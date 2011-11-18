@@ -1031,9 +1031,17 @@ span.link{
 .close-button-wrapper {
 	float: right;
 }
-.close-button {
-	width: 80px;
+#close-button {
+	display: block;
 	height: 44px;
+	width: 44px;
+	background: url(../images/low/back.png) center center no-repeat;
+	margin-top: 7px;
+	margin-right: 3px;
+}
+
+#close-button.selected {
+	background: url(../images/low/back-tapped.png) center center no-repeat;
 }
 
 .dashboard-icon-phnx {
