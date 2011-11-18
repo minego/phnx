@@ -1,16 +1,17 @@
 {
-	"id": "com.davidstrack.phnx.free",
+	"id": "net.minego.phnx",
 	"version": "1.1.5",
 	"vendor": "David Strack",
 	"type": "web",
 	"main": "index.html",
-	"title": "phnx",
-	"icon": "icon64.png",
+	"title": "Project Macaw",
+	"icon": "macaw.png",
 	"miniicon":"icon24.png",
 	"splashicon": "icon256.png",
 	"splashBackground":"splash-bg.png",
 	"keywords": ["twitter","tweet"],
 	"copyright": "Copyright 2011 David Strack",
 	"dockMode": false,
-	"noWindow": true
+	"noWindow": true,
+	"uiRevision": 2
 }
