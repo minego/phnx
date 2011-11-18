@@ -20,23 +20,23 @@ var ComposeToaster = Class.create(Toaster, {
 		this.images = []; //any images to be uploaded
 		this.uploading = false;
 		this.sending = false;
-		
+
 		var toasterObj = {
 			toasterId: this.id
 		};
-		
+
 		if (opts.rt) {
 			this.rt = true;
 		}
-		
+
 		if (opts.dm) {
 			this.dm = true;
 			this.to = opts.user;
 			toasterObj.to = opts.user.screen_name;
 		}
-		
+
 		this.render(toasterObj, 'templates/toasters/compose');
-		
+
 		if (opts.text) {
 			var txt;
 			if (opts.text === '0') {
@@ -48,7 +48,7 @@ var ComposeToaster = Class.create(Toaster, {
 			get(this.textarea).value = txt;
 			this.updateCounter();
 		}
-		
+
 		// Select reply-all names at first
 		if (opts.selectStart && opts.selectEnd) {
 			get(this.textarea).selectionStart = opts.selectStart;
@@ -61,18 +61,18 @@ var ComposeToaster = Class.create(Toaster, {
 			var len = get(this.textarea).value.length;
 			get(this.textarea).setSelectionRange(len,len); //focus the cursor at the end
 		}
-		
+
 		if (opts.reply_id) {
 			this.reply = true;
 			this.reply_id = opts.reply_id;
 			get('submit-' + this.id).update('Post Reply');
 		}
-		
+
 		if (opts.dm) {
 			get('dm-' + this.id).addClassName('show');
 			get('submit-' + this.id).update('Send Message');
 		}
-		
+
 		// Need a timeout because sometimes the tapend event cancels the focus()
 		setTimeout(function(){
 			get(this.textarea).focus();
@@ -88,7 +88,7 @@ var ComposeToaster = Class.create(Toaster, {
 		var args;
 		if (txt.length <= this.availableChars && txt.length > 0) {
 			if (this.uploading === false) {
-				if (!this.dm) {		
+				if (!this.dm) {
 					this.easterEggs(txt); //display some joke banners teehee
 					args = {'status': txt};
 
@@ -104,33 +104,33 @@ var ComposeToaster = Class.create(Toaster, {
 					Twitter.postTweet(args, function(response, meta) {
 						var prefs = new LocalStorage();
 						var refresh = prefs.read('refreshOnSubmit');
-						
+
 						if (refresh) {
 							this.assistant.refreshAll();
 						}
-						
+
 						if (!this.rt) {
-							this.assistant.toasters.back();							
+							this.assistant.toasters.back();
 						}
 						else {
 							// If it's a retweet we want to go back 2 toasters to close the RT toaster
 							this.assistant.toasters.backX(2);
 						}
-					}.bind(this));	
+					}.bind(this));
 				}
 				else if (this.dm) {
 					args = {'text': txt, 'user_id': this.to.id_str};
 					Twitter.newDM(args, function(response) {
 						var prefs = new LocalStorage();
 						var refresh = prefs.read('refreshOnSubmit');
-						
+
 						if (refresh) {
-							this.assistant.refreshAll();	
+							this.assistant.refreshAll();
 						}
-						
+
 						this.assistant.toasters.back();
 					}.bind(this));
-				}	
+				}
 			}
 			else {
 				ex('An upload is in progress.');
@@ -145,7 +145,7 @@ var ComposeToaster = Class.create(Toaster, {
 	},
 	easterEggs: function(t) {
 		t = t.toLowerCase();
-		
+
 		if (t.indexOf('packers') > -1) {
 			banner('Go Packers! :)');
 		}
@@ -153,9 +153,9 @@ var ComposeToaster = Class.create(Toaster, {
 			banner("Hey, that's me!");
 		}
 	},
-	geotagTapped: function(event) {		
+	geotagTapped: function(event) {
 		if (!this.geo) {
-			this.getLocation();	
+			this.getLocation();
 		}
 		else {
 			this.geo = false;
@@ -214,7 +214,7 @@ var ComposeToaster = Class.create(Toaster, {
 			{"key":"secret","data": currentUser.secret}
 		];
 		this.controller.serviceRequest('palm://com.palm.downloadmanager/', {
-			method: 'upload', 
+			method: 'upload',
 			parameters: {
 				'url': 'http://phnxapp.com/twitpic/upload.php',
 				'fileLabel': 'photo',
@@ -246,7 +246,7 @@ var ComposeToaster = Class.create(Toaster, {
 				get(this.textarea).value = get(this.textarea).value + ' ';
 			}
 			get(this.textarea).value = get(this.textarea).value + response.responseString;
-			this.updateCounter();	
+			this.updateCounter();
 		}
 	},
 	linkTapped: function(event) {
@@ -257,17 +257,21 @@ var ComposeToaster = Class.create(Toaster, {
 			user: Config.bitlyUser,
 			key: Config.bitlyKey
 		});
-		
+
 		var callback = function(short, long){
 			this.controller.get(this.textarea).value = this.controller.get(this.textarea).value.replace(new RegExp(long, 'g'), short);
 		};
-		
+
 		for (var i=0; i < urls.length; i++) {
 			var u = urls[i];
 			if (u.indexOf('bit.ly') < 0) {
-				bitly.shorten(u, callback.bind(this));	
+				bitly.shorten(u, callback.bind(this));
 			}
 		}
+	},
+	cancelTapped: function(event) {
+		get(this.textarea).blur();
+		this.assistant.toasters.back();
 	},
 	setup: function() {
 		var prefs = new LocalStorage();
@@ -277,7 +281,7 @@ var ComposeToaster = Class.create(Toaster, {
 					this.submitTweet();
 					e.stop();
 				}
-			}.bind(this));			
+			}.bind(this));
 		}
 
 		get(this.textarea).observe('keyup', function(e){
@@ -287,6 +291,7 @@ var ComposeToaster = Class.create(Toaster, {
 		Mojo.Event.listen(get('photo-' + this.id), Mojo.Event.tap, this.photoTapped.bind(this));
 		Mojo.Event.listen(get('geotag-' + this.id), Mojo.Event.tap, this.geotagTapped.bind(this));
 		Mojo.Event.listen(get('link-' + this.id), Mojo.Event.tap, this.linkTapped.bind(this));
+		Mojo.Event.listen(get('cancel-' + this.id), Mojo.Event.tap, this.cancelTapped.bind(this));
 	},
 	cleanup: function() {
 		get(this.textarea).stopObserving('keyup');
@@ -294,10 +299,11 @@ var ComposeToaster = Class.create(Toaster, {
 		if (prefs.read('enterToSubmit')) {
 			get(this.textarea.stopObserving('keydown'));
 		}
-		
+
 		Mojo.Event.stopListening(get('submit-' + this.id), Mojo.Event.tap, this.submitTweet);
 		Mojo.Event.stopListening(get('photo-' + this.id), Mojo.Event.tap, this.photoTapped);
 		Mojo.Event.stopListening(get('geotag-' + this.id), Mojo.Event.tap, this.geotagTapped);
 		Mojo.Event.stopListening(get('link-' + this.id), Mojo.Event.tap, this.linkTapped);
+		Mojo.Event.stopListening(get('cancel-' + this.id), Mojo.Event.tap, this.cancelTapped);
 	}
 });

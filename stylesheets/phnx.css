@@ -104,7 +104,7 @@ body{
 #header {
 	height: 63px;
 	display: block;
-	width: 320px;
+	width: 100%;
 	background: url('../images/low/header-bar.png') left -25px repeat-x;
 	-webkit-palm-mouse-target: ignore;
 	position: fixed;
@@ -503,7 +503,6 @@ span.link{
 	color: #f8f9b5;
 }
 #shim, #account-shim{
-	background: url(../images/low/shim.png) no-repeat center center;
 	width: 100%;
 	position: fixed;
 	top: 0;
@@ -595,7 +594,7 @@ span.link{
 	top: 0;
 	left: 0;
 	width: 100%;
-	z-index: 500;	
+	z-index: 500;
 }
 #preview{
 	-webkit-border-radius: 10px;
@@ -896,12 +895,13 @@ span.link{
 	color: #fff;
 	margin: 0px 0px;
 	height: 80px;
-	width: 275px;
+	width: 100%;
 	display: block;
 	z-index: 20;
 	position: relative;
 	left: 1px;
 	top: -3px;
+	right: 45px;
 }
 .compose-txt .counter {
 	position: absolute;
@@ -942,10 +942,11 @@ span.link{
 }
 
 .compose-submit {
+	float: right;
 	display: inline-block;
 	color: #fff;
 	border-width: 9px;
-	-webkit-border-image: url(../images/low/buttons/submit.png) 9 stretch;
+	-webkit-border-image: url(../images/low/buttons/positive.png) 6 stretch;
 	font-size: 14px;
 	padding: 0px;
 	margin: 0px 10px 0px 13px;
@@ -953,10 +954,26 @@ span.link{
 	font-weight: bold;
 	font-family: "Prelude";
 	position: relative;
-	top: -15px;
 }
 .compose-submit.selected {
-	-webkit-border-image: url(../images/low/buttons/submit-tapped.png) 9 stretch;	
+	-webkit-border-image: url(../images/low/buttons/positive-tapped.png) 6 stretch;
+}
+.compose-cancel {
+	float: left;
+	display: inline-block;
+	color: #fff;
+	border-width: 9px;
+	-webkit-border-image: url(../images/low/buttons/negative.png) 6 stretch;
+	font-size: 14px;
+	padding: 0px;
+	margin: 0px 10px 0px 13px;
+	width: 110px;
+	font-weight: bold;
+	font-family: "Prelude";
+	position: relative;
+}
+.compose-cancel.selected {
+	-webkit-border-image: url(../images/low/buttons/negative-tapped.png) 6 stretch;
 }
 
 .toaster.convo {
@@ -1007,6 +1024,14 @@ span.link{
 	bottom: 30px;
 	text-align: center;
 }
+.close-button-wrapper {
+	float: right;
+}
+.close-button {
+	width: 80px;
+	height: 44px;
+}
+
 .dashboard-icon-phnx {
 	background: url(../dash-icon.png) center center no-repeat;
 }

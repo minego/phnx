@@ -7,13 +7,13 @@ StreamAssistant.prototype = {
 		this.longPoll();
 	},
 	activate: function(event) {
-		
+
 	},
 	longPoll: function() {
 		this.controller.get('response').update('starting poll');
 		var url = 'https://userstream.twitter.com/2/user.json';
 		var self = this;
-		
+
 		var args = {};
 		var message = {
 			method: 'GET',
@@ -23,16 +23,16 @@ StreamAssistant.prototype = {
 
 		//when using OAuth, parameters must be included in the request body
 		//and in the base signature of the Auth Header
-		
+
 		var params = '';
 
 		for (var key in args) {
 			params += '&' + key + '=' + encodeURIComponent(args[key]);
 			message.parameters.push([key, args[key]]);
 		}
-		
+
 		var currentUser = getUser();
-		
+
 		OAuth.completeRequest(message, {
 			consumerKey: Twitter.key,
 			consumerSecret: Twitter.secret,
@@ -41,7 +41,7 @@ StreamAssistant.prototype = {
 		});
 
 		var authHeader = OAuth.getAuthorizationHeader(Twitter.apibase, message.parameters);
-		
+
 		this.controller.get('response').update('creating request');
 		var req = new Ajax.Request(url, {
 			method: 'GET',
@@ -61,12 +61,12 @@ StreamAssistant.prototype = {
 				// this.controller.get('response').update(transport.responseText);
 				// self.longPoll();
 			}
-		});		
+		});
 	},
 	deactivate: function(event) {
-		
+
 	},
 	cleanup: function(event) {
-		
+
 	}
 };

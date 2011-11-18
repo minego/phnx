@@ -14,11 +14,11 @@ StatusAssistant.prototype = {
 			var prefs = new LocalStorage();
 			var theme = prefs.read('theme');
 			this.controller.stageController.loadStylesheet('stylesheets/' + theme +'.css');
-			
+
 			var body = this.controller.stageController.document.getElementsByTagName("body")[0];
 			var font = prefs.read('fontSize');
 			global.setFontSize(body, font);
-			
+
 			var img = 'images/low/' + this.opts.type + '-card.png';
 			var cardHtml = Mojo.View.render({
 				object: {image: img},
@@ -26,24 +26,24 @@ StatusAssistant.prototype = {
 			});
 			this.controller.get('account-shim').update(cardHtml);
 		}
-		
+
 		if (this.opts.type === 'search' || this.opts.type === 'retweets') {
 			// Hide the load more button (not supported for searches or RTs yet)
 			this.controller.get('more').hide();
 		}
-		
+
 		if (this.opts.type === 'search') {
 			this.initSearch();
 		}
 		else if (this.opts.type === 'list' || this.opts.type === 'retweets') {
 			this.initList();
 		}
-		
+
 		this.controller.listen('shim', Mojo.Event.tap, this.shimTapped.bind(this));
 		this.controller.listen('refresh', Mojo.Event.tap, this.refreshTapped.bind(this));
 		this.controller.listen('footer', Mojo.Event.tap, this.footerTapped.bind(this));
 		this.controller.listen('more', Mojo.Event.tap, this.moreTapped.bind(this));
-		
+
 		if (!this.opts.newCard) {
 			this.controller.listen('new-card', Mojo.Event.tap, this.newCardTapped.bind(this));
 		}
@@ -53,11 +53,11 @@ StatusAssistant.prototype = {
 	},
 	initSearch: function() {
 		var opts = this.opts;
-		
+
 		// Set the scene's title
 		var title = opts.query.substr(0,16);
 		this.controller.get('header-title').update(title);
-		
+
 		if (opts.items) {
 			// Items are already loaded, don't do a search
 			this.setupList(opts.items);
@@ -73,11 +73,11 @@ StatusAssistant.prototype = {
 	},
 	initList: function() {
 		var opts = this.opts;
-		
+
 		// Set the scene's title
 		var title = opts.name.substr(0,16);
 		this.controller.get('header-title').update(title);
-		
+
 		if (opts.items) {
 			// Items are already loaded, don't do a search
 			this.setupList(opts.items);
@@ -88,19 +88,19 @@ StatusAssistant.prototype = {
 		var type = this.opts.type;
 		for (var i=0; i < items.length; i++) {
 			if (type === 'search') {
-				items[i] = th.processSearch(items[i]);	
+				items[i] = th.processSearch(items[i]);
 			}
 			else if (type === 'list' || type === 'retweets') {
 				items[i] = th.process(items[i]);
 			}
 		}
-		
+
 		var templates = {
 			"search": "search",
 			"list": "item",
 			"retweets": "item"
 		};
-		
+
 		this.itemsModel.items = items;
 		this.controller.setupWidget('list-items', {itemTemplate: "templates/tweets/" + templates[type],listTemplate: "templates/list", renderLimit: 1000}, this.itemsModel);
 		this.controller.listen('list-items', Mojo.Event.listTap, this.tweetTapped.bind(this));
@@ -109,12 +109,12 @@ StatusAssistant.prototype = {
 	},
 	refreshSearch: function() {
 		var Twitter = new TwitterAPI(this.opts.user, this.controller.stageController);
-		
+
 		var args = {
 			q: this.opts.query,
 			since_id: this.itemsModel.items[0].id_str
 		};
-		
+
 		Twitter.search(args, function(r){
 			var items = r.responseJSON.results;
 			this.gotItems(items);
@@ -123,11 +123,11 @@ StatusAssistant.prototype = {
 	loadList: function(args, callback) {
 		var Twitter = new TwitterAPI(this.opts.user, this.controller.stageController);
 		var opts = {'list_id': this.opts.id, "count": "100", 'include_entities': 'true'};
-		
+
 		for (var key in args) {
 			opts[key] = args[key];
 		}
-		
+
 		Twitter.listStatuses(opts, function(response){
 			callback(response.responseJSON);
 		}.bind(this));
@@ -135,11 +135,11 @@ StatusAssistant.prototype = {
 	loadRTs: function(args, callback) {
 		var Twitter = new TwitterAPI(this.opts.user, this.controller.stageController);
 		var opts = {'list_id': this.opts.id, "count": "100", 'include_entities': 'true'};
-		
+
 		for (var key in args) {
 			opts[key] = args[key];
 		}
-		
+
 		var type = this.opts.rtType;
 		if (type === 'rt-others') {
 			Twitter.retweetsToMe(opts, function(r){
@@ -177,12 +177,12 @@ StatusAssistant.prototype = {
 		for (i=0; i < this.itemsModel.items.length; i++) {
 			var tweet = this.itemsModel.items[i];
 			if (type === 'search') {
-				tweet = th.processSearch(tweet);	
+				tweet = th.processSearch(tweet);
 			}
 			else if (type === 'list'  || type === 'retweets') {
 				tweet = th.process(tweet);
 			}
-			
+
 			if (tweet.id_str !== newId) {
 				tweet.cssClass = 'old-tweet';
 			}
@@ -201,7 +201,7 @@ StatusAssistant.prototype = {
 			}.bind(this));
 		}
 		else if (this.opts.type === 'list' || this.opts.type === 'retweets') {
-			this.toasters.add(new TweetToaster(event.item, this));	
+			this.toasters.add(new TweetToaster(event.item, this));
 		}
 	},
 	updateCount: function() {
@@ -214,22 +214,22 @@ StatusAssistant.prototype = {
 				this.toasters.back();
 				event.stop();
 			}
-			
+
 		}
 		else if (event.type === Mojo.Event.forward) {
 			if (!this.loading) {
 				this.refreshTapped();
 			}
-		}	
+		}
 	},
 	shimTapped: function(event) {
 		this.toasters.nuke();
 	},
 	newCardTapped: function(event) {
 		var stageName = global.statusStage + global.stageId++;
-		
+
 		var appController = Mojo.Controller.getAppController();
-		
+
 		var pushCard = function(stageController){
 			stageController.user = this.opts.user;
 			global.stageActions(stageController);
@@ -239,7 +239,7 @@ StatusAssistant.prototype = {
 		}.bind(this);
 
 		appController.createStageWithCallback({name: stageName, lightweight: true}, pushCard);
-		
+
 		this.controller.stageController.popScene();
 	},
 	refreshTapped: function(event) {
@@ -249,7 +249,7 @@ StatusAssistant.prototype = {
 		else {
 			var args = {'since_id': this.itemsModel.items[0].id_str};
 			if (this.opts.type === 'list') {
-				this.loadList(args, this.gotItems.bind(this));	
+				this.loadList(args, this.gotItems.bind(this));
 			}
 			else if (this.opts.type === 'retweets') {
 				this.loadRTs(args, this.gotItems.bind(this));
@@ -280,16 +280,16 @@ StatusAssistant.prototype = {
 		var model = this.itemsModel;
 		var i;
 		var th = new TweetHelper();
-		
+
 		for (i=1; i < tweets.length; i++) {
 			//start the loop at i = 1 so tweets aren't duplicated
 			model.items.splice((model.items.length - 1) + i, 0, tweets[i]);
 		}
-		
+
 		for (i=0; i < model.items.length; i++) {
 			model.items[i] = th.process(model.items[i]);
 		}
-		
+
 		this.controller.modelChanged(model);
 		this.updateCount();
 	},

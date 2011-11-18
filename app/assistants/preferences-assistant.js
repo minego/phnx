@@ -1,6 +1,6 @@
 function PreferencesAssistant() {
 	this.prefs = new LocalStorage();
-	
+
 	var accounts = [];
 	for (var i=0; i < global.accounts.length; i++) {
 		var acct = global.accounts[i];
@@ -9,7 +9,7 @@ function PreferencesAssistant() {
 			value: acct.id
 		});
 	}
-	
+
 	// Add stuff here to auto-render them to the scene and auto-save on scene close.
 	// Toggle and select widgets are the only ones that are supported so far
 	this.sections = {
@@ -55,7 +55,7 @@ function PreferencesAssistant() {
 				{key: 'sendAnalytics', type: 'toggle', label: 'Send <strong>anonymous</strong> statistics to the developer to help improve phnx'}
 			]
 	};
-	
+
 	if (global.accounts.length > 1) {
 		this.sections['General Settings'].push({key: 'defaultAccount', type: 'select', label: 'Default User', items: accounts});
 	}
@@ -64,7 +64,6 @@ function PreferencesAssistant() {
 
 PreferencesAssistant.prototype = {
 	setup: function() {
-		
 		this.controller.setupWidget(Mojo.Menu.appMenu, {omitDefaultItems: true}, {visible: true, items: global.prefsMenu});
 
 		var widgetHtml, html;
@@ -74,16 +73,16 @@ PreferencesAssistant.prototype = {
 			widgetHtml = '';
 			for (var i=0; i < sectionItems.length; i++) {
 				var widget = sectionItems[i];
-				
+
 				if (widget.type === 'toggle') {
-					
+
 					html = Mojo.View.render({
 						object: widget,
 						template: 'preferences/toggle'
 					});
-					
+
 					widgetHtml += html;
-					
+
 					this.controller.setupWidget('toggle-' + widget.key,
 						this.widgets['attr_' + widget.key] = {
 							trueValue: true,
@@ -101,7 +100,7 @@ PreferencesAssistant.prototype = {
 						object: widget,
 						template: 'preferences/select'
 					});
-					
+
 					widgetHtml += html;
 					this.controller.setupWidget('select-' + widget.key,
 						this.widgets['attr_' + widget.key] = {
@@ -115,35 +114,41 @@ PreferencesAssistant.prototype = {
 					);
 				}
 			}
-			
+
 			// set up section html
 			var secObj = {
 				title: sectionId,
 				items: widgetHtml
 			};
-			
+
 			var sectionHtml = Mojo.View.render({
 				object: secObj,
 				template: 'preferences/section'
 			});
-			
+
 			pageHtml += sectionHtml;
 		}
-		
+
 		this.controller.get('sections').update(pageHtml);
-		
+
 		// Manually add listeners after the elements are on the DOM
+		this.closeTapped = this.closeTapped.bind(this);
+		this.controller.listen(this.controller.get("close-button"), Mojo.Event.tap, this.closeTapped);
+
 		this.controller.listen(this.controller.get('select-theme'), Mojo.Event.propertyChange, this.themeChanged.bind(this));
 		this.controller.listen(this.controller.get('select-fontSize'), Mojo.Event.propertyChange, this.fontChanged.bind(this));
+	},
+	closeTapped: function() {
+		this.controller.stageController.popScene();
 	},
 	themeChanged: function(event) {
 		var newTheme = event.value;
 		Mojo.Log.info('theme changed to ' + newTheme);
-		
+
 		// Remove the old theme
 		var oldTheme = this.prefs.read('theme');
 		this.controller.stageController.unloadStylesheet('stylesheets/' + oldTheme + '.css');
-		
+
 		// Apply the new theme
 		this.controller.stageController.loadStylesheet('stylesheets/' + newTheme + '.css');
 	},
@@ -160,9 +165,10 @@ PreferencesAssistant.prototype = {
 				this.prefs.write(item.key, this.widgets['model_' + item.key].value);
 			}
 		}
-		
+
 		// Manually remove any listeners from above
 		this.controller.stopListening(this.controller.get('select-theme'), Mojo.Event.propertyChange, this.themeChanged);
 		this.controller.stopListening(this.controller.get('select-fontSize'), Mojo.Event.propertyChange, this.fontChanged);
+		this.controller.stopListening(this.controller.get("close-button"), Mojo.Event.tap, this.closeTapped);
 	}
 };

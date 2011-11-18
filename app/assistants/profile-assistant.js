@@ -9,7 +9,7 @@ ProfileAssistant.prototype = {
 	setup: function() {
 		this.controller.setupWidget(Mojo.Menu.appMenu, {omitDefaultItems: true}, {visible: true, items: global.menuItems});
 		this.menuItems = [];
-		
+
 		if (this.user.following) {
 			this.menuItems.push({
 				label: 'Unfollow',
@@ -22,7 +22,7 @@ ProfileAssistant.prototype = {
 				command: 'cmdFollow'
 			});
 		}
-		
+
 		this.menuItems.push({
 			label: 'Public Mention',
 			command: 'cmdMention'
@@ -39,32 +39,32 @@ ProfileAssistant.prototype = {
 			label: 'Report Spam',
 			command: 'cmdSpam'
 		});
-		
+
 		if (!this.user.newCard) {
 			this.menuItems.push({
 				label: 'Open In New Card',
 				command: 'cmdNewCard'
-			});	
+			});
 		}
-		
+
 		this.historyModel = {items:[]};
 		this.mentionsModel = {items:[]};
 		this.favoritesModel = {items:[]};
-		
+
 		if (this.user.newCard) {
 			this.historyModel.items = this.user.history;
 			this.mentionsModel.items = this.user.mentions;
 			this.favoritesModel.items = this.user.favorites;
-			
+
 			// Apply theme / font and all that junk
 			var prefs = new LocalStorage();
 			var theme = prefs.read('theme');
 			this.controller.stageController.loadStylesheet('stylesheets/' + theme +'.css');
-			
+
 			var body = this.controller.stageController.document.getElementsByTagName("body")[0];
 			var font = prefs.read('fontSize');
 			global.setFontSize(body, font);
-			
+
 			// var img = this.user.profile_image_url.replace('_normal', '_bigger');
 			var img = 'images/low/user-card.png';
 			var cardHtml = Mojo.View.render({
@@ -72,18 +72,18 @@ ProfileAssistant.prototype = {
 				template: 'templates/account-card'
 			});
 			this.controller.get('account-shim').update(cardHtml);
-			
+
 		}
-		
+
 		this.account = this.controller.stageController.user;
 
 		var sceneHtml = Mojo.View.render({
 			object: this.user,
 			template: 'profile/content'
 		});
-		
+
 		this.controller.get('profile-scene').update(sceneHtml);
-		
+
 		// Fix any missing data
 		if (this.user.description === '') {
 			// Rather than hide the description, we replace it with this text.
@@ -96,32 +96,32 @@ ProfileAssistant.prototype = {
 		if (!this.user.url) {
 			this.controller.get('url').hide();
 		}
-		
+
 		this.controller.setupWidget('list-history',{itemTemplate: "templates/tweets/item",listTemplate: "templates/list", renderLimit: this.renderLimit}, this.historyModel);
 		this.controller.setupWidget('list-mentions',{itemTemplate: "templates/tweets/search",listTemplate: "templates/list", renderLimit: this.renderLimit}, this.mentionsModel);
 		this.controller.setupWidget('list-favorites',{itemTemplate: "templates/tweets/item",listTemplate: "templates/list", renderLimit: this.renderLimit}, this.favoritesModel);
-		
+
 		for (var i=0; i < this.panels.length; i++) {
 			this.controller.setupWidget(this.panels[i] + "-scroller",{mode: 'vertical'},{});
 			this.controller.listen(this.controller.get('btn-' + this.panels[i]), Mojo.Event.tap, this.navTapped.bind(this));
 		}
-		
+
 		var panelElements = this.controller.select('.panel');
 		this.controller.setupWidget(
 			"sideScroller",
 			this.attributes = {
 				mode: 'horizontal-snap'
-			}, 
+			},
 			this.sideScrollModel = {
 				snapElements: { x:	panelElements},
 				snapIndex: 0
 			}
 		);
-		
+
 		this.controller.instantiateChildWidgets(this.controller.get('profile-scene'));
 
 		this.setScrollerSizes();
-		
+
 		this.controller.listen(this.controller.get('sideScroller'), Mojo.Event.propertyChange, this.scrollerChanged.bind(this));
 		this.controller.listen(this.controller.get('list-history'), Mojo.Event.listTap, this.tweetTapped.bind(this));
 		this.controller.listen(this.controller.get('list-favorites'), Mojo.Event.listTap, this.tweetTapped.bind(this));
@@ -133,33 +133,39 @@ ProfileAssistant.prototype = {
 		this.controller.listen(this.controller.get('followers'), Mojo.Event.tap, this.followersTapped.bind(this));
 		this.controller.listen(this.controller.get('url'), Mojo.Event.tap, this.urlTapped.bind(this));
 		this.controller.listen(this.controller.get('profile-avatar'), Mojo.Event.tap, this.avatarTapped.bind(this));
-		
+
+		this.closeTapped = this.closeTapped.bind(this);
+		this.controller.listen(this.controller.get("close-button"), Mojo.Event.tap, this.closeTapped);
+
 		if (this.user.id_str === this.account.id) {
 			this.controller.get('options').setStyle({'display':'none'});
 		}
-		
+
 		// Holy eager loading, Batman!
 		// Timeout so the scene can be fully set up before requests are made
 		// (helps with the Request triggering the loading bar)
 		setTimeout(function(){
-			
+
 			if (this.user.id_str !== this.account.id) {
-				this.checkFollowing();	
+				this.checkFollowing();
 			}
 			else {
 				// lol, lazy
 				this.controller.get('follows-verb').update('is');
 			}
-			
+
 			if (!this.user.newCard) {
 				this.getHistory();
 				this.getMentions();
-				this.getFavorites();	
+				this.getFavorites();
 			}
 		}.bind(this), 200);
-		
+
 		this.controller.get('btn-history').addClassName('active');
 		this.currentPanel = 0;
+	},
+	closeTapped: function() {
+		this.controller.stageController.popScene();
 	},
 	checkFollowing: function() {
 		var Twitter = new TwitterAPI(this.account);
@@ -178,7 +184,7 @@ ProfileAssistant.prototype = {
 			if (this.toasters.items.length > 0) {
 				this.toasters.back();
 				event.stop();
-			}	
+			}
 		}
 		else if (event.type === Mojo.Event.forward) {
 			this.refresh();
@@ -206,17 +212,17 @@ ProfileAssistant.prototype = {
 	},
 	getHistory: function(opts) {
 		var Twitter = new TwitterAPI(this.account);
-		
+
 		var args = {
 			"user_id": this.user.id_str,
 			"count": 100,
 			"include_entities": true
 		};
-		
+
 		for (var key in opts) {
 			args[key] = opts[key];
 		}
-		
+
 		Twitter.getUserTweets(args, function(response){
 			var th = new TweetHelper();
 			for (var i=0; i < response.responseJSON.length; i++) {
@@ -238,11 +244,11 @@ ProfileAssistant.prototype = {
 	getMentions: function(opts) {
 		var Twitter = new TwitterAPI(this.account);
 		var query = '@' + this.user.screen_name;
-		
+
 		for (var key in opts) {
 			query += '&' + encodeURIComponent(key) + '=' + encodeURIComponent(opts[key]);
 		}
-		
+
 		Twitter.search('@' + this.user.screen_name, function(response){
 			var items = response.responseJSON.results;
 			var th = new TweetHelper();
@@ -264,11 +270,11 @@ ProfileAssistant.prototype = {
 	getFavorites: function(opts) {
 		var Twitter = new TwitterAPI(this.account);
 		var args = {"count": 100, "include_entities": true};
-		
+
 		for (var key in opts) {
 			args[key] = opts[key];
 		}
-		
+
 		Twitter.getFavorites(this.user.screen_name, args, function(response){
 			var th = new TweetHelper();
 			for (var i=0; i < response.responseJSON.length; i++) {
@@ -295,7 +301,7 @@ ProfileAssistant.prototype = {
 			// var height = screenHeight; //subtract the header
 			var i;
 			//grab each panel element. There should be as many of these as there are in this.panels
-			
+
 			var panelElements = this.controller.select('.panel');
 			var totalWidth = 0; //the width of the main container
 			for (i=0; i < panelElements.length; i++) {
@@ -304,9 +310,9 @@ ProfileAssistant.prototype = {
 					"width": screenWidth + "px"
 				});
 				totalWidth += screenWidth;
-				
+
 				// TODO: add some height to the mentions scroller...
-				
+
 				//each scroller needs a max height. otherwise they don't scroll
 				this.controller.get(this.panels[i] + "-scroller").setStyle({"max-height": height + "px"});
 			}
@@ -345,13 +351,13 @@ ProfileAssistant.prototype = {
 			var th = new TweetHelper();
 			var tweet = th.process(response.responseJSON);
 			this.toasters.add(new TweetToaster(tweet, this));
-		}.bind(this));	
+		}.bind(this));
 	},
 	shimTapped: function(event) {
 		this.toasters.nuke();
 	},
 	optionsTapped: function(event) {
-		
+
 		this.controller.popupSubmenu({
 			onChoose: this.popupHandler,
 			placeNear: this.controller.get('options'),
@@ -393,7 +399,7 @@ ProfileAssistant.prototype = {
 	unfollow: function() {
 		var opts = {
 			title: 'Are you sure you want to unfollow @' + this.user.screen_name + '?',
-			callback: function(){	
+			callback: function(){
 				var Twitter = new TwitterAPI(this.account);
 				Twitter.unfollowUser(this.user.id_str, function(response){
 					banner('Unfollowed @' + this.user.screen_name);
@@ -402,7 +408,7 @@ ProfileAssistant.prototype = {
 				}.bind(this));
 			}.bind(this)
 		};
-		
+
 		this.toasters.add(new ConfirmToaster(opts, this));
 	},
 	mention: function() {
@@ -421,7 +427,7 @@ ProfileAssistant.prototype = {
 	block: function() {
 		var opts = {
 			title: 'Are you sure you want to block @' + this.user.screen_name + '?',
-			callback: function(){	
+			callback: function(){
 				var Twitter = new TwitterAPI(this.account);
 				Twitter.block(this.user.id_str, function(response){
 					banner('Blocked @' + this.user.screen_name);
@@ -429,13 +435,13 @@ ProfileAssistant.prototype = {
 				}.bind(this));
 			}.bind(this)
 		};
-		
+
 		this.toasters.add(new ConfirmToaster(opts, this));
 	},
 	spam: function() {
 		var opts = {
 			title: 'Are you sure you want to report @' + this.user.screen_name + '?',
-			callback: function(){	
+			callback: function(){
 				var Twitter = new TwitterAPI(this.account);
 				Twitter.report(this.user.id_str, function(response) {
 					banner('Reported @' + this.user.screen_name);
@@ -443,14 +449,14 @@ ProfileAssistant.prototype = {
 				}.bind(this));
 			}.bind(this)
 		};
-		
+
 		this.toasters.add(new ConfirmToaster(opts, this));
 	},
 	newCard: function(event) {
 		var stageName = global.userStage + global.stageId++;
-		
+
 		var appController = Mojo.Controller.getAppController();
-		
+
 		var pushCard = function(stageController){
 			stageController.user = this.account;
 			global.stageActions(stageController);
@@ -459,7 +465,7 @@ ProfileAssistant.prototype = {
 		}.bind(this);
 
 		appController.createStageWithCallback({name: stageName, lightweight: true}, pushCard);
-		
+
 		this.controller.stageController.popScene();
 	},
 	activate: function(event) {
@@ -467,16 +473,16 @@ ProfileAssistant.prototype = {
 		//	// banner(e.keyCode + ' is the key');
 		//	if (e.keyCode !== 27 && e.keyCode !== 57575 && this.toasters.items.length === 0) {
 		//		// type to tweet, ignore the back gesture
-		//		
+		//
 		//		// keycodes for punctuation and symbols are not normal
 		//		// so only ascii chars are passed to the compose toaster for now...
 		//		var text = Mojo.Char.isValidWrittenChar(e.keyCode);
 		//		this.toasters.add(new ComposeToaster({text:'@' + this.user.screen_name + ' ' + text}, this));
 		//		// this.toggleCompose({
 		//		//	'text': text
-		//		// }); 
+		//		// });
 		//	}
-		// }.bind(this));	
+		// }.bind(this));
 	},
 	avatarTapped: function(event) {
 		var img = this.user.profile_image_url.replace('_normal', '');
@@ -485,7 +491,7 @@ ProfileAssistant.prototype = {
 	followingTapped: function(event) {
 		var Twitter = new TwitterAPI(this.account);
 		Twitter.getFriends(this.user.id_str, function(r){
-			this.toasters.add(new UserListToaster('@' + this.user.screen_name + '\'s friends', r, this));			
+			this.toasters.add(new UserListToaster('@' + this.user.screen_name + '\'s friends', r, this));
 		}.bind(this));
 	},
 	followersTapped: function(event) {
@@ -510,8 +516,9 @@ ProfileAssistant.prototype = {
 		this.controller.stopListening(this.controller.get('options'), Mojo.Event.tap, this.optionsTapped);
 		this.controller.stopListening(this.controller.get('tweets'), Mojo.Event.tap, this.tweetsTapped);
 		this.controller.stopListening(this.controller.get('following'), Mojo.Event.tap, this.followingTapped);
-		this.controller.stopListening(this.controller.get('followers'), Mojo.Event.tap, this.followersTapped);				
+		this.controller.stopListening(this.controller.get('followers'), Mojo.Event.tap, this.followersTapped);
 		this.controller.stopListening(this.controller.get('url'), Mojo.Event.tap, this.urlTapped);
 		this.controller.stopListening(this.controller.get('profile-avatar'), Mojo.Event.tap, this.avatarTapped);
+		this.controller.stopListening(this.controller.get("close-button"), Mojo.Event.tap, this.closeTapped);
 	}
 };

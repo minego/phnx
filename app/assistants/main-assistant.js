@@ -5,15 +5,15 @@ function MainAssistant(opts) {
 	this.opts = opts;
 	this.offset = 0;
 	this.currentPage = 0; //index position of the item in the below array
-	
+
 	this.loadingMore = false; //flag to determine if items should go to the bottom of a list
 	this.imagePreview = false;
 	this.loading = false;
-	
+
 	this.savedSearchesLoaded = false;
 	this.searchLoaded = false;
 	this.switcher = false;
-	
+
 	this.count = 100; //how many tweets to load each request
 	this.renderLimit = 1000; //umm...this scares me. used in list widgets to prevent flickering...
 	this.toasters = new ToasterChain();
@@ -23,17 +23,17 @@ MainAssistant.prototype = {
 	setup: function() {
 		// Start the background notifications timer
 		global.setTimer();
-		
+
 		this.user = this.controller.stageController.user;
-		this.users = this.controller.stageController.users; 
-		
+		this.users = this.controller.stageController.users;
+
 		var homeItems, mentionsItems, messagesItems, i;
 
 		if (this.user.home && this.user.mentions && this.user.messages) {
 			homeItems = this.user.home;
 			mentionsItems = this.user.mentions;
 			messagesItems = this.user.messages;
-			
+
 			// A very sloppy and inelegant way to update the times of these tweets.
 			// TODO: Fix this abomination
 			var th = new TweetHelper();
@@ -43,13 +43,13 @@ MainAssistant.prototype = {
 				d = new Date(tweet.created_at);
 				tweet.time_str = d.toRelativeTime(1500);
 			}
-			
+
 			for (i=0; i < mentionsItems.length; i++) {
 				tweet = mentionsItems[i];
 				d = new Date(tweet.created_at);
 				tweet.time_str = d.toRelativeTime(1500);
 			}
-			
+
 			for (i=0; i < messagesItems.length; i++) {
 				tweet = messagesItems[i];
 				d = new Date(tweet.created_at);
@@ -83,16 +83,16 @@ MainAssistant.prototype = {
 		];
 
 		this.timeline = 0; //index position of the timeline, default to first one
-		
+
 		this.controller.get('header-title').update(this.user.username);
-		
+
 		// Build the account menu items
-		
+
 		var am = new Account();
 		am.all(function(r){
-			this.users = r;			
+			this.users = r;
 		}.bind(this));
-		
+
 		var accountMenuItems = [];
 		if (this.users) {
 			for (i=0; i < this.users.length; i++) {
@@ -100,7 +100,7 @@ MainAssistant.prototype = {
 					label: '@' + this.users[i].username,
 					command: 'account-' + this.users[i].id
 				});
-			}	
+			}
 		}
 		else {
 			var me = {
@@ -110,17 +110,17 @@ MainAssistant.prototype = {
 			this.users = [me];
 			accountMenuItems.push(me);
 		}
-		
+
 		accountMenuItems.push({
 			label: 'New Account',
 			command: 'cmdNewAccount'
 		});
-		
+
 		accountMenuItems.push({
 			label: 'Logout @' + this.user.username,
 			command: 'cmdRemoveAccount'
 		});
-		
+
 		var menuItems = [
 			Mojo.Menu.editItem,
 			{
@@ -144,69 +144,69 @@ MainAssistant.prototype = {
 				command: 'cmdSupport'
 			}
 		];
-		
+
 		this.controller.setupWidget(Mojo.Menu.appMenu, {omitDefaultItems: true}, {visible: true, items: menuItems});
 
 		// create the panels
 		var panelHtml = '';
 		for (var j=0; j < this.panels.length; j++) {
-			var panel = this.panels[j];			
+			var panel = this.panels[j];
 			var content = Mojo.View.render({
 				object: panel,
 				template: 'templates/panels/' + panel.type
 			});
 			panelHtml += content;
-			
-			this.controller.get('scrollItems').update(panelHtml); 
-			
+
+			this.controller.get('scrollItems').update(panelHtml);
+
 			this.controller.setupWidget(panel.id + "-scroller",{mode: 'vertical'},{});
 			if (panel.type === "timeline") {
 				this.controller.setupWidget('list-' + panel.id,{itemTemplate: "templates/tweets/item",listTemplate: "templates/list", renderLimit: this.renderLimit}, panel.model);
 			}
 		}
-		
+
 		// Set up Lists and Search widgets
 		this.savedSearchesModel = {items: []};
 		this.trendingTopicsModel = {items: []};
-		
+
 		this.controller.setupWidget('trending-topics-list',{itemTemplate: "templates/search-list-item",listTemplate: "templates/list", renderLimit: 10}, this.trendingTopicsModel);
 		this.controller.setupWidget('saved-searches-list',{itemTemplate: "templates/search-list-item",listTemplate: "templates/list", renderLimit: 30}, this.savedSearchesModel);
-		
+
 		this.listsModel = {items: []};
 		this.listsYouFollowModel = {items: []};
-		
+
 		this.controller.setupWidget('your-lists-list',{itemTemplate: "templates/list-item",listTemplate: "templates/list", renderLimit: 30}, this.listsModel);
 		this.controller.setupWidget('lists-you-follow-list',{itemTemplate: "templates/list-follows",listTemplate: "templates/list", renderLimit: 30}, this.listsYouFollowModel);
-		
+
 		this.setScrollerSizes();
-		
+
 		var panelElements = this.controller.select('.panel');
 		var loadMoreBtns = this.controller.select('.load-more');
 		var timelineLists = this.controller.select('.timeline-list');
-		
+
 		this.controller.setupWidget(
-			"sideScroller", 
+			"sideScroller",
 			this.attributes = {
 				mode: 'horizontal-snap'
-			}, 
+			},
 			this.sideScrollModel = {
 				snapElements: { x:	panelElements},
 				snapIndex: 0
 			}
 		);
-		
+
 		//listen to the lists
 		for (i=0; i < timelineLists.length; i++) {
 			var el = timelineLists[i];
 			this.controller.listen(el, Mojo.Event.listTap, this.tweetTapped.bind(this));
 		}
-		
+
 		//listen to the load more buttons
 		for (i=0; i < loadMoreBtns.length; i++) {
 			var btn = loadMoreBtns[i];
 			this.controller.listen(btn, Mojo.Event.tap, this.moreButtonTapped.bind(this));
 		}
-				
+
 		this.addListeners();
 		setTimeout(function(){
 			this.refreshAll();
@@ -214,7 +214,7 @@ MainAssistant.prototype = {
 			this.getRetweeted();
 			// get the avatar for the minimized card
 			this.getUserAvatar();
-			
+
 			if (this.opts.autoScroll) {
 				var panel = this.getPanel(this.opts.panel);
 				this.scrollTo(panel.index);
@@ -232,14 +232,14 @@ MainAssistant.prototype = {
 				}
 				event.stop();
 			}
-			
+
 		}
 		else if (event.type === Mojo.Event.forward) {
 			var prefs = new LocalStorage();
 			var onSwipe = prefs.read('forwardSwipe');
 			if (Ajax.activeRequestCount === 0) {
 				if (onSwipe === 'current') {
-					this.refresh();			
+					this.refresh();
 				}
 				else if (onSwipe === 'all') {
 					this.refreshAll();
@@ -288,13 +288,13 @@ MainAssistant.prototype = {
 		// for (i=0; i < classes.length; i++) {
 		//	this.controller.select('body')[0].removeClassName(classes[i]);
 		// }
-		// 
+		//
 		// this.controller.select('body')[0].addClassName(theme);
-		// 
+		//
 		// //add cookie to save theme
 		// var themeCookie = new Mojo.Model.Cookie('phnxTheme');
 		// themeCookie.put({
-		//	className: theme 
+		//	className: theme
 		// });
 	},
 	changeFont: function(cmdFont) {
@@ -313,19 +313,20 @@ MainAssistant.prototype = {
 		if (this.controller.window && this.controller) {
 			var screenHeight = this.controller.window.innerHeight;
 			var screenWidth = this.controller.window.innerWidth;
+			var panelWidth = 320;
 			var height = screenHeight - 0; //subtract the header
 			// var height = screenHeight; //subtract the header
 			var i;
 			//grab each panel element. There should be as many of these as there are in this.panels
-			
+
 			var panelElements = this.controller.select('.panel');
 			var totalWidth = 0; //the width of the main container
 			for (i=0; i < panelElements.length; i++) {
 				var panel = panelElements[i];
 				panel.setStyle({
-					"width": screenWidth + "px"
+					"width": panelWidth + "px"
 				});
-				totalWidth += screenWidth;
+				totalWidth += panelWidth;
 
 				//each scroller needs a max height. otherwise they don't scroll
 				this.controller.get(this.panels[i].id + "-scroller").setStyle({"max-height": height + "px"});
@@ -335,7 +336,7 @@ MainAssistant.prototype = {
 			this.controller.get('scrollItems').setStyle({'width' : totalWidth + 'px'});
 			//set the height of the dark 'shim' that we use sometimes
 			this.controller.get('shim').setStyle({'height': screenHeight + 'px'});
-			this.controller.get('image-preview').hide();	
+			this.controller.get('image-preview').hide();
 		}
 	},
 	scrollTo: function(idx) {
@@ -344,7 +345,7 @@ MainAssistant.prototype = {
 	},
 	scrollerChanged: function(event) {
 		var panel = this.panels[event.value];
-		
+
 		//hide the beacon and new content indicator on the old panel
 		var oldPanel = this.panels[this.timeline];
 		if (oldPanel.refresh) {
@@ -353,7 +354,7 @@ MainAssistant.prototype = {
 			//	this.controller.get(newTweets[i]).removeClassName('new-tweet');
 			// }
 			this.controller.get(oldPanel.id + '-beacon').removeClassName('show');
-		}		
+		}
 		if (event.value === 4) {
 			// enable the search box
 			this.controller.get('txtSearch').disabled = false;
@@ -366,7 +367,7 @@ MainAssistant.prototype = {
 			this.controller.get('txtSearch').blur();
 			this.controller.get('txtSearch').disabled = true;
 		}
-		
+
 		//update the index
 		this.timeline = event.value;
 		// Move the indicator arrow
@@ -381,7 +382,7 @@ MainAssistant.prototype = {
 			this.trendingTopicsModel.items = trends;
 			this.controller.modelChanged(this.trendingTopicsModel);
 		}.bind(this));
-	
+
 		Twitter.getSavedSearches(function(response){
 			var savedSearches = response.responseJSON;
 			if (savedSearches.length > 0) {
@@ -413,7 +414,7 @@ MainAssistant.prototype = {
 			if (panel.model.items.length > 0) {
 				// grab the second tweet for gap detection
 				var tweet = panel.model.items[1];
-				
+
 				if (tweet.is_rt) {
 					lastId = tweet.original_id;
 				}
@@ -424,7 +425,7 @@ MainAssistant.prototype = {
 			if (lastId === 0) {
 				this.getTweets(panel);
 			}else{
-				this.getTweets(panel, lastId); 
+				this.getTweets(panel, lastId);
 			}
 		}
 		else if (panel.id === 'search') {
@@ -456,6 +457,7 @@ MainAssistant.prototype = {
 				return panel;
 			}
 		}
+		return null;
 	},
 	loadMore: function(timeline) {
 		this.loadingMore = true;
@@ -463,12 +465,12 @@ MainAssistant.prototype = {
 		var maxId = model.items[model.items.length - 1].id_str;
 		this.getTweets(this.panels[this.timeline], undefined, maxId);
 	},
-	getTweets: function(panel, lastId, maxId) {		
+	getTweets: function(panel, lastId, maxId) {
 		var args = {
 			'count': this.count,
 			'include_entities': 'true'
 		};
-		
+
 		if (lastId) {
 			args.since_id = lastId;
 		}
@@ -494,16 +496,16 @@ MainAssistant.prototype = {
 	gotItems: function(response, meta) {
 		// one-size-fits-all function to handle timeline updates
 		// Does lots of looping to update relative times. Needs optimization
-		
+
 		var panel = meta.panel;
 		var model = panel.model;
 		var scroller = panel.id + "-scroller";
 		var more = "more-" + panel.id;
 		var tweets = response.responseJSON;
 		var xCount = tweets.length;
-		
+
 		var i;
-		
+
 		if (tweets.length > 1) {
 			var count = 0;
 			for (i=0; i < tweets.length; i++) {
@@ -514,7 +516,7 @@ MainAssistant.prototype = {
 				var th = new TweetHelper();
 				tweets[i] = th.process(tweets[i]);
 			}
-			
+
 			if (!this.loadingMore) {
 				this.controller.get(panel.id + '-beacon').addClassName('show');
 			}
@@ -522,22 +524,22 @@ MainAssistant.prototype = {
 		else {
 			this.controller.get(panel.id + '-beacon').removeClassName('show');
 		}
-		
+
 		var scrollId = 0; // this is the INDEX (not ID, sorry) of the new tweet to scroll to
-		
+
 		if (model.items.length > 0 && this.loadingMore) {
 			//loading "more" items (not refreshing), so append to bottom
-			
+
 			for (i=1; i < tweets.length; i++) {
 				//start the loop at i = 1 so tweets aren't duplicated
 				model.items.splice((model.items.length - 1) + i, 0, tweets[i]);
 			}
-			
+
 		}
 		else if (model.items.length > 0 && !this.loadingMore) {
 			// a typical refresh is being performed here (append to top)
 			var k;
-			
+
 			// loop through old tweets
 			for (k=0; k < model.items.length; k++) {
 				// remove the tweet divider
@@ -545,7 +547,7 @@ MainAssistant.prototype = {
 					model.items[k].cssClass = "old-tweet";
 				}
 			}
-			
+
 			var hasGap, loopCount;
 			var tweetCount = tweets.length;
 			if (tweets[tweets.length - 1].id_str === model.items[0].id_str) {
@@ -561,38 +563,38 @@ MainAssistant.prototype = {
 				panel.gapStart = tweets[tweets.length - 1].id_str;
 				panel.gapEnd = model.items[0].id_str;
 			}
-			
+
 			hasGap = false; // ignore gap detection in this release
-			
+
 			var j;
 			for (j = loopCount; j >= 0; j--) {
 				//doing a backwards (upwards?) loop to get the items in the right order
-				
+
 				if (j === loopCount) {
 					tweets[j].cssClass = 'new-tweet';
-					
+
 					// These nouns are used in the "X New {Noun}" message
 					var nouns = {
 						'home': 'Tweet',
 						'mentions': 'Mention',
 						'messages': 'Direct Message'
 					};
-					
+
 					// TODO: Make this message tappable to load gaps
 					var msg = tweetCount + ' New ' + nouns[panel.id];
 					if (tweetCount > 1) {
 						msg += 's'; //pluralize
 					}
-					
+
 					if (hasGap) {
 						msg += '<br /><span>Tap to load missing tweets</span>';
 					}
-					
+
 					tweets[j].dividerMessage = msg;
 				}
 				model.items.splice(0,0,tweets[j]);
 			}
-			
+
 			scrollId = tweetCount; // set the index of the new tweet to auto-scroll to
 		}
 		else{
@@ -604,20 +606,20 @@ MainAssistant.prototype = {
 		var account = new Account();
 		account.load(this.user);
 		account.save();
-		
+
 		// Save the recent ids for notification checks
 		if (tweets.length > 0 && !this.loadingMore) {
 			var store = new LocalStorage();
-			store.write(this.user.id + '_' + panel.id, tweets[0].id_str);	
+			store.write(this.user.id + '_' + panel.id, tweets[0].id_str);
 		}
-		
+
 		if (panel.update) {
 			for (i=0; i < model.items.length; i++) {
 				var tweet = model.items[i];
 				tweet.time_str = this.timeSince(tweet.created_at);
 			}
 		}
-		
+
 		this.controller.modelChanged(panel.model);
 		if (scrollId !== 0) {
 			this.controller.get('list-' + panel.id).mojo.revealItem(scrollId, true);
@@ -641,11 +643,11 @@ MainAssistant.prototype = {
 					this.controller.get('your-lists').addClassName('single');
 				}
 				this.listsModel.items = lists;
-				this.controller.modelChanged(this.listsModel);	
+				this.controller.modelChanged(this.listsModel);
 				this.controller.get('your-lists').show();
 			}
 		}.bind(this));
-		
+
 		Twitter.listSubscriptions({'user_id':this.user.id}, function(response) {
 			var subs = response.responseJSON.lists;
 			if (subs.length > 0) {
@@ -685,14 +687,14 @@ MainAssistant.prototype = {
 			name: global.authStage,
 			lightweight: true
 		};
-		
+
 		var self = this;
 		var pushMainScene = function(stageController) {
 			stageController.user = {};
 			stageController.users = self.users;
 			stageController.pushScene('oauth', true);
 		};
-		
+
 		var app = Mojo.Controller.getAppController();
 		var authStage = app.getStageProxy(global.authStage);
 		if (authStage) {
@@ -704,7 +706,7 @@ MainAssistant.prototype = {
 			}, 200);
 		}
 	},
-	openAccount: function(userId) {		
+	openAccount: function(userId) {
 		var users = new Account();
 		users.all(function(r) {
 			var user;
@@ -719,7 +721,7 @@ MainAssistant.prototype = {
 				name: stageName,
 				lightweight: true
 			};
-			
+
 			var pushMainScene = function(stageController) {
 				global.stageActions(stageController);
 				var launchArgs = {
@@ -728,16 +730,16 @@ MainAssistant.prototype = {
 				};
 				stageController.pushScene('launch', launchArgs);
 			};
-			
+
 			var app = Mojo.Controller.getAppController();
 			var userStage = app.getStageProxy(stageName);
-			
+
 			if (userStage) {
 				userStage.activate();
 			}
 			else {
-				app.createStageWithCallback(args, pushMainScene, "card");	
-			}			
+				app.createStageWithCallback(args, pushMainScene, "card");
+			}
 		}.bind(this));
 	},
 	logout: function() {
@@ -750,23 +752,23 @@ MainAssistant.prototype = {
 			if (r.length > 0) {
 				// change the default account to the next one in line
 				prefs.write('defaultAccount', r[0].id);
-				this.openAccount(r[0].id);	
+				this.openAccount(r[0].id);
 			}
 			else {
 				prefs.write('defaultAccount', '0');
 				this.newAccountTapped();
-				
+
 			}
 			setTimeout(function(){
 				var app = this.controller.stageController.getAppController();
 				app.closeStage(global.mainStage + user.id);
 			}.bind(this), 500);
-		}.bind(this));	
+		}.bind(this));
 	},
 	tweetTapped: function(event) {
 		if (this.toasters.items.length === 0) {
 			Mojo.Log.info(event.originalEvent.srcElement.id);
-			
+
 			if (event.originalEvent.srcElement.id === 'gap') {
 				// Load the gap if it's gappy
 				Mojo.Log.info('gaptastic!');
@@ -774,7 +776,7 @@ MainAssistant.prototype = {
 				this.fillGap(panel);
 			}
 			else {
-				this.toasters.add(new TweetToaster(event.item, this));		
+				this.toasters.add(new TweetToaster(event.item, this));
 			}
 		}
 	},
@@ -822,14 +824,14 @@ MainAssistant.prototype = {
 			'lists': 'fourth',
 			'search': 'fifth'
 		};
-		
+
 		this.controller.get('indicator').className = ''; // remove existing classes
 		this.controller.get('indicator').addClassName(positions[panelId]);
 	},
 	navButtonTapped: function(event) {
 		var id = event.srcElement.id;
 		var panelId = id.substr(id.indexOf('-') + 1);
-		
+
 		var panelIndex;
 		//get the index of the panel for the nav item
 		for (i=0; i < this.panels.length; i++) {
@@ -837,7 +839,7 @@ MainAssistant.prototype = {
 				panelIndex = i;
 			}
 		}
-		
+
 		//if it's the current panel, scroll to the top
 		//otherwise, scroll to that panel
 		if (this.timeline === panelIndex) {
@@ -866,7 +868,7 @@ MainAssistant.prototype = {
 				items: response.responseJSON,
 				user: this.user
 			};
-			
+
 			this.controller.stageController.pushScene('status', opts);
 		}.bind(this));
 	},
@@ -895,7 +897,7 @@ MainAssistant.prototype = {
 			user: this.user,
 			rtType: id
 		};
-		
+
 		if (id === 'rt-others') {
 			Twitter.retweetsToMe(function(response) {
 				if (response.responseJSON.length > 0) {
@@ -923,7 +925,7 @@ MainAssistant.prototype = {
 				}
 				else {
 					banner('Twitter did not find anything');
-				}				
+				}
 			}.bind(this));
 		}
 	},
@@ -942,7 +944,7 @@ MainAssistant.prototype = {
 						var rtId = items[i].retweeted_status.id_str;
 						this.user.retweeted.push(rtId);
 					}
-				}			
+				}
 			}.bind(this));
 		}.bind(this), 2000);
 	},
@@ -970,7 +972,7 @@ MainAssistant.prototype = {
 		this.controller.listen(this.controller.get('refresh'), Mojo.Event.tap, this.refreshTapped.bind(this));
 		this.controller.listen(this.controller.get('new-tweet'), Mojo.Event.tap, this.newTweet.bind(this));
 		this.controller.listen(this.controller.get('header-title'), Mojo.Event.tap, this.headerTapped.bind(this));
-		this.controller.listen(this.controller.get('shim'), Mojo.Event.tap, this.shimTapped.bind(this));		
+		this.controller.listen(this.controller.get('shim'), Mojo.Event.tap, this.shimTapped.bind(this));
 		this.controller.listen(this.controller.window, 'resize', this.windowResized.bind(this));
 		this.controller.listen(this.controller.get('nav-home'), Mojo.Event.tap, this.navButtonTapped.bind(this));
 		this.controller.listen(this.controller.get('nav-mentions'), Mojo.Event.tap, this.navButtonTapped.bind(this));
@@ -981,20 +983,20 @@ MainAssistant.prototype = {
 		this.controller.listen(this.controller.get('lists-you-follow-list'), Mojo.Event.listTap, this.listTapped.bind(this));
 		this.controller.listen(this.controller.get('saved-searches-list'), Mojo.Event.listTap, this.searchListTapped.bind(this));
 		this.controller.listen(this.controller.get('trending-topics-list'), Mojo.Event.listTap, this.searchListTapped.bind(this));
-		
-		
+
+
 		this.controller.get(this.controller.document).observe("keyup", function(e) {
 			// banner(e.keyCode + ' is the key');
 			if (e.keyCode !== 27 && e.keyCode !== 57575 && this.toasters.items.length === 0) {
 				// type to tweet, ignore the back gesture
-				
+
 				// keycodes for punctuation and symbols are not normal
 				// so only ascii chars are passed to the compose toaster for now...
 				var text = Mojo.Char.isValidWrittenChar(e.keyCode);
 				if (this.timeline !== 4) {
 					this.toggleCompose({
 						'text': text
-					}); 
+					});
 				}
 				else {
 					// type to search on the search panel
@@ -1005,7 +1007,7 @@ MainAssistant.prototype = {
 
 						var len = this.controller.get('txtSearch').value.length;
 						this.controller.get('txtSearch').setSelectionRange(len,len); //focus the cursor at the end
-						this.controller.get('txtSearch').focus(); 
+						this.controller.get('txtSearch').focus();
 					}
 				}
 			}
@@ -1025,7 +1027,7 @@ MainAssistant.prototype = {
 		this.controller.stopListening(this.controller.get('refresh'), Mojo.Event.tap, this.refreshTapped);
 		this.controller.stopListening(this.controller.get('new-tweet'), Mojo.Event.tap, this.newTweet);
 		this.controller.stopListening(this.controller.get('header-title'), Mojo.Event.tap, this.headerTapped);
-		this.controller.stopListening(this.controller.get('shim'), Mojo.Event.tap, this.shimTapped);	
+		this.controller.stopListening(this.controller.get('shim'), Mojo.Event.tap, this.shimTapped);
 		this.controller.stopListening(this.controller.window, 'resize', this.windowResized);
 		this.controller.stopListening(this.controller.get('nav-home'), Mojo.Event.tap, this.navButtonTapped);
 		this.controller.stopListening(this.controller.get('nav-mentions'), Mojo.Event.tap, this.navButtonTapped);

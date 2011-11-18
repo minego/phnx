@@ -4,36 +4,36 @@ var TweetToaster = Class.create(Toaster, {
 		this.nodeId = 'toaster-' + this.id;
 		this.visible = false;
 		this.shim = true;
-		
+
 		// We save the scene's assistant here
 		this.assistant = assistant;
 		this.controller = getController();
 		this.user = this.controller.stageController.user;
 		this.tweet = tweet;
 		this.tweet.toasterId = this.id;
-		
+
 		if (this.tweet.retweet_count > 0) {
 			this.tweet.rt_class = 'show';
 		}
 		else {
 			this.tweet.rt_class = 'hide';
 		}
-		
+
 		var th = new TweetHelper();
 
 		// Process the tweet again for updates or whatever
 		// this.tweet = th.process(this.tweet);
-		
+
 		this.content = {toasterId: this.id};
-		
+
 		var tweetHtml = Mojo.View.render({
 			object: this.tweet,
 			template: 'templates/tweets/details'
 		});
-		
+
 		this.content.tweetHtml = tweetHtml;
 		this.render(this.content, 'templates/toasters/tweet');
-		
+
 		// Stuff to do after the element is added to the DOM
 		var currentUser = getUser();
 		var me = currentUser.id;
@@ -46,15 +46,15 @@ var TweetToaster = Class.create(Toaster, {
 		else {
 			this.controller.get(this.nodeId).addClassName('normal');
 		}
-		
+
 		if (this.tweet.favorited) {
 			this.controller.get('favorite-' + this.id).addClassName('favorited');
 		}
-		
+
 		if (this.tweet.in_reply_to_status_id_str !== null && this.tweet.in_reply_to_status_id_str) {
 			this.controller.get(this.nodeId).addClassName('has-convo');
 		}
-		
+
 		// Expand links if possible
 		th.autoExpand(this.tweet, function(shortUrl, expandedUrl){
 			this.tweet.text = this.tweet.text.replace(new RegExp(shortUrl, 'g'), expandedUrl);
@@ -66,7 +66,7 @@ var TweetToaster = Class.create(Toaster, {
 			this.controller.get('details-' + this.id).update(tweetHtml);
 			Mojo.Event.listen(this.controller.get('rt-' + this.id), Mojo.Event.tap, this.rtTapped.bind(this));
 		}.bind(this));
-		
+
 	},
 	actionTapped: function(event) {
 		var action = event.srcElement.id.substr(0, event.srcElement.id.indexOf('-'));
@@ -89,17 +89,20 @@ var TweetToaster = Class.create(Toaster, {
 			case 'convo':
 				this.showConvo();
 				break;
+			case 'close':
+				this.assistant.toasters.back();
+				break;
 		}
 	},
 	createReply: function() {
 		var statusText;
-		
+
 		var args = {
 			'reply_id': this.tweet.id_str
 		};
-		
+
 		if (this.tweet.entities && this.tweet.entities.user_mentions.length > 0) {
-			// Reply all			
+			// Reply all
 			statusTxt = '@' + this.tweet.user.screen_name + ' ';
 			var selectionStart = statusTxt.length;
 			var selectionLength = 0;
@@ -107,7 +110,7 @@ var TweetToaster = Class.create(Toaster, {
 			for (var i=0; i < this.tweet.entities.user_mentions.length; i++) {
 				if (this.tweet.entities.user_mentions[i].screen_name !== currentUser.username) {
 					statusTxt += '@' + this.tweet.entities.user_mentions[i].screen_name + ' ';
-					selectionLength += this.tweet.entities.user_mentions[i].screen_name.length + 2; 
+					selectionLength += this.tweet.entities.user_mentions[i].screen_name.length + 2;
 				}
 			}
 
@@ -131,7 +134,7 @@ var TweetToaster = Class.create(Toaster, {
 		var th = new TweetHelper();
 		var rt = th.isRetweeted(this.tweet, this.user);
 		if (rt === false) {
-			this.assistant.toasters.add(new RetweetToaster(this.tweet, this.assistant));	
+			this.assistant.toasters.add(new RetweetToaster(this.tweet, this.assistant));
 		}
 		else if (rt === true) {
 			var opts = {
@@ -160,7 +163,7 @@ var TweetToaster = Class.create(Toaster, {
 			Twitter.action('favorite', this.tweet.id_str, function(response, meta){
 				this.tweet.favorited = true;
 				this.controller.get('favorite-' + this.id).addClassName('favorited');
-			}.bind(this));	
+			}.bind(this));
 		}
 		else {
 			Twitter.action('unfavorite', this.tweet.id_str, function(response){
@@ -173,7 +176,7 @@ var TweetToaster = Class.create(Toaster, {
 		var Twitter = new TwitterAPI(this.user);
 		var opts = {
 			title: 'Are you sure you want to delete this tweet?',
-			callback: function(){	
+			callback: function(){
 				var onDelete = function(response, meta){
 					// this.controller.get('tweet-' + this.tweet.id_str).remove();
 					// this.assistant.panels[this.assistant.timeline]
@@ -193,7 +196,7 @@ var TweetToaster = Class.create(Toaster, {
 					this.controller.modelChanged(changedModel);
 					banner('No one will ever know...'); //except the people who already saw it!
 				}.bind(this);
-				
+
 				Twitter.action('destroy', this.tweet.id_str, onDelete, this.assistant);
 				this.assistant.toasters.back();
 			}.bind(this)
@@ -235,7 +238,7 @@ var TweetToaster = Class.create(Toaster, {
 			Twitter.getUser(username, function(response) {
 				this.controller.stageController.pushScene({name:'profile', disableSceneScroller: true}, response.responseJSON);
 			}.bind(this));
-			
+
 		}
 	},
 	handleLink: function(url) {
@@ -333,7 +336,7 @@ var TweetToaster = Class.create(Toaster, {
 			}
 		}.bind(this));
 	},
-	setup: function() {		
+	setup: function() {
 		Mojo.Event.listen(this.controller.get('details-' + this.id), Mojo.Event.tap, this.detailsTapped.bind(this));
 		Mojo.Event.listen(this.controller.get('rt-' + this.id), Mojo.Event.tap, this.rtTapped.bind(this));
 		// Mojo.Event.listen(this.controller.get('preview'), Mojo.Event.tap, this.previewTapped.bind(this));
@@ -343,6 +346,7 @@ var TweetToaster = Class.create(Toaster, {
 		Mojo.Event.listen(this.controller.get('convo-' + this.id), Mojo.Event.tap, this.actionTapped.bind(this));
 		Mojo.Event.listen(this.controller.get('dm-' + this.id), Mojo.Event.tap, this.actionTapped.bind(this));
 		Mojo.Event.listen(this.controller.get('delete-' + this.id), Mojo.Event.tap, this.actionTapped.bind(this));
+		Mojo.Event.listen(this.controller.get('close-' + this.id), Mojo.Event.tap, this.actionTapped.bind(this));
 	},
 	cleanup: function() {
 		Mojo.Event.stopListening(this.controller.get('details-' + this.id), Mojo.Event.tap, this.detailsTapped);
@@ -354,5 +358,6 @@ var TweetToaster = Class.create(Toaster, {
 		Mojo.Event.stopListening(this.controller.get('convo-' + this.id), Mojo.Event.tap, this.actionTapped);
 		Mojo.Event.stopListening(this.controller.get('dm-' + this.id), Mojo.Event.tap, this.actionTapped);
 		Mojo.Event.stopListening(this.controller.get('delete-' + this.id), Mojo.Event.tap, this.actionTapped);
+		Mojo.Event.stopListening(this.controller.get('close-' + this.id), Mojo.Event.tap, this.actionTapped);
 	}
 });

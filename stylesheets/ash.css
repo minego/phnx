@@ -1,5 +1,6 @@
 body.default {
 	background: url('../images/low/scene-top.png') left top repeat-x,url(../images/low/themes/ash/bg.png) no-repeat left top;
+	background-size: 100%;
 }
 
 #header {
@@ -70,13 +71,6 @@ body.default {
 }
 .compose-opts {
 /*	background: url('../images/low/compose-opts-bg.png') left top repeat-x;*/
-}
-.compose-submit {
-	color: #fff;
-	-webkit-border-image: url(../images/low/buttons/submit.png) 9 stretch;
-}
-.compose-submit.selected {
-	-webkit-border-image: url(../images/low/buttons/submit-tapped.png) 9 stretch;	
 }
 
 .scene-title {

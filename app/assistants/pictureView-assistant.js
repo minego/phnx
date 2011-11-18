@@ -20,6 +20,12 @@ PictureViewAssistant.prototype = {
 				}
 			}
 		);
+
+		this.closeTapped = this.closeTapped.bind(this);
+		this.controller.listen(this.imageViewer, Mojo.Event.tap, this.closeTapped);
+	},
+	closeTapped: function() {
+		this.controller.stageController.popScene();
 	},
 	handleWindowResize: function(event) {
 		if (this.imageViewer && this.imageViewer.mojo) {
@@ -33,10 +39,12 @@ PictureViewAssistant.prototype = {
 	    this.imageViewer.mojo.manualSize(Mojo.Environment.DeviceInfo.screenWidth, Mojo.Environment.DeviceInfo.screenHeight);
 	},
 	deactivate: function(event) {
-		this.controller.stageController.setWindowOrientation('up'); // Not sure if it's needed, but doesn't hurt
+		// TODO	Test this on phones - This causes problems on the TouchPad
+		// this.controller.stageController.setWindowOrientation('up'); // Not sure if it's needed, but doesn't hurt
 		this.controller.enableFullScreenMode(false);
 	},
 	cleanup: function(event) {
 		this.controller.stopListening(this.controller.window, 'resize', this.handleWindowResizeHandler);
+		this.controller.stopListening(this.imageViewer, Mojo.Event.tap, this.closeTapped);
 	}
 };

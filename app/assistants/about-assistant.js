@@ -9,10 +9,10 @@ AboutAssistant.prototype = {
 				command: 'cmdSupport'
 			}
 		];
-		
+
 		this.controller.setupWidget(Mojo.Menu.appMenu, {omitDefaultItems: true}, {visible: true, items: appMenu});
 		this.controller.get('version').update(Mojo.appInfo.version);
-		
+
 		this.controller.listen('head-honcho', Mojo.Event.tap, this.awesomeSauce.bind(this));
 		this.controller.listen('series-of-tubes', Mojo.Event.tap, this.coolio.bind(this));
 	},
@@ -30,6 +30,6 @@ AboutAssistant.prototype = {
 	},
 	cleanup: function() {
 		this.controller.stopListening('head-honcho', Mojo.Event.tap, this.awesomeSauce);
-		this.controller.stopListening('series-of-tubes', Mojo.Event.tap, this.coolio);		
+		this.controller.stopListening('series-of-tubes', Mojo.Event.tap, this.coolio);
 	}
 };
