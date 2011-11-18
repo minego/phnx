@@ -4,16 +4,16 @@ var LookupToaster = Class.create(Toaster, {
 		this.nodeId = 'toaster-' + this.id;
 		this.visible = false;
 		this.shim = true;
-		
+
 		// We save the scene's assistant here
 		this.assistant = assistant;
 		this.controller = getController();
 		this.user = this.controller.stageController.user;
-		
+
 		var obj = {
 			toasterId: this.id
 		};
-		
+
 		this.render(obj, 'templates/toasters/lookup');
 		get('txtSearch-' + this.id).focus();
 	},
@@ -25,11 +25,15 @@ var LookupToaster = Class.create(Toaster, {
 					name: 'profile',
 					disableSceneScroller: true
 				}, r.responseJSON);
-			}.bind(this));	
+			}.bind(this));
 		}
 	},
-	setup: function() {		
+	backTapped: function(event) {
+		this.assistant.toasters.back();
+	},
+	setup: function() {
 		Mojo.Event.listen(get('search-' + this.id), Mojo.Event.tap, this.searchTapped.bind(this));
+		Mojo.Event.listen(get('back-' + this.id), Mojo.Event.tap, this.backTapped.bind(this));
 		get('txtSearch-' + this.id).observe('keydown', function(e){
 			if (e.keyCode === 13) {
 				this.searchTapped();
@@ -39,5 +43,6 @@ var LookupToaster = Class.create(Toaster, {
 	},
 	cleanup: function() {
 		Mojo.Event.stopListening(get('search-' + this.id), Mojo.Event.tap, this.searchTapped);
+		Mojo.Event.stopListening(get('back-' + this.id), Mojo.Event.tap, this.backTapped);
 	}
 });

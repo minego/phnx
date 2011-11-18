@@ -89,7 +89,7 @@ var TweetToaster = Class.create(Toaster, {
 			case 'convo':
 				this.showConvo();
 				break;
-			case 'close':
+			case 'back':
 				this.assistant.toasters.back();
 				break;
 		}
@@ -346,7 +346,7 @@ var TweetToaster = Class.create(Toaster, {
 		Mojo.Event.listen(this.controller.get('convo-' + this.id), Mojo.Event.tap, this.actionTapped.bind(this));
 		Mojo.Event.listen(this.controller.get('dm-' + this.id), Mojo.Event.tap, this.actionTapped.bind(this));
 		Mojo.Event.listen(this.controller.get('delete-' + this.id), Mojo.Event.tap, this.actionTapped.bind(this));
-		Mojo.Event.listen(this.controller.get('close-' + this.id), Mojo.Event.tap, this.actionTapped.bind(this));
+		Mojo.Event.listen(this.controller.get('back-' + this.id), Mojo.Event.tap, this.actionTapped.bind(this));
 	},
 	cleanup: function() {
 		Mojo.Event.stopListening(this.controller.get('details-' + this.id), Mojo.Event.tap, this.detailsTapped);
@@ -358,6 +358,6 @@ var TweetToaster = Class.create(Toaster, {
 		Mojo.Event.stopListening(this.controller.get('convo-' + this.id), Mojo.Event.tap, this.actionTapped);
 		Mojo.Event.stopListening(this.controller.get('dm-' + this.id), Mojo.Event.tap, this.actionTapped);
 		Mojo.Event.stopListening(this.controller.get('delete-' + this.id), Mojo.Event.tap, this.actionTapped);
-		Mojo.Event.stopListening(this.controller.get('close-' + this.id), Mojo.Event.tap, this.actionTapped);
+		Mojo.Event.stopListening(this.controller.get('back-' + this.id), Mojo.Event.tap, this.actionTapped);
 	}
 });

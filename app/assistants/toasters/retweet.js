@@ -28,12 +28,17 @@ var RetweetToaster = Class.create(Toaster, {
 		var rtText = 'RT @' + this.tweet.user.screen_name + ': ' + this.tweet.stripped;
 		this.assistant.toasters.add(new ComposeToaster({'text': rtText,'rt':true}, this.assistant));
 	},
+	cancelTapped: function(event) {
+		this.assistant.toasters.back();
+	},
 	setup: function() {
 		Mojo.Event.listen(get('publish'), Mojo.Event.tap, this.publishTapped.bind(this));
 		Mojo.Event.listen(get('edit'), Mojo.Event.tap, this.editTapped.bind(this));
+		Mojo.Event.listen(get('cancel'), Mojo.Event.tap, this.cancelTapped.bind(this));
 	},
 	cleanup: function() {
 		Mojo.Event.stopListening(get('publish'), Mojo.Event.tap, this.publishTapped);
 		Mojo.Event.stopListening(get('edit'), Mojo.Event.tap, this.editTapped);
+		Mojo.Event.stopListening(get('cancel'), Mojo.Event.tap, this.cancelTapped.bind(this));
 	}
 });

@@ -850,6 +850,10 @@ span.link{
 	background: url('../images/low/icons/cancel.png') center center no-repeat;
 	display: inline-block;
 }
+.toaster-button.back {
+	background: url('../images/low/icons/back.png') center center no-repeat;
+	display: inline-block;
+}
 .toaster-button.edit {
 	background: url('../images/low/icons/edit.png') center center no-repeat;
 	display: inline-block;

@@ -34,7 +34,7 @@ var ConvoToaster = Class.create(Toaster, {
 	tweetTapped: function(event) {
 		this.assistant.toasters.add(new TweetToaster(event.item, this.assistant));
 	},
-	closeTapped: function(event) {
+	backTapped: function(event) {
 		this.assistant.toasters.back();
 	},
 
@@ -46,10 +46,10 @@ var ConvoToaster = Class.create(Toaster, {
 		get(this.nodeId).setStyle({'max-height': (screenHeight - 45) + 'px'});
 		this.controller.listen(get('convo-list-' + this.id), Mojo.Event.listTap, this.tweetTapped.bind(this));
 
-		Mojo.Event.listen(this.controller.get('close-' + this.id), Mojo.Event.tap, this.closeTapped.bind(this));
+		Mojo.Event.listen(this.controller.get('back-' + this.id), Mojo.Event.tap, this.backTapped.bind(this));
 	},
 	cleanup: function() {
 		this.controller.stopListening(get('convo-list-' + this.id), Mojo.Event.listTap, this.tweetTapped);
-		Mojo.Event.stopListening(this.controller.get('close-' + this.id), Mojo.Event.tap, this.closeTapped);
+		Mojo.Event.stopListening(this.controller.get('back-' + this.id), Mojo.Event.tap, this.backTapped);
 	}
 });
