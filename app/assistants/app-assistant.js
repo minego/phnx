@@ -8,6 +8,15 @@ AppAssistant.prototype = {
 			global.Metrix = new Metrix();
 			global.Metrix.postDeviceData();
 		}
+
+		if (Mojo.Environment.DeviceInfo.modelNameAscii == "Pixi" ||
+			Mojo.Environment.DeviceInfo.modelNameAscii == "Veer") {
+			this.controller.document.body.addClassName("small-device");
+		}
+		if (Mojo.Environment.DeviceInfo.modelNameAscii == "TouchPad" ||
+			Mojo.Environment.DeviceInfo.modelNameAscii == "Emulator") {
+			this.controller.document.body.addClassName("no-gesture");
+		}
 	},
 	handleLaunch: function(params) {
 		if (params.action === 'checkNotifications') {

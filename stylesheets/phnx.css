@@ -5,6 +5,10 @@ body{
 	margin: 0;
 	padding: 0;
 }
+body.small-device {  /* pixi/veer */
+}
+body.no-gesture {  /* touchpad */
+}
 
 /*#loading {
 	position: fixed;
