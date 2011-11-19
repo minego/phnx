@@ -22,10 +22,18 @@ function MainAssistant(opts) {
 MainAssistant.prototype = {
 	setup: function() {
 		// set css classes based on device
+		console.log(Mojo.Environment.DeviceInfo.modelNameAscii);
+
 		if (Mojo.Environment.DeviceInfo.modelNameAscii == "Pixi" ||
 			Mojo.Environment.DeviceInfo.modelNameAscii == "Veer") {
 			this.controller.document.body.addClassName("small-device");
+		} else if (Mojo.Environment.DeviceInfo.modelNameAscii == "TouchPad" ||
+			Mojo.Environment.DeviceInfo.screenWidth > 500) {
+			this.controller.document.body.addClassName("large-device");
+		} else {
+			this.controller.document.body.addClassName("medium-device");
 		}
+
 		if (Mojo.Environment.DeviceInfo.modelNameAscii == "TouchPad" ||
 			Mojo.Environment.DeviceInfo.modelNameAscii == "Emulator") {
 			this.controller.document.body.addClassName("no-gesture");

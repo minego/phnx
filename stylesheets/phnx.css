@@ -7,7 +7,14 @@ body{
 }
 body.small-device {  /* pixi/veer */
 }
-body.no-gesture {  /* touchpad */
+
+body.medium-device {  /* pre/pre+/pre2/pre3 */
+}
+
+body.large-device {  /* touchpad */
+}
+
+body.no-gesture {  /* touchpad/emulator */
 }
 
 /*#loading {
@@ -210,6 +217,10 @@ body.no-gesture {  /* touchpad */
 }
 
 .nav-title {
+	display: none;
+}
+
+.large-device .nav-title {
 	display: block;
 	width: 256px;
 	height: 51px;
@@ -224,10 +235,6 @@ body.no-gesture {  /* touchpad */
 	color: #94989c;
 	font-size: 18px;
 	padding-top: 12px;
-}
-
-body.small-device .nav-title {
-	display: none !important;
 }
 
 #nav-home {
@@ -286,7 +293,7 @@ body.small-device .nav-title {
 	left: 281px;
 }
 
-body.no-gesture #indicator {
+.large-device #indicator {
 	display: none !important;
 }
 
