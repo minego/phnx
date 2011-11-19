@@ -7,7 +7,7 @@
 	"title": "Project Macaw",
 	"icon": "macaw.png",
 	"miniicon":"icon24.png",
-	"splashicon": "icon256.png",
+	"splashicon": "icon256-villo.png",
 	"splashBackground":"splash-bg-villo.png",
 	"keywords": ["twitter","tweet"],
 	"copyright": "Copyright 2011 David Strack",
