@@ -11,7 +11,7 @@ function OauthAssistant() {
 		consumer_key_secret: Config.secret,
 		callback: 'http://www.google.com' // Optional - 'oob' by default if not specified
 	};
-	
+
 	this.message = null;
 	this.accessor = null;
 	this.authHeader = null;
@@ -40,7 +40,7 @@ function OauthAssistant() {
 	this.exchangingToken=false;
 }
 OauthAssistant.prototype.setup = function() {
-	
+
 	this.controller.setupWidget('browser',{},this.storyViewModel = {});
 	this.reloadModel = {
 		icon: 'refresh',
@@ -60,8 +60,9 @@ OauthAssistant.prototype.setup = function() {
 	Mojo.Event.listen(this.controller.get('browser'),Mojo.Event.webViewLoadStopped, this.loadStopped.bind(this));
 	Mojo.Event.listen(this.controller.get('browser'),Mojo.Event.webViewLoadFailed, this.loadStopped.bind(this));
 	Mojo.Event.listen(this.controller.get('browser'),Mojo.Event.webViewTitleUrlChanged, this.titleChanged.bind(this));
+
 	this.requestToken();
-}
+};
 OauthAssistant.prototype.titleChanged = function(event) {
 	var callbackUrl=event.url;
 	var responseVars=callbackUrl.split("?");
@@ -76,7 +77,7 @@ OauthAssistant.prototype.titleChanged = function(event) {
 		this.exchangeToken(token);
 	}
 	}
-}
+};
 OauthAssistant.prototype.signHeader = function (params){
 	if(params==undefined)
 		params='';
@@ -93,11 +94,11 @@ OauthAssistant.prototype.signHeader = function (params){
 	if(this.token!=null)
 	this.message.parameters.push(['oauth_token',this.token]);
 	this.message.parameters.push(['oauth_version','1.0']);
-	this.message.parameters.sort()
+	this.message.parameters.sort();
 	OAuth.SignatureMethod.sign(this.message, this.accessor);
 	this.authHeader=OAuth.getAuthorizationHeader("", this.message.parameters);
 	return true;
-}
+};
 OauthAssistant.prototype.requestToken = function (){
 	this.url=this.requestTokenUrl;
 	this.method=this.requestTokenMethod;
@@ -117,13 +118,13 @@ OauthAssistant.prototype.requestToken = function (){
 		this.token=this.requested_token;
 		this.tokenSecret=oauth_token_secret;
 		var oauthBrowserParams={
-		authUrl:auth_url,
-		callbackUrl:this.callback
-		}
+			authUrl:auth_url,
+			callbackUrl:this.callback
+		};
 		this.instanceBrowser(oauthBrowserParams);
 	}.bind(this)
 	});
-}
+};
 OauthAssistant.prototype.exchangeToken = function (token){
 	this.exchangingToken=true;
 	this.url=this.accessTokenUrl;
@@ -139,12 +140,12 @@ OauthAssistant.prototype.exchangeToken = function (token){
 			this.controller.stageController.swapScene({name:this.callbackScene},{source:'oauth',response:response_text});
 		}.bind(this)
 	});
-}
+};
 OauthAssistant.prototype.instanceBrowser = function(oauthBrowserParams) {
 	this.storyURL = oauthBrowserParams.authUrl;
-	this.callbackURL=oauthBrowserParams.callbackUrl
+	this.callbackURL=oauthBrowserParams.callbackUrl;
 	this.controller.get('browser').mojo.openURL(oauthBrowserParams.authUrl);
-}
+};
 OauthAssistant.prototype.handleCommand = function(event) {
 	if (event.type == Mojo.Event.command) {
 		switch (event.command) {
@@ -170,6 +171,14 @@ OauthAssistant.prototype.handleCommand = function(event) {
 	this.cmdMenuModel.items.pop(this.stopModel);
 	this.cmdMenuModel.items.push(this.reloadModel);
 	this.controller.modelChanged(this.cmdMenuModel);
+
+	this.controller.get('browser').focus();
+	try {
+		this.controller.window.PalmSystem.editorFocused(true, 0, 0);
+	} catch (e) {
+		// This is fine on a phone with a physical keyboard. Trying to work
+		// around a bug in webOS 3.x with virtual keyboards in mojo
+	}
  };
   //  loadProgress - check for completion, then update progress
  OauthAssistant.prototype.loadProgress = function(event) {
@@ -233,16 +242,16 @@ OauthAssistant.prototype.activate = function(event) {
 	var prefs = new LocalStorage();
 	var theme = prefs.read('theme');
 	this.controller.stageController.loadStylesheet('stylesheets/' + theme +'.css');
-}
+};
 
 OauthAssistant.prototype.deactivate = function(event) {
 
-}
+};
 OauthAssistant.prototype.cleanup = function(event) {
 	Mojo.Event.stopListening(this.controller.get('browser'),Mojo.Event.webViewLoadProgress, this.loadProgress);
 	Mojo.Event.stopListening(this.controller.get('browser'),Mojo.Event.webViewLoadStarted, this.loadStarted);
 	Mojo.Event.stopListening(this.controller.get('browser'),Mojo.Event.webViewLoadStopped, this.loadStopped);
 	Mojo.Event.stopListening(this.controller.get('browser'),Mojo.Event.webViewLoadFailed, this.loadStopped);
 	Mojo.Event.stopListening(this.controller.get('browser'),Mojo.Event.webViewTitleUrlChanged, this.titleChanged);
-}
+};
 
