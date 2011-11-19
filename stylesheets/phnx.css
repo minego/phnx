@@ -222,20 +222,17 @@ body.no-gesture {  /* touchpad/emulator */
 
 .large-device .nav-icon {
 	/* total width is 320 */
-	width: 255px;
+	width: 260px;
 	padding-right: 20px;
 	padding-left: 30px;
-	margin-left: 5px;
+	margin-left: 10px;
 
 	float: left;
 }
 
-.large-device .nav-icon .beacon {
-	display: none;
-}
-
 .nav-icon p {
 	display: none;
+	-webkit-palm-mouse-target: ignore;
 }
 
 .large-device .nav-icon p {
@@ -248,7 +245,7 @@ body.no-gesture {  /* touchpad/emulator */
 }
 
 #nav-home {
-	background: url('../images/low/icons/tweets.png') 19px center no-repeat, url('../images/low/nav-icon-border.png') right 4px no-repeat;
+	background: url('../images/low/icons/tweets.png') 24px center no-repeat, url('../images/low/nav-icon-border.png') right 4px no-repeat;
 }
 #nav-mentions {
 	background: url('../images/low/icons/mentions.png') 22px center no-repeat, url('../images/low/nav-icon-border.png') right 4px no-repeat;

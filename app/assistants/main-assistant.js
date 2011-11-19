@@ -389,7 +389,10 @@ MainAssistant.prototype = {
 		//update the index
 		this.timeline = event.value;
 		// Move the indicator arrow
-		this.moveIndicator(panel.id);
+
+		if (panel) {
+			this.moveIndicator(panel.id);
+		}
 	},
 
 	sideScrollChanged: function(event) {
