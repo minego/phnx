@@ -366,7 +366,7 @@ MainAssistant.prototype = {
 
 		//hide the beacon and new content indicator on the old panel
 		var oldPanel = this.panels[this.timeline];
-		if (oldPanel.refresh) {
+		if (oldPanel && oldPanel.refresh) {
 			// newTweets = this.controller.select('#panel-' + oldPanel.id + ' .new-tweet');
 			// for (var i=0; i < newTweets.length; i++) {
 			//	this.controller.get(newTweets[i]).removeClassName('new-tweet');
@@ -392,7 +392,7 @@ MainAssistant.prototype = {
 		this.moveIndicator(panel.id);
 	},
 
-	sizeScrollChanged: function(event) {
+	sideScrollChanged: function(event) {
 		// Update the position of the bottom bar
 		var screenWidth = this.controller.window.innerWidth;
 		var panelWidth = 320;
@@ -873,15 +873,17 @@ MainAssistant.prototype = {
 		//if it's the current panel, scroll to the top
 		//otherwise, scroll to that panel
 		if (this.timeline === panelIndex) {
-			var scroller = panelId + '-scroller';
-			var position = this.controller.get(scroller).mojo.getScrollPosition();
-			var size = this.controller.get(scroller).mojo.scrollerSize();
-			if (position.top === 0) {
-				// scroll to bottom
-				this.controller.get(scroller).mojo.scrollTo(0, -99999999, true);
-			}
-			else {
-				this.controller.get(scroller).mojo.scrollTo(0, 0,true);
+			var scroller = this.controller.get(panelId + '-scroller');
+
+			if (scroller) {
+				var position = scroller.mojo.getScrollPosition();
+				var size = scroller.mojo.scrollerSize();
+				if (position.top === 0) {
+					// scroll to bottom
+					scroller.mojo.scrollTo(0, -99999999, true);
+				} else {
+					scroller.mojo.scrollTo(0, 0,true);
+				}
 			}
 		}else{
 			this.scrollTo(panelIndex);
@@ -996,7 +998,7 @@ MainAssistant.prototype = {
 	},
 	addListeners: function(event) {
 		this.controller.listen(this.controller.get('sideScroller'), Mojo.Event.propertyChange, this.scrollerChanged.bind(this));
-		this.controller.listen(this.controller.get('sideScroller'), 'scroll', this.sizeScrollChanged.bind(this));
+		this.controller.listen(this.controller.get('sideScroller'), 'scroll', this.sideScrollChanged.bind(this));
 		this.controller.listen(this.controller.get('rt-others'), Mojo.Event.tap, this.rtTapped.bind(this));
 		this.controller.listen(this.controller.get('rt-yours'), Mojo.Event.tap, this.rtTapped.bind(this));
 		this.controller.listen(this.controller.get('rt-ofyou'), Mojo.Event.tap, this.rtTapped.bind(this));
@@ -1052,7 +1054,7 @@ MainAssistant.prototype = {
 	},
 	stopListening: function() {
 		this.controller.stopListening(this.controller.get('sideScroller'), Mojo.Event.propertyChange, this.scrollerChanged);
-		this.controller.stopListening(this.controller.get('sideScroller'), 'scroll', this.sizeScrollChanged);
+		this.controller.stopListening(this.controller.get('sideScroller'), 'scroll', this.sideScrollChanged);
 		this.controller.stopListening(this.controller.get('rt-others'), Mojo.Event.tap, this.rtTapped);
 		this.controller.stopListening(this.controller.get('rt-yours'), Mojo.Event.tap, this.rtTapped);
 		this.controller.stopListening(this.controller.get('rt-ofyou'), Mojo.Event.tap, this.rtTapped);

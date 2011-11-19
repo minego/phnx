@@ -191,6 +191,10 @@ body.no-gesture {  /* touchpad/emulator */
 	overflow: scroll;
 }
 
+.large-device #nav-bar-scroller {
+	width: 1280px;
+}
+
 #footer {
 	text-align: center;
 	color: #94989c;
@@ -212,33 +216,39 @@ body.no-gesture {  /* touchpad/emulator */
 	position: relative;
 	top: 22px;
 }
-.nav-icon.first {
+.nav-icon.last {
 	background: transparent;
 }
 
-.nav-title {
+.large-device .nav-icon {
+	/* total width is 320 */
+	width: 255px;
+	padding-right: 20px;
+	padding-left: 30px;
+	margin-left: 5px;
+
+	float: left;
+}
+
+.large-device .nav-icon .beacon {
 	display: none;
 }
 
-.large-device .nav-title {
-	display: block;
-	width: 256px;
-	height: 51px;
-	padding: 0;
-	margin: 0;
-	float: left;
-	position: relative;
-	top: 22px;
-	left: 10px;
+.nav-icon p {
+	display: none;
+}
 
+.large-device .nav-icon p {
+	display: inline-block;
+	width: 256px;
 	font-family: "Prelude";
 	color: #94989c;
 	font-size: 18px;
-	padding-top: 12px;
+	margin-top: -2px;
 }
 
 #nav-home {
-	background: url('../images/low/icons/tweets.png') center center no-repeat, url('../images/low/nav-icon-border.png') right 4px no-repeat;
+	background: url('../images/low/icons/tweets.png') 19px center no-repeat, url('../images/low/nav-icon-border.png') right 4px no-repeat;
 }
 #nav-mentions {
 	background: url('../images/low/icons/mentions.png') 22px center no-repeat, url('../images/low/nav-icon-border.png') right 4px no-repeat;
@@ -721,44 +731,75 @@ span.link{
 	background: url(../images/low/profile-opts-tapped.png) center center no-repeat;
 }
 .profile-icon-wrapper {
-	padding: 8px 0px 5px 0px;
-	text-align: center;
+	padding: 8px 10px 5px 0px;
 	margin-top: 0px;
+	text-align: center;
+	height: 30px;
 }
+
+.large-device .profile-icon-wrapper {
+	width: 1280px;
+}
+.large-device .profile-icon-wrapper {
+	text-align: left;
+}
+
 .profile-icon {
 	display: inline-block;
 	height: 30px;
 	width: 30px;
 	opacity: .7;
-	padding-right: 20px;
 	-webkit-transition: all .2s;
+	overflow: hidden;
+	padding-right: 20px;
 }
+
+.large-device .profile-icon {
+	/* total width is 320 */
+	width: 252px;
+	padding-right: 20px;
+	padding-left: 28px;
+	margin-left: 20px;
+
+	float: left;
+}
+.profile-icon p {
+	display: none;
+}
+.large-device .profile-icon p {
+	display: inline;
+	font-family: "Prelude";
+	color: #94989c;
+	font-size: 18px;
+	padding-top: 14px;
+}
+
 .profile-icon.selected {
 	opacity: 1;
 }
 .profile-icon.history {
-	background: url(../images/low/icons/profile-history.png) center center no-repeat;
+	background: url(../images/low/icons/profile-history.png) left center no-repeat;
 }
 .profile-icon.history.active {
-	background: url(../images/low/icons/profile-history-tapped.png) center center no-repeat;
+	background: url(../images/low/icons/profile-history-tapped.png) left center no-repeat;
 }
 .profile-icon.mentions {
-	background: url(../images/low/icons/profile-mentions.png) center center no-repeat;
+	background: url(../images/low/icons/profile-mentions.png) center left no-repeat;
 }
 .profile-icon.mentions.active {
-	background: url(../images/low/icons/profile-mentions-tapped.png) center center no-repeat;
+	background: url(../images/low/icons/profile-mentions-tapped.png) left center no-repeat;
 }
 .profile-icon.favorites {
-	background: url(../images/low/icons/profile-favorite.png) center center no-repeat;
+	background: url(../images/low/icons/profile-favorite.png) center left no-repeat;
 }
 .profile-icon.favorites.active {
-	background: url(../images/low/icons/profile-favorite-tapped.png) center center no-repeat;
+	background: url(../images/low/icons/profile-favorite-tapped.png) left center no-repeat;
 }
 .profile-icon.info {
-	background: url(../images/low/icons/profile-info.png) center center no-repeat;
+	background: url(../images/low/icons/profile-info.png) left center no-repeat;
 }
 .profile-icon.info.active {
-	background: url(../images/low/icons/profile-info-tapped.png) center center no-repeat;
+	background: url(../images/low/icons/profile-info-tapped.png) left center no-repeat;
 }
 #profile-menubar {
 	clear: both;

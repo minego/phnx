@@ -123,6 +123,7 @@ ProfileAssistant.prototype = {
 		this.setScrollerSizes();
 
 		this.controller.listen(this.controller.get('sideScroller'), Mojo.Event.propertyChange, this.scrollerChanged.bind(this));
+		this.controller.listen(this.controller.get('sideScroller'), 'scroll', this.sideScrollChanged.bind(this));
 		this.controller.listen(this.controller.get('list-history'), Mojo.Event.listTap, this.tweetTapped.bind(this));
 		this.controller.listen(this.controller.get('list-favorites'), Mojo.Event.listTap, this.tweetTapped.bind(this));
 		this.controller.listen(this.controller.get('list-mentions'), Mojo.Event.listTap, this.mentionTapped.bind(this));
@@ -333,6 +334,16 @@ ProfileAssistant.prototype = {
 		this.controller.select('.active')[0].removeClassName('active');
 		this.controller.get('btn-' + this.panels[i]).addClassName('active');
 	},
+	sideScrollChanged: function(event) {
+		// Update the position of the icon bar
+		var screenWidth = this.controller.window.innerWidth;
+		var panelWidth = 320;
+
+		if (screenWidth > panelWidth) {
+			this.controller.get('profile-menubar').style.marginLeft =
+				(-this.controller.get('sideScroller').scrollLeft) + 'px';
+		}
+	},
 	scrollTo: function(i) {
 		this.controller.get("sideScroller").mojo.setSnapIndex(i, true);
 	},
@@ -510,6 +521,7 @@ ProfileAssistant.prototype = {
 		}
 		this.controller.get(this.controller.document).stopObserving('keyup');
 		this.controller.stopListening(this.controller.get('sideScroller'), Mojo.Event.propertyChange, this.scrollerChanged);
+		this.controller.stopListening(this.controller.get('sideScroller'), 'scroll', this.sideScrollChanged);
 		this.controller.stopListening(this.controller.get('list-history'), Mojo.Event.listTap, this.tweetTapped);
 		this.controller.stopListening(this.controller.get('list-favorites'), Mojo.Event.listTap, this.tweetTapped);
 		this.controller.stopListening(this.controller.get('list-mentions'), Mojo.Event.listTap, this.mentionTapped);
