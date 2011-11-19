@@ -383,6 +383,18 @@ MainAssistant.prototype = {
 		// Move the indicator arrow
 		this.moveIndicator(panel.id);
 	},
+
+	sizeScrollChanged: function(event) {
+		// Update the position of the bottom bar
+		var screenWidth = this.controller.window.innerWidth;
+		var panelWidth = 320;
+
+		if (screenWidth > panelWidth) {
+			this.controller.get('nav-bar').style.marginLeft =
+				(-this.controller.get('sideScroller').scrollLeft) + 'px';
+		}
+	},
+
 	loadSearch: function() {
 		// Loads saved searches and trending topics
 		var Twitter = new TwitterAPI(this.user);
@@ -976,6 +988,7 @@ MainAssistant.prototype = {
 	},
 	addListeners: function(event) {
 		this.controller.listen(this.controller.get('sideScroller'), Mojo.Event.propertyChange, this.scrollerChanged.bind(this));
+		this.controller.listen(this.controller.get('sideScroller'), 'scroll', this.sizeScrollChanged.bind(this));
 		this.controller.listen(this.controller.get('rt-others'), Mojo.Event.tap, this.rtTapped.bind(this));
 		this.controller.listen(this.controller.get('rt-yours'), Mojo.Event.tap, this.rtTapped.bind(this));
 		this.controller.listen(this.controller.get('rt-ofyou'), Mojo.Event.tap, this.rtTapped.bind(this));
@@ -1031,6 +1044,7 @@ MainAssistant.prototype = {
 	},
 	stopListening: function() {
 		this.controller.stopListening(this.controller.get('sideScroller'), Mojo.Event.propertyChange, this.scrollerChanged);
+		this.controller.stopListening(this.controller.get('sideScroller'), 'scroll', this.sizeScrollChanged);
 		this.controller.stopListening(this.controller.get('rt-others'), Mojo.Event.tap, this.rtTapped);
 		this.controller.stopListening(this.controller.get('rt-yours'), Mojo.Event.tap, this.rtTapped);
 		this.controller.stopListening(this.controller.get('rt-ofyou'), Mojo.Event.tap, this.rtTapped);
