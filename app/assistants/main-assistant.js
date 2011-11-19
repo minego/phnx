@@ -21,6 +21,16 @@ function MainAssistant(opts) {
 
 MainAssistant.prototype = {
 	setup: function() {
+		// set css classes based on device
+		if (Mojo.Environment.DeviceInfo.modelNameAscii == "Pixi" ||
+			Mojo.Environment.DeviceInfo.modelNameAscii == "Veer") {
+			this.controller.document.body.addClassName("small-device");
+		}
+		if (Mojo.Environment.DeviceInfo.modelNameAscii == "TouchPad" ||
+			Mojo.Environment.DeviceInfo.modelNameAscii == "Emulator") {
+			this.controller.document.body.addClassName("no-gesture");
+		}
+
 		// Start the background notifications timer
 		global.setTimer();
 
