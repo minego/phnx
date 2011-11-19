@@ -1,7 +1,7 @@
 function ProfileAssistant(user) {
 	this.user = user;
 	this.renderLimit = 200;
-	this.panels = ['history','mentions','favorites','info'];
+	this.panels = ['info','history','mentions','favorites'];
 	this.toasters = new ToasterChain();
 }
 
@@ -161,7 +161,7 @@ ProfileAssistant.prototype = {
 			}
 		}.bind(this), 200);
 
-		this.controller.get('btn-history').addClassName('active');
+		this.controller.get('btn-info').addClassName('active');
 		this.currentPanel = 0;
 	},
 	closeTapped: function() {
@@ -298,6 +298,7 @@ ProfileAssistant.prototype = {
 			var screenHeight = this.controller.window.innerHeight;
 			var screenWidth = this.controller.window.innerWidth;
 			var height = screenHeight - 135; //subtract the top stuff
+			var panelWidth = 320;
 			// var height = screenHeight; //subtract the header
 			var i;
 			//grab each panel element. There should be as many of these as there are in this.panels
@@ -307,9 +308,9 @@ ProfileAssistant.prototype = {
 			for (i=0; i < panelElements.length; i++) {
 				var panel = panelElements[i];
 				panel.setStyle({
-					"width": screenWidth + "px"
+					"width": panelWidth + "px"
 				});
-				totalWidth += screenWidth;
+				totalWidth += panelWidth;
 
 				// TODO: add some height to the mentions scroller...
 
