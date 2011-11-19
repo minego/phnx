@@ -913,7 +913,7 @@ span.link{
 	color: #4d5154;
 	font-weight: bold;
 /*	top: 124px;*/
-	bottom: 70px;
+	bottom: 68px;
 	font-size: 40px;
 /*	width: 100%;*/
 	font-family: "Prelude";
@@ -921,7 +921,7 @@ span.link{
 .compose-opts {
 /*	background: url('../images/low/compose-opts-bg.png') left top repeat-x;*/
 	width: 100%;
-	height: 70px;
+	height: 68px;
 }
 .compose-opts-wrapper {
 	text-align: center;
