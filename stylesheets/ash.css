@@ -9,7 +9,7 @@ body.default {
 .header-title {
 	color: #94989c;
 }
-#nav-bar {
+#nav-bar-scroller {
 	background: url(../images/low/themes/ash/nav-bar.png) left bottom repeat-x;
 }
 .beacon {
