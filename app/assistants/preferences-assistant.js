@@ -12,6 +12,19 @@ function PreferencesAssistant() {
 
 	// Add stuff here to auto-render them to the scene and auto-save on scene close.
 	// Toggle and select widgets are the only ones that are supported so far
+
+	var advanced = [];
+
+	if (Mojo.Environment.DeviceInfo.coreNaviButton) {
+		advanced.push(
+			{key: 'forwardSwipe', type: 'select', label: 'Forward Swipe', items: [
+				{label: 'Refresh All', value: 'all'},
+				{label: 'Refresh Current', value: 'current'}
+			]}
+		);
+	}
+	advanced.push({key: 'sendAnalytics', type: 'toggle', label: 'Send <strong>anonymous</strong> statistics to the developer to help improve phnx'});
+
 	this.sections = {
 			'General Settings': [
 				{key: 'theme', type: 'select', label: 'Theme', items: [
@@ -46,14 +59,7 @@ function PreferencesAssistant() {
 				{key: 'notificationMentions', type: 'toggle', label: 'Mentions'},
 				{key: 'notificationMessages', type: 'toggle', label: 'Messages'}
 			],
-			'Advanced Settings': [
-				{key: 'forwardSwipe', type: 'select', label: 'Forward Swipe', items: [
-					{label: 'Refresh All', value: 'all'},
-					{label: 'Refresh Current', value: 'current'}
-				]},
-				// {key: 'limitToLocale', type: 'toggle', label: 'Exclude search results not in my own language'},
-				{key: 'sendAnalytics', type: 'toggle', label: 'Send <strong>anonymous</strong> statistics to the developer to help improve phnx'}
-			]
+			'Advanced Settings': advanced
 	};
 
 	if (global.accounts.length > 1) {

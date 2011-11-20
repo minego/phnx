@@ -34,8 +34,7 @@ MainAssistant.prototype = {
 			this.controller.document.body.addClassName("medium-device");
 		}
 
-		if (Mojo.Environment.DeviceInfo.modelNameAscii == "TouchPad" ||
-			Mojo.Environment.DeviceInfo.modelNameAscii == "Emulator") {
+		if (!Mojo.Environment.DeviceInfo.coreNaviButton) {
 			this.controller.document.body.addClassName("no-gesture");
 		}
 
