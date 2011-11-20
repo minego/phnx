@@ -164,7 +164,7 @@ body.no-gesture {  /* touchpad/emulator */
 
 .large-device .panel {
 	min-height: 1024px; /* this is to prevent other timelines from appearing on app launch */
-	background: url('../images/low/nav-icon-border.png') right bottom repeat-y;
+	background: url('../images/low/nav-icon-border.png') left bottom repeat-y;
 }
 .tweets-list {
 	padding-bottom: 60px;
@@ -226,7 +226,7 @@ body.no-gesture {  /* touchpad/emulator */
 	height: 51px;
 	padding: 0;
 	margin: 0;
-	background: url(../images/low/nav-icon-border.png) right 4px no-repeat;
+	background: url(../images/low/nav-icon-border.png) left 4px no-repeat;
 	float: left;
 	position: relative;
 	top: 22px;
@@ -260,19 +260,19 @@ body.no-gesture {  /* touchpad/emulator */
 }
 
 #nav-home {
-	background: url('../images/low/icons/tweets.png') 24px center no-repeat, url('../images/low/nav-icon-border.png') right 4px no-repeat;
+	background: url('../images/low/icons/tweets.png') 24px center no-repeat;
 }
 #nav-mentions {
-	background: url('../images/low/icons/mentions.png') 22px center no-repeat, url('../images/low/nav-icon-border.png') right 4px no-repeat;
+	background: url('../images/low/icons/mentions.png') 22px center no-repeat, url('../images/low/nav-icon-border.png') left 4px no-repeat;
 }
 #nav-messages {
-	background: url('../images/low/icons/messages.png') 20px center no-repeat, url('../images/low/nav-icon-border.png') right 4px no-repeat;
+	background: url('../images/low/icons/messages.png') 20px center no-repeat, url('../images/low/nav-icon-border.png') left 4px no-repeat;
 }
 #nav-lists {
-	background: url('../images/low/icons/lists.png') 20px center no-repeat, url('../images/low/nav-icon-border.png') right 4px no-repeat;
+	background: url('../images/low/icons/lists.png') 20px center no-repeat, url('../images/low/nav-icon-border.png') left 4px no-repeat;
 }
 #nav-search {
-	background: url('../images/low/icons/search.png') 19px center no-repeat;
+	background: url('../images/low/icons/search.png') 19px center no-repeat, url('../images/low/nav-icon-border.png') left 4px no-repeat;
 }
 .beacon {
 	display: block;
