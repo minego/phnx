@@ -39,8 +39,9 @@ PictureViewAssistant.prototype = {
 	    this.imageViewer.mojo.manualSize(Mojo.Environment.DeviceInfo.screenWidth, Mojo.Environment.DeviceInfo.screenHeight);
 	},
 	deactivate: function(event) {
-		// TODO	Test this on phones - This causes problems on the TouchPad
-		// this.controller.stageController.setWindowOrientation('up'); // Not sure if it's needed, but doesn't hurt
+		if (Mojo.Environment.DeviceInfo.platformVersionMajor < 3) {
+			this.controller.stageController.setWindowOrientation('up');
+		}
 		this.controller.enableFullScreenMode(false);
 	},
 	cleanup: function(event) {
