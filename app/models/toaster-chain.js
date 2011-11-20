@@ -8,7 +8,7 @@ window.ToasterChain = function() {
 ToasterChain.prototype = {
 	add: function(toaster) {
 		// Add a toaster to the stack
-		
+
 		if (this.items.length > 0) {
 			// hide the currently visible toaster
 			this.items[this.items.length - 1].hide();
@@ -21,7 +21,7 @@ ToasterChain.prototype = {
 			}
 			catch (e){}
 		}
-		
+
 		// store and show the new toaster
 		this.items.push(toaster);
 		toaster.show();
@@ -31,7 +31,7 @@ ToasterChain.prototype = {
 		if (this.items.length > 0) {
 			var toaster = this.items.pop();
 			toaster.destroy();
-			
+
 			// If there are more items, show the next one
 			if (this.items.length > 0) {
 				this.items[this.items.length - 1].show();
@@ -42,7 +42,7 @@ ToasterChain.prototype = {
 				get('shim').addClassName('ignore');
 				setTimeout(function(){
 					get('nav-bar').setStyle({'bottom':'0px'});
-					
+
 					try {
 						get('footer').show();
 					}
@@ -64,7 +64,7 @@ ToasterChain.prototype = {
 			toaster.destroy();
 		}
 		this.items = []; //reset the array just to be sure
-		
+
 		get('shim').removeClassName('show');
 		get('shim').addClassName('ignore');
 		setTimeout(function(){
@@ -73,7 +73,7 @@ ToasterChain.prototype = {
 				get('footer').show();
 			}
 			catch (e){}
-			
+
 		}, 300);
 	}
 };

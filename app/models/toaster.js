@@ -1,7 +1,7 @@
 /*
-	Toasters are slide-up mini scenes. 
+	Toasters are slide-up mini scenes.
 	Using the ToasterChain class to keep track of history.
-	
+
 	This particular file is a module of functions that
 	each Toaster class inherits.
 */
@@ -12,7 +12,7 @@ var Toaster = {
 			object: obj,
 			template: template
 		});
-		
+
 		// Append to the Toasters container
 		get('toasters').innerHTML = get('toasters').innerHTML + content;
 	},
@@ -35,7 +35,7 @@ var Toaster = {
 	animateShow: function() {
 		// CSS Animation method
 		get(this.nodeId).addClassName('show');
-		
+
 		// Javascript Animation method
 		// var from = get(this.nodeId).getHeight();
 		// Mojo.Animation.animateStyle(get(this.nodeId), 'bottom', 'linear', {
@@ -59,7 +59,7 @@ var Toaster = {
 	animateHide: function() {
 		// CSS animation
 		get(this.nodeId).removeClassName('show');
-		
+
 		// Javascript animation
 		// var to = get(this.nodeId).getHeight();
 		// Mojo.Animation.animateStyle(get(this.nodeId), 'bottom', 'linear', {
@@ -81,9 +81,9 @@ var Toaster = {
 		}, 1000);
 	},
 	setup: function() {
-		
+
 	},
 	cleanup: function() {
-		
+
 	}
 };

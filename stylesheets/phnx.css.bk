@@ -684,6 +684,11 @@ span.link{
 	-webkit-transition-property: all;
 	-webkit-transition-duration: .3s;
 	background: url('../images/trans9.png');
+	max-height: 60%;
+}
+
+.large-device .convo-scroller{
+	max-height: 300px;
 }
 .convo-list{
 	padding-bottom: 20px 15px;
@@ -877,10 +882,16 @@ span.link{
 	background: url('../images/low/toaster-bg.png') left top repeat-x;
 	opacity: .95;
 	color: #d2d2d2;
+	max-height: 80%;
 }
+.large-device .toaster {
+	max-height: 300px;
+}
+
 .toaster.show {
 	bottom: 0px;
 }
+
 .toaster.compose {
 	opacity: 1;
 }
@@ -1066,10 +1077,6 @@ span.link{
 }
 .compose-cancel.selected {
 	-webkit-border-image: url(../images/low/buttons/negative-tapped.png) 6 stretch;
-}
-
-.toaster.convo {
-	max-height: 80%;
 }
 
 /* Dialog Controls */
