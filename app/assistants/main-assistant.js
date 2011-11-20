@@ -201,10 +201,24 @@ MainAssistant.prototype = {
 		var loadMoreBtns = this.controller.select('.load-more');
 		var timelineLists = this.controller.select('.timeline-list');
 
+		var screenWidth = this.controller.window.innerWidth;
+		var panelWidth = 320;
+		var scrollmode;
+
+		/*
+			Do not snap on the TouchPad because the snap behavior doesn't behave
+			well there.
+		*/
+		if (screenWidth <= panelWidth) {
+			scrollmode = 'horizontal-snap';
+		} else {
+			scrollmode = 'horizontal';
+		}
+
 		this.controller.setupWidget(
 			"sideScroller",
 			this.attributes = {
-				mode: 'horizontal-snap'
+				mode: scrollmode
 			},
 			this.sideScrollModel = {
 				snapElements: { x:	panelElements},
