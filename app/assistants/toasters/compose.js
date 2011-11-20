@@ -82,6 +82,25 @@ var ComposeToaster = Class.create(Toaster, {
 		var count = this.availableChars - get(this.textarea).value.length;
 		get('count-' + this.id).update(count);
 	},
+	showKeyboard: function() {
+		// Show the virtual keyboard with the type set to email (4) which shows
+		// the '@' and '.COM' buttons. URL (7) may be useful too, which shows a
+		// '/' key instead of a '@' key.
+		try {
+			this.controller.window.PalmSystem.keyboardShow(4);
+		} catch (e) {
+			// This is fine. This is only need for devices without a physical
+			// keyboard.
+		}
+	},
+	hideKeyboard: function() {
+		try {
+			this.controller.window.PalmSystem.keyboardHide();
+		} catch (e) {
+			// This is fine. This is only need for devices without a physical
+			// keyboard.
+		}
+	},
 	submitTweet: function(event) {
 		var txt = get(this.textarea).value;
 		var Twitter = new TwitterAPI(this.user);
@@ -97,8 +116,8 @@ var ComposeToaster = Class.create(Toaster, {
 					}
 
 					if (this.geo) {
-						args.lat = this.lat;
-						args.long = this.lng;
+						args['lat'] = this.lat;
+						args['long'] = this.lng;
 					}
 
 					Twitter.postTweet(args, function(response, meta) {
@@ -258,8 +277,8 @@ var ComposeToaster = Class.create(Toaster, {
 			key: Config.bitlyKey
 		});
 
-		var callback = function(short, long){
-			this.controller.get(this.textarea).value = this.controller.get(this.textarea).value.replace(new RegExp(long, 'g'), short);
+		var callback = function(shrt, lng){
+			this.controller.get(this.textarea).value = this.controller.get(this.textarea).value.replace(new RegExp(lng, 'g'), shrt);
 		};
 
 		for (var i=0; i < urls.length; i++) {
@@ -287,6 +306,21 @@ var ComposeToaster = Class.create(Toaster, {
 		get(this.textarea).observe('keyup', function(e){
 				this.updateCounter();
 		}.bind(this));
+
+		try {
+			this.controller.window.PalmSystem.setManualKeyboardEnabled(true);
+		} catch (e) {
+			// This is fine. This is only need for devices without a physical
+			// keyboard.
+		}
+
+		get(this.textarea).observe('focus', function(e){
+				this.showKeyboard();
+		}.bind(this));
+		get(this.textarea).observe('blur', function(e){
+				this.hideKeyboard();
+		}.bind(this));
+
 		Mojo.Event.listen(get('submit-' + this.id), Mojo.Event.tap, this.submitTweet.bind(this));
 		Mojo.Event.listen(get('photo-' + this.id), Mojo.Event.tap, this.photoTapped.bind(this));
 		Mojo.Event.listen(get('geotag-' + this.id), Mojo.Event.tap, this.geotagTapped.bind(this));
@@ -294,6 +328,9 @@ var ComposeToaster = Class.create(Toaster, {
 		Mojo.Event.listen(get('cancel-' + this.id), Mojo.Event.tap, this.cancelTapped.bind(this));
 	},
 	cleanup: function() {
+		get(this.textarea).stopObserving('focus');
+		get(this.textarea).stopObserving('blur');
+
 		get(this.textarea).stopObserving('keyup');
 		var prefs = new LocalStorage();
 		if (prefs.read('enterToSubmit')) {
