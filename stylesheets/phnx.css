@@ -161,6 +161,11 @@ body.no-gesture {  /* touchpad/emulator */
 	width: 320px;
 	min-height: 350px; /* this is to prevent other timelines from appearing on app launch */
 }
+
+.large-device .panel {
+	min-height: 1024px; /* this is to prevent other timelines from appearing on app launch */
+	background: url('../images/low/nav-icon-border.png') right bottom repeat-y;
+}
 .tweets-list {
 	padding-bottom: 60px;
 }
