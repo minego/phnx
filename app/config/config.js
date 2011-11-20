@@ -4,8 +4,8 @@ var Config = {
 		secret: 'ulz0dpskxcddc1wlraDEwPCoJYMHaNhfXJO8sMjIA0'
 	},
 
-	key: 'wiUn8VrK6FgwQ2l5KQtLg',
-	secret: 'nQyyVimum7CRNbRT3MLNkno05YpY5KqaimcrKcLEAE',
+	key: 'OFqvS0cNc7oRdPGqz3GTw',
+	secret: 'JqGFNJAAQgXg8TPtJOVFXpbzZS8gNPAHjb2exvOgdQ',
 	bitlyUser: 'phnx',
 	bitlyKey: 'R_d120bdeaf302f28ca251ee64d7aef8fc',
 	beta: true,
