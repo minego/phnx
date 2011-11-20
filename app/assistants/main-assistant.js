@@ -419,6 +419,13 @@ MainAssistant.prototype = {
 		if (screenWidth > panelWidth) {
 			this.controller.get('nav-bar').style.marginLeft =
 				(-this.controller.get('sideScroller').scrollLeft) + 'px';
+
+			// enable the search box
+			this.controller.get('txtSearch').disabled = false;
+			if (this.searchLoaded === false) {
+				this.searchLoaded = true;
+				this.loadSearch();
+			}
 		}
 	},
 
