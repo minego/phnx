@@ -862,7 +862,13 @@ MainAssistant.prototype = {
 		this.controller.get('indicator').addClassName(positions[panelId]);
 	},
 	navButtonTapped: function(event) {
-		var id = event.srcElement.id;
+		var src = event.srcElement;
+
+		while (src && (!src.id || 0 != src.id.indexOf('nav-'))) {
+			src = src.parentNode;
+		}
+
+		var id = src.id;
 		var panelId = id.substr(id.indexOf('-') + 1);
 
 		var panelIndex;
