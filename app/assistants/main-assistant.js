@@ -363,6 +363,8 @@ MainAssistant.prototype = {
 	},
 	scrollerChanged: function(event) {
 		var panel = this.panels[event.value];
+		var screenWidth = this.controller.window.innerWidth;
+		var panelWidth = 320;
 
 		//hide the beacon and new content indicator on the old panel
 		var oldPanel = this.panels[this.timeline];
@@ -373,7 +375,8 @@ MainAssistant.prototype = {
 			// }
 			this.controller.get(oldPanel.id + '-beacon').removeClassName('show');
 		}
-		if (event.value === 4) {
+
+		if (event.value === 4 || screenWidth > panelWidth) {
 			// enable the search box
 			this.controller.get('txtSearch').disabled = false;
 			if (this.searchLoaded === false) {
