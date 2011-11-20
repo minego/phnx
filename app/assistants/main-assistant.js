@@ -862,6 +862,8 @@ MainAssistant.prototype = {
 		this.controller.get('indicator').addClassName(positions[panelId]);
 	},
 	navButtonTapped: function(event) {
+		var screenWidth = this.controller.window.innerWidth;
+		var panelWidth = 320;
 		var src = event.srcElement;
 
 		while (src && (!src.id || 0 != src.id.indexOf('nav-'))) {
@@ -881,7 +883,7 @@ MainAssistant.prototype = {
 
 		//if it's the current panel, scroll to the top
 		//otherwise, scroll to that panel
-		if (this.timeline === panelIndex) {
+		if (this.timeline === panelIndex || screenWidth > panelWidth) {
 			var scroller = this.controller.get(panelId + '-scroller');
 
 			if (scroller) {
