@@ -161,7 +161,6 @@ body.no-gesture {  /* touchpad/emulator */
 	display: inline-block;
 	width: 320px;
 	min-height: 350px; /* this is to prevent other timelines from appearing on app launch */
-	background: url('../images/low/sep.png') right top repeat-y;
 }
 
 .large-device .panel {
