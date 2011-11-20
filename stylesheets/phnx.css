@@ -440,6 +440,10 @@ body.no-gesture {  /* touchpad/emulator */
 .tweet-text{
 	max-width: 236px;
 }
+.toaster .tweet-text{
+	max-width: none;
+}
+
 .tweet-text.user-tweet{
 	max-width: 280px;
 	padding: 0px 10px;
