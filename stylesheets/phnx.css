@@ -1021,6 +1021,10 @@ span.link{
 	width: 100%;
 	height: 70px;
 }
+.large-device .compose-opts {
+	height: 42px;
+}
+
 .compose-opts-wrapper {
 	text-align: center;
 }
