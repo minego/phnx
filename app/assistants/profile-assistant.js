@@ -354,7 +354,7 @@ ProfileAssistant.prototype = {
 		var panelWidth = 320;
 
 		if (screenWidth > panelWidth) {
-			this.controller.get('profile-menubar').style.marginLeft =
+			this.controller.get('profile-icons').style.marginLeft =
 				(-this.controller.get('sideScroller').scrollLeft) + 'px';
 		}
 	},
