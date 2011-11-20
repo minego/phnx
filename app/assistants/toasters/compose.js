@@ -3,6 +3,7 @@ var ComposeToaster = Class.create(Toaster, {
 		this.id = toasterIndex++;
 		this.nodeId = 'toaster-' + this.id;
 		this.textarea = 'txtCompose-' + this.id;
+		this.completebar = 'complete-bar-' + this.id;
 		this.assistant = assistant;
 		this.controller = assistant.controller;
 		this.user = this.controller.stageController.user;
@@ -20,6 +21,13 @@ var ComposeToaster = Class.create(Toaster, {
 		this.images = []; //any images to be uploaded
 		this.uploading = false;
 		this.sending = false;
+
+		// TODO	This should be replaced with a global list of users names that
+		//		is loaded once for fast searching. This list is just for testing
+		//		the autocomplete UI.
+		//
+		//		The list should contain all lower case names.
+		// this.users = [ 'foo', 'bar', '_minego', 'penduin', 'notminego', 'notpenduin', 'fakeminego', 'fakependuin', 'pen1', 'pen2', 'pen3', 'pen4', 'pen5', 'pen6', 'pen7', 'pen8', 'pen9', 'pen0' ];
 
 		var toasterObj = {
 			toasterId: this.id
@@ -81,6 +89,73 @@ var ComposeToaster = Class.create(Toaster, {
 	updateCounter: function() {
 		var count = this.availableChars - get(this.textarea).value.length;
 		get('count-' + this.id).update(count);
+	},
+	autoComplete: function() {
+		var bar		= get(this.completebar);
+		var ta		= get(this.textarea);
+		var value	= ta.value;
+		var end		= ta.selectionStart;
+		var start;
+
+		bar.innerHTML = '';
+
+		for (start = end; start >= 0; start--) {
+			var c = value.charAt(start);
+
+			switch (c) {
+				case ' ': case '\t': case '\n': case '\r':
+					// There was no @ in this word
+					// console.log('Got to the start of the word with no @');
+					return;
+
+				case '@':
+					// console.log('found an @: ' + start);
+					break;
+
+				default:
+					continue;
+			}
+
+			break;
+		}
+
+		if (start < 0) {
+			// console.log('Hit the begining of the value with no @');
+			return;
+		} else if (end - start < 4) {
+			// Search string isn't long enough
+			return;
+		}
+
+		if (start > 0) {
+			switch (value.charAt(start - 1)) {
+				case ' ': case '\t': case '\n': case '\r':
+					break;
+
+				default:
+					// console.log('The @ was in the middle of a word');
+					// A @ in the middle of the word should be ignored
+					return;
+			}
+		}
+
+		var match = value.slice(start + 1, end).toLowerCase();
+		// console.log('Search for things that match: ' + match);
+
+// TODO	Load a list of everyone this user follows and keep it around
+// TODO	Make the matches bar clickable. Grab the innerHTML of the element that
+//		was clicked on and insert that.
+
+		var matches = [];
+		for (var name, i = 0; name = this.users[i]; i++) {
+			if (-1 != name.indexOf(match)) {
+				console.log('Found a match:' + name);
+
+				matches.push('<div class="compose-match" x-mojo-tap-highlight="immediate">' + name + '</div>');
+			}
+		}
+
+		bar.innerHTML = matches.join('\n');
 	},
 	showKeyboard: function() {
 		// Show the virtual keyboard with the type set to email (4) which shows
@@ -312,7 +387,11 @@ var ComposeToaster = Class.create(Toaster, {
 		}
 
 		get(this.textarea).observe('keyup', function(e){
-				this.updateCounter();
+			this.updateCounter();
+
+			if (this.users) {
+				this.autoComplete();
+			}
 		}.bind(this));
 
 		try {

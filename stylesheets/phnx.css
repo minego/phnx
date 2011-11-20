@@ -1088,6 +1088,22 @@ span.link{
 	-webkit-border-image: url(../images/low/buttons/negative-tapped.png) 6 stretch;
 }
 
+.compose-match {
+	display: inline-block;
+	color: #fff;
+	border-width: 9px;
+	-webkit-border-image: url(../images/low/buttons/positive.png) 6 stretch;
+	font-size: 14px;
+	padding: 0px;
+	margin: 5px;
+	margin-right: 0px;
+	font-weight: bold;
+	font-family: "Prelude";
+}
+.compose-match.selected {
+	-webkit-border-image: url(../images/low/buttons/positive-tapped.png) 6 stretch;
+}
+
 .toaster.convo {
 	max-height: 80%;
 }
