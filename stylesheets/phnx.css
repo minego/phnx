@@ -129,28 +129,29 @@ body.no-gesture {  /* touchpad/emulator */
 }
 
 .header-icon {
-	display: inline-block;
 	width: 64px;
 	height: 39px;
 	margin-top: 1px;
 }
 .header-icon.left {
-	float: left;
+	position: fixed;
+	left: 0px;
 }
 .header-icon.right {
-	float: right;
+	position: fixed;
+	right: 0px;
 }
 .header-title {
-	display: inline-block;
-	float: left;
+	background: url('../images/low/nav-icon-border.png') left bottom no-repeat, url('../images/low/nav-icon-border.png') right bottom no-repeat;
+	position: fixed;
+	left: 64px;
+	right: 64px;
 	color: #94989c;
 	font-size: 18px;
 	text-align: center;
 	padding-top: 8px;
-	width: 192px;
 	height: 32px;
 	font-family: "Prelude";
-	background: url('../images/low/nav-icon-border.png') left bottom no-repeat, url('../images/low/nav-icon-border.png') right bottom no-repeat;
 }
 .header-title.active {
 	background: url(../images/trans70.png);
