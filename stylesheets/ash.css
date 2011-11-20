@@ -3,15 +3,27 @@ body.default {
 	background-size: 100%;
 }
 
-#header {
-	background: url('../images/low/themes/ash/header-bar.png') left -25px repeat-x;
-}
 .header-title {
 	color: #94989c;
+}
+
+#header {
+	background: url('../images/low/themes/ash/header-bar.png') left -25px repeat-x;
 }
 #nav-bar-scroller {
 	background: url(../images/low/themes/ash/nav-bar.png) left bottom repeat-x;
 }
+
+/* navbar and header are swapped on the touchpad */
+.large-device #header {
+	background: url('../images/low/themes/ash/nav-bar.png') left -22px repeat-x;
+}
+.large-device #nav-bar-scroller {
+	background: url(../images/low/themes/ash/header-bar.png) left 3px repeat-x;
+}
+
+
+
 .beacon {
 	background: url('../images/low/new-content.png') center bottom no-repeat;
 }

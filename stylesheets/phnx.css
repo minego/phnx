@@ -119,10 +119,15 @@ body.no-gesture {  /* touchpad/emulator */
 	background: url('../images/low/header-bar.png') left -25px repeat-x;
 	-webkit-palm-mouse-target: ignore;
 	position: fixed;
-	top: 0;
 	left: 0;
 	z-index: 100;
 }
+.large-device #header {
+	bottom: 0px;
+	margin-bottom: -22px;
+	background: url('../images/low/nav-bar.png') left -22px repeat-x;
+}
+
 .header-icon {
 	display: inline-block;
 	width: 64px;
@@ -189,6 +194,11 @@ body.no-gesture {  /* touchpad/emulator */
 	margin: 0;
 	background: url(../images/low/nav-bar.png) left bottom repeat-x;
 	overflow: scroll;
+}
+.large-device #nav-bar-scroller {
+	top: 0px;
+	margin-top: -23px;
+	background: url(../images/low/header-bar.png) left 3px repeat-x;
 }
 
 .large-device #nav-bar-scroller {
