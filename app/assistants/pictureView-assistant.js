@@ -23,6 +23,7 @@ PictureViewAssistant.prototype = {
 
 		this.closeTapped = this.closeTapped.bind(this);
 		this.controller.listen(this.imageViewer, Mojo.Event.tap, this.closeTapped);
+		this.controller.listen(this.controller.get("close-button"), Mojo.Event.tap, this.closeTapped);
 	},
 	closeTapped: function() {
 		this.controller.stageController.popScene();
