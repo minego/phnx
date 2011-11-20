@@ -1146,6 +1146,16 @@ span.link{
 	background: url(../images/low/back-tapped.png) center center no-repeat;
 }
 
+.close-button-wrapper.photo {
+	position: fixed;
+	right: 5px;
+	top: 15px;
+}
+
+.close-button-wrapper.photo #close-button {
+	margin: 0px;
+}
+
 .dashboard-icon-phnx {
 	background: url(../dash-icon.png) center center no-repeat;
 }
