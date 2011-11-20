@@ -310,15 +310,19 @@ var TweetToaster = Class.create(Toaster, {
 		this.closePreview();
 	},
 	openYouTube: function(url) {
-		this.controller.serviceRequest("palm://com.palm.applicationManager", {
-			method: "launch",
-			parameters: {
-				id: "com.palm.app.youtube",
-				params: {
-					target: url
+		if (Mojo.Environment.DeviceInfo.platformVersionMajor < 3) {
+			this.controller.serviceRequest("palm://com.palm.applicationManager", {
+				method: "launch",
+				parameters: {
+					id: "com.palm.app.youtube",
+					params: {
+						target: url
+					}
 				}
-			}
-		});
+			});
+		} else {
+			global.openBrowser(url);
+		}
 	},
 	rtTapped: function(event) {
 		var Twitter = new TwitterAPI(this.user);
