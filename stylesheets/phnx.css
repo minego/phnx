@@ -129,7 +129,7 @@ body.no-gesture {  /* touchpad/emulator */
 }
 
 .header-icon {
-	width: 64px;
+	width: 62px;
 	height: 39px;
 	margin-top: 1px;
 }
@@ -144,8 +144,8 @@ body.no-gesture {  /* touchpad/emulator */
 .header-title {
 	background: url('../images/low/nav-icon-border.png') left bottom no-repeat, url('../images/low/nav-icon-border.png') right bottom no-repeat;
 	position: fixed;
-	left: 64px;
-	right: 64px;
+	left: 62px;
+	right: 62px;
 	color: #94989c;
 	font-size: 18px;
 	text-align: center;

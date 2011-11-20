@@ -290,6 +290,14 @@ var ComposeToaster = Class.create(Toaster, {
 	},
 	cancelTapped: function(event) {
 		get(this.textarea).blur();
+
+		try {
+			this.controller.window.PalmSystem.setManualKeyboardEnabled(false);
+		} catch (e) {
+			// This is fine. This is only need for devices without a physical
+			// keyboard.
+		}
+
 		this.assistant.toasters.back();
 	},
 	setup: function() {
@@ -317,6 +325,9 @@ var ComposeToaster = Class.create(Toaster, {
 		get(this.textarea).observe('focus', function(e){
 				this.showKeyboard();
 		}.bind(this));
+		get(this.textarea).observe('click', function(e){
+				this.showKeyboard();
+		}.bind(this));
 		get(this.textarea).observe('blur', function(e){
 				this.hideKeyboard();
 		}.bind(this));
@@ -328,6 +339,7 @@ var ComposeToaster = Class.create(Toaster, {
 		Mojo.Event.listen(get('cancel-' + this.id), Mojo.Event.tap, this.cancelTapped.bind(this));
 	},
 	cleanup: function() {
+		get(this.textarea).stopObserving('click');
 		get(this.textarea).stopObserving('focus');
 		get(this.textarea).stopObserving('blur');
 
@@ -335,6 +347,13 @@ var ComposeToaster = Class.create(Toaster, {
 		var prefs = new LocalStorage();
 		if (prefs.read('enterToSubmit')) {
 			get(this.textarea.stopObserving('keydown'));
+		}
+
+		try {
+			this.controller.window.PalmSystem.setManualKeyboardEnabled(false);
+		} catch (e) {
+			// This is fine. This is only need for devices without a physical
+			// keyboard.
 		}
 
 		Mojo.Event.stopListening(get('submit-' + this.id), Mojo.Event.tap, this.submitTweet);
