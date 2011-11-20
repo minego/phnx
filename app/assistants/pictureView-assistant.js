@@ -48,5 +48,6 @@ PictureViewAssistant.prototype = {
 	cleanup: function(event) {
 		this.controller.stopListening(this.controller.window, 'resize', this.handleWindowResizeHandler);
 		this.controller.stopListening(this.imageViewer, Mojo.Event.tap, this.closeTapped);
+		this.controller.stopListening(this.controller.get("close-button"), Mojo.Event.tap, this.closeTapped);
 	}
 };
