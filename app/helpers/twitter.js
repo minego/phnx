@@ -176,17 +176,25 @@ TwitterAPI.prototype = {
 		this.sign('GET', this.url(this.endpoints.friends), this.gotIds.bind(this), {'user_id': userId, 'cursor': '-1'}, {callback: callback});
 	},
 	gotIds: function(response, meta) {
-		var ids = response.responseJSON.ids.slice(0,99);
-		var idList = '';
-		for (var i=0; i < ids.length; i++) {
-			if (idList !== ''){
-				idList += ',';
+		var start	= meta.start || 0;
+		var ids		= response.responseJSON.ids.slice(start, start + 99);
+
+		meta.start	= start + 100;
+		this.getUsersById(ids.join(','), function(r) {
+			if (meta.results) {
+				var tmp = meta.results;
+
+				meta.results = tmp.concat(r.responseJSON);
+			} else {
+				meta.results = r.responseJSON;
 			}
-			idList += ids[i];
-		}
-		this.getUsersById(idList, function(r){
-			meta.callback(r.responseJSON);
-		});
+
+			if (meta.start > response.responseJSON.ids.length) {
+				meta.callback(meta.results);
+			} else {
+				this.gotIds(response, meta);
+			}
+		}.bind(this));
 	},
 	sign: function(httpMethod, url, callback, args, meta) {
 
