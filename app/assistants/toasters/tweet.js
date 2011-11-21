@@ -89,6 +89,9 @@ var TweetToaster = Class.create(Toaster, {
 			case 'convo':
 				this.showConvo();
 				break;
+			case 'opts':
+				this.showOpts();
+				break;
 			case 'back':
 				this.assistant.toasters.back();
 				break;
@@ -206,6 +209,71 @@ var TweetToaster = Class.create(Toaster, {
 	showConvo: function() {
 		this.assistant.toasters.add(new ConvoToaster(this.tweet, this.assistant));
 	},
+	showOpts: function() {
+		this.controller.popupSubmenu({
+			onChoose: this.popupHandler.bind(this),
+			placeNear: this.controller.get('opts-' + this.id),
+			items: this.menuItems
+		});
+	},
+	popupHandler: function(command) {
+		switch (command) {
+			case 'cmdMention':
+				this.mention();
+				break;
+			case 'cmdMessage':
+				this.message();
+				break;
+			case 'cmdBlock':
+				this.block();
+				break;
+			case 'cmdSpam':
+				this.spam();
+				break;
+		}
+	},
+	mention: function() {
+		var opts = {
+			text: '@' + this.tweet.user.screen_name + ' '
+		};
+		this.assistant.toasters.add(new ComposeToaster(opts, this.assistant));
+	},
+	message: function() {
+		var args = {
+			user: this.tweet.user,
+			dm: true
+		};
+		this.assistant.toasters.add(new ComposeToaster(args, this.assistant));
+	},
+	block: function() {
+		var opts = {
+			title: 'Are you sure you want to block @' + this.tweet.user.screen_name + '?',
+			callback: function(){
+				var Twitter = new TwitterAPI(this.account);
+				Twitter.block(this.tweet.user.id_str, function(response){
+					banner('Blocked @' + this.tweet.user.screen_name);
+					this.toasters.back();
+				}.bind(this));
+			}.bind(this)
+		};
+
+		this.assistant.toasters.add(new ConfirmToaster(opts, this.assistant));
+	},
+	spam: function() {
+		var opts = {
+			title: 'Are you sure you want to report @' + this.tweet.user.screen_name + '?',
+			callback: function(){
+				var Twitter = new TwitterAPI(this.account);
+				Twitter.report(this.tweet.user.id_str, function(response) {
+					banner('Reported @' + this.tweet.user.screen_name);
+					this.toasters.back();
+				}.bind(this));
+			}.bind(this)
+		};
+
+		this.assistant.toasters.add(new ConfirmToaster(opts, this.assistant));
+	},
+
 	detailsTapped: function(event) {
 		var Twitter = new TwitterAPI(this.user);
 		var e = event.target;
@@ -341,6 +409,25 @@ var TweetToaster = Class.create(Toaster, {
 		}.bind(this));
 	},
 	setup: function() {
+		this.menuItems = [];
+
+		this.menuItems.push({
+			label: 'Public Mention',
+			command: 'cmdMention'
+		});
+		this.menuItems.push({
+			label: 'Send Direct Message',
+			command: 'cmdMessage'
+		});
+		this.menuItems.push({
+			label: 'Block',
+			command: 'cmdBlock'
+		});
+		this.menuItems.push({
+			label: 'Report Spam',
+			command: 'cmdSpam'
+		});
+
 		Mojo.Event.listen(this.controller.get('details-' + this.id), Mojo.Event.tap, this.detailsTapped.bind(this));
 		Mojo.Event.listen(this.controller.get('rt-' + this.id), Mojo.Event.tap, this.rtTapped.bind(this));
 		// Mojo.Event.listen(this.controller.get('preview'), Mojo.Event.tap, this.previewTapped.bind(this));
@@ -351,6 +438,7 @@ var TweetToaster = Class.create(Toaster, {
 		Mojo.Event.listen(this.controller.get('dm-' + this.id), Mojo.Event.tap, this.actionTapped.bind(this));
 		Mojo.Event.listen(this.controller.get('delete-' + this.id), Mojo.Event.tap, this.actionTapped.bind(this));
 		Mojo.Event.listen(this.controller.get('back-' + this.id), Mojo.Event.tap, this.actionTapped.bind(this));
+		Mojo.Event.listen(this.controller.get('opts-' + this.id), Mojo.Event.tap, this.actionTapped.bind(this));
 	},
 	cleanup: function() {
 		Mojo.Event.stopListening(this.controller.get('details-' + this.id), Mojo.Event.tap, this.detailsTapped);
@@ -363,5 +451,6 @@ var TweetToaster = Class.create(Toaster, {
 		Mojo.Event.stopListening(this.controller.get('dm-' + this.id), Mojo.Event.tap, this.actionTapped);
 		Mojo.Event.stopListening(this.controller.get('delete-' + this.id), Mojo.Event.tap, this.actionTapped);
 		Mojo.Event.stopListening(this.controller.get('back-' + this.id), Mojo.Event.tap, this.actionTapped);
+		Mojo.Event.stopListening(this.controller.get('opts-' + this.id), Mojo.Event.tap, this.actionTapped);
 	}
 });

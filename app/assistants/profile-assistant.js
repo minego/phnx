@@ -383,7 +383,6 @@ ProfileAssistant.prototype = {
 		this.toasters.nuke();
 	},
 	optionsTapped: function(event) {
-
 		this.controller.popupSubmenu({
 			onChoose: this.popupHandler,
 			placeNear: this.controller.get('options'),
