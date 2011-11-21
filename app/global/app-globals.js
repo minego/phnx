@@ -9,6 +9,7 @@ var global = {
 	stageFocused: false,
 	accounts: [],
 	stages: [],
+	following: [],
 	doc: document,
 	fontSizes: [
 		{label: 'Small', command: 'font-small'},

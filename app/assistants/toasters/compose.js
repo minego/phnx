@@ -22,13 +22,6 @@ var ComposeToaster = Class.create(Toaster, {
 		this.uploading = false;
 		this.sending = false;
 
-		// TODO	This should be replaced with a global list of users names that
-		//		is loaded once for fast searching. This list is just for testing
-		//		the autocomplete UI.
-		//
-		//		The list should contain all lower case names.
-		// this.users = [ 'foo', 'bar', '_minego', 'penduin', 'notminego', 'notpenduin', 'fakeminego', 'fakependuin', 'pen1', 'pen2', 'pen3', 'pen4', 'pen5', 'pen6', 'pen7', 'pen8', 'pen9', 'pen0' ];
-
 		var toasterObj = {
 			toasterId: this.id
 		};
@@ -144,11 +137,11 @@ var ComposeToaster = Class.create(Toaster, {
 		// console.log('Search for things that match: ' + match);
 
 		var matches = [];
-		for (var name, i = 0; name = this.users[i]; i++) {
-			if (-1 != name.indexOf(match)) {
-				console.log('Found a match:' + name);
+		for (var user, i = 0; user = global.following[i]; i++) {
+			if (-1 != user.screen_name.toLowerCase().indexOf(match)) {
+				console.log('Found a match:' + user.screen_name);
 
-				matches.push('<div class="compose-match" x-mojo-tap-highlight="immediate">' + name + '</div>');
+				matches.push('<div class="compose-match" x-mojo-tap-highlight="immediate">' + user.screen_name + '</div>');
 			}
 		}
 
@@ -397,9 +390,7 @@ var ComposeToaster = Class.create(Toaster, {
 		get(this.textarea).observe('keyup', function(e){
 			this.updateCounter();
 
-			if (this.users) {
-				this.autoComplete();
-			}
+			this.autoComplete();
 		}.bind(this));
 
 		try {

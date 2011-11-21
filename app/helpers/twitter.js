@@ -1,7 +1,7 @@
 // TODO: Remove the assistant parameter from many of these functions
-// TODO: Allow custom API (for Chinese users) 
+// TODO: Allow custom API (for Chinese users)
 var TwitterAPI = function(user, stageController) {
-	
+
 	this.apibase = 'https://api.twitter.com';
 	this.version = '1'; // will probably have to change a lot more than just this number once v2 hits
 	this.key = Config.key;
@@ -10,14 +10,14 @@ var TwitterAPI = function(user, stageController) {
 	this.token = user.token;
 	this.tokenSecret = user.secret;
 	this.format = 'json'; // why would it be anything else?
-	
+
 	if (stageController) {
 		this.stage = stageController;
 	}
 	else {
 		this.stage = false;
 	}
-	
+
 	this.endpoints = {
 		home: 'statuses/home_timeline',
 		mentions: 'statuses/mentions',
@@ -51,7 +51,7 @@ var TwitterAPI = function(user, stageController) {
 		followers: 'followers/ids',
 		friends: 'friends/ids'
 	};
-	
+
 };
 
 TwitterAPI.prototype = {
@@ -59,7 +59,7 @@ TwitterAPI.prototype = {
 		// Build an API URL from all of the parts we store.
 		return this.apibase + '/' + this.version + '/' + endpoint + '.' + this.format;
 	},
-	timeline: function(panel, callback, args, assistant) {		
+	timeline: function(panel, callback, args, assistant) {
 		this.sign('GET', this.url(this.endpoints[panel.resource]), callback, args, {'panel': panel, 'assistant': assistant});
 	},
 	notificationCheck: function(resource, callback, args, user) {
@@ -130,7 +130,7 @@ TwitterAPI.prototype = {
 		// Query can be either a string or an object literal with named parameters in it
 		var url = 'http://search.twitter.com/search.json';
 		var args = {"result_type":"mixed","rpp":"150"};
-		
+
 		if (typeof(query) === 'string') {
 			args.q = query;
 		}
@@ -139,10 +139,10 @@ TwitterAPI.prototype = {
 				args[key] = query[key];
 			}
 		}
-		
+
 		// var prefs = new LocalStorage();
 		// if (prefs.read('limitToLocale')) {
-		// 	var locale = Mojo.Locale.getCurrentLocale();	
+		// 	var locale = Mojo.Locale.getCurrentLocale();
 		// 	args.lang = locale;
 		// }
 
@@ -196,14 +196,14 @@ TwitterAPI.prototype = {
 		if (meta.user) {
 			silent = true;
 		}
-		
+
 		if (meta.silent === true) {
 			silent = true;
 		}
-		
+
 		//args is an object literal of URL parameters to be included
 		//meta is an object literal with data that needs to be passed through to the callback
-		
+
 		var i; //to make JSLint shut up.
 
 		var message = {
@@ -214,7 +214,7 @@ TwitterAPI.prototype = {
 
 		//when using OAuth, parameters must be included in the request body
 		//and in the base signature of the Auth Header
-		
+
 		var params = '';
 
 		for (var key in args) {
@@ -233,7 +233,7 @@ TwitterAPI.prototype = {
 		});
 
 		var authHeader = OAuth.getAuthorizationHeader(this.apibase, message.parameters);
-		
+
 		var opts = {
 			method: httpMethod,
 			encoding: 'UTF-8',
@@ -245,21 +245,21 @@ TwitterAPI.prototype = {
 			success: callback,
 			silent: silent
 		};
-		
+
 		if (meta) {
 			opts.meta = meta;
 		}
-		
+
 		this.request(url, opts);
-		
+
 	},
 	plain: function(httpMethod, url, args, callback, silent) {
 		// Send a plain HTTP request. No OAuth signing.
-		
+
 		if (typeof(silent) === 'undefined') {
 			silent = false;
 		}
-		
+
 		var params = '';
 
 		for (var key in args) {
@@ -269,7 +269,7 @@ TwitterAPI.prototype = {
 			params += encodeURIComponent(key) + '=' + encodeURIComponent(args[key]);
 		}
 		params = params.replace('%08',''); // remove the hidden backspace character (messes up searches sometimes)
-		
+
 		this.request(url, {
 			method: httpMethod,
 			encoding: 'UTF-8',
@@ -286,7 +286,7 @@ TwitterAPI.prototype = {
 		if (!opts.silent || opts.silent === false) {
 			this.toggleLoading(true);
 		}
-		
+
 		var connectionResponse = function(r) {
 			var conn = r.isInternetConnectionAvailable;
 			// var conn = false; // for testing with no internet connection
@@ -295,7 +295,7 @@ TwitterAPI.prototype = {
 					if (Ajax.activeRequestCount <= 1) {
 						this.toggleLoading(false);
 					}
-					
+
 					if (!opts.meta) {
 						opts.success(response);
 					}
@@ -303,7 +303,7 @@ TwitterAPI.prototype = {
 						opts.success(response, opts.meta);
 					}
 				}.bind(this);
-				
+
 				opts.onFailure = function(transport) {
 					if (Ajax.activeRequestCount <= 1 && opts.silent !== true) {
 						this.toggleLoading(false);
@@ -317,7 +317,7 @@ TwitterAPI.prototype = {
 							// do nothing, this is a weird 401 error.
 						}
 						else {
-							global.ex(transport.status + ': ' + transport.responseJSON.error);	
+							global.ex(transport.status + ': ' + transport.responseJSON.error);
 						}
 					}
 				}.bind(this);
@@ -328,8 +328,8 @@ TwitterAPI.prototype = {
 				// ex('No internet connection.');
 			}
 		};
-		
-		var service = new Mojo.Service.Request('palm://com.palm.connectionmanager', { 
+
+		var service = new Mojo.Service.Request('palm://com.palm.connectionmanager', {
 			method: 'getStatus',
 			onSuccess: connectionResponse.bind(this),
 			onFailure: connectionResponse.bind(this)
@@ -339,7 +339,7 @@ TwitterAPI.prototype = {
 		var user = this.user;
 		if (show) {
 			if (this.stage === false) {
-				g(user.id, 'loading').addClassName('show');	
+				g(user.id, 'loading').addClassName('show');
 			}
 			else {
 				this.stage.document.getElementById('loading').className = 'show';

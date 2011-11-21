@@ -456,6 +456,15 @@ MainAssistant.prototype = {
 		this.refreshPanel(this.panels[0]);
 		this.refreshPanel(this.panels[1]);
 		this.refreshPanel(this.panels[2]);
+
+		// Load the list of people being followed for auto complete
+		this.refreshFollowing();
+	},
+	refreshFollowing: function() {
+		var Twitter = new TwitterAPI(this.user);
+		Twitter.getFriends(this.user.id, function(r){
+			global.following = r;
+		}.bind(this));
 	},
 	refresh: function() {
 		this.refreshPanel(this.panels[this.timeline]);
