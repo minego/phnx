@@ -1103,6 +1103,16 @@ span.link{
 .compose-match.selected {
 	-webkit-border-image: url(../images/low/buttons/positive-tapped.png) 6 stretch;
 }
+.compose-over {
+	display: inline-block;
+	color: #fff;
+	font-size: 14px;
+	padding: 0px;
+	margin: 5px;
+	margin-right: 0px;
+	font-weight: bold;
+	font-family: "Prelude";
+}
 
 .toaster.convo {
 	max-height: 80%;
