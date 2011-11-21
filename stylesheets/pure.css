@@ -110,7 +110,7 @@ body.default {
 }
 
 .scene-title {
-	color: #d2d2d2;
+	color: #222;
 }
 .section-header span {
 	color: #d2d2d2;
@@ -128,5 +128,9 @@ body.default {
 #profile-header,
 .section-header {
 	background: #333;
+}
+
+.section-items {
+	background: #444
 }
 
