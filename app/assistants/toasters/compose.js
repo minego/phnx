@@ -98,6 +98,7 @@ var ComposeToaster = Class.create(Toaster, {
 		var start;
 
 		bar.innerHTML = '';
+		this.pos	= null;
 
 		for (start = end; start >= 0; start--) {
 			var c = value.charAt(start);
@@ -142,10 +143,6 @@ var ComposeToaster = Class.create(Toaster, {
 		var match = value.slice(start + 1, end).toLowerCase();
 		// console.log('Search for things that match: ' + match);
 
-// TODO	Load a list of everyone this user follows and keep it around
-// TODO	Make the matches bar clickable. Grab the innerHTML of the element that
-//		was clicked on and insert that.
-
 		var matches = [];
 		for (var name, i = 0; name = this.users[i]; i++) {
 			if (-1 != name.indexOf(match)) {
@@ -156,6 +153,30 @@ var ComposeToaster = Class.create(Toaster, {
 		}
 
 		bar.innerHTML = matches.join('\n');
+		this.pos = { 'start': start, 'end': end, 'value': value  };
+	},
+	addUser: function(event) {
+		var button	= event.srcElement;
+		var bar		= get(this.completebar);
+		var ta		= get(this.textarea);
+
+		if (!this.pos || !button.className || 0 != button.className.indexOf('compose-match')) {
+			return;
+		}
+
+		var user = button.innerHTML;
+
+		ta.value = this.pos.value.slice(0, this.pos.start) + '@' + user;
+
+		var rest = this.pos.value.slice(this.pos.end + 1);
+		if (rest.length > 0) {
+			ta.value += rest;
+		} else {
+			ta.value += ' ';
+		}
+
+		bar.innerHTML = '';
+		this.pos	= null;
 	},
 	showKeyboard: function() {
 		// Show the virtual keyboard with the type set to email (4) which shows
@@ -163,14 +184,6 @@ var ComposeToaster = Class.create(Toaster, {
 		// '/' key instead of a '@' key.
 		try {
 			this.controller.window.PalmSystem.keyboardShow(4);
-		} catch (e) {
-			// This is fine. This is only need for devices without a physical
-			// keyboard.
-		}
-	},
-	hideKeyboard: function() {
-		try {
-			this.controller.window.PalmSystem.keyboardHide();
 		} catch (e) {
 			// This is fine. This is only need for devices without a physical
 			// keyboard.
@@ -366,13 +379,6 @@ var ComposeToaster = Class.create(Toaster, {
 	cancelTapped: function(event) {
 		get(this.textarea).blur();
 
-		try {
-			this.controller.window.PalmSystem.setManualKeyboardEnabled(false);
-		} catch (e) {
-			// This is fine. This is only need for devices without a physical
-			// keyboard.
-		}
-
 		this.assistant.toasters.back();
 	},
 	setup: function() {
@@ -402,13 +408,14 @@ var ComposeToaster = Class.create(Toaster, {
 		}
 
 		get(this.textarea).observe('focus', function(e){
-				this.showKeyboard();
+			this.showKeyboard();
 		}.bind(this));
 		get(this.textarea).observe('click', function(e){
-				this.showKeyboard();
+			this.showKeyboard();
 		}.bind(this));
 		get(this.textarea).observe('blur', function(e){
-				this.hideKeyboard();
+			this.showKeyboard();
+			get(this.textarea).focus();
 		}.bind(this));
 
 		Mojo.Event.listen(get('submit-' + this.id), Mojo.Event.tap, this.submitTweet.bind(this));
@@ -416,6 +423,7 @@ var ComposeToaster = Class.create(Toaster, {
 		Mojo.Event.listen(get('geotag-' + this.id), Mojo.Event.tap, this.geotagTapped.bind(this));
 		Mojo.Event.listen(get('link-' + this.id), Mojo.Event.tap, this.linkTapped.bind(this));
 		Mojo.Event.listen(get('cancel-' + this.id), Mojo.Event.tap, this.cancelTapped.bind(this));
+		Mojo.Event.listen(get('complete-bar-' + this.id), Mojo.Event.tap, this.addUser.bind(this));
 	},
 	cleanup: function() {
 		get(this.textarea).stopObserving('click');
@@ -429,6 +437,7 @@ var ComposeToaster = Class.create(Toaster, {
 		}
 
 		try {
+			this.controller.window.PalmSystem.keyboardHide();
 			this.controller.window.PalmSystem.setManualKeyboardEnabled(false);
 		} catch (e) {
 			// This is fine. This is only need for devices without a physical
@@ -440,5 +449,6 @@ var ComposeToaster = Class.create(Toaster, {
 		Mojo.Event.stopListening(get('geotag-' + this.id), Mojo.Event.tap, this.geotagTapped);
 		Mojo.Event.stopListening(get('link-' + this.id), Mojo.Event.tap, this.linkTapped);
 		Mojo.Event.stopListening(get('cancel-' + this.id), Mojo.Event.tap, this.cancelTapped);
+		Mojo.Event.stopListening(get('complete-bar-' + this.id), Mojo.Event.tap, this.addUser);
 	}
 });
