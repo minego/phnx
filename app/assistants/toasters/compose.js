@@ -175,8 +175,12 @@ var ComposeToaster = Class.create(Toaster, {
 			ta.value += ' ';
 		}
 
+		/* Hide the bar */
 		bar.innerHTML = '';
-		this.pos	= null;
+		this.pos = null;
+
+		/* Prevent losing focus */
+		this.addedUser = true;
 	},
 	showKeyboard: function() {
 		// Show the virtual keyboard with the type set to email (4) which shows
@@ -377,8 +381,6 @@ var ComposeToaster = Class.create(Toaster, {
 		}
 	},
 	cancelTapped: function(event) {
-		get(this.textarea).blur();
-
 		this.assistant.toasters.back();
 	},
 	setup: function() {
@@ -413,9 +415,17 @@ var ComposeToaster = Class.create(Toaster, {
 		get(this.textarea).observe('click', function(e){
 			this.showKeyboard();
 		}.bind(this));
+
 		get(this.textarea).observe('blur', function(e){
-			this.showKeyboard();
-			get(this.textarea).focus();
+			if (this.addedUser) {
+				this.showKeyboard();
+				try {
+					get(this.textarea).focus();
+				} catch (e) {
+				}
+
+				this.addedUser = false;
+			}
 		}.bind(this));
 
 		Mojo.Event.listen(get('submit-' + this.id), Mojo.Event.tap, this.submitTweet.bind(this));
@@ -436,7 +446,9 @@ var ComposeToaster = Class.create(Toaster, {
 			get(this.textarea.stopObserving('keydown'));
 		}
 
+		// Do everything possible to get the keyboard to hide
 		try {
+			this.controller.window.PalmSystem.setManualKeyboardEnabled(true);
 			this.controller.window.PalmSystem.keyboardHide();
 			this.controller.window.PalmSystem.setManualKeyboardEnabled(false);
 		} catch (e) {
