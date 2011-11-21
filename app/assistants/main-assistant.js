@@ -398,6 +398,7 @@ MainAssistant.prototype = {
 			}
 		}
 		else {
+			this.controller.get('txtSearch').value = '';
 			this.controller.get('txtSearch').blur();
 			this.controller.get('txtSearch').disabled = true;
 		}
@@ -1069,7 +1070,7 @@ MainAssistant.prototype = {
 				// keycodes for punctuation and symbols are not normal
 				// so only ascii chars are passed to the compose toaster for now...
 				var text = Mojo.Char.isValidWrittenChar(e.keyCode);
-				if (this.timeline !== 4) {
+				if (this.timeline !== 4 && this.controller.get('txtSearch').value.length === 0) {
 					this.toggleCompose({
 						'text': text
 					});
