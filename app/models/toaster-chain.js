@@ -30,6 +30,9 @@ ToasterChain.prototype = {
 		// Remove the topmost toaster and show the one "behind" it
 		if (this.items.length > 0) {
 			var toaster = this.items.pop();
+			if (toaster.cleanup) {
+				toaster.cleanup();
+			}
 			toaster.destroy();
 
 			// If there are more items, show the next one
