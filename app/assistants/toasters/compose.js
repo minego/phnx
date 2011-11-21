@@ -434,7 +434,7 @@ var ComposeToaster = Class.create(Toaster, {
 		get(this.textarea).stopObserving('keyup');
 		var prefs = new LocalStorage();
 		if (prefs.read('enterToSubmit')) {
-			get(this.textarea.stopObserving('keydown'));
+			get(this.textarea).stopObserving('keydown');
 		}
 
 		// Do everything possible to get the keyboard to hide
