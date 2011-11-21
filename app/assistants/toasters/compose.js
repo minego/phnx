@@ -116,7 +116,7 @@ var ComposeToaster = Class.create(Toaster, {
 		if (start < 0) {
 			// console.log('Hit the begining of the value with no @');
 			return;
-		} else if (end - start < 4) {
+		} else if (end - (start + 1) < 2) {
 			// Search string isn't long enough
 			return;
 		}
