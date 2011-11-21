@@ -29,7 +29,8 @@ function PreferencesAssistant() {
 			'General Settings': [
 				{key: 'theme', type: 'select', label: 'Theme', items: [
 					{label: 'Rebirth', value: 'rebirth'},
-					{label: 'Ash', value: 'ash'}
+					{label: 'Ash', value: 'ash'},
+					{label: 'Pure', value: 'pure'}
 					// {label: 'Sunnyvale', value: 'sunnyvale'}
 				]},
 				{key: 'fontSize', type: 'select', label: 'Font Size', items: [
