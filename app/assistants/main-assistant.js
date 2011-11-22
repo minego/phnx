@@ -179,6 +179,93 @@ MainAssistant.prototype = {
 			this.controller.setupWidget(panel.id + "-scroller",{mode: 'vertical'},{});
 			if (panel.type === "timeline") {
 				this.controller.setupWidget('list-' + panel.id,{itemTemplate: "templates/tweets/item",listTemplate: "templates/list", renderLimit: this.renderLimit}, panel.model);
+
+				//ask tweetmarker where we left off
+/*
+				var req = {
+					"method": "POST",
+					"uri": [
+						"https://api.tweetmarker.net/v1/lastread?collection=",
+						(panel.id === "home") ? "timeline" : panel.id,
+						"&username=", this.user.userName,
+						"&api_key=WL-33C6DF48244C"
+					].join("")
+				};
+
+				var currentUser = getUser();
+				var args = [
+					{"key":"token","data": currentUser.token},
+					{"key":"secret","data": currentUser.secret}
+				];
+
+				OAuth.completeRequest({
+					"method": req.method,
+					"action": req.uri,
+					"parameters": []
+				}, {
+					"consumerKey": Twitter.key,
+					"consumerSecret": Twitter.secret,
+					"token": currentUser.token,
+					"tokenSecret": currentUser.secret
+				});
+
+				var authHeader = OAuth.getAuthorizationHeader(Twitter.apibase,
+															  []);
+//				this.controller.get('response').update('creating request');
+				var req = new Ajax.Request(url, {
+					"method": req.method,
+					"requestHeaders": {
+						"X-Auth-Service-Provider": [
+							"https://api.twitter.com/1/account",
+							"/verify_credentials.json"
+						].join(""),
+						"X-Verify-Credentials-Authorization": authHeader
+					},
+					"onSuccess": function(response) {
+						Mojo.Controller.errorDialog("yayy " + response);
+					},
+					"onFailure": function(transport) {
+						Mojo.Controller.errorDialog("boo " + transport.responseText);
+					}
+				});
+
+				new Ajax.Request(req.uri, {
+					"method": req.method,
+					"encoding": "UTF-8",
+					"requestHeaders": {
+						"X-Auth-Service-Provider": [
+							"https://api.twitter.com/1/account",
+							"/verify_credentials.json"
+						].join(""),
+						"X-Verify-Credentials-Authorization": [
+							"OAuth realm=\"http://api.twitter.com\"",
+							", oauth_consumer_key=", "WL-33C6DF48244C",
+							", oauth_token=", currentUser.token,
+							", oauth_signature_method=", "HMAC-SHA1",
+							", oauth_signature=", "???",
+							", oauth_timestamp=", "???",
+							", oauth_nonce=", "???",
+							", oauth_version=", "1.0"
+						].join("")
+					},
+					onComplete:function(response){
+						//ex(response.responseText);
+						var response_text=response.responseText;
+						var responseVars=response_text.split("&");
+						var auth_url=this.authorizeUrl+"?"+responseVars[0]+"&oauth_consumer="+this.consumer_key;
+						var oauth_token=responseVars[0].replace("oauth_token=","");
+						var oauth_token_secret=responseVars[1].replace("oauth_token_secret=","");
+						this.requested_token=oauth_token;
+						this.token=this.requested_token;
+						this.tokenSecret=oauth_token_secret;
+						var oauthBrowserParams={
+							authUrl:auth_url,
+							callbackUrl:this.callback
+						};
+						this.instanceBrowser(oauthBrowserParams);
+					}.bind(this)
+				});
+				*/
 			}
 		}
 
