@@ -230,6 +230,15 @@ var TweetToaster = Class.create(Toaster, {
 			case 'cmdSpam':
 				this.spam();
 				break;
+			case 'cmdCopy':
+				this.copy();
+				break;
+			case 'cmdEmail':
+				this.email();
+				break;
+			case 'cmdSms':
+				this.sms();
+				break;	
 		}
 	},
 	mention: function() {
@@ -273,6 +282,38 @@ var TweetToaster = Class.create(Toaster, {
 
 		this.assistant.toasters.add(new ConfirmToaster(opts, this.assistant));
 	},
+	copy: function() {
+		this.controller.stageController.setClipboard(this.tweet.stripped,true);	
+				banner('Copied tweet to clipboard.');
+	},
+	email: function() {
+		this.controller.serviceRequest(
+    "palm://com.palm.applicationManager", {
+        method: 'open',
+        parameters: {
+            id: "com.palm.app.email",
+            params: {
+                summary: "I would like to share this tweet with you",
+                text: this.tweet.stripped,
+            }
+        }
+    }
+);
+	},
+	sms: function() {
+		this.controller.serviceRequest('palm://com.palm.applicationManager', {
+    method: 'launch',
+    parameters: {
+        id: 'com.palm.app.messaging',
+        params: {
+            messageText: this.tweet.stripped,
+        }
+    },
+    onSuccess: this.handleOKResponse,
+    onFailure: this.handleErrResponse
+});
+	},
+
 
 	detailsTapped: function(event) {
 		var Twitter = new TwitterAPI(this.user);
@@ -419,6 +460,13 @@ var TweetToaster = Class.create(Toaster, {
 			label: 'Send Direct Message',
 			command: 'cmdMessage'
 		});
+		this.menuItems.push({
+			label: 'Share',
+			items: [
+			{label: $L('Copy'), command:'cmdCopy'},
+			{label: $L('Email'), command: 'cmdEmail'},
+			{label: $L('SMS'), command: 'cmdSms'},
+		]});
 		this.menuItems.push({
 			label: 'Block',
 			command: 'cmdBlock'

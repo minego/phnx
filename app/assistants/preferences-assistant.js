@@ -33,6 +33,10 @@ function PreferencesAssistant() {
 					{label: 'Pure', value: 'pure'}
 					// {label: 'Sunnyvale', value: 'sunnyvale'}
 				]},
+				{key: 'barlayout', type: 'select', label: 'Layout', items: [
+					{label: 'Navigation on top', value: 'swapped'},
+					{label: 'Toolbar on top', value: 'original'}
+				]},
 				{key: 'fontSize', type: 'select', label: 'Font Size', items: [
 					{label: 'Tiny', value: 'tiny'},
 					{label: 'Small', value: 'small'},
@@ -143,6 +147,7 @@ PreferencesAssistant.prototype = {
 		this.controller.listen(this.controller.get("close-button"), Mojo.Event.tap, this.closeTapped);
 
 		this.controller.listen(this.controller.get('select-theme'), Mojo.Event.propertyChange, this.themeChanged.bind(this));
+		this.controller.listen(this.controller.get('select-barlayout'), Mojo.Event.propertyChange, this.layoutChanged.bind(this));
 		this.controller.listen(this.controller.get('select-fontSize'), Mojo.Event.propertyChange, this.fontChanged.bind(this));
 	},
 	closeTapped: function() {
@@ -163,6 +168,10 @@ PreferencesAssistant.prototype = {
 		var body = this.controller.stageController.document.getElementsByTagName("body")[0];
 		global.setFontSize(body, event.value);
 	},
+	layoutChanged: function(event) {
+		var body = this.controller.stageController.document.getElementsByTagName("body")[0];
+		global.setLayout(body, event.value);
+	},
 	cleanup: function() {
 		// Save preferences on exit.
 		for (var sectionId in this.sections) {
@@ -175,6 +184,7 @@ PreferencesAssistant.prototype = {
 
 		// Manually remove any listeners from above
 		this.controller.stopListening(this.controller.get('select-theme'), Mojo.Event.propertyChange, this.themeChanged);
+		this.controller.stopListening(this.controller.get('select-barlayout'), Mojo.Event.propertyChange, this.layoutChanged);
 		this.controller.stopListening(this.controller.get('select-fontSize'), Mojo.Event.propertyChange, this.fontChanged);
 		this.controller.stopListening(this.controller.get("close-button"), Mojo.Event.tap, this.closeTapped);
 	}

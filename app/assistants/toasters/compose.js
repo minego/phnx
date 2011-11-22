@@ -87,7 +87,7 @@ var ComposeToaster = Class.create(Toaster, {
 		var bar		= get(this.completebar);
 		var ta		= get(this.textarea);
 		var value	= ta.value;
-		var end		= ta.selectionStart;
+		var end		= ta.selectionStart - 1;
 		var start;
 
 		bar.innerHTML = '';
@@ -116,8 +116,9 @@ var ComposeToaster = Class.create(Toaster, {
 		if (start < 0) {
 			// console.log('Hit the begining of the value with no @');
 			return;
-		} else if (end - (start + 1) < 1) {
+		} else if ((end - start) < 1) {
 			// Search string isn't long enough
+			// console.log('Gotta give me more');
 			return;
 		}
 
@@ -133,13 +134,13 @@ var ComposeToaster = Class.create(Toaster, {
 			}
 		}
 
-		var match = value.slice(start + 1, end).toLowerCase();
+		var match = value.slice(start + 1, end + 1).toLowerCase();
 		// console.log('Search for things that match: ' + match);
 
 		var matches = [];
 		for (var user, i = 0; (user = global.following[i]); i++) {
 			if (-1 != user.screen_name.toLowerCase().indexOf(match)) {
-				if (matches.length <= 25) {
+				if (matches.length <= 10) {
 					matches.push('<div class="compose-match" x-mojo-tap-highlight="immediate">' + user.screen_name + '</div>');
 				} else {
 					matches.push('<div class="compose-over">...</div>');
@@ -165,11 +166,7 @@ var ComposeToaster = Class.create(Toaster, {
 		ta.value = this.pos.value.slice(0, this.pos.start) + '@' + user;
 
 		var rest = this.pos.value.slice(this.pos.end + 1);
-		if (rest.length > 0) {
-			ta.value += rest;
-		} else {
-			ta.value += ' ';
-		}
+		ta.value += ' ' + rest;
 
 		/* Hide the bar */
 		bar.innerHTML = '';

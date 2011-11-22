@@ -1207,8 +1207,8 @@ MainAssistant.prototype = {
 	activate: function(event) {
 		var body = this.controller.stageController.document.getElementsByTagName("body")[0];
 		var prefs = new LocalStorage();
-		var font = prefs.read('fontSize');
-		global.setFontSize(body, font);
+		global.setFontSize(body, prefs.read('fontSize'));
+		global.setLayout(body, prefs.read('barlayout'));
 	},
 	deactivate: function(event) {
 		this.controller.get(this.controller.document).stopObserving("keyup");
