@@ -1,6 +1,5 @@
 /* Uses a cookie right now for saving key/value pairs */
 function LocalStorage() {
-	
 	this.defaults = {
 		notifications: true,
 		notificationInterval: '00:15',
@@ -9,6 +8,7 @@ function LocalStorage() {
 		notificationMessages: true,
 		enterToSend: false,
 		fontSize: 'small',
+		barlayout: 'swapped',
 		theme: 'rebirth',
 		api: 'https://api.twitter.com',
 		defaultAccount: '0',
@@ -20,9 +20,9 @@ function LocalStorage() {
 		forwardSwipe: 'current',
 		refreshOnMaximize: false
 	};
-	
+
 	this.cookie = new Mojo.Model.Cookie('phnxStore');
-	
+
 	if (typeof(this.cookie.get()) !== 'undefined') {
 		this.data = this.cookie.get();
 	}
@@ -43,8 +43,8 @@ LocalStorage.prototype = {
 		}
 		else {
 			// Return null if it doesn't exist.
-			return null;
 			Mojo.Log.error('Key ' + key + ' doesn\'t exist.');
+			return null;
 		}
 	},
 	write: function(key, value) {

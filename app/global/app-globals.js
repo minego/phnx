@@ -62,7 +62,7 @@ var global = {
 				onFailure: function(response) {
 					ex(response.errorText);
 				}
-			});	
+			});
 		}
 	},
 	openBrowser: function(url) {
@@ -98,7 +98,7 @@ var global = {
 	},
 	stageActions: function(stageController) {
 		// Actions / listeners that are run on stage creation
-		
+
 		// Set the account shim size
 		var screenHeight = stageController.window.innerHeight;
 		var shim = stageController.document.getElementById('account-shim');
@@ -107,50 +107,59 @@ var global = {
 		shim.className = 'ignore';
 		// Amount of active requests
 		stageController.requests = 0;
-		
-		// stageController.handleCommand = function(event) {			
+
+		// stageController.handleCommand = function(event) {
 		// 	if (event.command === 'cmdPreferences') {
 		// 		stageController.pushScene('preferences');
 		// 	}
 		// };
-		
+
 		var activate = function(event) {
 			Mojo.Log.info('activate scene');
-			
+
 			// Close the notification stage right away
 			var app = stageController.getAppController();
 			var dashStage = app.getStageProxy(global.dashboardStage);
 			if (dashStage) {
 				app.closeStage(global.dashboardStage);
 			}
-			
+
 			var prefs = new LocalStorage();
-			
+
 			if (prefs.read('refreshOnMaximize')) {
 				stageController.delegateToSceneAssistant('refreshAll');
 			}
-			
+
 			// save a reference to the stage's document
 			global.doc = stageController.document;
 			Mojo.Log.info('stage doc set');
 			// Hide the account shim if it is shown
-			stageController.document.getElementById('account-shim').className = 'ignore';	
-			
+			stageController.document.getElementById('account-shim').className = 'ignore';
+
 		};
-		
+
 		var deactivate = function(event) {
 			Mojo.Log.info('deactivate scene');
-			
+
 			// show the account shim if it is enabled
 			var prefs = new LocalStorage();
 			if (prefs.read('cardIcons')) {
 				stageController.document.getElementById('account-shim').className = 'show';
 			}
 		};
-		
+
 		// Add stage listeners
 		Mojo.Event.listen(stageController.document, Mojo.Event.stageActivate, activate);
 		Mojo.Event.listen(stageController.document, Mojo.Event.stageDeactivate, deactivate);
+	},
+	setLayout: function(body, layout) {
+		var layouts = ['swapped', 'original'];
+
+		for (var i=0; i < layouts.length; i++) {
+			Element.removeClassName(body, 'layout-' + layouts[i]);
+		}
+
+		Element.addClassName(body, 'layout-' + layout);
 	},
 	setFontSize: function(body, font) {
 		var fonts = ['tiny','small', 'medium', 'large','huge'];
@@ -196,12 +205,12 @@ function g(userId, elementId) {
 	var stage = app.getStageProxy(stageName);
 	var element;
 	if (stage) {
-		element = stage.document.getElementById(elementId);		
+		element = stage.document.getElementById(elementId);
 	}
 	else {
 		element = document.getElementById(elementId);
 	}
-	
+
 	Element.extend(element);
 	return element;
 }

@@ -123,9 +123,7 @@ body.no-gesture {  /* touchpad/emulator */
 	z-index: 100;
 }
 
-/* Swap the top and bottom bars */
-/* .large-device #header { */
-#header {
+.layout-swapped #header {
 	bottom: 0px;
 	margin-bottom: -22px;
 	background: url('../images/low/nav-bar.png') left -22px repeat-x;
@@ -205,9 +203,7 @@ body.no-gesture {  /* touchpad/emulator */
 	overflow: scroll;
 }
 
-/* Swap the top and bottom bars */
-/* .large-device #nav-bar-scroller { */
-#nav-bar-scroller {
+.layout-swapped #nav-bar-scroller {
 	top: 0px;
 	margin-top: -23px;
 	background: url(../images/low/header-bar.png) left 3px repeat-x;
@@ -294,8 +290,7 @@ body.no-gesture {  /* touchpad/emulator */
 	-webkit-palm-mouse-target: ignore;
 }
 
-/* Swap the top and bottom bars */
-.beacon {
+.layout-swapped .beacon {
 	top: 0px;
 	background: url('../images/low/new-content-down.png') center 0px no-repeat;
 }
@@ -316,8 +311,7 @@ body.no-gesture {  /* touchpad/emulator */
 	-webkit-transition: left .3s;
 }
 
-/* Swap the top and bottom bars */
-#indicator {
+.layout-swapped #indicator {
 	position: fixed;
 	top: 44px;
 	background: url(../images/low/indicator-down.png) center center no-repeat;

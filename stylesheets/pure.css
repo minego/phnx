@@ -14,13 +14,10 @@ body.default {
 	background: url(../images/low/themes/ash/nav-bar.png) left bottom repeat-x;
 }
 
-/* Swap the top and bottom bars */
-/* .large-device #header { */
-#header {
+.layout-swapped #header {
 	background: url('../images/low/themes/ash/nav-bar.png') left -22px repeat-x;
 }
-/* .large-device #nav-bar-scroller { */
-#nav-bar-scroller {
+.layout-swapped #nav-bar-scroller {
 	background: url(../images/low/themes/ash/header-bar.png) left 3px repeat-x;
 }
 
@@ -30,8 +27,7 @@ body.default {
 	background: url(../images/low/themes/ash/indicator.png) center center no-repeat;
 }
 
-/* Swap the top and bottom bars */
-#indicator {
+.layout-swapped #indicator {
 	background: url(../images/low/themes/ash/indicator-down.png) center center no-repeat;
 }
 
