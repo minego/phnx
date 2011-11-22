@@ -966,7 +966,7 @@ span.link{
 	background: url('../images/low/icons/search-button.png') center center no-repeat;
 	display: inline-block;
 }
-.toaster.mine .delete, .toaster.has-convo .convo, .toaster.normal .reply, .toaster.normal .retweet, .toaster.normal .favorite, .toaster.is-dm .dm {
+.toaster.mine .delete, .toaster.mine .reply, .toaster.has-convo .convo, .toaster.normal .reply, .toaster.normal .retweet, .toaster.normal .favorite, .toaster.is-dm .dm {
 	display: inline-block;
 }
 .toaster.compose {

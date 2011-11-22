@@ -230,6 +230,9 @@ var TweetToaster = Class.create(Toaster, {
 			case 'cmdSpam':
 				this.spam();
 				break;
+			case 'cmdShare':
+				this.share();
+				break;
 		}
 	},
 	mention: function() {
@@ -272,6 +275,9 @@ var TweetToaster = Class.create(Toaster, {
 		};
 
 		this.assistant.toasters.add(new ConfirmToaster(opts, this.assistant));
+	},
+	share: function() {
+		this.controller.stageController.setClipboard(this.tweet.stripped,true);	
 	},
 
 	detailsTapped: function(event) {
@@ -426,6 +432,10 @@ var TweetToaster = Class.create(Toaster, {
 		this.menuItems.push({
 			label: 'Report Spam',
 			command: 'cmdSpam'
+		});
+		this.menuItems.push({
+			label: 'Share',
+			command: 'cmdShare'
 		});
 
 		Mojo.Event.listen(this.controller.get('details-' + this.id), Mojo.Event.tap, this.detailsTapped.bind(this));
