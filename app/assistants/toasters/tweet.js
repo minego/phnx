@@ -278,6 +278,7 @@ var TweetToaster = Class.create(Toaster, {
 	},
 	share: function() {
 		this.controller.stageController.setClipboard(this.tweet.stripped,true);	
+				banner('Copied tweet to clipboard.');
 	},
 
 	detailsTapped: function(event) {
