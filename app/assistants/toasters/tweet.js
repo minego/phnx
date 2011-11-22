@@ -461,6 +461,13 @@ var TweetToaster = Class.create(Toaster, {
 			command: 'cmdMessage'
 		});
 		this.menuItems.push({
+			label: 'Share',
+			items: [
+			{label: $L('Copy'), command:'cmdCopy'},
+			{label: $L('Email'), command: 'cmdEmail'},
+			{label: $L('SMS'), command: 'cmdSms'},
+		]});
+		this.menuItems.push({
 			label: 'Block',
 			command: 'cmdBlock'
 		});
@@ -468,13 +475,6 @@ var TweetToaster = Class.create(Toaster, {
 			label: 'Report Spam',
 			command: 'cmdSpam'
 		});
-		this.menuItems.push({
-			label: 'Share',
-			items: [
-			{label: $L('Copy'), command:'cmdCopy'},
-			{label: $L('Email'), command: 'cmdEmail'},
-			{label: $L('SMS'), command: 'cmdSms'},
-		]});
 
 		Mojo.Event.listen(this.controller.get('details-' + this.id), Mojo.Event.tap, this.detailsTapped.bind(this));
 		Mojo.Event.listen(this.controller.get('rt-' + this.id), Mojo.Event.tap, this.rtTapped.bind(this));
