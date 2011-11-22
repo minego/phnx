@@ -140,7 +140,7 @@ body.default {
 	color: #666;
 }
 
-#txtSearch, .searchbox {
+#txtSearch, .searchbox, #about-body {
 	color: #666 !important;
 }
 

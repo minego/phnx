@@ -16,15 +16,24 @@ AboutAssistant.prototype = {
 		this.closeTapped = this.closeTapped.bind(this);
 		this.controller.listen(this.controller.get("close-button"), Mojo.Event.tap, this.closeTapped);
 
-		this.controller.listen('head-honcho', Mojo.Event.tap, this.awesomeSauce.bind(this));
+		this.controller.listen('about-body', Mojo.Event.tap, this.awesomeSauce.bind(this));
 		this.controller.listen('series-of-tubes', Mojo.Event.tap, this.coolio.bind(this));
 	},
 	closeTapped: function() {
 		this.controller.stageController.popScene();
 	},
 	awesomeSauce: function(event) {
+		if (!event.srcElement || !event.srcElement.id ||
+			0 != event.srcElement.id.indexOf('@')
+		) {
+			return;
+		}
+
+		// cut off the leading @
+		var user = event.srcElement.id.slice(1);
+
 		var Twitter = new TwitterAPI(this.controller.stageController.user);
-		Twitter.getUser('rmxdave', function(r){
+		Twitter.getUser(user, function(r){
 			this.controller.stageController.pushScene({
 				name: 'profile',
 				disableSceneScroller: true
@@ -35,7 +44,7 @@ AboutAssistant.prototype = {
 		global.openBrowser('http://phnxapp.com');
 	},
 	cleanup: function() {
-		this.controller.stopListening('head-honcho', Mojo.Event.tap, this.awesomeSauce);
+		this.controller.stopListening('about-body', Mojo.Event.tap, this.awesomeSauce);
 		this.controller.stopListening('series-of-tubes', Mojo.Event.tap, this.coolio);
 		this.controller.stopListening(this.controller.get("close-button"), Mojo.Event.tap, this.closeTapped);
 	}
