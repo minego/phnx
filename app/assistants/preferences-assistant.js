@@ -47,7 +47,8 @@ function PreferencesAssistant() {
 				{key: 'cardIcons', type: 'toggle', label: 'Show card icons'},
 				{key: 'refreshOnMaximize', type: 'toggle', label: 'Auto Refresh'},
 				{key: 'refreshOnSubmit', type: 'toggle', label: 'Refresh after post'},
-				{key: 'enterToSubmit', type: 'toggle', label: 'Enter to submit'}
+				{key: 'enterToSubmit', type: 'toggle', label: 'Enter to submit'},
+				{key: 'autoCorrect', type: 'toggle', label: 'Auto Correct'}
 			],
 			'Notifications': [
 				{key: 'notifications', type: 'toggle', label: 'Notifications'},

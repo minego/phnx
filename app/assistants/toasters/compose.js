@@ -100,10 +100,16 @@ var ComposeToaster = Class.create(Toaster, {
 				case ' ': case '\t': case '\n': case '\r':
 					// There was no @ in this word
 					// console.log('Got to the start of the word with no @');
+					if (this.autoCorrect) {
+						ta.setAttribute("autocorrect", "on");
+					}
 					return;
 
 				case '@':
 					// console.log('found an @: ' + start);
+					if (this.autoCorrect) {
+						ta.setAttribute("autocorrect", "off");
+					}
 					break;
 
 				default:
@@ -162,6 +168,10 @@ var ComposeToaster = Class.create(Toaster, {
 		}
 
 		var user = button.innerHTML;
+
+		// Autocorrect tends to freak out when inserting a name. Turn it off and
+		// leave it off until the user types at least one more character.
+		ta.setAttribute("autocorrect", "off");
 
 		ta.value = this.pos.value.slice(0, this.pos.start) + '@' + user;
 
@@ -388,11 +398,18 @@ var ComposeToaster = Class.create(Toaster, {
 			}.bind(this));
 		}
 
+		this.autoCorrect = prefs.read('autoCorrect');
+
 		get(this.textarea).observe('keyup', function(e){
 			this.updateCounter();
-
 			this.autoComplete();
 		}.bind(this));
+
+		if (this.autoCorrect) {
+			get(this.textarea).setAttribute("autocorrect", "on");
+		} else {
+			get(this.textarea).setAttribute("autocorrect", "off");
+		}
 
 		try {
 			this.controller.window.PalmSystem.setManualKeyboardEnabled(true);
