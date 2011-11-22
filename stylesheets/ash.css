@@ -3,6 +3,11 @@ body.default {
 	background-size: 100%;
 }
 
+body.default.large-device {
+	background: url('../images/low/scene-top.png') left top repeat-x,url(../images/low/themes/ash/touchpad-bg.jpg) no-repeat center top;
+	background-size: auto;
+}
+
 .header-title {
 	color: #94989c;
 }
