@@ -15,7 +15,7 @@ body.default {
 }
 
 .layout-swapped #header {
-	background: url('../images/low/themes/ash/nav-bar.png') left -22px repeat-x;
+	background: url('../images/low/themes/ash/nav-bar.png') left 5px repeat-x;
 }
 .layout-swapped #nav-bar-scroller {
 	background: url(../images/low/themes/ash/header-bar.png) left 3px repeat-x;

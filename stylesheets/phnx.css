@@ -125,8 +125,9 @@ body.no-gesture {  /* touchpad/emulator */
 
 .layout-swapped #header {
 	bottom: 0px;
+	padding-top: 30px;
 	margin-bottom: -22px;
-	background: url('../images/low/nav-bar.png') left -22px repeat-x;
+	background: url('../images/low/nav-bar.png') left 5px repeat-x;
 }
 
 .header-icon {
