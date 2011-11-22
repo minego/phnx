@@ -140,7 +140,7 @@ var ComposeToaster = Class.create(Toaster, {
 		var matches = [];
 		for (var user, i = 0; (user = global.following[i]); i++) {
 			if (-1 != user.screen_name.toLowerCase().indexOf(match)) {
-				if (matches.length <= 25) {
+				if (matches.length <= 10) {
 					matches.push('<div class="compose-match" x-mojo-tap-highlight="immediate">' + user.screen_name + '</div>');
 				} else {
 					matches.push('<div class="compose-over">...</div>');
