@@ -134,3 +134,11 @@ body.default {
 	background: #444
 }
 
+.new-indicator {
+	color: #666;
+}
+
+#txtSearch, .searchbox {
+	color: #666 !important;
+}
+
