@@ -405,11 +405,9 @@ var ComposeToaster = Class.create(Toaster, {
 			this.autoComplete();
 		}.bind(this));
 
-		if (this.autoCorrect) {
-			get(this.textarea).setAttribute("autocorrect", "on");
-		} else {
-			get(this.textarea).setAttribute("autocorrect", "off");
-		}
+		// Start with autocorrect disabled. Only turn it on when the cursor is
+		// in a word that does not start with @.
+		get(this.textarea).setAttribute("autocorrect", "off");
 
 		try {
 			this.controller.window.PalmSystem.setManualKeyboardEnabled(true);
