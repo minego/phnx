@@ -116,7 +116,7 @@ var ComposeToaster = Class.create(Toaster, {
 		if (start < 0) {
 			// console.log('Hit the begining of the value with no @');
 			return;
-		} else if (end - start < 4) {
+		} else if (end - (start + 1) < 1) {
 			// Search string isn't long enough
 			return;
 		}
@@ -137,11 +137,14 @@ var ComposeToaster = Class.create(Toaster, {
 		// console.log('Search for things that match: ' + match);
 
 		var matches = [];
-		for (var user, i = 0; user = global.following[i]; i++) {
+		for (var user, i = 0; (user = global.following[i]); i++) {
 			if (-1 != user.screen_name.toLowerCase().indexOf(match)) {
-				console.log('Found a match:' + user.screen_name);
-
-				matches.push('<div class="compose-match" x-mojo-tap-highlight="immediate">' + user.screen_name + '</div>');
+				if (matches.length <= 25) {
+					matches.push('<div class="compose-match" x-mojo-tap-highlight="immediate">' + user.screen_name + '</div>');
+				} else {
+					matches.push('<div class="compose-over">...</div>');
+					break;
+				}
 			}
 		}
 
