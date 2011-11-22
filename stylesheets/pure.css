@@ -138,3 +138,7 @@ body.default {
 	color: #666;
 }
 
+#txtSearch, .searchbox {
+	color: #666 !important;
+}
+
