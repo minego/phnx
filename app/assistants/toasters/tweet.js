@@ -238,7 +238,7 @@ var TweetToaster = Class.create(Toaster, {
 				break;
 			case 'cmdSms':
 				this.sms();
-				break;	
+				break;
 		}
 	},
 	mention: function() {
@@ -258,10 +258,10 @@ var TweetToaster = Class.create(Toaster, {
 		var opts = {
 			title: 'Are you sure you want to block @' + this.tweet.user.screen_name + '?',
 			callback: function(){
-				var Twitter = new TwitterAPI(this.account);
+				var Twitter = new TwitterAPI(this.user);
 				Twitter.block(this.tweet.user.id_str, function(response){
 					banner('Blocked @' + this.tweet.user.screen_name);
-					this.toasters.back();
+					this.assistant.toasters.back();
 				}.bind(this));
 			}.bind(this)
 		};
@@ -272,10 +272,10 @@ var TweetToaster = Class.create(Toaster, {
 		var opts = {
 			title: 'Are you sure you want to report @' + this.tweet.user.screen_name + '?',
 			callback: function(){
-				var Twitter = new TwitterAPI(this.account);
+				var Twitter = new TwitterAPI(this.user);
 				Twitter.report(this.tweet.user.id_str, function(response) {
 					banner('Reported @' + this.tweet.user.screen_name);
-					this.toasters.back();
+					this.assistant.toasters.back();
 				}.bind(this));
 			}.bind(this)
 		};
@@ -283,7 +283,7 @@ var TweetToaster = Class.create(Toaster, {
 		this.assistant.toasters.add(new ConfirmToaster(opts, this.assistant));
 	},
 	copy: function() {
-		this.controller.stageController.setClipboard(this.tweet.stripped,true);	
+		this.controller.stageController.setClipboard(this.tweet.stripped,true);
 				banner('Copied tweet to clipboard.');
 	},
 	email: function() {
@@ -294,7 +294,7 @@ var TweetToaster = Class.create(Toaster, {
             id: "com.palm.app.email",
             params: {
                 summary: "I would like to share this tweet with you",
-                text: this.tweet.stripped,
+                text: this.tweet.stripped
             }
         }
     }
@@ -306,7 +306,7 @@ var TweetToaster = Class.create(Toaster, {
     parameters: {
         id: 'com.palm.app.messaging',
         params: {
-            messageText: this.tweet.stripped,
+            messageText: this.tweet.stripped
         }
     },
     onSuccess: this.handleOKResponse,
@@ -465,7 +465,7 @@ var TweetToaster = Class.create(Toaster, {
 			items: [
 			{label: $L('Copy'), command:'cmdCopy'},
 			{label: $L('Email'), command: 'cmdEmail'},
-			{label: $L('SMS'), command: 'cmdSms'},
+			{label: $L('SMS'), command: 'cmdSms'}
 		]});
 		this.menuItems.push({
 			label: 'Block',
