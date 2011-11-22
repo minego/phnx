@@ -15,7 +15,7 @@ function PreferencesAssistant() {
 
 	var advanced = [];
 
-	if (Mojo.Environment.DeviceInfo.coreNaviButton) {
+	if (Mojo.Environment.DeviceInfo.modelNameAscii != "TouchPad") {
 		advanced.push(
 			{key: 'forwardSwipe', type: 'select', label: 'Forward Swipe', items: [
 				{label: 'Refresh All', value: 'all'},
