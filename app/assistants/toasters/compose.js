@@ -572,6 +572,10 @@ var ComposeToaster = Class.create(Toaster, {
 
 		this.autoCorrect = prefs.read('autoCorrect');
 
+		get(this.textarea).observe('change', function(e) {
+			this.updateCounter();
+		}.bind(this));
+
 		get(this.textarea).observe('keyup', function(e){
 			this.updateCounter();
 			this.autoComplete();
@@ -621,6 +625,7 @@ var ComposeToaster = Class.create(Toaster, {
 		get(this.textarea).stopObserving('blur');
 
 		get(this.textarea).stopObserving('keyup');
+		get(this.textarea).stopObserving('change');
 		var prefs = new LocalStorage();
 		if (prefs.read('enterToSubmit')) {
 			get(this.textarea).stopObserving('keydown');
