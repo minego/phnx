@@ -379,6 +379,10 @@ body.no-gesture {  /* touchpad/emulator */
 	clear: both;
 /*	background: url(../images/low/tweet-border.png) center bottom repeat-x;*/
 }
+.user-row {
+	display: inline-block;
+	width: 320px;
+}
 .status-row.last {
 	background: transparent;
 }
