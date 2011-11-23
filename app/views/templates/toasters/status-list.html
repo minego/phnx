@@ -1,5 +1,8 @@
 <div id="toaster-#{-toasterId}" class="toaster status-list">
-	<div class="toaster-title">#{-title}</div>
+	<div class="toaster-title">
+		#{-title}
+		<div id="back-#{-toasterId}" class="toaster-button back" x-mojo-tap-highlight="immediate" style="float: right;"></div>
+	</div>
 	<div id="status-scroller-#{-toasterId}" x-mojo-element="Scroller" class="convo-scroller">
 		<div id="status-list-#{-toasterId}" x-mojo-element="List" class="convo-list"></div>
 		<img src="images/scrollspace.png" height="10" />

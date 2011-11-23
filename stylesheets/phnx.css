@@ -714,6 +714,11 @@ span.link{
 	position: relative;
 }
 
+.toaster-title .toaster-button.back {
+	position: relative;
+	top: -5px;
+}
+
 .convo-scroller{
 	-webkit-transition-property: all;
 	-webkit-transition-duration: .3s;
