@@ -23,6 +23,8 @@ var UserListToaster = Class.create(Toaster, {
 		get('status-scroller-' + this.id).setStyle({'max-height': (screenHeight - 65) + 'px'});
 		get(this.nodeId).setStyle({'max-height': (screenHeight - 45) + 'px'});
 		this.controller.listen(get('status-list-' + this.id), Mojo.Event.listTap, this.userTapped.bind(this));
+
+		Mojo.Event.listen(this.controller.get('back-' + this.id), Mojo.Event.tap, this.backTapped.bind(this));
 	},
 	userTapped: function(event) {
 		var Twitter = new TwitterAPI(this.controller.stageController.user);
@@ -33,7 +35,11 @@ var UserListToaster = Class.create(Toaster, {
 			}, r.responseJSON);
 		}.bind(this));
 	},
+	backTapped: function(event) {
+		this.assistant.toasters.back();
+	},
 	cleanup: function() {
 		this.controller.stopListening(get('status-list-' + this.id), Mojo.Event.listTap, this.userTapped);
+		Mojo.Event.stopListening(this.controller.get('back-' + this.id), Mojo.Event.tap, this.backTapped);
 	}
 });
