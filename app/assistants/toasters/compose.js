@@ -219,6 +219,8 @@ var ComposeToaster = Class.create(Toaster, {
 
 		if (txt.length > this.availableChars) {
 			var words		= txt.match(/[^"\s]+/g);
+			var todone		= false;
+			var to			= [];
 			var mentions	= [];
 			var messages	= [];
 			var length		= 0;
@@ -229,11 +231,35 @@ var ComposeToaster = Class.create(Toaster, {
 			// Count the length of these words so we know how much space
 			// to save at the end of each aprt.
 			for (var i = 0, word; word = words[i]; i++) {
-				if ((0 == word.indexOf('@') || 0 == word.indexOf('#')) &&
-					-1 == mentions.indexOf(word)
+				if (0 == word.indexOf('.@')) {
+					todone = true;
+					word = word.slice(1);
+				} else if (0 == word.indexOf('#')) {
+					todone = true;
+				} else if (0 == word.indexOf('@')) {
+					;
+				} else {
+					todone = true;
+					continue;
+				}
+
+				// Count the length of the word, even if it is already in our
+				// list so that it can be included in the right order.
+				length += word.length + 1;
+
+				if (-1 != mentions.indexOf(word) ||
+					-1 != to.indexOf(word)
 				) {
+					// We've already found this guy
+					continue;
+				}
+
+				if (!todone) {
+					// The message is addressed directly to this user
+					to.push(word);
+				} else {
+					// The message mentioned this user
 					mentions.push(word);
-					length += word.length + 1;
 				}
 			}
 
@@ -281,6 +307,7 @@ var ComposeToaster = Class.create(Toaster, {
 								add.push(word);
 							}
 						}
+
 						if (add.length) {
 							msg.push(' // ' + add.join(' '));
 						}
@@ -289,12 +316,15 @@ var ComposeToaster = Class.create(Toaster, {
 					}
 
 					// Add a prefix to each message: "x of y: "
-					for (var i = 0; messages[i]; i++) {
-						messages[i] = (i + 1) + ' of ' + messages.length + ': ' + messages[i];
+					var totext = '';
+
+					if (to.length) {
+						totext = to.join(' ') + ' ';
 					}
 
-					// TODO Okay time to send em...
-					// TODO	Each part should be in reply to the one before it
+					for (var i = 0; messages[i]; i++) {
+						messages[i] = totext + (i + 1) + ' of ' + messages.length + ': ' + messages[i];
+					}
 
 					var sendfunc = function()
 					{
