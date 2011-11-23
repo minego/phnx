@@ -1,6 +1,6 @@
 {
 	"id": "net.minego.phnx",
-	"version": "1.2.7",
+	"version": "1.2.8",
 	"vendor": "David Strack",
 	"type": "web",
 	"main": "index.html",
