@@ -14,7 +14,11 @@ var ConfirmToaster = Class.create(Toaster, {
 		this.opts.callback();
 	},
 	cancelTapped: function(event) {
-		this.assistant.toasters.backX(2);
+		if (this.opts.cancel) {
+			this.opts.cancel();
+		} else {
+			this.assistant.toasters.backX(2);
+		}
 	},
 	setup: function() {
 		this.controller.listen(this.controller.get('confirm-' + this.id), Mojo.Event.tap, this.confirmTapped.bind(this));

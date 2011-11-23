@@ -568,11 +568,13 @@ MainAssistant.prototype = {
 				// grab the second tweet for gap detection
 				var tweet = panel.model.items[1];
 
-				if (tweet.is_rt) {
-					lastId = tweet.original_id;
-				}
-				else{
-					lastId = tweet.id_str;
+				if (tweet) {
+					if (tweet.is_rt) {
+						lastId = tweet.original_id;
+					}
+					else{
+						lastId = tweet.id_str;
+					}
 				}
 			}
 			if (lastId === 0) {

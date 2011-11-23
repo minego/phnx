@@ -183,78 +183,220 @@ var ComposeToaster = Class.create(Toaster, {
 		this.pos = null;
 
 		/* Prevent losing focus */
-		this.addedUser = true;
+		this.refocus = true;
 	},
 	showKeyboard: function() {
 		// Show the virtual keyboard with the type set to email (4) which shows
 		// the '@' and '.COM' buttons. URL (7) may be useful too, which shows a
 		// '/' key instead of a '@' key.
 		try {
+			this.controller.window.PalmSystem.setManualKeyboardEnabled(true);
 			this.controller.window.PalmSystem.keyboardShow(4);
 		} catch (e) {
 			// This is fine. This is only need for devices without a physical
 			// keyboard.
 		}
 	},
+	hideKeyboard: function() {
+		// Do everything possible to get the keyboard to hide
+		try {
+			this.controller.window.PalmSystem.setManualKeyboardEnabled(true);
+			this.controller.window.PalmSystem.keyboardHide();
+			this.controller.window.PalmSystem.setManualKeyboardEnabled(false);
+		} catch (e) {
+			// This is fine. This is only need for devices without a physical
+			// keyboard.
+		}
+
+		// Ensure we don't refocus
+		this.refocus = false;
+		get(this.textarea).blur();
+	},
 	submitTweet: function(event) {
 		var txt = get(this.textarea).value;
 		var Twitter = new TwitterAPI(this.user);
 		var args;
-		if (txt.length <= this.availableChars && txt.length > 0) {
-			if (this.uploading === false) {
-				if (!this.dm) {
+
+		if (txt.length > this.availableChars) {
+			var words		= txt.match(/[^"\s]+/g);
+			var mentions	= [];
+			var messages	= [];
+			var length		= 0;
+
+			// Find all mentions in the message. Each part should cc all
+			// of them. Include any hashes too.
+			//
+			// Count the length of these words so we know how much space
+			// to save at the end of each aprt.
+			for (var i = 0, word; word = words[i]; i++) {
+				if ((0 == word.indexOf('@') || 0 == word.indexOf('#')) &&
+					-1 == mentions.indexOf(word)
+				) {
+					mentions.push(word);
+					length += word.length + 1;
+				}
+			}
+
+			if (length > 100 || this.dm) {
+				// TODO	Allow splitting a DM in the future
+
+				// Ya gotta give me a little bit of room to work with. How am I
+				// supposed to split that? Jerk!
+
+				ex('Keep it under 140, please!');
+				return;
+			}
+
+			console.log('Mentions require ' + length + ' chars');
+
+			var opts = {
+				title: 'Your message is over 140 characters. Would you like to split it into multiple messages?',
+				callback: function() {
+					this.assistant.toasters.back();
+
 					this.easterEggs(txt); //display some joke banners teehee
-					args = {'status': txt};
 
-					if (this.reply) {
-						args.in_reply_to_status_id = this.reply_id;
+					while (words.length) {
+						var left	= this.availableChars - length - 15;
+						var msg		= [];
+
+						while (words.length && left > 0) {
+							if (0 == words[0].indexOf('@') ||
+								0 == words[0].indexOf('#')
+							) {
+								// This is a mention or tag, so it's length is
+								// already accounted for
+								msg.push(words.shift());
+							} else if (words[0].length < left) {
+								left -= (words[0].length + 1);
+								msg.push(words.shift());
+							} else {
+								break;
+							}
+						}
+
+						var add = [];
+						for (var i = 0, word; word = mentions[i]; i++) {
+							if (-1 == msg.indexOf(word)) {
+								add.push(word);
+							}
+						}
+						if (add.length) {
+							msg.push(' // ' + add.join(' '));
+						}
+
+						messages.push(msg.join(' '));
 					}
 
-					if (this.geo) {
-						args['lat'] = this.lat;
-						args['long'] = this.lng;
+					// Add a prefix to each message: "x of y: "
+					for (var i = 0; messages[i]; i++) {
+						messages[i] = (i + 1) + ' of ' + messages.length + ': ' + messages[i];
 					}
 
-					Twitter.postTweet(args, function(response, meta) {
-						var prefs = new LocalStorage();
-						var refresh = prefs.read('refreshOnSubmit');
+					// TODO Okay time to send em...
+					// TODO	Each part should be in reply to the one before it
 
-						if (refresh) {
-							this.assistant.refreshAll();
+					var sendfunc = function()
+					{
+						var msg = messages.shift();
+
+						if (!msg) {
+							// We're all done!
+							var refresh = (new LocalStorage()).read('refreshOnSubmit');
+
+							if (refresh) {
+								this.assistant.refreshAll();
+							}
+
+							if (!this.rt) {
+								this.assistant.toasters.back();
+							} else {
+								// If it's a retweet we want to go back 2 toasters to close the RT toaster
+								this.assistant.toasters.backX(2);
+							}
+							return;
 						}
 
-						if (!this.rt) {
-							this.assistant.toasters.back();
-						}
-						else {
-							// If it's a retweet we want to go back 2 toasters to close the RT toaster
-							this.assistant.toasters.backX(2);
-						}
-					}.bind(this));
-				}
-				else if (this.dm) {
-					args = {'text': txt, 'user_id': this.to.id_str};
-					Twitter.newDM(args, function(response) {
-						var prefs = new LocalStorage();
-						var refresh = prefs.read('refreshOnSubmit');
+						args = { 'status': msg };
 
-						if (refresh) {
-							this.assistant.refreshAll();
+						if (this.reply) {
+							args.in_reply_to_status_id = this.reply_id;
 						}
 
-						this.assistant.toasters.back();
-					}.bind(this));
-				}
-			}
-			else {
-				ex('An upload is in progress.');
-			}
-		}
-		else if (txt.length === 0) {
+						if (this.geo) {
+							args['lat' ] = this.lat;
+							args['long'] = this.lng;
+						}
+
+						Twitter.postTweet(args, function(response, meta) {
+							// Make the next message a reply to this one
+							// this.reply = true;
+							// this.reply_id = response.responseJSON.id;
+
+							// Send the next part
+							sendfunc();
+						}.bind(this));
+					}.bind(this);
+
+					// kick it off
+					sendfunc();
+				}.bind(this),
+
+				cancel: function() {
+					this.assistant.toasters.back();
+
+					// Restore the previous value
+					get(this.textarea).value = txt;
+					get(this.textarea).focus();
+				}.bind(this)
+			};
+
+			this.hideKeyboard();
+			this.assistant.toasters.add(new ConfirmToaster(opts, this.assistant));
+		} else if (txt.length === 0) {
 			ex('That tweet is kind of empty.');
-		}
-		else {
-			ex('Keep it under 140, please!');
+		} else if (this.uploading !== false) {
+			ex('An upload is in progress.');
+		} else if (!this.dm) {
+			this.easterEggs(txt); //display some joke banners teehee
+			args = {'status': txt};
+
+			if (this.reply) {
+				args.in_reply_to_status_id = this.reply_id;
+			}
+
+			if (this.geo) {
+				args['lat'] = this.lat;
+				args['long'] = this.lng;
+			}
+
+			Twitter.postTweet(args, function(response, meta) {
+				var prefs = new LocalStorage();
+				var refresh = prefs.read('refreshOnSubmit');
+
+				if (refresh) {
+					this.assistant.refreshAll();
+				}
+
+				if (!this.rt) {
+					this.assistant.toasters.back();
+				} else {
+					// If it's a retweet we want to go back 2 toasters to close the RT toaster
+					this.assistant.toasters.backX(2);
+				}
+			}.bind(this));
+		} else {
+			args = {'text': txt, 'user_id': this.to.id_str};
+			Twitter.newDM(args, function(response) {
+				var prefs = new LocalStorage();
+				var refresh = prefs.read('refreshOnSubmit');
+
+				if (refresh) {
+					this.assistant.refreshAll();
+				}
+
+				this.assistant.toasters.back();
+			}.bind(this));
 		}
 	},
 	easterEggs: function(t) {
@@ -424,14 +566,15 @@ var ComposeToaster = Class.create(Toaster, {
 		}.bind(this));
 
 		get(this.textarea).observe('blur', function(e){
-			if (this.addedUser) {
+			if (this.refocus) {
 				this.showKeyboard();
 				try {
 					get(this.textarea).focus();
 				} catch (e) {
 				}
 
-				this.addedUser = false;
+				// Reset each time
+				this.refocus = false;
 			}
 		}.bind(this));
 
@@ -453,15 +596,7 @@ var ComposeToaster = Class.create(Toaster, {
 			get(this.textarea).stopObserving('keydown');
 		}
 
-		// Do everything possible to get the keyboard to hide
-		try {
-			this.controller.window.PalmSystem.setManualKeyboardEnabled(true);
-			this.controller.window.PalmSystem.keyboardHide();
-			this.controller.window.PalmSystem.setManualKeyboardEnabled(false);
-		} catch (e) {
-			// This is fine. This is only need for devices without a physical
-			// keyboard.
-		}
+		this.hideKeyboard();
 
 		Mojo.Event.stopListening(get('submit-' + this.id), Mojo.Event.tap, this.submitTweet);
 		Mojo.Event.stopListening(get('photo-' + this.id), Mojo.Event.tap, this.photoTapped);
