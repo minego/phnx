@@ -143,6 +143,10 @@ body.no-gesture {  /* touchpad/emulator */
 	position: fixed;
 	right: 0px;
 }
+.header-icon.right2 {
+	position: fixed;
+	right: 62px;
+}
 .header-title {
 	background: url('../images/low/nav-icon-border.png') left bottom no-repeat, url('../images/low/nav-icon-border.png') right bottom no-repeat;
 	position: fixed;
@@ -181,6 +185,9 @@ body.no-gesture {  /* touchpad/emulator */
 }
 #new-card{
 	background: url(../images/low/icons/new-card.png) no-repeat center center;
+}
+#back-button{
+	background: url(../images/low/icons/back.png) no-repeat center center;
 }
 
 #nav-bar {

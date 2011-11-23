@@ -350,7 +350,6 @@ MainAssistant.prototype = {
 				}
 				event.stop();
 			}
-
 		}
 		else if (event.type === Mojo.Event.forward) {
 			var prefs = new LocalStorage();

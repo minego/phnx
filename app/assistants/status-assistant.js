@@ -46,9 +46,11 @@ StatusAssistant.prototype = {
 
 		if (!this.opts.newCard) {
 			this.controller.listen('new-card', Mojo.Event.tap, this.newCardTapped.bind(this));
+			this.controller.listen('back-button', Mojo.Event.tap, this.backTapped.bind(this));
 		}
 		else {
-			this.controller.get('new-card').setStyle({'opacity':'0.4'});
+			this.controller.get('new-card').setStyle({'display':'none'});
+			this.controller.get('back-button').setStyle({'display':'none'});
 		}
 	},
 	initSearch: function() {
@@ -214,7 +216,6 @@ StatusAssistant.prototype = {
 				this.toasters.back();
 				event.stop();
 			}
-
 		}
 		else if (event.type === Mojo.Event.forward) {
 			if (!this.loading) {
@@ -241,6 +242,13 @@ StatusAssistant.prototype = {
 		appController.createStageWithCallback({name: stageName, lightweight: true}, pushCard);
 
 		this.controller.stageController.popScene();
+	},
+	backTapped: function(event) {
+		if (this.toasters.items.length > 0) {
+			this.toasters.back();
+		} else {
+			this.controller.stageController.popScene();
+		}
 	},
 	refreshTapped: function(event) {
 		if (this.opts.type === 'search') {
@@ -299,5 +307,10 @@ StatusAssistant.prototype = {
 		this.controller.stopListening('footer', Mojo.Event.tap, this.footerTapped);
 		this.controller.stopListening('more', Mojo.Event.tap, this.moreTapped);
 		this.controller.stopListening('list-items', Mojo.Event.listTap, this.tweetTapped);
+
+		if (!this.opts.newCard) {
+			this.controller.stopListening('new-card', Mojo.Event.tap, this.newCardTapped.bind(this));
+			this.controller.stopListening('back-button', Mojo.Event.tap, this.backTapped.bind(this));
+		}
 	}
 };
