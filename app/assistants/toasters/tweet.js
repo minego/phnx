@@ -282,10 +282,12 @@ var TweetToaster = Class.create(Toaster, {
 
 		this.assistant.toasters.add(new ConfirmToaster(opts, this.assistant));
 	},
+	//Copies the current tweet to the clipboard and shows a banner saying that it successfully copied the tweet
 	copy: function() {
 		this.controller.stageController.setClipboard(this.tweet.stripped,true);
 				banner('Copied tweet to clipboard.');
 	},
+	//Sends the current tweet via email and adds the tag "Sent via Project Macaw for webOS"
 	email: function() {
 		this.controller.serviceRequest(
     "palm://com.palm.applicationManager", {
@@ -300,6 +302,7 @@ var TweetToaster = Class.create(Toaster, {
     }
 );
 	},
+	//Sends the current tweet via SMS/Instant Message
 	sms: function() {
 		this.controller.serviceRequest('palm://com.palm.applicationManager', {
     method: 'launch',
