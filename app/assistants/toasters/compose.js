@@ -257,6 +257,11 @@ var ComposeToaster = Class.create(Toaster, {
 				if (!todone) {
 					// The message is addressed directly to this user
 					to.push(word);
+
+					// These will be inserted before the message, so they do not
+					// need to be in the message itself.
+					words.shift();
+					i--;
 				} else {
 					// The message mentioned this user
 					mentions.push(word);
