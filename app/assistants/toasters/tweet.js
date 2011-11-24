@@ -294,7 +294,7 @@ var TweetToaster = Class.create(Toaster, {
             id: "com.palm.app.email",
             params: {
                 summary: "I would like to share this tweet with you",
-                text: this.tweet.stripped
+                text: this.tweet.stripped + "<br>" + " -- Sent via Project Macaw for webOS",
             }
         }
     }
