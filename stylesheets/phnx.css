@@ -418,10 +418,10 @@ body.no-gesture {  /* touchpad/emulator */
 	float: left;
 }
 .tweet-avatar{
+	display: inline-block;
 	height: 48px;
 	width: 48px;
 	background-size: 48px;
-	display: inline-block;
 	-webkit-border-radius: 4px;
 	margin: 5px 8px 0px 0px;
 	float: left;
@@ -431,6 +431,17 @@ body.no-gesture {  /* touchpad/emulator */
 	width: 40px;
 	background-size: 40px;
 }
+
+.tweet-avatar.retweet{
+	display: none;
+	width: 26px;
+	height: 26px;
+	background-size: 26px;
+}
+.tweet-avatar.retweet.show{
+	display: inline-block;
+}
+
 .tweet-footer{
 	font-size: 11px;
 	color: #bbb;

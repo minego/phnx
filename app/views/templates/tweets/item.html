@@ -1,11 +1,17 @@
 <div class="item-row #{-cssClass}">
 	<div id="tweet-#{-id_str}" x-mojo-tap-highlight='immediate' class="status-row">
 		<div class="palm-row-wrapper row-wrapper">
-	       	<div class="tweet-avatar" style="background-image: url(#{-user.profile_image_url});"></div>
+	       	<div class="tweet-avatar show" style="background-image: url(#{-user.profile_image_url});"></div>
+
 	       	<div class="content-wrapper">
 	        	<div class='tweet-username'>#{-user.screen_name}</div>
 				<div class='tweet-text'>#{-text}</div>
-				<div class='tweet-footer'>#{-time_str} #{-via} #{-source} #{-footer}</div>
+				<div class='tweet-footer'>
+					#{-time_str} #{-via} #{-source}
+ 
+					<div class="tweet-avatar #{-rt_class} retweet" style="background-image: url(#{-retweeter.profile_image_url});"></div>
+					#{-footer}
+				</div>
 			</div>
 			<div style="clear:both"></div>
 		</div>
