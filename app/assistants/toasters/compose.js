@@ -111,7 +111,7 @@ var ComposeToaster = Class.create(Toaster, {
 		value = value.slice(0, end);
 
 		// Split the string into words
-		words = value.match(/[^"\s]+/g);
+		words = value.match(/[^"\s]+/g) || [];
 
 		// If the cursor is in whitepsace then the split will not include the
 		// current word.

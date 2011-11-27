@@ -87,7 +87,6 @@ PreferencesAssistant.prototype = {
 				var widget = sectionItems[i];
 
 				if (widget.type === 'toggle') {
-
 					html = Mojo.View.render({
 						object: widget,
 						template: 'preferences/toggle'
