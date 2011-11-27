@@ -1,12 +1,12 @@
-var TweetHelper = function() {}
+var TweetHelper = function() {};
 
 TweetHelper.prototype = {
 	process: function(tweet) {
 		// takes a tweet and does all sorts of stuff to it
-		
+
 		// Save the created_at property for all tweets
 		tweet.timestamp = tweet.created_at;
-		
+
 		if (!tweet.dm) {
 			if (typeof(tweet.retweeted_status) !== "undefined") {
 				var orig = tweet;
@@ -15,6 +15,7 @@ TweetHelper.prototype = {
 				tweet.retweeter = retweeter;
 				tweet.original_id = orig.id_str;
 				tweet.is_rt = true;
+				tweet.rt_class = 'show';
 				tweet.footer = "<br />Retweeted by " + retweeter.screen_name;
 			}
 			else{
@@ -26,7 +27,7 @@ TweetHelper.prototype = {
 			// Save the link to the tweet on Twitter.com for fun times
 			tweet.link = 'http://twitter.com/' + tweet.user.screen_name + '/status/' + tweet.id_str;
 		}
-		
+
 		// Expand some shortened links automatically via the entities payload
 		if (tweet.entities && tweet.entities.urls) {
 			var links = tweet.entities.urls;
@@ -34,12 +35,12 @@ TweetHelper.prototype = {
 				if (links[i].expanded_url !== null) {
 					tweet.text = tweet.text.replace(new RegExp(links[i].url, 'g'), links[i].expanded_url);
 				}
-			}	
+			}
 		}
-		
+
 		var d = new Date(tweet.created_at);
 		tweet.time_str = d.toRelativeTime(1500);
-		
+
 		//keep the plaintext version for quote-style RTs (so HTML doesn't get tossed in there)
 		tweet.stripped = tweet.text;
 		tweet.text = tweet.text.parseLinks();
@@ -47,7 +48,7 @@ TweetHelper.prototype = {
 	},
 	processSearch: function(tweet) {
 		// search tweets are stupid and in a different format from the rest.
-		tweet.source = tweet.source.unescapeHTML(); // search returns escaped HTML for some reason		
+		tweet.source = tweet.source.unescapeHTML(); // search returns escaped HTML for some reason
 		//disable clickable source links
 		tweet.source = "via " + tweet.source.replace('href="', 'hhref="#');
 		var d = new Date(tweet.created_at);
@@ -63,13 +64,13 @@ TweetHelper.prototype = {
 	isRetweeted: function(tweet, user) {
 		// Finds out if you retweeted this tweet
 		var r = false;
-		
+
 		for (var i=0; i < user.retweeted.length; i++) {
 			if (user.retweeted[i] === tweet.id_str) {
 				r = true;
 			}
 		}
-		
+
 		return r;
 	},
 	autoExpand: function(tweet, callback) {
@@ -84,7 +85,7 @@ TweetHelper.prototype = {
 				else {
 					// try to expand through bit.ly API last
 					// since there are so many custom bit.ly URLs
-					this.expandBitly(link, callback);	
+					this.expandBitly(link, callback);
 				}
 			}
 		}
@@ -106,7 +107,7 @@ TweetHelper.prototype = {
 				Mojo.Log.error(response.responseText);
 			}
 		});
-		
+
 	},
 	expandBitly: function(shortUrl, callback) {
 		var x_user = Config.bitlyUser;
@@ -120,7 +121,7 @@ TweetHelper.prototype = {
 					Element.removeClassName('loading', 'show');
 				}
 				var r = response.responseJSON.data.expand[0];
-				
+
 				if (!r.error) {
 					callback(shortUrl, r.long_url);
 				}
