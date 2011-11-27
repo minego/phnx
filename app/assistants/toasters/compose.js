@@ -502,13 +502,16 @@ var ComposeToaster = Class.create(Toaster, {
 		get('loading').addClassName('show');
 		var currentUser = getUser();
 		var args = [
+			{"key":"consumerKey","data": Config.key},
+			{"key":"consumerSecret","data": Config.secret},
 			{"key":"token","data": currentUser.token},
 			{"key":"secret","data": currentUser.secret}
 		];
 		this.controller.serviceRequest('palm://com.palm.downloadmanager/', {
 			method: 'upload',
 			parameters: {
-				'url': 'http://awesomeapps.aa.am/twitpic/upload-macaw.php',
+				//'url': 'http://awesomeapps.aa.am/twitpic/upload-macaw.php',
+				'url': 'http://photos.phnxapp.com/upload',
 				'fileLabel': 'photo',
 				'fileName': path,
 				'postParameters': args,
