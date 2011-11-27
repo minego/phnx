@@ -508,7 +508,7 @@ var ComposeToaster = Class.create(Toaster, {
 		this.controller.serviceRequest('palm://com.palm.downloadmanager/', {
 			method: 'upload',
 			parameters: {
-				'url': 'http://awesomeapps.aa.am/twitpic/upload.php',
+				'url': 'http://awesomeapps.aa.am/twitpic/upload-macaw.php',
 				'fileLabel': 'photo',
 				'fileName': path,
 				'postParameters': args,
