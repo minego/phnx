@@ -83,119 +83,81 @@ var ComposeToaster = Class.create(Toaster, {
 		var count = this.availableChars - get(this.textarea).value.length;
 		get('count-' + this.id).update(count);
 	},
-
-	isSpace: function(c) {
-		switch (c) {
-			case ' ': case '\t': case '\n': case '\r':
-				return(true);
-
-			default:
-				return(false);
-		}
-	},
-
-	getWords: function(count) {
-		var ta		= get(this.textarea);
-		var value	= ta.value;
-		var end		= ta.selectionStart - 1;
-		var words;
-
-		// Find the end of the current word
-		for (; end < value.length; end++) {
-			if (this.isSpace(value.charAt(end))) {
-				break;
-			}
-		}
-
-		// Ignore anything after the current word
-		value = value.slice(0, end);
-
-		// Split the string into words
-		words = value.match(/[^"\s]+/g) || [];
-
-		// If the cursor is in whitepsace then the split will not include the
-		// current word.
-		if (end == ta.selectionStart - 1) {
-			words.push(null);
-		}
-
-		// Pad the results if needed
-		while (words.length < count) {
-			words.unshift(null);
-		}
-
-		// Return the requested number of words, from the end
-		return({
-			words: words.splice(-count),
-			end: end
-		});
-	},
-
 	autoComplete: function() {
 		var bar		= get(this.completebar);
 		var ta		= get(this.textarea);
 		var value	= ta.value;
-		var details	= this.getWords(2);
-		var word	= details.words[1];
-		var prev	= details.words[0];
+		var end		= ta.selectionStart - 1;
+		var start;
 
 		bar.innerHTML = '';
-		this.pos = null;
+		this.pos	= null;
 
-		if (word && (
-				word.startsWith('#') ||
-				word.startsWith('@') ||
-				word.startsWith('.@')
-			)
-		) {
-			// The current word is a mention or tag, do not auto correct
-			ta.setAttribute("autocorrect", "off");
-		} else if (prev && (
-				prev.startsWith('#') ||
-				prev.startsWith('@') ||
-				prev.startsWith('.@')
-			)
-		) {
-			// The previous word is a mention or a tag, do not autocorrect
-			// unless the cursor is past the first character of this word
-			if (this.isSpace(value.charAt(ta.selectionStart - 2))) {
-				ta.setAttribute("autocorrect", "off");
-			} else {
-				ta.setAttribute("autocorrect", "on");
-			}
-		} else {
-			ta.setAttribute("autocorrect", "on");
-		}
+		for (start = end; start >= 0; start--) {
+			var c = value.charAt(start);
 
-		if (word && word.startsWith('.@')) {
-			word = word.slice(1);
-		}
-
-		if (word && word.length > 2 && word.startsWith('@')) {
-			word = word.toLowerCase().slice(1);
-// console.log('Looking for: ' + word);
-
-			var matches = [];
-			for (var user, i = 0; (user = global.following[i]); i++) {
-				if (-1 != user.screen_name.toLowerCase().indexOf(word)) {
-					if (matches.length <= 10) {
-						matches.push('<div class="compose-match" x-mojo-tap-highlight="immediate">' + user.screen_name + '</div>');
-					} else {
-						matches.push('<div class="compose-over">...</div>');
-						break;
+			switch (c) {
+				case ' ': case '\t': case '\n': case '\r':
+					// There was no @ in this word
+					// console.log('Got to the start of the word with no @');
+					if (this.autoCorrect) {
+						ta.setAttribute("autocorrect", "on");
 					}
+					return;
+
+				case '@':
+					// console.log('found an @: ' + start);
+					if (this.autoCorrect) {
+						ta.setAttribute("autocorrect", "off");
+					}
+					break;
+
+				default:
+					continue;
+			}
+
+			break;
+		}
+
+		if (start < 0) {
+			// console.log('Hit the begining of the value with no @');
+			return;
+		} else if ((end - start) < 1) {
+			// Search string isn't long enough
+			// console.log('Gotta give me more');
+			return;
+		}
+
+		if (start > 0) {
+			switch (value.charAt(start - 1)) {
+				case ' ': case '\t': case '\n': case '\r':
+					break;
+
+				default:
+					// console.log('The @ was in the middle of a word');
+					// A @ in the middle of the word should be ignored
+					return;
+			}
+		}
+
+		var match = value.slice(start + 1, end + 1).toLowerCase();
+		// console.log('Search for things that match: ' + match);
+
+		var matches = [];
+		for (var user, i = 0; (user = global.following[i]); i++) {
+			if (-1 != user.screen_name.toLowerCase().indexOf(match)) {
+				if (matches.length <= 10) {
+					matches.push('<div class="compose-match" x-mojo-tap-highlight="immediate">' + user.screen_name + '</div>');
+				} else {
+					matches.push('<div class="compose-over">...</div>');
+					break;
 				}
 			}
-
-			bar.innerHTML = matches.join('\n');
-			this.pos = {
-				'start':	details.end - (word.length + 1),
-				'end':		details.end,
-				'value':	value
-			};
 		}
-	},
 
+		bar.innerHTML = matches.join('\n');
+		this.pos = { 'start': start, 'end': end, 'value': value  };
+	},
 	addUser: function(event) {
 		var button	= event.srcElement;
 		var bar		= get(this.completebar);
