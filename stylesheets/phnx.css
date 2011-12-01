@@ -654,6 +654,7 @@ span.link{
 	z-index: 500 !important;
 	-webkit-transform: scale(4);
 	background: #000;
+	-webkit-palm-mouse-target: ignore;
 }
 #account-shim.show {
 	opacity: .8 !important;
