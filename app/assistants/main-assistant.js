@@ -145,8 +145,20 @@ MainAssistant.prototype = {
 				items: accountMenuItems
 			},
 			{
+				label: 'Compose',
+				command: 'cmdNewTweet'
+			},
+			{
+				label: 'Refresh',
+				command: 'cmdRefresh'
+			},
+			{
 				label: 'Lookup User',
 				command: 'cmdFindUser'
+			},
+			{
+				label: 'Toggle Toolbars',
+				command: 'cmdToggleToolbar'
 			},
 			{
 				label: 'Preferences',
@@ -387,8 +399,23 @@ MainAssistant.prototype = {
 					}, response.responseJSON);
 				}.bind(this));
 			}
+			else if (event.command === 'cmdNewTweet') {
+				this.newTweet();
+			}
+			else if (event.command === 'cmdRefresh') {
+				if (Ajax.activeRequestCount === 0) {
+					this.refreshAll();
+				}
+			}
 			else if (event.command === 'cmdFindUser') {
 				this.toasters.add(new LookupToaster(this));
+			}
+			else if (event.command === 'cmdToggleToolbar') {
+				if (this.controller.document.body.hasClassName('no-toolbars')) {
+					this.controller.document.body.removeClassName('no-toolbars');
+				} else {
+					this.controller.document.body.addClassName('no-toolbars');
+				}
 			}
 			// else if (event.command === 'cmdPreferences') {
 			//	// this.controller.stageController.pushScene('preferences');

@@ -122,12 +122,14 @@ body.no-gesture {  /* touchpad/emulator */
 	left: 0;
 	z-index: 100;
 }
-
 .layout-swapped #header {
 	bottom: 0px;
 	padding-top: 30px;
 	margin-bottom: -22px;
 	background: url('../images/low/nav-bar.png') left 5px repeat-x;
+}
+.no-toolbars #header {
+	display: none;
 }
 
 .header-icon {
@@ -221,6 +223,10 @@ body.no-gesture {  /* touchpad/emulator */
 	width: 1280px;
 }
 
+.no-toolbars #nav-bar-scroller {
+	display: none;
+}
+
 #footer {
 	text-align: center;
 	color: #94989c;
@@ -231,6 +237,11 @@ body.no-gesture {  /* touchpad/emulator */
 	width: 100%;
 	z-index: 50;
 }
+
+.no-toolbars #footer {
+	display: none;
+}
+
 .nav-icon {
 	display: block;
 	width: 64px;
@@ -302,7 +313,9 @@ body.no-gesture {  /* touchpad/emulator */
 	top: 0px;
 	background: url('../images/low/new-content-down.png') center 0px no-repeat;
 }
-
+.no-toolbars .beacon {
+	display: none;
+}
 
 .beacon.show {
 	opacity: 1;
@@ -323,6 +336,9 @@ body.no-gesture {  /* touchpad/emulator */
 	position: fixed;
 	top: 44px;
 	background: url(../images/low/indicator-down.png) center center no-repeat;
+}
+.no-toolbars #indicator {
+	display: none;
 }
 
 #indicator.first {
@@ -574,6 +590,9 @@ span.link{
 	margin-top: 10px;
 	border-width: 9px;
 	-webkit-border-image: url(../images/low/search-box.png) 9 stretch;
+}
+.no-toolbars .panel-spacer {
+	display: none;
 }
 .search-list-item.first {
 /*	padding-top: 0px;*/
