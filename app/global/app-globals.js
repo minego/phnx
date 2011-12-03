@@ -75,6 +75,7 @@ var global = {
 				}
 			}
 		});
+		//this.stageController.pushScene('webview');
 	},
 	banner: function(message) {
 		Mojo.Controller.getAppController().showBanner(message, {source: 'notification'});
