@@ -145,20 +145,25 @@ MainAssistant.prototype = {
 				items: accountMenuItems
 			},
 			{
+				label: 'View',
+				items: [
+				{
 				label: 'Compose',
 				command: 'cmdNewTweet'
-			},
-			{
+				},
+				{
 				label: 'Refresh',
 				command: 'cmdRefresh'
+				},
+				{
+				label: 'Toggle Toolbars',
+				command: 'cmdToggleToolbar'
+				}
+				]
 			},
 			{
 				label: 'Lookup User',
 				command: 'cmdFindUser'
-			},
-			{
-				label: 'Toggle Toolbars',
-				command: 'cmdToggleToolbar'
 			},
 			{
 				label: 'Preferences',

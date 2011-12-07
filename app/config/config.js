@@ -6,8 +6,8 @@ var Config = {
 
 	key: 'OFqvS0cNc7oRdPGqz3GTw',
 	secret: 'JqGFNJAAQgXg8TPtJOVFXpbzZS8gNPAHjb2exvOgdQ',
-	bitlyUser: 'phnx',
-	bitlyKey: 'R_d120bdeaf302f28ca251ee64d7aef8fc',
+	bitlyUser: 'multiipass',
+	bitlyKey: 'R_28a87f31120f81a28437fb11dcf808fd',
 	beta: true,
 	debug: true
 };
