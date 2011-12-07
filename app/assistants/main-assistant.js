@@ -14,7 +14,7 @@ function MainAssistant(opts) {
 	this.searchLoaded = false;
 	this.switcher = false;
 
-	this.count = 100; //how many tweets to load each request
+	this.count = 300; //how many tweets to load each request
 	this.renderLimit = 1000; //umm...this scares me. used in list widgets to prevent flickering...
 	this.toasters = new ToasterChain();
 }
