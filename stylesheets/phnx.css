@@ -764,7 +764,8 @@ span.link{
 
 .toaster-title .toaster-button.back {
 	position: relative;
-	top: -5px;
+	float: right;
+	height: 24px;
 }
 
 .convo-scroller{
