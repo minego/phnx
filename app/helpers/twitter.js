@@ -179,6 +179,11 @@ TwitterAPI.prototype = {
 		var start	= meta.start || 0;
 		var ids		= response.responseJSON.ids.slice(start, start + 99);
 
+		if (!ids || ids.length <= 0) {
+			meta.callback(meta.results || []);
+			return;
+		}
+
 		meta.start	= start + 100;
 		this.getUsersById(ids.join(','), function(r) {
 			if (meta.results) {
@@ -189,11 +194,7 @@ TwitterAPI.prototype = {
 				meta.results = r.responseJSON;
 			}
 
-			if (meta.start > response.responseJSON.ids.length) {
-				meta.callback(meta.results);
-			} else {
-				this.gotIds(response, meta);
-			}
+			this.gotIds(response, meta);
 		}.bind(this));
 	},
 	sign: function(httpMethod, url, callback, args, meta) {
