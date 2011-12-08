@@ -147,18 +147,14 @@ MainAssistant.prototype = {
 			{
 				label: 'View',
 				items: [
-				{
-				label: 'Compose',
-				command: 'cmdNewTweet'
-				},
-				{
-				label: 'Refresh',
-				command: 'cmdRefresh'
-				},
-				{
-				label: 'Toggle Toolbars',
-				command: 'cmdToggleToolbar'
-				}
+					{
+						label: 'Compose',
+						command: 'cmdNewTweet'
+					},
+					{
+						label: 'Refresh',
+						command: 'cmdRefresh'
+					}
 				]
 			},
 			{
@@ -414,13 +410,6 @@ MainAssistant.prototype = {
 			}
 			else if (event.command === 'cmdFindUser') {
 				this.toasters.add(new LookupToaster(this));
-			}
-			else if (event.command === 'cmdToggleToolbar') {
-				if (this.controller.document.body.hasClassName('no-toolbars')) {
-					this.controller.document.body.removeClassName('no-toolbars');
-				} else {
-					this.controller.document.body.addClassName('no-toolbars');
-				}
 			}
 			// else if (event.command === 'cmdPreferences') {
 			//	// this.controller.stageController.pushScene('preferences');

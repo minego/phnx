@@ -34,8 +34,11 @@ function PreferencesAssistant() {
 					// {label: 'Sunnyvale', value: 'sunnyvale'}
 				]},
 				{key: 'barlayout', type: 'select', label: 'Layout', items: [
-					{label: 'Navigation on top', value: 'swapped'},
-					{label: 'Toolbar on top', value: 'original'}
+					{label: 'Tabs above Toolbar', value: 'swapped'},
+					{label: 'Toolbar above Tabs', value: 'original'},
+					{label: 'Hide Toolbar', value: 'no-toolbar'},
+					{label: 'Hide Tabs', value: 'no-nav'},
+					{label: 'Hide Tabs & Toolbar', value: 'none'}
 				]},
 				{key: 'fontSize', type: 'select', label: 'Font Size', items: [
 					{label: 'Tiny', value: 'tiny'},

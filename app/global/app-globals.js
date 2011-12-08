@@ -154,13 +154,23 @@ var global = {
 		Mojo.Event.listen(stageController.document, Mojo.Event.stageDeactivate, deactivate);
 	},
 	setLayout: function(body, layout) {
-		var layouts = ['swapped', 'original'];
+		var layouts = ['swapped', 'original', 'no-toolbar', 'no-nav', 'none'];
 
 		for (var i=0; i < layouts.length; i++) {
 			Element.removeClassName(body, 'layout-' + layouts[i]);
 		}
 
 		Element.addClassName(body, 'layout-' + layout);
+
+		if (layout == 'no-toolbar') {
+			/* If navigation only then put it on the top (for now) */
+			Element.addClassName(body, 'layout-swapped');
+		}
+
+		if (layout == 'none') {
+			Element.addClassName(body, 'layout-no-toolbar');
+			Element.addClassName(body, 'layout-no-nav');
+		}
 	},
 	setFontSize: function(body, font) {
 		var fonts = ['tiny','small', 'medium', 'large','huge'];

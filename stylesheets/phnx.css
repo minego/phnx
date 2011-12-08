@@ -128,7 +128,8 @@ body.no-gesture {  /* touchpad/emulator */
 	margin-bottom: -22px;
 	background: url('../images/low/nav-bar.png') left 5px repeat-x;
 }
-.no-toolbars #header {
+
+.layout-no-toolbar #header {
 	display: none;
 }
 
@@ -223,7 +224,7 @@ body.no-gesture {  /* touchpad/emulator */
 	width: 1280px;
 }
 
-.no-toolbars #nav-bar-scroller {
+.layout-no-nav #nav-bar-scroller {
 	display: none;
 }
 
@@ -238,7 +239,7 @@ body.no-gesture {  /* touchpad/emulator */
 	z-index: 50;
 }
 
-.no-toolbars #footer {
+.layout-no-nav #footer {
 	display: none;
 }
 
@@ -299,7 +300,7 @@ body.no-gesture {  /* touchpad/emulator */
 .beacon {
 	display: block;
 	position: relative;
-	top: 25px;
+	top: 37px;
 	left: -1px;
 	width: 100%;
 	height: 14px;
@@ -313,7 +314,8 @@ body.no-gesture {  /* touchpad/emulator */
 	top: 0px;
 	background: url('../images/low/new-content-down.png') center 0px no-repeat;
 }
-.no-toolbars .beacon {
+
+.layout-no-nav .beacon {
 	display: none;
 }
 
@@ -337,7 +339,8 @@ body.no-gesture {  /* touchpad/emulator */
 	top: 44px;
 	background: url(../images/low/indicator-down.png) center center no-repeat;
 }
-.no-toolbars #indicator {
+
+.layout-no-nav #indicator {
 	display: none;
 }
 
@@ -591,7 +594,7 @@ span.link{
 	border-width: 9px;
 	-webkit-border-image: url(../images/low/search-box.png) 9 stretch;
 }
-.no-toolbars .panel-spacer {
+.layout-none .panel-spacer {
 	display: none;
 }
 .search-list-item.first {
