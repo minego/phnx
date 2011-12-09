@@ -22,6 +22,7 @@ var TwitterAPI = function(user, stageController) {
 		home: 'statuses/home_timeline',
 		mentions: 'statuses/mentions',
 		messages: 'direct_messages',
+		sentMessages: 'direct_messages/sent',
 		favorite: 'favorites/create',
 		unfavorite: 'favorites/destroy',
 		retweet: 'statuses/retweet',
@@ -59,8 +60,8 @@ TwitterAPI.prototype = {
 		// Build an API URL from all of the parts we store.
 		return this.apibase + '/' + this.version + '/' + endpoint + '.' + this.format;
 	},
-	timeline: function(panel, callback, args, assistant) {
-		this.sign('GET', this.url(this.endpoints[panel.resource]), callback, args, {'panel': panel, 'assistant': assistant});
+	timeline: function(panel, callback, args, assistant, resource) {
+		this.sign('GET', this.url(this.endpoints[resource || panel.resource]), callback, args, {'panel': panel, 'assistant': assistant});
 	},
 	notificationCheck: function(resource, callback, args, user) {
 		// Similar to timeline function but it needs to pass the user object to sign the request properly

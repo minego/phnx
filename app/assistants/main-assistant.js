@@ -584,7 +584,7 @@ MainAssistant.prototype = {
 	},
 	refreshPanel: function(panel) {
 		this.loadingMore = false;
-		var lastId = 0;
+		var lastId = undefined;
 		if (panel.refresh) {
 			if (panel.model.items.length > 0) {
 				// grab the second tweet for gap detection
@@ -599,9 +599,10 @@ MainAssistant.prototype = {
 					}
 				}
 			}
-			if (lastId === 0) {
-				this.getTweets(panel);
-			}else{
+
+			if (panel.id === 'messages') {
+				this.getDMs(panel, lastId);
+			} else {
 				this.getTweets(panel, lastId);
 			}
 		}
@@ -656,19 +657,6 @@ MainAssistant.prototype = {
 		}
 		var Twitter = new TwitterAPI(this.user);
 		Twitter.timeline(panel, this.gotItems.bind(this), args, this);
-	},
-	fillGap: function(panel) {
-		var args = {
-			count: this.count,
-			include_entities: 'true',
-			max_id: panel.gapStart,
-			since_id: panel.gapEnd
-		};
-		var Twitter = new TwitterAPI(this.user);
-		Twitter.timeline(panel, this.gotGap.bind(this), args, this);
-	},
-	gotGap: function(response, meta) {
-		banner('Not done yet');
 	},
 	gotItems: function(response, meta) {
 		// one-size-fits-all function to handle timeline updates
@@ -805,6 +793,45 @@ MainAssistant.prototype = {
 			this.controller.get(more).hide();
 		}
 		this.loading = false;
+	},
+	getDMs: function(panel, lastId, maxId) {
+		var args = {
+			'count': this.count,
+			'include_entities': 'true'
+		};
+
+		if (lastId) {
+			args.since_id = lastId;
+		}
+		if (maxId) {
+			args.max_id = maxId;
+		}
+		var Twitter = new TwitterAPI(this.user);
+
+		Twitter.timeline(panel, function(r1, m1) {
+			Twitter.timeline(panel, function(r2, m2) {
+				var joined	= r1.responseJSON.concat(r2.responseJSON);
+
+				joined.sort(function(a, b) {
+					return((new Date(b.created_at)) - (new Date(a.created_at)));
+				});
+
+				this.gotItems({ responseJSON: joined }, m2);
+			}.bind(this), args, this, 'sentMessages');
+		}.bind(this), args, this);
+	},
+	fillGap: function(panel) {
+		var args = {
+			count: this.count,
+			include_entities: 'true',
+			max_id: panel.gapStart,
+			since_id: panel.gapEnd
+		};
+		var Twitter = new TwitterAPI(this.user);
+		Twitter.timeline(panel, this.gotGap.bind(this), args, this);
+	},
+	gotGap: function(response, meta) {
+		banner('Not done yet');
 	},
 	timeSince: function(time) {
 		//using a modified Date function in helpers/date.js
