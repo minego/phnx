@@ -175,33 +175,38 @@ var TweetToaster = Class.create(Toaster, {
 			}.bind(this));
 		}
 	},
+	hideTweet: function() {
+		// this.controller.get('tweet-' + this.tweet.id_str).remove();
+		// this.assistant.panels[this.assistant.timeline]
+		var changedModel;
+
+		for (var i=0; i < this.assistant.panels.length; i++) {
+			var panel = this.assistant.panels[i];
+			if (panel.type === 'timeline') {
+				for (var j=0; j < panel.model.items.length; j++) {
+					var item = panel.model.items[j];
+					if (item.id_str === this.tweet.id_str) {
+						panel.model.items.splice(i, 1);
+						changedModel = panel.model;
+					}
+				}
+			}
+		}
+		this.controller.modelChanged(changedModel);
+	},
 	deleteTweet: function() {
 		var Twitter = new TwitterAPI(this.user);
 		var opts = {
 			title: 'Are you sure you want to delete this tweet?',
 			callback: function(){
-				var onDelete = function(response, meta){
-					// this.controller.get('tweet-' + this.tweet.id_str).remove();
-					// this.assistant.panels[this.assistant.timeline]
-					var changedModel;
-					for (var i=0; i < this.assistant.panels.length; i++) {
-						var panel = this.assistant.panels[i];
-						if (panel.type === 'timeline') {
-							for (var j=0; j < panel.model.items.length; j++) {
-								var item = panel.model.items[j];
-								if (item.id_str === this.tweet.id_str) {
-									panel.model.items.splice(i, 1);
-									changedModel = panel.model;
-								}
-							}
-						}
-					}
-					this.controller.modelChanged(changedModel);
-					banner('No one will ever know...'); //except the people who already saw it!
-				}.bind(this);
-
-				Twitter.action('destroy', this.tweet.id_str, onDelete, this.assistant);
 				this.assistant.toasters.back();
+
+				Twitter.action('destroy', this.tweet.id_str, function(response) {
+					banner('No one will ever know...'); //except the people who already saw it!
+					this.assistant.toasters.back();
+
+					this.hideTweet();
+				}.bind(this), this.assistant);
 			}.bind(this)
 		};
 		this.assistant.toasters.add(new ConfirmToaster(opts, this.assistant));
@@ -262,6 +267,8 @@ var TweetToaster = Class.create(Toaster, {
 				Twitter.block(this.tweet.user.id_str, function(response){
 					banner('Blocked @' + this.tweet.user.screen_name);
 					this.assistant.toasters.back();
+
+					this.hideTweet();
 				}.bind(this));
 			}.bind(this)
 		};
@@ -276,6 +283,8 @@ var TweetToaster = Class.create(Toaster, {
 				Twitter.report(this.tweet.user.id_str, function(response) {
 					banner('Reported @' + this.tweet.user.screen_name);
 					this.assistant.toasters.back();
+
+					this.hideTweet();
 				}.bind(this));
 			}.bind(this)
 		};
@@ -296,7 +305,7 @@ var TweetToaster = Class.create(Toaster, {
             id: "com.palm.app.email",
             params: {
                 summary: "I would like to share this tweet with you",
-                text: this.tweet.stripped + "<br>" + " -- Sent via Project Macaw for webOS",
+                text: this.tweet.stripped + "<br>" + " -- Sent via Project Macaw for webOS"
             }
         }
     }
