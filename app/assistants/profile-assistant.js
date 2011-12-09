@@ -516,6 +516,8 @@ ProfileAssistant.prototype = {
 	followingTapped: function(event) {
 		var Twitter = new TwitterAPI(this.account);
 		Twitter.getFriends(this.user.id_str, function(r){
+			global.following = r;
+
 			this.toasters.add(new UserListToaster('@' + this.user.screen_name + '\'s friends', r, this));
 		}.bind(this));
 	},
