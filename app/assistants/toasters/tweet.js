@@ -176,23 +176,21 @@ var TweetToaster = Class.create(Toaster, {
 		}
 	},
 	hideTweet: function() {
-		// this.controller.get('tweet-' + this.tweet.id_str).remove();
-		// this.assistant.panels[this.assistant.timeline]
-		var changedModel;
-
 		for (var i=0; i < this.assistant.panels.length; i++) {
 			var panel = this.assistant.panels[i];
+
 			if (panel.type === 'timeline') {
 				for (var j=0; j < panel.model.items.length; j++) {
 					var item = panel.model.items[j];
 					if (item.id_str === this.tweet.id_str) {
 						panel.model.items.splice(i, 1);
-						changedModel = panel.model;
+
+						this.controller.modelChanged(panel.model);
+						break;
 					}
 				}
 			}
 		}
-		this.controller.modelChanged(changedModel);
 	},
 	deleteTweet: function() {
 		var Twitter = new TwitterAPI(this.user);
