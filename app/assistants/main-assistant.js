@@ -641,7 +641,13 @@ MainAssistant.prototype = {
 		this.loadingMore = true;
 		var model = this.panels[this.timeline].model;
 		var maxId = model.items[model.items.length - 1].id_str;
-		this.getTweets(this.panels[this.timeline], undefined, maxId);
+		var panel = this.panels[this.timeline];
+
+		if (panel.id === 'messages') {
+			this.getDMs(panel, undefined, maxId);
+		} else {
+			this.getTweets(panel, undefined, maxId);
+		}
 	},
 	getTweets: function(panel, lastId, maxId) {
 		var args = {
