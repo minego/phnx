@@ -183,7 +183,7 @@ var TweetToaster = Class.create(Toaster, {
 				for (var j=0; j < panel.model.items.length; j++) {
 					var item = panel.model.items[j];
 					if (item.id_str === this.tweet.id_str) {
-						panel.model.items.splice(i, 1);
+						panel.model.items.splice(j, 1);
 
 						this.controller.modelChanged(panel.model);
 						break;
@@ -232,6 +232,9 @@ var TweetToaster = Class.create(Toaster, {
 				break;
 			case 'cmdSpam':
 				this.spam();
+				break;
+			case 'cmdHide':
+				this.hideTweet();
 				break;
 			case 'cmdCopy':
 				this.copy();
@@ -487,6 +490,10 @@ var TweetToaster = Class.create(Toaster, {
 		this.menuItems.push({
 			label: 'Report Spam',
 			command: 'cmdSpam'
+		});
+		this.menuItems.push({
+			label: 'Hide',
+			command: 'cmdHide'
 		});
 
 		Mojo.Event.listen(this.controller.get('details-' + this.id), Mojo.Event.tap, this.detailsTapped.bind(this));
