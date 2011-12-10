@@ -239,6 +239,9 @@ var TweetToaster = Class.create(Toaster, {
 			case 'cmdCopy':
 				this.copy();
 				break;
+			case 'cmdCopyUrl':
+				this.copyUrl();
+				break;
 			case 'cmdEmail':
 				this.email();
 				break;
@@ -296,6 +299,12 @@ var TweetToaster = Class.create(Toaster, {
 	copy: function() {
 		this.controller.stageController.setClipboard(this.tweet.stripped,true);
 				banner('Copied tweet to clipboard.');
+	},
+	copyUrl: function() {
+		var Twitter = new TwitterAPI(this.user);
+		var id = this.tweet.original_id;
+		this.controller.stageController.setClipboard("http://twitter.com/#!" + this.tweet.user.screen_name + "/" + "status/" + id,true); 
+				banner('Copied tweet URL to clipboard.');
 	},
 	//Sends the current tweet via email and adds the tag "Sent via Project Macaw for webOS"
 	email: function() {
@@ -479,7 +488,8 @@ var TweetToaster = Class.create(Toaster, {
 		this.menuItems.push({
 			label: 'Share',
 			items: [
-			{label: $L('Copy'), command:'cmdCopy'},
+			{label: $L('Copy Text'), command:'cmdCopy'},
+			{label: $L('Copy URL'), command:'cmdCopyUrl'},
 			{label: $L('Email'), command: 'cmdEmail'},
 			{label: $L('SMS'), command: 'cmdSms'}
 		]});

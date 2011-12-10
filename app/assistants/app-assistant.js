@@ -23,7 +23,13 @@ AppAssistant.prototype = {
 			}
 		}
 		else if (params.dockMode) {
+			this.launchMain();
 			// This is exhibition mode
+		}
+		// code for x-launch-params still work-in-progress
+		else if (params.tweet) {
+		launchParams.action = 'prepTweet';
+		launchParams.msg = launchParams.tweet;
 		}
 		else {
 			Mojo.Log.info('params: ' + params);
