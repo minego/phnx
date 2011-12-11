@@ -242,6 +242,12 @@ var TweetToaster = Class.create(Toaster, {
 			case 'cmdCopyUrl':
 				this.copyUrl();
 				break;
+			case 'cmdPaperMache':
+				this.addToPaperMache();
+				break;	
+			case 'cmdReadOnTouchPro':
+				this.addToReadOnTouchPro();
+				break;	
 			case 'cmdEmail':
 				this.email();
 				break;
@@ -300,9 +306,33 @@ var TweetToaster = Class.create(Toaster, {
 		this.controller.stageController.setClipboard(this.tweet.stripped,true);
 				banner('Copied tweet to clipboard.');
 	},
+	addToPaperMache: function() {
+		var Twitter = new TwitterAPI(this.user);
+		var id = this.tweet.id_str;
+		var request = new Mojo.Service.Request("palm://com.palm.applicationManager", {
+    method:      'add',
+    parameters:  {
+        id: 'net.ryanwatkins.app.papermache',
+        params: { url: "http://twitter.com/#!" + this.tweet.user.screen_name + "/" + "status/" + id}
+    }
+});
+				banner('Added URL to Paper Mache');
+	},
+	addToReadOnTouchPro: function() {
+		var Twitter = new TwitterAPI(this.user);
+		var tweetid = this.tweet.id_str;
+		//var this.readontouchid = "com.sven-ziegler.readontouch";
+		var request = new Mojo.Service.Request("palm://com.palm.applicationManager", {
+						method: 'open',
+						parameters: {
+							id: 'com.sven-ziegler.readontouch',
+			params: {action: 'addLink', url: "http://twitter.com/#!" + this.tweet.user.screen_name + "/" + "status/" + tweetid}
+						}});
+				banner('Added URL to ReadOnTouch PRO');
+	},
 	copyUrl: function() {
 		var Twitter = new TwitterAPI(this.user);
-		var id = this.tweet.original_id;
+		var id = this.tweet.id_str;
 		this.controller.stageController.setClipboard("http://twitter.com/#!" + this.tweet.user.screen_name + "/" + "status/" + id,true); 
 				banner('Copied tweet URL to clipboard.');
 	},
@@ -490,6 +520,8 @@ var TweetToaster = Class.create(Toaster, {
 			items: [
 			{label: $L('Copy Text'), command:'cmdCopy'},
 			{label: $L('Copy URL'), command:'cmdCopyUrl'},
+			{label: $L('Add to Paper Mache'), command:'cmdPaperMache'},
+			{label: $L('Add to ReadOnTouch PRO'), command:'cmdReadOnTouchPro'},
 			{label: $L('Email'), command: 'cmdEmail'},
 			{label: $L('SMS'), command: 'cmdSms'}
 		]});
