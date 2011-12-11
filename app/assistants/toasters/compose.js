@@ -435,13 +435,11 @@ var ComposeToaster = Class.create(Toaster, {
 		}
 	},
 	easterEggs: function(t) {
-		t = t.toLowerCase();
+		t = t.toLowerCase().replace(/phnx\.ws/gi, '');
 
 		if (t.indexOf('packers') > -1) {
 			banner('Go Packers! :)');
-		}
-		else if (t.indexOf('phnx') > -1 ||
-				t.indexOf('macaw') > -1) {
+		} else if (t.indexOf('phnx') > -1 || t.indexOf('macaw') > -1) {
 			banner("Hey, that's me!");
 		}
 	},
