@@ -77,5 +77,9 @@
     {
         "scenes": "webview",
         "source": "app/assistants/webview-assistant.js"
+    },
+    {
+        "scenes": "ril-login",
+        "source": "app/assistants/ril-login-assistant.js"
     }
 ]

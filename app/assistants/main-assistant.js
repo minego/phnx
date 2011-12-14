@@ -137,6 +137,10 @@ MainAssistant.prototype = {
 			label: 'Logout @' + this.user.username,
 			command: 'cmdRemoveAccount'
 		});
+		accountMenuItems.push({
+			label: 'Log into ReadItLater',
+			command: 'cmdLoginRil'
+		});
 
 		var menuItems = [
 			Mojo.Menu.editItem,
@@ -416,6 +420,9 @@ MainAssistant.prototype = {
 			// }
 			else if (event.command === 'cmdRemoveAccount') {
 				this.logout();
+			}
+			else if (event.command === 'cmdLoginRil') {
+				this.controller.stageController.pushScene("ril-login");
 			}
 		}
 	},

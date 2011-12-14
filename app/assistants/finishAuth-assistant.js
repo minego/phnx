@@ -108,11 +108,11 @@ FinishAuthAssistant.prototype = {
 	listen: function(event) {
 		this.controller.listen('next-button', Mojo.Event.tap, this.nextTapped.bind(this));
 		this.controller.listen('rmxdave', Mojo.Event.tap, this.followTapped.bind(this));
-		this.controller.listen('phnxapp', Mojo.Event.tap, this.followTapped.bind(this));		
+		this.controller.listen('ProjectMacaw', Mojo.Event.tap, this.followTapped.bind(this));		
 	},
 	cleanup: function(event) {
 		this.controller.stopListening('next-button', Mojo.Event.tap, this.nextTapped);
 		this.controller.stopListening('rmxdave', Mojo.Event.tap, this.followTapped);
-		this.controller.stopListening('phnxapp', Mojo.Event.tap, this.followTapped);
+		this.controller.stopListening('ProjectMacaw', Mojo.Event.tap, this.followTapped);
 	}
 };
