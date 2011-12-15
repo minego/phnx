@@ -696,7 +696,7 @@ MainAssistant.prototype = {
 			}
 		}
 
-		if (tweets.length > 0) {
+		if (tweets.length > 1) {
 			if (!this.loadingMore) {
 				this.controller.get(panel.id + '-beacon').addClassName('show');
 			}
