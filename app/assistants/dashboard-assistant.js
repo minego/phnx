@@ -49,6 +49,27 @@ DashboardAssistant.prototype = {
 		var infoElement = this.controller.get('dashboardinfo');
 		infoElement.innerHTML = renderedInfo;
 		this.listenDashboard();
+		
+		//Send notification message to BT watch SE MBW-150 via metaviews MW150
+		this.getTweaksPrefs = new Mojo.Service.Request("palm://org.webosinternals.tweaks.prefs/", {
+			method: 'get', parameters: {'owner': "bluetooth-mbw150", 
+			keys: ["mbwMacaw"]},
+			onSuccess: function(response) {
+				if(response) {
+					if(response.mbwMacaw == true) {
+						//If true - Report BannerMessage to SE-Watch MBW150
+						var request = new Mojo.Service.Request('palm://com.palm.applicationManager', {
+					        method: 'open',
+					        parameters: {
+					            id: "de.metaviewsoft.mwatch",
+					            params: {command: "SMS", info: bannerMessage, wordwrap: true}
+				   	    	 },
+				     	   	onSuccess: function() {},
+				       	  	onFailure: function() {}
+				          	});
+					}
+				}
+			}.bind(this)});
 	},
 	listenDashboard: function() {
 		this.controller.listen(this.controller.get('dashboard-icon'), Mojo.Event.tap, this.iconTapped.bind(this));
