@@ -694,7 +694,9 @@ MainAssistant.prototype = {
 				var th = new TweetHelper();
 				tweets[i] = th.process(tweets[i]);
 			}
+		}
 
+		if (tweets.length > 0) {
 			if (!this.loadingMore) {
 				this.controller.get(panel.id + '-beacon').addClassName('show');
 			}
