@@ -684,7 +684,7 @@ MainAssistant.prototype = {
 
 		var i;
 
-		if (tweets.length > 1) {
+		if (tweets.length > 0) {
 			var count = 0;
 			for (i=0; i < tweets.length; i++) {
 				if (panel.id === 'messages') {
