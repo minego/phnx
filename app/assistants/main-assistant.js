@@ -666,8 +666,9 @@ MainAssistant.prototype = {
 	},
 	getTweets: function(panel, lastId, maxId) {
 		var args = {
-			'count': this.count,
-			'include_entities': 'true'
+			'count':			this.count,
+			'include_entities':	'true',
+			'include_rts':		'1'
 		};
 
 		if (lastId) {
