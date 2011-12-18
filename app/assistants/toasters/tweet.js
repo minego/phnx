@@ -38,7 +38,13 @@ var TweetToaster = Class.create(Toaster, {
 		var currentUser = getUser();
 		var me = currentUser.id;
 		if (this.tweet.user.id_str === me) {
-			this.controller.get(this.nodeId).addClassName('mine');
+			if (!this.tweet.dm) {
+				this.controller.get(this.nodeId).addClassName('mine');
+			} else {
+				// A sent DM
+				this.controller.get(this.nodeId).addClassName('is-sent');
+				this.controller.get(this.nodeId).addClassName('is-dm');
+			}
 		}
 		else if (this.tweet.dm) {
 			this.controller.get(this.nodeId).addClassName('is-dm');
@@ -193,13 +199,21 @@ var TweetToaster = Class.create(Toaster, {
 		}
 	},
 	deleteTweet: function() {
+		var action;
 		var Twitter = new TwitterAPI(this.user);
+
+		if (!this.tweet.dm) {
+			action = 'destroy';
+		} else {
+			action = 'destroyDM';
+		}
+
 		var opts = {
 			title: 'Are you sure you want to delete this tweet?',
 			callback: function(){
 				this.assistant.toasters.back();
 
-				Twitter.action('destroy', this.tweet.id_str, function(response) {
+				Twitter.action(action, this.tweet.id_str, function(response) {
 					banner('No one will ever know...'); //except the people who already saw it!
 					this.assistant.toasters.back();
 

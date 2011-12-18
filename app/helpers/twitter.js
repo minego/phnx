@@ -27,6 +27,7 @@ var TwitterAPI = function(user, stageController) {
 		unfavorite: 'favorites/destroy',
 		retweet: 'statuses/retweet',
 		destroy: 'statuses/destroy',
+		destroyDM: 'direct_messages/destroy',
 		statusShow: 'statuses/show',
 		statusUpdate: 'statuses/update',
 		showUser: 'users/show',

@@ -692,24 +692,20 @@ MainAssistant.prototype = {
 
 		var i;
 
-		if (tweets.length > 0) {
-			var count = 0;
-			for (i=0; i < tweets.length; i++) {
-				if (panel.id === 'messages') {
-					tweets[i].user = tweets[i].sender;
-					tweets[i].dm = true;
-				}
-				var th = new TweetHelper();
-				tweets[i] = th.process(tweets[i]);
+		for (i=0; i < tweets.length; i++) {
+			if (panel.id === 'messages') {
+				tweets[i].user = tweets[i].sender;
+				tweets[i].dm = true;
 			}
+			var th = new TweetHelper();
+			tweets[i] = th.process(tweets[i]);
 		}
 
 		if (tweets.length > 1) {
 			if (!this.loadingMore) {
 				this.controller.get(panel.id + '-beacon').addClassName('show');
 			}
-		}
-		else {
+		} else {
 			this.controller.get(panel.id + '-beacon').removeClassName('show');
 		}
 
@@ -833,6 +829,18 @@ MainAssistant.prototype = {
 
 		Twitter.timeline(panel, function(r1, m1) {
 			Twitter.timeline(panel, function(r2, m2) {
+				// Swap the sender in for sent messages, but leave our icon so
+				// that it is clear.
+				for (var i = 0, tweet; tweet = r2.responseJSON[i]; i++) {
+					var id	= tweet.sender.id_str;
+					var img	= tweet.sender.profile_image_url;
+
+					tweet.sender = tweet.recipient;
+
+					tweet.sender.profile_image_url	= img;
+					tweet.sender.id_str				= id;
+				}
+
 				var joined	= r1.responseJSON.concat(r2.responseJSON);
 
 				joined.sort(function(a, b) {
