@@ -119,33 +119,48 @@ body.no-gesture {  /* touchpad/emulator */
 	background: url('../images/low/header-bar.png') left -25px repeat-x;
 	-webkit-palm-mouse-target: ignore;
 	position: fixed;
-	top: 0;
 	left: 0;
 	z-index: 100;
 }
+.layout-swapped #header {
+	bottom: 0px;
+	padding-top: 30px;
+	margin-bottom: -22px;
+	background: url('../images/low/nav-bar.png') left 5px repeat-x;
+}
+
+.layout-no-toolbar #header {
+	display: none;
+}
+
 .header-icon {
-	display: inline-block;
-	width: 64px;
+	width: 62px;
 	height: 39px;
 	margin-top: 1px;
 }
 .header-icon.left {
-	float: left;
+	position: fixed;
+	left: 0px;
 }
 .header-icon.right {
-	float: right;
+	position: fixed;
+	right: 0px;
+}
+.header-icon.right2 {
+	position: fixed;
+	right: 62px;
 }
 .header-title {
-	display: inline-block;
-	float: left;
+	background: url('../images/low/nav-icon-border.png') left bottom no-repeat, url('../images/low/nav-icon-border.png') right bottom no-repeat;
+	position: fixed;
+	left: 62px;
+	right: 62px;
 	color: #94989c;
 	font-size: 18px;
 	text-align: center;
 	padding-top: 8px;
-	width: 192px;
 	height: 32px;
 	font-family: "Prelude";
-	background: url('../images/low/nav-icon-border.png') left bottom no-repeat, url('../images/low/nav-icon-border.png') right bottom no-repeat;
 }
 .header-title.active {
 	background: url(../images/trans70.png);
@@ -155,6 +170,11 @@ body.no-gesture {  /* touchpad/emulator */
 	display: inline-block;
 	width: 320px;
 	min-height: 350px; /* this is to prevent other timelines from appearing on app launch */
+	background: url('../images/low/nav-icon-border.png') left bottom repeat-y;
+}
+
+.large-device .panel {
+	min-height: 1024px; /* this is to prevent other timelines from appearing on app launch */
 }
 .tweets-list {
 	padding-bottom: 60px;
@@ -168,6 +188,9 @@ body.no-gesture {  /* touchpad/emulator */
 }
 #new-card{
 	background: url(../images/low/icons/new-card.png) no-repeat center center;
+}
+#back-button{
+	background: url(../images/low/icons/back.png) no-repeat center center;
 }
 
 #nav-bar {
@@ -191,8 +214,18 @@ body.no-gesture {  /* touchpad/emulator */
 	overflow: scroll;
 }
 
+.layout-swapped #nav-bar-scroller {
+	top: 0px;
+	margin-top: -23px;
+	background: url(../images/low/header-bar.png) left 3px repeat-x;
+}
+
 .large-device #nav-bar-scroller {
 	width: 1280px;
+}
+
+.layout-no-nav #nav-bar-scroller {
+	display: none;
 }
 
 #footer {
@@ -205,13 +238,18 @@ body.no-gesture {  /* touchpad/emulator */
 	width: 100%;
 	z-index: 50;
 }
+
+.layout-no-nav #footer {
+	display: none;
+}
+
 .nav-icon {
 	display: block;
 	width: 64px;
 	height: 51px;
 	padding: 0;
 	margin: 0;
-	background: url(../images/low/nav-icon-border.png) right 4px no-repeat;
+	background: url(../images/low/nav-icon-border.png) left 4px no-repeat;
 	float: left;
 	position: relative;
 	top: 22px;
@@ -224,8 +262,8 @@ body.no-gesture {  /* touchpad/emulator */
 	/* total width is 320 */
 	width: 260px;
 	padding-right: 20px;
-	padding-left: 30px;
-	margin-left: 10px;
+	padding-left: 40px;
+	margin-left: 0px;
 
 	float: left;
 }
@@ -245,24 +283,24 @@ body.no-gesture {  /* touchpad/emulator */
 }
 
 #nav-home {
-	background: url('../images/low/icons/tweets.png') 24px center no-repeat, url('../images/low/nav-icon-border.png') right 4px no-repeat;
+	background: url('../images/low/icons/tweets.png') 24px center no-repeat;
 }
 #nav-mentions {
-	background: url('../images/low/icons/mentions.png') 22px center no-repeat, url('../images/low/nav-icon-border.png') right 4px no-repeat;
+	background: url('../images/low/icons/mentions.png') 22px center no-repeat, url('../images/low/nav-icon-border.png') left 2px no-repeat;
 }
 #nav-messages {
-	background: url('../images/low/icons/messages.png') 20px center no-repeat, url('../images/low/nav-icon-border.png') right 4px no-repeat;
+	background: url('../images/low/icons/messages.png') 20px center no-repeat, url('../images/low/nav-icon-border.png') left 2px no-repeat;
 }
 #nav-lists {
-	background: url('../images/low/icons/lists.png') 20px center no-repeat, url('../images/low/nav-icon-border.png') right 4px no-repeat;
+	background: url('../images/low/icons/lists.png') 20px center no-repeat, url('../images/low/nav-icon-border.png') left 2px no-repeat;
 }
 #nav-search {
-	background: url('../images/low/icons/search.png') 19px center no-repeat;
+	background: url('../images/low/icons/search.png') 19px center no-repeat, url('../images/low/nav-icon-border.png') left 2px no-repeat;
 }
 .beacon {
 	display: block;
 	position: relative;
-	top: 38px;
+	top: 37px;
 	left: -1px;
 	width: 100%;
 	height: 14px;
@@ -271,9 +309,20 @@ body.no-gesture {  /* touchpad/emulator */
 	-webkit-transition: opacity .3s;
 	-webkit-palm-mouse-target: ignore;
 }
+
+.layout-swapped .beacon {
+	top: 0px;
+	background: url('../images/low/new-content-down.png') center 0px no-repeat;
+}
+
+.layout-no-nav .beacon {
+	display: none;
+}
+
 .beacon.show {
 	opacity: 1;
 }
+
 #indicator {
 	position: relative;
 	top: 14px;
@@ -284,6 +333,17 @@ body.no-gesture {  /* touchpad/emulator */
 	width: 12px;
 	-webkit-transition: left .3s;
 }
+
+.layout-swapped #indicator {
+	position: fixed;
+	top: 44px;
+	background: url(../images/low/indicator-down.png) center center no-repeat;
+}
+
+.layout-no-nav #indicator {
+	display: none;
+}
+
 #indicator.first {
 	left: 26px;
 }
@@ -345,6 +405,10 @@ body.no-gesture {  /* touchpad/emulator */
 	clear: both;
 /*	background: url(../images/low/tweet-border.png) center bottom repeat-x;*/
 }
+.user-row {
+	display: inline-block;
+	width: 320px;
+}
 .status-row.last {
 	background: transparent;
 }
@@ -373,10 +437,10 @@ body.no-gesture {  /* touchpad/emulator */
 	float: left;
 }
 .tweet-avatar{
+	display: inline-block;
 	height: 48px;
 	width: 48px;
 	background-size: 48px;
-	display: inline-block;
 	-webkit-border-radius: 4px;
 	margin: 5px 8px 0px 0px;
 	float: left;
@@ -386,6 +450,17 @@ body.no-gesture {  /* touchpad/emulator */
 	width: 40px;
 	background-size: 40px;
 }
+
+.tweet-avatar.retweet{
+	display: none;
+	width: 26px;
+	height: 26px;
+	background-size: 26px;
+}
+.tweet-avatar.retweet.show{
+	display: inline-block;
+}
+
 .tweet-footer{
 	font-size: 11px;
 	color: #bbb;
@@ -519,6 +594,9 @@ span.link{
 	border-width: 9px;
 	-webkit-border-image: url(../images/low/search-box.png) 9 stretch;
 }
+.layout-none .panel-spacer {
+	display: none;
+}
 .search-list-item.first {
 /*	padding-top: 0px;*/
 	margin-top: -8px;
@@ -560,29 +638,38 @@ span.link{
 	color: #f8f9b5;
 }
 #shim, #account-shim{
-	width: 100%;
-	position: fixed;
-	top: 0;
-	left: 0;
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	right: 0px;
+	bottom: 0px;
+
 	z-index: 200;
-	display: block;
+	display: none;
 	opacity: 0;
-	-webkit-transition-property: opacity;
+}
+
+#shim {
+	-webkit-transition-property: all;
 	-webkit-transition-duration: .4s;
 }
+
 #account-shim {
 	z-index: 500 !important;
-	-webkit-transform: scale(4);
+	background: #000;
+	-webkit-palm-mouse-target: ignore;
 }
+
 #account-shim.show {
 	opacity: .8 !important;
-	-webkit-transform: scale(1);
-/*	height: 480px;*/
+	display: block;
 }
+
 #shim.show {
+	display: block;
 	opacity: 1;
-	height: 480px;
 }
+
 #loading.ignore, #shim.ignore, #account-shim.ignore, #nav-bar.ignore #nav-bar-scroller.ignore {
 	-webkit-palm-mouse-target: ignore;
 }
@@ -590,10 +677,8 @@ span.link{
 #account-shim.show .account-card {
 	display: block;
 	position: fixed;
-	top: 30%;
 	width: 100%;
 	-webkit-palm-mouse-target: ignore;
-	text-align: center;
 }
 #account-shim .account-card {
 	display: none;
@@ -609,12 +694,14 @@ span.link{
 	display: block;
 	height: 120px;
 	width: 120px;
+
+	position: relative;
+	left: 20px;
+	top: 20px;
+
 	-webkit-background-size: 120px;
-	background-position: center center;
 	background-repeat: none;
 	-webkit-border-radius: 10px;
-	margin: 10px auto;
-/*	border: 3px solid #fff;*/
 }
 .account-name {
 	font-size: 30px;
@@ -680,15 +767,16 @@ span.link{
 	position: relative;
 }
 
+.toaster-title .toaster-button.back {
+	position: relative;
+	float: right;
+	height: 24px;
+}
+
 .convo-scroller{
 	-webkit-transition-property: all;
 	-webkit-transition-duration: .3s;
 	background: url('../images/trans9.png');
-	max-height: 60%;
-}
-
-.large-device .convo-scroller{
-	max-height: 300px;
 }
 .convo-list{
 	padding-bottom: 20px 15px;
@@ -882,16 +970,11 @@ span.link{
 	background: url('../images/low/toaster-bg.png') left top repeat-x;
 	opacity: .95;
 	color: #d2d2d2;
-	max-height: 80%;
+	max-height: 1024px;
 }
-.large-device .toaster {
-	max-height: 300px;
-}
-
 .toaster.show {
 	bottom: 0px;
 }
-
 .toaster.compose {
 	opacity: 1;
 }
@@ -961,7 +1044,7 @@ span.link{
 	background: url('../images/low/icons/search-button.png') center center no-repeat;
 	display: inline-block;
 }
-.toaster.mine .delete, .toaster.has-convo .convo, .toaster.normal .reply, .toaster.normal .retweet, .toaster.normal .favorite, .toaster.is-dm .dm {
+.toaster.mine .delete, .toaster.mine .reply, .toaster.has-convo .convo, .toaster.normal .reply, .toaster.normal .retweet, .toaster.normal .favorite, .toaster.is-dm .dm {
 	display: inline-block;
 }
 .toaster.compose {
@@ -1022,6 +1105,10 @@ span.link{
 	width: 100%;
 	height: 70px;
 }
+.large-device .compose-opts {
+	height: 42px;
+}
+
 .compose-opts-wrapper {
 	text-align: center;
 }
@@ -1077,6 +1164,36 @@ span.link{
 }
 .compose-cancel.selected {
 	-webkit-border-image: url(../images/low/buttons/negative-tapped.png) 6 stretch;
+}
+
+.compose-match {
+	display: inline-block;
+	color: #fff;
+	border-width: 9px;
+	-webkit-border-image: url(../images/low/buttons/positive.png) 6 stretch;
+	font-size: 14px;
+	padding: 0px;
+	margin: 5px;
+	margin-right: 0px;
+	font-weight: bold;
+	font-family: "Prelude";
+}
+.compose-match.selected {
+	-webkit-border-image: url(../images/low/buttons/positive-tapped.png) 6 stretch;
+}
+.compose-over {
+	display: inline-block;
+	color: #fff;
+	font-size: 14px;
+	padding: 0px;
+	margin: 5px;
+	margin-right: 0px;
+	font-weight: bold;
+	font-family: "Prelude";
+}
+
+.toaster.convo {
+	max-height: 80%;
 }
 
 /* Dialog Controls */
@@ -1137,6 +1254,16 @@ span.link{
 
 #close-button.selected {
 	background: url(../images/low/back-tapped.png) center center no-repeat;
+}
+
+.close-button-wrapper.photo {
+	position: fixed;
+	right: 5px;
+	top: 15px;
+}
+
+.close-button-wrapper.photo #close-button {
+	margin: 0px;
 }
 
 .dashboard-icon-phnx {

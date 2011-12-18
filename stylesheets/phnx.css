@@ -638,10 +638,12 @@ span.link{
 	color: #f8f9b5;
 }
 #shim, #account-shim{
-	width: 100%;
-	position: fixed;
-	top: 0;
-	left: 0;
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	right: 0px;
+	bottom: 0px;
+
 	z-index: 200;
 	display: block;
 	opacity: 0;
@@ -660,7 +662,7 @@ span.link{
 	-webkit-palm-mouse-target: ignore;
 }
 #account-shim.show {
-	opacity: .8 !important;
+	opacity: .7 !important;
 	-webkit-transform: scale(1);
 /*	height: 480px;*/
 }

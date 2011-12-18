@@ -104,7 +104,6 @@ var global = {
 		var screenHeight = stageController.window.innerHeight;
 		var shim = stageController.document.getElementById('account-shim');
 		Element.extend(shim);
-		shim.setStyle({"height": screenHeight + "px"});
 		shim.className = 'ignore';
 		// Amount of active requests
 		stageController.requests = 0;
