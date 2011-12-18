@@ -464,6 +464,11 @@ MainAssistant.prototype = {
 			var i;
 			//grab each panel element. There should be as many of these as there are in this.panels
 
+			if (screenWidth > panelWidth) {
+				// On large devices there is 21px of padding
+				panelWidth += 21;
+			}
+
 			var panelElements = this.controller.select('.panel');
 			var totalWidth = 0; //the width of the main container
 			for (i=0; i < panelElements.length; i++) {

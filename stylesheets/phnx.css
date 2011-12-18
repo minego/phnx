@@ -175,7 +175,9 @@ body.no-gesture {  /* touchpad/emulator */
 
 .large-device .panel {
 	min-height: 1024px; /* this is to prevent other timelines from appearing on app launch */
+	width: 341px !important;
 }
+
 .tweets-list {
 	padding-bottom: 60px;
 }
@@ -221,7 +223,7 @@ body.no-gesture {  /* touchpad/emulator */
 }
 
 .large-device #nav-bar-scroller {
-	width: 1280px;
+	width: 1700px;
 }
 
 .layout-no-nav #nav-bar-scroller {
@@ -260,7 +262,7 @@ body.no-gesture {  /* touchpad/emulator */
 
 .large-device .nav-icon {
 	/* total width is 320 */
-	width: 260px;
+	width: 281px;
 	padding-right: 20px;
 	padding-left: 40px;
 	margin-left: 0px;
@@ -400,7 +402,7 @@ body.no-gesture {  /* touchpad/emulator */
 }
 .status-row, .user-row{
 	margin: 0px;
-	padding: 0 0 0px 0;
+	padding: 0px;
 	color: #d2d2d2;
 	clear: both;
 /*	background: url(../images/low/tweet-border.png) center bottom repeat-x;*/
@@ -427,6 +429,9 @@ body.no-gesture {  /* touchpad/emulator */
 .status-row a{
 	color: #bbb;
 	text-decoration: none;
+}
+.large-device .panel .status-row {
+	padding-left: 10px;
 }
 .tweet-username{
 	font-weight: bold;
@@ -512,6 +517,7 @@ body.no-gesture {  /* touchpad/emulator */
 	margin-top: 0px;
 	width: 100%;
 }
+
 .tweet-text{
 	max-width: 236px;
 }
@@ -832,7 +838,7 @@ span.link{
 }
 
 .large-device .profile-icon-wrapper {
-	width: 1280px;
+	width: 1700px;
 }
 .large-device .profile-icon-wrapper {
 	text-align: left;
@@ -939,7 +945,7 @@ span.link{
 }
 .profileScrollerContainer{
 	display: block;
-	width: 1280px !important;
+	width: 1700px !important;
 }
 .profile-bio{
 	padding: 0px 15px;
