@@ -9,7 +9,7 @@ function LocalStorage() {
 		enterToSend: false,
 		fontSize: 'small',
 		barlayout: 'swapped',
-		theme: 'rebirth',
+		theme: 'pure',
 		api: 'https://api.twitter.com',
 		defaultAccount: '0',
 		refreshOnSubmit: false,
