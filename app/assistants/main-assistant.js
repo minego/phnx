@@ -465,8 +465,11 @@ MainAssistant.prototype = {
 			//grab each panel element. There should be as many of these as there are in this.panels
 
 			if (screenWidth > panelWidth) {
-				// On large devices there is 21px of padding
-				panelWidth += 21;
+				// On large devices there are 21px of padding and 1px border
+				panelWidth += 22;
+			} else {
+				// Account for the border, 1px
+				panelWidth += 1;
 			}
 
 			var panelElements = this.controller.select('.panel');
