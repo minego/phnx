@@ -62,7 +62,6 @@ TwitterAPI.prototype = {
 		return this.apibase + '/' + this.version + '/' + endpoint + '.' + this.format;
 	},
 	timeline: function(panel, callback, args, assistant, resource) {
-		args.include_rts = true;
 		this.sign('GET', this.url(this.endpoints[resource || panel.resource]), callback, args, {'panel': panel, 'assistant': assistant});
 	},
 	notificationCheck: function(resource, callback, args, user) {
