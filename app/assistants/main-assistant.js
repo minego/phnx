@@ -694,12 +694,7 @@ MainAssistant.prototype = {
 		var i;
 
 		for (i=0; i < tweets.length; i++) {
-			if (panel.id === 'messages') {
-				tweets[i].user = tweets[i].sender;
-				tweets[i].dm = true;
-			}
-			var th = new TweetHelper();
-			tweets[i] = th.process(tweets[i]);
+			tweets[i] = (new TweetHelper()).process(tweets[i]);
 		}
 
 		if (tweets.length > 1) {
@@ -830,16 +825,20 @@ MainAssistant.prototype = {
 
 		Twitter.timeline(panel, function(r1, m1) {
 			Twitter.timeline(panel, function(r2, m2) {
-				// Swap the sender in for sent messages, but leave our icon so
-				// that it is clear.
+				for (var i = 0, tweet; tweet = r1.responseJSON[i]; i++) {
+					tweet.user = tweet.sender;
+					tweet.dm						= true;
+				}
+
 				for (var i = 0, tweet; tweet = r2.responseJSON[i]; i++) {
 					var id	= tweet.sender.id_str;
 					var img	= tweet.sender.profile_image_url;
 
-					tweet.sender = tweet.recipient;
+					tweet.user = tweet.recipient;
 
-					tweet.sender.profile_image_url	= img;
-					tweet.sender.id_str				= id;
+					tweet.user.profile_image_url	= img;
+					tweet.user.id_str				= id;
+					tweet.dm						= true;
 				}
 
 				var joined	= r1.responseJSON.concat(r2.responseJSON);
