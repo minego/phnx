@@ -218,7 +218,7 @@ var ComposeToaster = Class.create(Toaster, {
 		var args;
 
 		if (txt.length > this.availableChars) {
-			var words		= txt.match(/[^"\s]+/g);
+			var words		= txt.match(/[^\s]+/g);
 			var todone		= false;
 			var to			= [];
 			var mentions	= [];

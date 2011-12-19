@@ -690,11 +690,19 @@ MainAssistant.prototype = {
 		var more = "more-" + panel.id;
 		var tweets = response.responseJSON;
 		var xCount = tweets.length;
+		var th = new TweetHelper();
 
 		var i;
 
-		for (i=0; i < tweets.length; i++) {
-			tweets[i] = (new TweetHelper()).process(tweets[i]);
+		var filters = (new LocalStorage()).read('filters');
+		// filters = [ 'foo', 'bar' ];
+
+		for (i = 0; i < tweets.length; i++) {
+			if (tweets[i].dm || !th.filter(tweets[i], filters)) {
+				tweets[i] = th.process(tweets[i]);
+			} else {
+				tweets.splice(i, 1);
+			}
 		}
 
 		if (tweets.length > 1) {
@@ -710,7 +718,7 @@ MainAssistant.prototype = {
 		if (model.items.length > 0 && this.loadingMore) {
 			//loading "more" items (not refreshing), so append to bottom
 
-			for (i=1; i < tweets.length; i++) {
+			for (i = 1; i < tweets.length; i++) {
 				//start the loop at i = 1 so tweets aren't duplicated
 				model.items.splice((model.items.length - 1) + i, 0, tweets[i]);
 			}
@@ -794,7 +802,7 @@ MainAssistant.prototype = {
 		}
 
 		if (panel.update) {
-			for (i=0; i < model.items.length; i++) {
+			for (i = 0; i < model.items.length; i++) {
 				var tweet = model.items[i];
 				tweet.time_str = this.timeSince(tweet.created_at);
 			}

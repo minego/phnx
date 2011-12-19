@@ -19,7 +19,8 @@ function LocalStorage() {
 		cardIcons: true,
 		forwardSwipe: 'current',
 		refreshOnMaximize: false,
-		autoCorrect: true
+		autoCorrect: true,
+		filters: []
 	};
 
 	this.cookie = new Mojo.Model.Cookie('phnxStore');

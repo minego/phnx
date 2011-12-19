@@ -46,6 +46,21 @@ TweetHelper.prototype = {
 		tweet.text = tweet.text.parseLinks();
 		return tweet;
 	},
+	filter: function(tweet, filters) {
+		if (!filters || !filters.length) {
+			return(null);
+		}
+
+		var words = tweet.text.toLowerCase().match(/[^"'\s]+/g);
+
+		for (var f = 0, filter; filter = filters[f]; f++) {
+			if (-1 != words.indexOf(filter)) {
+				return(filter);
+			}
+		}
+
+		return(null);
+	},
 	processSearch: function(tweet) {
 		// search tweets are stupid and in a different format from the rest.
 		tweet.source = tweet.source.unescapeHTML(); // search returns escaped HTML for some reason
