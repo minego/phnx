@@ -166,6 +166,10 @@ MainAssistant.prototype = {
 				command: 'cmdFindUser'
 			},
 			{
+				label: 'Add Filter',
+				command: 'cmdAddFilter'
+			},
+			{
 				label: 'Preferences',
 				command: 'cmdPreferences'
 			},
@@ -414,6 +418,9 @@ MainAssistant.prototype = {
 			}
 			else if (event.command === 'cmdFindUser') {
 				this.toasters.add(new LookupToaster(this));
+			}
+			else if (event.command === 'cmdAddFilter') {
+				this.toasters.add(new AddFilterToaster(this));
 			}
 			// else if (event.command === 'cmdPreferences') {
 			//	// this.controller.stageController.pushScene('preferences');

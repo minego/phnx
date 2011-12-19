@@ -101,7 +101,8 @@ body.default {
 .compose-txt {
 	-webkit-border-image: url('../images/low/textarea-border.png') 12 stretch;
 }
-.compose-txt textarea{
+.compose-txt textarea,
+.search-box textarea {
 	color: #fff;
 }
 .compose-txt .counter {
