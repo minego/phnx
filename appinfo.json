@@ -1,6 +1,6 @@
 {
 	"id": "net.minego.phnx",
-	"version": "1.2.15",
+	"version": "1.2.16",
 	"vendor": "Project Macaw",
 	"type": "web",
 	"main": "index.html",
