@@ -19,12 +19,14 @@ var AddFilterToaster = Class.create(Toaster, {
 	},
 	saveTapped: function(event) {
 		var prefs	= new LocalStorage();
-		var value	= this.controller.get('txtFilter-' + this.id).value;
+		var value	= this.controller.get('txtFilter-' + this.id).value.toLowerCase();
 
 		if (value && value.length > 0) {
 			var filters = prefs.read('filters');
 
-			filters.push(value.toLowerCase());
+			if (-1 == filters.indexOf(value)) {
+				filters.push(value);
+			}
 			prefs.write('filters', filters);
 		}
 
@@ -41,10 +43,15 @@ var AddFilterToaster = Class.create(Toaster, {
 			if (e.keyCode === 13) {
 				this.saveTapped();
 				e.stop();
+			} else if ((e.keyCode > 8 && e.keyCode < 14) || e.keyCode === 32) {
+				/* Don't allow whitespace */
+				e.stop();
 			}
 		}.bind(this));
 	},
 	cleanup: function() {
+		get('txtFilter-' + this.id).blur();
+
 		Mojo.Event.stopListening(get('save-' + this.id), Mojo.Event.tap, this.saveTapped);
 		Mojo.Event.stopListening(get('back-' + this.id), Mojo.Event.tap, this.backTapped);
 	}

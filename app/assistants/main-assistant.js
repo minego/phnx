@@ -165,13 +165,19 @@ MainAssistant.prototype = {
 				label: 'Lookup User',
 				command: 'cmdFindUser'
 			},
+/*
 			{
 				label: 'Add Filter',
 				command: 'cmdAddFilter'
 			},
+*/
 			{
 				label: 'Preferences',
 				command: 'cmdPreferences'
+			},
+			{
+				label: 'Manage Filters',
+				command: 'cmdManageFilters'
 			},
 			{
 				label: 'About phnx',
@@ -421,6 +427,9 @@ MainAssistant.prototype = {
 			}
 			else if (event.command === 'cmdAddFilter') {
 				this.toasters.add(new AddFilterToaster(this));
+			}
+			else if (event.command === 'cmdManageFilters') {
+				this.toasters.add(new ManageFiltersToaster(this));
 			}
 			// else if (event.command === 'cmdPreferences') {
 			//	// this.controller.stageController.pushScene('preferences');

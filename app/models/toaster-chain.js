@@ -37,9 +37,14 @@ ToasterChain.prototype = {
 
 			// If there are more items, show the next one
 			if (this.items.length > 0) {
-				this.items[this.items.length - 1].show();
-			}
-			else {
+				var last = this.items[this.items.length - 1];
+
+				last.show();
+
+				if (last.reshow) {
+					last.reshow();
+				}
+			} else {
 				// Otherwise show the navbar
 				get('shim').removeClassName('show');
 				get('shim').addClassName('ignore');
