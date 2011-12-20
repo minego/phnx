@@ -217,7 +217,11 @@ var ComposeToaster = Class.create(Toaster, {
 		var Twitter = new TwitterAPI(this.user);
 		var args;
 
-		if (txt.length > this.availableChars) {
+		if (this.uploading) {
+			ex('An upload is in progress.');
+		} else if (this.sending) {
+			;
+		} else if (txt.length > this.availableChars) {
 			var words		= txt.match(/[^\s]+/g);
 			var todone		= false;
 			var to			= [];
@@ -375,6 +379,9 @@ var ComposeToaster = Class.create(Toaster, {
 
 					// kick it off
 					sendfunc();
+
+					this.sending = true;
+					get('submit-' + this.id).setStyle({'opacity': '.4'});
 				}.bind(this),
 
 				cancel: function() {
@@ -390,8 +397,6 @@ var ComposeToaster = Class.create(Toaster, {
 			this.assistant.toasters.add(new ConfirmToaster(opts, this.assistant));
 		} else if (txt.length === 0) {
 			ex('That tweet is kind of empty.');
-		} else if (this.uploading !== false) {
-			ex('An upload is in progress.');
 		} else if (!this.dm) {
 			this.easterEggs(txt); //display some joke banners teehee
 			args = {'status': txt};
@@ -404,6 +409,9 @@ var ComposeToaster = Class.create(Toaster, {
 				args['lat'] = this.lat;
 				args['long'] = this.lng;
 			}
+
+			this.sending = true;
+			get('submit-' + this.id).setStyle({'opacity': '.4'});
 
 			Twitter.postTweet(args, function(response, meta) {
 				var prefs = new LocalStorage();
@@ -422,6 +430,10 @@ var ComposeToaster = Class.create(Toaster, {
 			}.bind(this));
 		} else {
 			args = {'text': txt, 'user_id': this.to.id_str};
+
+			this.sending = true;
+			get('submit-' + this.id).setStyle({'opacity': '.4'});
+
 			Twitter.newDM(args, function(response) {
 				var prefs = new LocalStorage();
 				var refresh = prefs.read('refreshOnSubmit');
