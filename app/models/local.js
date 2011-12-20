@@ -16,7 +16,7 @@ function LocalStorage() {
 		enterToSubmit: false,
 		sendAnalytics: true,
 		limitToLocale: false,
-		cardIcons: true,
+		cardIcons: 'auto',
 		forwardSwipe: 'current',
 		refreshOnMaximize: false,
 		autoCorrect: true,
@@ -37,6 +37,16 @@ LocalStorage.prototype = {
 	read: function(key) {
 		if (typeof(this.data[key]) !== 'undefined') {
 			// Attempt to read the key from the cookie
+
+			if (key == 'cardIcons') {
+				// Update old settings. This used to be a bool
+				if (this.data[key] === true) {
+					this.data[key] = 'auto';
+				} else if (this.data[key] === false) {
+					this.data[key] = 'never';
+				}
+			}
+
 			return this.data[key];
 		}
 		else if (typeof(this.defaults[key]) != 'undefined') {

@@ -999,6 +999,9 @@ MainAssistant.prototype = {
 			else {
 				app.createStageWithCallback(args, pushMainScene, "card");
 			}
+
+			// Enable the card icon if it is set to 'auto'
+			global.multiCard = true;
 		}.bind(this));
 	},
 	logout: function() {

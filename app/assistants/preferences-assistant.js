@@ -47,7 +47,11 @@ function PreferencesAssistant() {
 					{label: 'Large', value: 'large'},
 					{label: 'Huge', value: 'huge'}
 				]},
-				{key: 'cardIcons', type: 'toggle', label: 'Show card icons'},
+				{key: 'cardIcons', type: 'select', label: 'Show card icons', items: [
+					{label: 'Automatic', value: 'auto'},
+					{label: 'Always', value: 'always'},
+					{label: 'Never', value: 'never'}
+				]},
 				{key: 'refreshOnMaximize', type: 'toggle', label: 'Auto Refresh'},
 				{key: 'refreshOnSubmit', type: 'toggle', label: 'Refresh after post'},
 				{key: 'enterToSubmit', type: 'toggle', label: 'Enter to submit'},

@@ -10,6 +10,7 @@ var global = {
 	accounts: [],
 	stages: [],
 	following: [],
+	multiCard: false,
 	doc: document,
 	fontSizes: [
 		{label: 'Small', command: 'font-small'},
@@ -143,8 +144,21 @@ var global = {
 
 			// show the account shim if it is enabled
 			var prefs = new LocalStorage();
-			if (prefs.read('cardIcons')) {
-				stageController.document.getElementById('account-shim').className = 'show';
+
+			switch (prefs.read('cardIcons')) {
+				case 'never':
+					break;
+
+				case 'auto':
+					if (!global.multiCard) {
+						break;
+					}
+					// fall through
+
+				default:
+				case 'always':
+					stageController.document.getElementById('account-shim').className = 'show';
+					break;
 			}
 		};
 
