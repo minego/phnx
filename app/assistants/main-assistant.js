@@ -180,12 +180,21 @@ MainAssistant.prototype = {
 				command: 'cmdManageFilters'
 			},
 			{
-				label: 'About phnx',
-				command: 'cmdAbout'
-			},
-			{
-				label: 'Contact Support',
-				command: 'cmdSupport'
+				label: 'About',
+				items: [
+					{
+						label: 'About phnx',
+						command: 'cmdAbout'
+					},
+					{
+						label: 'View Changelog',
+						command: 'cmdChangelog'
+					},
+					{
+						label: 'Contact Support',
+						command: 'cmdSupport'
+					}
+				]
 			}
 		];
 
@@ -364,6 +373,14 @@ MainAssistant.prototype = {
 				var panel = this.getPanel(this.opts.panel);
 				this.scrollTo(panel.index);
 			}
+
+			var prefs = new LocalStorage();
+
+			if (prefs.read('version') !== Mojo.appInfo.version) {
+				prefs.write('version', Mojo.appInfo.version);
+
+				this.toasters.add(new ChangelogToaster(this));
+			}
 		}.bind(this),10);
 	},
 	handleCommand: function(event) {
@@ -430,6 +447,9 @@ MainAssistant.prototype = {
 			}
 			else if (event.command === 'cmdManageFilters') {
 				this.toasters.add(new ManageFiltersToaster(this));
+			}
+			else if (event.command === 'cmdChangelog') {
+				this.toasters.add(new ChangelogToaster(this));
 			}
 			// else if (event.command === 'cmdPreferences') {
 			//	// this.controller.stageController.pushScene('preferences');

@@ -42,8 +42,8 @@ var ConvoToaster = Class.create(Toaster, {
 		this.controller.instantiateChildWidgets(get('toasters'));
 
 		var screenHeight = this.controller.window.innerHeight;
-		get('convo-scroller-' + this.id).setStyle({'max-height': (screenHeight - 65) + 'px'});
-		get(this.nodeId).setStyle({'max-height': (screenHeight - 45) + 'px'});
+		get('convo-scroller-' + this.id).setStyle({'max-height': (screenHeight - 85) + 'px'});
+		get(this.nodeId).setStyle({'max-height': (screenHeight - 65) + 'px'});
 		this.controller.listen(get('convo-list-' + this.id), Mojo.Event.listTap, this.tweetTapped.bind(this));
 
 		Mojo.Event.listen(this.controller.get('back-' + this.id), Mojo.Event.tap, this.backTapped.bind(this));
