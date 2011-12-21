@@ -84,5 +84,9 @@
     {
         "scenes": "ril-login",
         "source": "app/assistants/ril-login-assistant.js"
+    },
+    {
+        "scenes": "help",
+        "source": "app/assistants/help-assistant.js"
     }
 ]

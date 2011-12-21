@@ -1,5 +1,8 @@
 var ChangelogToaster = Class.create(Toaster, {
 	items: [
+		{ version: '1.2.18' },
+		{ item: 'Added help scene' },
+		
 		{ version: '1.2.17' },
 		{ item: 'Added a changelog' },
 		{ item:	'Disable the post button while posting a tweet' },

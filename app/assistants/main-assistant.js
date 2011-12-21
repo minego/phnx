@@ -187,6 +187,10 @@ MainAssistant.prototype = {
 						command: 'cmdAbout'
 					},
 					{
+						label: 'Support',
+						command: 'cmdSupport'
+					},
+					{
 						label: 'View Changelog',
 						command: 'cmdChangelog'
 					},

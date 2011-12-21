@@ -47,6 +47,9 @@ AppAssistant.prototype = {
 			stage.pushScene('about');
 		}
 		else if (event.command === 'cmdSupport') {
+			stage.pushScene('help');
+		}
+		else if (event.command === 'cmdSupport') {
 			var service = new Mojo.Service.Request('palm://com.palm.applicationManager', {
 				method: 'open',
 				parameters: {

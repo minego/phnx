@@ -1365,3 +1365,8 @@ span.link{
 	text-align: center;
 	padding-bottom: 10px;
 }
+a:link {
+	color: #d2d2d2;
+	text-decoration:underline;
+	font-weight:900;
+}
