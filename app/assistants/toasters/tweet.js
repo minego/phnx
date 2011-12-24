@@ -327,7 +327,7 @@ var TweetToaster = Class.create(Toaster, {
     method:      'add',
     parameters:  {
         id: 'net.ryanwatkins.app.papermache',
-        params: { url: "http://twitter.com/#!" + this.tweet.user.screen_name + "/" + "status/" + id}
+        params: { url: "https://twitter.com/#!" + this.tweet.user.screen_name + "/" + "status/" + id}
     }
 });
 				banner('Added URL to Paper Mache');
@@ -340,14 +340,14 @@ var TweetToaster = Class.create(Toaster, {
 						method: 'open',
 						parameters: {
 							id: 'com.sven-ziegler.readontouch',
-			params: {action: 'addLink', url: "http://twitter.com/#!" + this.tweet.user.screen_name + "/" + "status/" + tweetid}
+			params: {action: 'addLink', url: "https://twitter.com/#!" + this.tweet.user.screen_name + "/" + "status/" + tweetid}
 						}});
 				banner('Added URL to ReadOnTouch PRO');
 	},
 	copyUrl: function() {
 		var Twitter = new TwitterAPI(this.user);
 		var id = this.tweet.id_str;
-		this.controller.stageController.setClipboard("http://twitter.com/#!" + this.tweet.user.screen_name + "/" + "status/" + id,true); 
+		this.controller.stageController.setClipboard("https://twitter.com/#!" + this.tweet.user.screen_name + "/" + "status/" + id,true); 
 				banner('Copied tweet URL to clipboard.');
 	},
 	//Sends the current tweet via email and adds the tag "Sent via Project Macaw for webOS"

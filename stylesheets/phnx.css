@@ -1249,10 +1249,8 @@ span.link{
 .button.signin.selected {
 	-webkit-border-image: url(../images/low/buttons/signin-tapped.png) 6 stretch;
 }
-.button-wrapper {
-	position: fixed;
+.myaccount-button-wrapper {
 	width: 100%;
-	bottom: 30px;
 	text-align: center;
 }
 .close-button-wrapper {
