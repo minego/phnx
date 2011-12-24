@@ -2,7 +2,9 @@ var ChangelogToaster = Class.create(Toaster, {
 	items: [
 		{ version: '1.2.18' },
 		{ item: 'Added help scene' },
-		
+		{ item: 'Use HTTPS for all twitter access' },
+		{ item: 'Updated the finished authentiation scene layout' },
+
 		{ version: '1.2.17' },
 		{ item: 'Added a changelog' },
 		{ item:	'Disable the post button while posting a tweet' },
