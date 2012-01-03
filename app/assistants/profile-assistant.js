@@ -376,7 +376,16 @@ ProfileAssistant.prototype = {
 	urlTapped: function(event) {
 		//global.openBrowser(this.user.url);
 		//var user.url = src
-		this.controller.stageController.pushScene('webview', this.user.url);
+		//this.controller.stageController.pushScene('webview', this.user.url);
+		var prefs = new LocalStorage();
+		if (prefs.read('browserSelection') === 'inAppBrowser') {
+			this.controller.stageController.pushScene('webview', this.user.url);
+			Mojo.Log.info("Launching In App Browser")
+		}	
+		else {
+			global.openBrowser(this.user.url);
+			Mojo.Log.info("Launching Stock Browser")
+		}
 	},
 	tweetsTapped: function(event) {
 		this.scrollTo(0);
