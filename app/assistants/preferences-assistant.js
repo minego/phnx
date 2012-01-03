@@ -40,6 +40,10 @@ function PreferencesAssistant() {
 					{label: 'Hide Tabs', value: 'no-nav'},
 					{label: 'Hide Tabs & Toolbar', value: 'none'}
 				]},
+				/*{key: 'browserSelection', type: 'select', label: 'Browser', items: [
+					{label: 'In-App Browser', value: 'inAppBrowser'},
+					{label: 'Stock Browser', value: 'stockBrowser'}
+				]},*/
 				{key: 'fontSize', type: 'select', label: 'Font Size', items: [
 					{label: 'Tiny', value: 'tiny'},
 					{label: 'Small', value: 'small'},

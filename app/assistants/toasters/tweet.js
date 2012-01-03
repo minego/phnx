@@ -458,8 +458,16 @@ var TweetToaster = Class.create(Toaster, {
 	      this.showPreview(url + '/normal');
 	    }
 		else{
-			global.openBrowser(url);
+			this.showWebview(url);
 		}
+	},
+	showWebview: function(src, url) {
+		/*var prefs = new LocalStorage();
+		if (prefs.read('inAppBrowser')) {
+			this.controller.stageController.pushScene('webview', src)
+			.bind(this);
+		}*/
+		this.controller.stageController.pushScene('webview', src);
 	},
 	showPreview: function(src, url) {
 		// this.assistant.imagePreview = true;

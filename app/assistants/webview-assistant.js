@@ -1,14 +1,11 @@
-function WebviewAssistant() {
-	/* this is the creator function for your scene assistant object. It will be passed all the 
-	   additional parameters (after the scene name) that were passed to pushScene. The reference
-	   to the scene controller (this.controller) has not be established yet, so any initialization
-	   that needs the scene controller should be done in the setup function below. */
+function WebviewAssistant(url) {
+	this.url = url;
 }
 
 WebviewAssistant.prototype.setup = function() {
 	this.controller.setupWidget('browser',
   this.attributes = {
-      url: url,
+      url: this.url,
       minFontSize: 18,
       virtualpagewidth: 20,
       virtualpageheight: 10
@@ -128,13 +125,15 @@ WebviewAssistant.prototype.handleCommand = function(event) {
 	this.currLoadProgressImage = image;
  };
 WebviewAssistant.prototype.activate = function(event) {
-	/* put in event handlers here that should only be in effect when this scene is active. For
-	   example, key handlers that are observing the document */
+	this.controller.enableFullScreenMode(true);
+		this.controller.stageController.setWindowOrientation('free');
 };
 
 WebviewAssistant.prototype.deactivate = function(event) {
-	/* remove any event handlers you added in activate and do any other cleanup that should happen before
-	   this scene is popped or another scene is pushed on top */
+		if (Mojo.Environment.DeviceInfo.platformVersionMajor < 3) {
+			this.controller.stageController.setWindowOrientation('up');
+		}
+		this.controller.enableFullScreenMode(false);
 };
 
 WebviewAssistant.prototype.cleanup = function(event) {
