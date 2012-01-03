@@ -146,6 +146,7 @@ ProfileAssistant.prototype = {
 		this.controller.listen(this.controller.get('tweets'), Mojo.Event.tap, this.tweetsTapped.bind(this));
 		this.controller.listen(this.controller.get('following'), Mojo.Event.tap, this.followingTapped.bind(this));
 		this.controller.listen(this.controller.get('followers'), Mojo.Event.tap, this.followersTapped.bind(this));
+		this.controller.listen(this.controller.get('location'), Mojo.Event.tap, this.locationTapped.bind(this));
 		this.controller.listen(this.controller.get('url'), Mojo.Event.tap, this.urlTapped.bind(this));
 		this.controller.listen(this.controller.get('profile-avatar'), Mojo.Event.tap, this.avatarTapped.bind(this));
 
@@ -360,6 +361,17 @@ ProfileAssistant.prototype = {
 	},
 	scrollTo: function(i) {
 		this.controller.get("sideScroller").mojo.setSnapIndex(i, true);
+	},
+	locationTapped: function(event) {
+		this.controller.serviceRequest("palm://com.palm.applicationManager", {
+    method:"launch",
+    parameters: {
+        id: "com.palm.app.maps",
+        params: {
+            query: this.user.location
+        }
+    }
+});
 	},
 	urlTapped: function(event) {
 		global.openBrowser(this.user.url);
