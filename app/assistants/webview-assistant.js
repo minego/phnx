@@ -29,9 +29,13 @@ WebviewAssistant.prototype.setup = function() {
 	Mojo.Event.listen(this.controller.get('browser'),Mojo.Event.webViewLoadProgress, this.loadProgress.bind(this));
 	Mojo.Event.listen(this.controller.get('browser'),Mojo.Event.webViewLoadStarted, this.loadStarted.bind(this));
 	Mojo.Event.listen(this.controller.get('browser'),Mojo.Event.webViewLoadStopped, this.loadStopped.bind(this));
-	Mojo.Event.listen(this.controller.get('browser'),Mojo.Event.webViewLoadFailed, this.loadStopped.bind(this));
+	Mojo.Event.listen(this.controller.get('browser'),Mojo.Event.webViewLoadFailed, this.loadStopped.bind(this));			
+	this.closeTapped = this.closeTapped.bind(this);
+	this.controller.listen(this.controller.get("close-button"), Mojo.Event.tap, this.closeTapped);
 };
-
+WebviewAssistant.prototype.closeTapped = function(event) {
+		this.controller.stageController.popScene();
+	};
 WebviewAssistant.prototype.handleCommand = function(event) {
 	if (event.type == Mojo.Event.command) {
 		switch (event.command) {
@@ -137,6 +141,5 @@ WebviewAssistant.prototype.deactivate = function(event) {
 };
 
 WebviewAssistant.prototype.cleanup = function(event) {
-	/* this function should do any cleanup needed before the scene is destroyed as 
-	   a result of being popped off the scene stack */
+			this.controller.stopListening(this.controller.get("close-button"), Mojo.Event.tap, this.closeTapped);
 };

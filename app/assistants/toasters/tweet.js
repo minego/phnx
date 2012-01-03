@@ -462,12 +462,16 @@ var TweetToaster = Class.create(Toaster, {
 		}
 	},
 	showWebview: function(src, url) {
-		/*var prefs = new LocalStorage();
-		if (prefs.read('inAppBrowser')) {
-			this.controller.stageController.pushScene('webview', src)
-			.bind(this);
-		}*/
-		this.controller.stageController.pushScene('webview', src);
+		var prefs = new LocalStorage();
+		if (prefs.read('browserSelection') === 'inAppBrowser') {
+			this.controller.stageController.pushScene('webview', src);
+			Mojo.Log.info("Launching In App Browser")
+		}	
+		else {
+			global.openBrowser(src);
+			Mojo.Log.info("Launching Stock Browser")
+		}
+		//this.controller.stageController.pushScene('webview', src);
 	},
 	showPreview: function(src, url) {
 		// this.assistant.imagePreview = true;

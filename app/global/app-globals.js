@@ -66,13 +66,13 @@ var global = {
 			});
 		}
 	},
-	openBrowser: function(url) {
+	openBrowser: function(src, url) {
 		var service = new Mojo.Service.Request("palm://com.palm.applicationManager", {
 			method: "open",
 			parameters: {
 				id: 'com.palm.app.browser',
 				params: {
-					target: url
+					target: src
 				}
 			}
 		});

@@ -17,6 +17,7 @@ function LocalStorage() {
 		sendAnalytics: true,
 		limitToLocale: false,
 		cardIcons: 'auto',
+		browserSelection: 'inAppBrowser',
 		forwardSwipe: 'current',
 		refreshOnMaximize: false,
 		autoCorrect: true,

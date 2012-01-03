@@ -374,7 +374,9 @@ ProfileAssistant.prototype = {
 });
 	},
 	urlTapped: function(event) {
-		global.openBrowser(this.user.url);
+		//global.openBrowser(this.user.url);
+		//var user.url = src
+		this.controller.stageController.pushScene('webview', this.user.url);
 	},
 	tweetsTapped: function(event) {
 		this.scrollTo(0);
