@@ -194,10 +194,10 @@ MainAssistant.prototype = {
 						label: 'View Changelog',
 						command: 'cmdChangelog'
 					},
-					{
+					/*{
 						label: 'Contact Support',
 						command: 'cmdSupport'
-					}
+					}*/
 				]
 			}
 		];
