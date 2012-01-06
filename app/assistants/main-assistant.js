@@ -183,7 +183,7 @@ MainAssistant.prototype = {
 				label: 'About',
 				items: [
 					{
-						label: 'About phnx',
+						label: 'About Project Macaw',
 						command: 'cmdAbout'
 					},
 					{
@@ -947,6 +947,7 @@ MainAssistant.prototype = {
 		if (this.toasters.items.length === 0) {
 			this.toggleCompose({});
 		}
+		//this.controller.stageController.pushScene("compose-tweet");
 	},
 	toggleCompose: function(opts) {
 		this.toasters.add(new ComposeToaster(opts, this));

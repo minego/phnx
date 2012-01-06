@@ -88,5 +88,9 @@
     {
         "scenes": "help",
         "source": "app/assistants/help-assistant.js"
+    },
+    {
+        "scenes": "compose-tweet",
+        "source": "app/assistants/compose-tweet-assistant.js"
     }
 ]
