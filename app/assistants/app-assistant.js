@@ -28,15 +28,22 @@ AppAssistant.prototype = {
 		}
 		// code for x-launch-params still work-in-progress
 		else if (params.tweet) {
-		launchParams.action = 'prepTweet';
-		launchParams.msg = launchParams.tweet;
+		params.action = 'prepTweet';
+		params.msg = params.tweet;
 		}
+		if(params.action == 'compose') {
+        	var compose_parameters = {
+        			todo: 'new_external',
+        			tweet_text: params.body
+        	};
+        	this.toasters.add(new ComposeToaster(compose_parameters, this));
+        }
 		else {
 			Mojo.Log.info('params: ' + params);
 			// Launch the app normally, load the default user if it exists.
 			this.launchMain();
 			// this.checkNotifications(); // for debugging
-		}
+		}	
 	},
 	handleCommand: function(event) {
 		var stage = this.controller.getActiveStageController();
