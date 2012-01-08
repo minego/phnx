@@ -455,8 +455,8 @@ var TweetToaster = Class.create(Toaster, {
 			this.showPreview(url);
 		}
 		else if (url.indexOf('http://phnx.ws/') > -1) {
-	      this.showPreview(url + '/normal');
-	    }
+			this.showPreview(url + '/normal');
+		}
 		else{
 			this.showWebview(url);
 		}
