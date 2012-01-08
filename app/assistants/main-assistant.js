@@ -137,10 +137,10 @@ MainAssistant.prototype = {
 			label: 'Logout @' + this.user.username,
 			command: 'cmdRemoveAccount'
 		});
-		/*accountMenuItems.push({
+		accountMenuItems.push({
 			label: 'Log into ReadItLater and InstaPaper',
 			command: 'cmdLoginRil'
-		});*/
+		});
 
 		var menuItems = [
 			Mojo.Menu.editItem,
@@ -461,9 +461,9 @@ MainAssistant.prototype = {
 			else if (event.command === 'cmdRemoveAccount') {
 				this.logout();
 			}
-			/*else if (event.command === 'cmdLoginRil') {
+			else if (event.command === 'cmdLoginRil') {
 				this.controller.stageController.pushScene("ril-login");
-			}*/
+			}
 		}
 	},
 	switchTheme: function(command) {

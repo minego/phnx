@@ -98,6 +98,9 @@ var TweetToaster = Class.create(Toaster, {
 			case 'opts':
 				this.showOpts();
 				break;
+			case 'optsUrl':
+				this.showOptsUrl();
+				break;	
 			case 'back':
 				this.assistant.toasters.back();
 				break;
@@ -233,6 +236,13 @@ var TweetToaster = Class.create(Toaster, {
 			items: this.menuItems
 		});
 	},
+	showOptsUrl: function(url) {
+		this.controller.popupSubmenu({
+			onChoose: this.popupHandler.bind(this),
+			placeNear: this.controller.get('opts-' + this.id),
+			items: this.linkMenuItems
+		});
+	},
 	popupHandler: function(command) {
 		switch (command) {
 			case 'cmdMention':
@@ -268,6 +278,28 @@ var TweetToaster = Class.create(Toaster, {
 			case 'cmdSms':
 				this.sms();
 				break;
+			case 'cmdCopyLinkUrl':
+				this.copyLinkUrl();
+				break;
+			case 'cmdAddLinkPaperMache':
+				this.addLinkToPaperMache();
+				break;
+			case 'cmdAddLinkReadOnTouchPro':
+				this.addLinkReadOnTouchPro();
+				break;
+			case 'cmdEmailLink':
+				this.emailLink();
+				break;
+			case 'cmdSmsLink':
+				this.smsLink();
+				break;
+			case 'cmdOpenStockBrowser':
+				this.openStockBrowser();
+				break;
+			case 'cmdOpenInAppBrowser':
+				this.openInAppBrowser();
+				break;
+
 		}
 	},
 	mention: function() {
@@ -352,6 +384,7 @@ var TweetToaster = Class.create(Toaster, {
 	},
 	//Sends the current tweet via email and adds the tag "Sent via Project Macaw for webOS"
 	email: function() {
+		var Twitter = new TwitterAPI(this.user);
 		this.controller.serviceRequest(
     "palm://com.palm.applicationManager", {
         method: 'open',
@@ -359,7 +392,7 @@ var TweetToaster = Class.create(Toaster, {
             id: "com.palm.app.email",
             params: {
                 summary: "I would like to share this tweet with you",
-                text: this.tweet.stripped + "<br>" + " -- Sent via Project Macaw for webOS"
+                text: "From" + " @" + this.tweet.user.screen_name + ": " + this.tweet.stripped + "<br>" + " -- Sent via Project Macaw for webOS"
             }
         }
     }
@@ -379,6 +412,69 @@ var TweetToaster = Class.create(Toaster, {
     onFailure: this.handleErrResponse
 });
 	},
+	//Copies the link in a tweet to the clipboard
+	copyLinkUrl: function(src, url) {
+		this.controller.stageController.setClipboard(src,true);
+				banner('Copied link URL to clipboard.');
+	},
+
+	addLinkToPaperMache: function(url) {
+		var request = new Mojo.Service.Request("palm://com.palm.applicationManager", {
+    method:      'add',
+    parameters:  {
+        id: 'net.ryanwatkins.app.papermache',
+        params: { url: url}
+    }
+});
+				banner('Added URL to Paper Mache');
+	},
+
+	addLinkReadOnTouchPro: function(url) {
+		var request = new Mojo.Service.Request("palm://com.palm.applicationManager", {
+						method: 'open',
+						parameters: {
+							id: 'com.sven-ziegler.readontouch',
+			params: {action: 'addLink', url: url}
+						}});
+				banner('Added URL to ReadOnTouch PRO');
+	},
+
+	emailLink: function(url) {
+		this.controller.serviceRequest(
+    "palm://com.palm.applicationManager", {
+        method: 'open',
+        parameters: {
+            id: "com.palm.app.email",
+            params: {
+                summary: "I would like to share this link with you",
+                text: url + "<br>" + " -- Sent via Project Macaw for webOS"
+            }
+        }
+    }
+);
+	},
+
+	smsLink: function(url) {
+		this.controller.serviceRequest('palm://com.palm.applicationManager', {
+    method: 'launch',
+    parameters: {
+        id: 'com.palm.app.messaging',
+        params: {
+            messageText: url
+        }
+    },
+    onSuccess: this.handleOKResponse,
+    onFailure: this.handleErrResponse
+});
+	},
+
+	openStockBrowser: function(url) {
+		global.openBrowser(url);
+	},
+
+	openInAppBrowser: function(url) {
+		this.controller.stageController.pushScene('webview', url);
+	},
 
 
 	detailsTapped: function(event) {
@@ -388,6 +484,7 @@ var TweetToaster = Class.create(Toaster, {
 		if (e.id === 'link') {
 			var url = e.innerText;
 			this.handleLink(url);
+			//this.copyLinkUrl(url);
 		}
 		else if (e.id === 'hashtag') {
 			var hashtag = e.innerText;
@@ -563,6 +660,26 @@ var TweetToaster = Class.create(Toaster, {
 			label: 'Hide',
 			command: 'cmdHide'
 		});
+		
+		this.linkMenuItems = [];
+
+		this.linkMenuItems.push({
+			label: 'Share',
+			items: [
+			{label: $L('Copy Link URL'), command:'cmdCopyLinkUrl'},
+			{label: $L('Add to Paper Mache'), command:'cmdAddLinkPaperMache'},
+			{label: $L('Add to ReadOnTouch PRO'), command:'cmdAddLinkReadOnTouchPro'},
+			{label: $L('Email Link'), command: 'cmdEmailLink'},
+			{label: $L('SMS Link'), command: 'cmdSmsLink'}
+		]});
+
+		this.linkMenuItems.push({
+			label: 'Open',
+			items: [
+			{label: $L('Open in Stock Browser'), command:'cmdOpenStockBrowser'},
+			{label: $L('Open in In-App Browser'), command:'cmdOpenInAppBrowser'}
+		]});
+
 
 		Mojo.Event.listen(this.controller.get('details-' + this.id), Mojo.Event.tap, this.detailsTapped.bind(this));
 		Mojo.Event.listen(this.controller.get('rt-' + this.id), Mojo.Event.tap, this.rtTapped.bind(this));
