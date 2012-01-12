@@ -25,7 +25,7 @@ TweetHelper.prototype = {
 			tweet.source = tweet.source.replace('href="', 'href="#');
 			tweet.via = 'via';
 			// Save the link to the tweet on Twitter.com for fun times
-			tweet.link = 'https://twitter.com/' + tweet.user.screen_name + '/status/' + tweet.id_str;
+			tweet.link = 'https://twitter.com/#!' + tweet.user.screen_name + '/status/' + tweet.id_str;
 		}
 
 		// Expand some shortened links automatically via the entities payload
