@@ -24,7 +24,7 @@ var TweetToaster = Class.create(Toaster, {
 		this.twitterLink = "https://twitter.com/#!" + this.tweet.user.screen_name + "/" + "status/" + this.twitterId;
 		//this.event = event.target;
 		//var username;
-		this.url = tweet.entities && tweet.entities.urls;
+		this.url = this.tweet.entities && this.tweet.entities.urls;
 		//if (e.id === 'link') {
 		//	var url = e.innerText
 		//}

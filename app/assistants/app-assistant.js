@@ -1,4 +1,6 @@
-function AppAssistant(){}
+function AppAssistant(opts){
+	this.toasters = new ToasterChain();
+}
 
 AppAssistant.prototype = {
 	setup: function() {
@@ -9,7 +11,7 @@ AppAssistant.prototype = {
 			global.Metrix.postDeviceData();
 		}
 	},
-	handleLaunch: function(params) {
+	handleLaunch: function(params, opts) {
 		if (params.action === 'checkNotifications') {
 			var prefs = new LocalStorage();
 			var stageFocused = false; // temporaray
@@ -27,23 +29,38 @@ AppAssistant.prototype = {
 			// This is exhibition mode
 		}
 		// code for x-launch-params still work-in-progress
-		else if (params.tweet) {
-		params.action = 'prepTweet';
-		params.msg = params.tweet;
-		}
-		if(params.action == 'compose') {
-        	var compose_parameters = {
-        			todo: 'new_external',
-        			tweet_text: params.body
-        	};
-        	this.toasters.add(new ComposeToaster(compose_parameters, this));
-        }
+		else if(params.composeTweet) {
+			Mojo.Log.info("Called Launch Param correctly")
+        	params.action = 'prepPost';
+			params.msg = params.composeTweet;
+        }	
 		else {
 			Mojo.Log.info('params: ' + params);
 			// Launch the app normally, load the default user if it exists.
 			this.launchMain();
+			this.toasters.add(new ComposeToaster(this));
 			// this.checkNotifications(); // for debugging
 		}	
+		var stageCallback = function(stageController) {
+		Mojo.Log.error('RUNNING stageCallback');
+
+		switch(params.action) {
+
+			/**
+			 * {
+			 *   action:"prepPost",
+			 *   msg:"Some Text",
+			 *   account:"ACCOUNT_HASH" // optional
+			 * }
+			 */
+			case 'prepPost':
+			case 'post':
+					this.toasters.add(new ComposeToaster({
+					'text':launchParams.msg}, this
+				));
+				break;
+		}
+	}
 	},
 	handleCommand: function(event) {
 		var stage = this.controller.getActiveStageController();
