@@ -1,3 +1,8 @@
 .appid
+.filename
+.version
+.tmp
+Packages
+Packages.gz
 *.ipk
 
