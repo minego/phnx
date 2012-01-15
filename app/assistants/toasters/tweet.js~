@@ -678,7 +678,7 @@ var TweetToaster = Class.create(Toaster, {
 			label: 'Send Direct Message',
 			command: 'cmdMessage'
 		});
-		/*if (this.myUser.following) {
+		if (this.myUser.following) {
 			this.menuItems.push({
 				label: 'Unfollow',
 				command: 'cmdUnfollow'
@@ -689,7 +689,7 @@ var TweetToaster = Class.create(Toaster, {
 				label: 'Follow',
 				command: 'cmdFollow'
 			});
-		}*/
+		}
 		this.menuItems.push({
 			label: 'Share',
 			items: [
