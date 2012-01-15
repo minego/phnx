@@ -2,24 +2,14 @@ function RilLoginAssistant() {
 }
 
 RilLoginAssistant.prototype.setup = function() {
-this.loginRil = {
-        'attributes': {
-            'label': 'Log into ReadItLater',
-            'type': Mojo.Widget.activityButton
-        },
-        'model': {
-            'disabled': false
-        }
-    };
-this.loginIp = {
-        'attributes': {
-            'label': 'Log into InstaPaper',
-            'type': Mojo.Widget.activityButton
-        },
-        'model': {
-            'disabled': false
-        }
-    };
+    this.loginRilModel = {
+      buttonLabel: "Log into ReadItLater",
+      disabled: false
+};
+this.loginIpModel = {
+      buttonLabel: "Log into InstaPaper",
+      disabled: false
+};
     this.controller.setupWidget("rilUserFieldId",
     this.attributes = {
         hintText: $L("ReadItLater Username"),
@@ -68,8 +58,8 @@ this.loginIp = {
         disabled: false
     }
 );
-    this.controller.setupWidget('loginRil', this.loginRil.attributes, this.loginRil.model);
-    this.controller.setupWidget('loginIp', this.loginIp.attributes, this.loginIp.model);
+    this.controller.setupWidget("loginRil", {}, this.loginRilModel);
+    this.controller.setupWidget("loginIp", {}, this.loginIpModel);
     Mojo.Event.listen(this.controller.get("rilUserFieldId"), Mojo.Event.propertyChange, this.handleUpdateRilUser/*.bindAsEventListener(this)*/);
     Mojo.Event.listen(this.controller.get("rilPassFieldId"), Mojo.Event.propertyChange, this.handleUpdateRilPw/*.bindAsEventListener(this)*/);
     Mojo.Event.listen(this.controller.get("ippUserFieldId"), Mojo.Event.propertyChange, this.handleUpdateIpUser/*.bindAsEventListener(this)*/);

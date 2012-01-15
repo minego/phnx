@@ -1,16 +1,15 @@
 var TweetToaster = Class.create(Toaster, {
 	initialize: function(tweet, assistant) {
-		this.id = toasterIndex++;
-		this.nodeId = 'toaster-' + this.id;
+		this.toasterId = toasterIndex++;
+		this.nodeId = 'toaster-' + this.toasterId;
 		this.visible = false;
 		this.shim = true;
-
 		// We save the scene's assistant here
 		this.assistant = assistant;
 		this.controller = getController();
 		this.user = this.controller.stageController.user;
 		this.tweet = tweet;
-		this.tweet.toasterId = this.id;
+		this.tweet.toasterId = this.toasterId;
 
 		if (this.tweet.retweet_count > 0) {
 			this.tweet.rt_class = 'show';
@@ -20,11 +19,19 @@ var TweetToaster = Class.create(Toaster, {
 		}
 
 		var th = new TweetHelper();
-
+		var Twitter = new TwitterAPI(this.user);
+		this.twitterId = this.tweet.id_str;
+		this.twitterLink = "https://twitter.com/#!" + this.tweet.user.screen_name + "/" + "status/" + this.twitterId;
+		//this.event = event.target;
+		//var username;
+		this.url = this.tweet.entities && this.tweet.entities.urls;
+		//if (e.id === 'link') {
+		//	var url = e.innerText
+		//}
 		// Process the tweet again for updates or whatever
 		// this.tweet = th.process(this.tweet);
 
-		this.content = {toasterId: this.id};
+		this.content = {toasterId: this.toasterId};
 
 		var tweetHtml = Mojo.View.render({
 			object: this.tweet,
@@ -54,7 +61,7 @@ var TweetToaster = Class.create(Toaster, {
 		}
 
 		if (this.tweet.favorited) {
-			this.controller.get('favorite-' + this.id).addClassName('favorited');
+			this.controller.get('favorite-' + this.toasterId).addClassName('favorited');
 		}
 
 		if (this.tweet.in_reply_to_status_id_str !== null && this.tweet.in_reply_to_status_id_str) {
@@ -69,8 +76,8 @@ var TweetToaster = Class.create(Toaster, {
 				object: this.tweet,
 				template: 'templates/tweets/details'
 			});
-			this.controller.get('details-' + this.id).update(tweetHtml);
-			Mojo.Event.listen(this.controller.get('rt-' + this.id), Mojo.Event.tap, this.rtTapped.bind(this));
+			this.controller.get('details-' + this.toasterId).update(tweetHtml);
+			Mojo.Event.listen(this.controller.get('rt-' + this.toasterId), Mojo.Event.tap, this.rtTapped.bind(this));
 		}.bind(this));
 
 	},
@@ -98,6 +105,9 @@ var TweetToaster = Class.create(Toaster, {
 			case 'opts':
 				this.showOpts();
 				break;
+			case 'optsUrl':
+				this.showOptsUrl();
+				break;	
 			case 'back':
 				this.assistant.toasters.back();
 				break;
@@ -171,13 +181,13 @@ var TweetToaster = Class.create(Toaster, {
 		if (this.tweet.favorited === false) {
 			Twitter.action('favorite', this.tweet.id_str, function(response, meta){
 				this.tweet.favorited = true;
-				this.controller.get('favorite-' + this.id).addClassName('favorited');
+				this.controller.get('favorite-' + this.toasterId).addClassName('favorited');
 			}.bind(this));
 		}
 		else {
 			Twitter.action('unfavorite', this.tweet.id_str, function(response){
 				this.tweet.favorited = false;
-				this.controller.get('favorite-' + this.id).removeClassName('favorited');
+				this.controller.get('favorite-' + this.toasterId).removeClassName('favorited');
 			}.bind(this));
 		}
 	},
@@ -229,8 +239,15 @@ var TweetToaster = Class.create(Toaster, {
 	showOpts: function() {
 		this.controller.popupSubmenu({
 			onChoose: this.popupHandler.bind(this),
-			placeNear: this.controller.get('opts-' + this.id),
+			placeNear: this.controller.get('opts-' + this.toasterId),
 			items: this.menuItems
+		});
+	},
+	showOptsUrl: function(url) {
+		this.controller.popupSubmenu({
+			onChoose: this.popupHandler.bind(this),
+			placeNear: this.controller.get('opts-' + this.toasterId),
+			items: this.linkMenuItems
 		});
 	},
 	popupHandler: function(command) {
@@ -268,6 +285,28 @@ var TweetToaster = Class.create(Toaster, {
 			case 'cmdSms':
 				this.sms();
 				break;
+			case 'cmdCopyLinkUrl':
+				this.copyLinkUrl();
+				break;
+			case 'cmdAddLinkPaperMache':
+				this.addLinkToPaperMache();
+				break;
+			case 'cmdAddLinkReadOnTouchPro':
+				this.addLinkReadOnTouchPro();
+				break;
+			case 'cmdEmailLink':
+				this.emailLink();
+				break;
+			case 'cmdSmsLink':
+				this.smsLink();
+				break;
+			case 'cmdOpenStockBrowser':
+				this.openStockBrowser();
+				break;
+			case 'cmdOpenInAppBrowser':
+				this.openInAppBrowser();
+				break;
+
 		}
 	},
 	mention: function() {
@@ -327,7 +366,7 @@ var TweetToaster = Class.create(Toaster, {
     method:      'add',
     parameters:  {
         id: 'net.ryanwatkins.app.papermache',
-        params: { url: "https://twitter.com/#!" + this.tweet.user.screen_name + "/" + "status/" + id}
+        params: { url: this.twitterLink}
     }
 });
 				banner('Added URL to Paper Mache');
@@ -340,18 +379,17 @@ var TweetToaster = Class.create(Toaster, {
 						method: 'open',
 						parameters: {
 							id: 'com.sven-ziegler.readontouch',
-			params: {action: 'addLink', url: "https://twitter.com/#!" + this.tweet.user.screen_name + "/" + "status/" + tweetid}
+			params: {action: 'addLink', url: this.twitterLink}
 						}});
 				banner('Added URL to ReadOnTouch PRO');
 	},
 	copyUrl: function() {
-		var Twitter = new TwitterAPI(this.user);
-		var id = this.tweet.id_str;
-		this.controller.stageController.setClipboard("https://twitter.com/#!" + this.tweet.user.screen_name + "/" + "status/" + id,true); 
+		this.controller.stageController.setClipboard(this.twitterLink,true); 
 				banner('Copied tweet URL to clipboard.');
 	},
 	//Sends the current tweet via email and adds the tag "Sent via Project Macaw for webOS"
 	email: function() {
+		var Twitter = new TwitterAPI(this.user);
 		this.controller.serviceRequest(
     "palm://com.palm.applicationManager", {
         method: 'open',
@@ -359,7 +397,7 @@ var TweetToaster = Class.create(Toaster, {
             id: "com.palm.app.email",
             params: {
                 summary: "I would like to share this tweet with you",
-                text: this.tweet.stripped + "<br>" + " -- Sent via Project Macaw for webOS"
+                text: "From" + " @" + this.tweet.user.screen_name + ": " + this.tweet.stripped + "<br>" + " -- Sent via Project Macaw for webOS"
             }
         }
     }
@@ -379,6 +417,69 @@ var TweetToaster = Class.create(Toaster, {
     onFailure: this.handleErrResponse
 });
 	},
+	//Copies the link in a tweet to the clipboard
+	copyLinkUrl: function() {
+		this.controller.stageController.setClipboard(this.url,true);
+				banner('Copied link URL to clipboard.');
+	},
+
+	addLinkToPaperMache: function(url) {
+		var request = new Mojo.Service.Request("palm://com.palm.applicationManager", {
+    method:      'add',
+    parameters:  {
+        id: 'net.ryanwatkins.app.papermache',
+        params: { url: url}
+    }
+});
+				banner('Added URL to Paper Mache');
+	},
+
+	addLinkReadOnTouchPro: function(url) {
+		var request = new Mojo.Service.Request("palm://com.palm.applicationManager", {
+						method: 'open',
+						parameters: {
+							id: 'com.sven-ziegler.readontouch',
+			params: {action: 'addLink', url: url}
+						}});
+				banner('Added URL to ReadOnTouch PRO');
+	},
+
+	emailLink: function(url) {
+		this.controller.serviceRequest(
+    "palm://com.palm.applicationManager", {
+        method: 'open',
+        parameters: {
+            id: "com.palm.app.email",
+            params: {
+                summary: "I would like to share this link with you",
+                text: url + "<br>" + " -- Sent via Project Macaw for webOS"
+            }
+        }
+    }
+);
+	},
+
+	smsLink: function(url) {
+		this.controller.serviceRequest('palm://com.palm.applicationManager', {
+    method: 'launch',
+    parameters: {
+        id: 'com.palm.app.messaging',
+        params: {
+            messageText: url
+        }
+    },
+    onSuccess: this.handleOKResponse,
+    onFailure: this.handleErrResponse
+});
+	},
+
+	openStockBrowser: function(url) {
+		global.openBrowser(url);
+	},
+
+	openInAppBrowser: function(url) {
+		this.controller.stageController.pushScene('webview', url);
+	},
 
 
 	detailsTapped: function(event) {
@@ -388,6 +489,7 @@ var TweetToaster = Class.create(Toaster, {
 		if (e.id === 'link') {
 			var url = e.innerText;
 			this.handleLink(url);
+			//this.copyLinkUrl(url);
 		}
 		else if (e.id === 'hashtag') {
 			var hashtag = e.innerText;
@@ -563,30 +665,50 @@ var TweetToaster = Class.create(Toaster, {
 			label: 'Hide',
 			command: 'cmdHide'
 		});
+		
+		this.linkMenuItems = [];
 
-		Mojo.Event.listen(this.controller.get('details-' + this.id), Mojo.Event.tap, this.detailsTapped.bind(this));
-		Mojo.Event.listen(this.controller.get('rt-' + this.id), Mojo.Event.tap, this.rtTapped.bind(this));
+		this.linkMenuItems.push({
+			label: 'Share',
+			items: [
+			{label: $L('Copy Link URL'), command:'cmdCopyLinkUrl'},
+			{label: $L('Add to Paper Mache'), command:'cmdAddLinkPaperMache'},
+			{label: $L('Add to ReadOnTouch PRO'), command:'cmdAddLinkReadOnTouchPro'},
+			{label: $L('Email Link'), command: 'cmdEmailLink'},
+			{label: $L('SMS Link'), command: 'cmdSmsLink'}
+		]});
+
+		this.linkMenuItems.push({
+			label: 'Open',
+			items: [
+			{label: $L('Open in Stock Browser'), command:'cmdOpenStockBrowser'},
+			{label: $L('Open in In-App Browser'), command:'cmdOpenInAppBrowser'}
+		]});
+
+
+		Mojo.Event.listen(this.controller.get('details-' + this.toasterId), Mojo.Event.tap, this.detailsTapped.bind(this));
+		Mojo.Event.listen(this.controller.get('rt-' + this.toasterId), Mojo.Event.tap, this.rtTapped.bind(this));
 		// Mojo.Event.listen(this.controller.get('preview'), Mojo.Event.tap, this.previewTapped.bind(this));
-		Mojo.Event.listen(this.controller.get('reply-' + this.id), Mojo.Event.tap, this.actionTapped.bind(this));
-		Mojo.Event.listen(this.controller.get('retweet-' + this.id), Mojo.Event.tap, this.actionTapped.bind(this));
-		Mojo.Event.listen(this.controller.get('favorite-' + this.id), Mojo.Event.tap, this.actionTapped.bind(this));
-		Mojo.Event.listen(this.controller.get('convo-' + this.id), Mojo.Event.tap, this.actionTapped.bind(this));
-		Mojo.Event.listen(this.controller.get('dm-' + this.id), Mojo.Event.tap, this.actionTapped.bind(this));
-		Mojo.Event.listen(this.controller.get('delete-' + this.id), Mojo.Event.tap, this.actionTapped.bind(this));
-		Mojo.Event.listen(this.controller.get('back-' + this.id), Mojo.Event.tap, this.actionTapped.bind(this));
-		Mojo.Event.listen(this.controller.get('opts-' + this.id), Mojo.Event.tap, this.actionTapped.bind(this));
+		Mojo.Event.listen(this.controller.get('reply-' + this.toasterId), Mojo.Event.tap, this.actionTapped.bind(this));
+		Mojo.Event.listen(this.controller.get('retweet-' + this.toasterId), Mojo.Event.tap, this.actionTapped.bind(this));
+		Mojo.Event.listen(this.controller.get('favorite-' + this.toasterId), Mojo.Event.tap, this.actionTapped.bind(this));
+		Mojo.Event.listen(this.controller.get('convo-' + this.toasterId), Mojo.Event.tap, this.actionTapped.bind(this));
+		Mojo.Event.listen(this.controller.get('dm-' + this.toasterId), Mojo.Event.tap, this.actionTapped.bind(this));
+		Mojo.Event.listen(this.controller.get('delete-' + this.toasterId), Mojo.Event.tap, this.actionTapped.bind(this));
+		Mojo.Event.listen(this.controller.get('back-' + this.toasterId), Mojo.Event.tap, this.actionTapped.bind(this));
+		Mojo.Event.listen(this.controller.get('opts-' + this.toasterId), Mojo.Event.tap, this.actionTapped.bind(this));
 	},
 	cleanup: function() {
-		Mojo.Event.stopListening(this.controller.get('details-' + this.id), Mojo.Event.tap, this.detailsTapped);
-		Mojo.Event.stopListening(this.controller.get('rt-' + this.id), Mojo.Event.tap, this.rtTapped);
+		Mojo.Event.stopListening(this.controller.get('details-' + this.toasterId), Mojo.Event.tap, this.detailsTapped);
+		Mojo.Event.stopListening(this.controller.get('rt-' + this.toasterId), Mojo.Event.tap, this.rtTapped);
 		// Mojo.Event.stopListening(this.controller.get('preview'), Mojo.Event.tap, this.previewTapped.bind(this));
-		Mojo.Event.stopListening(this.controller.get('reply-' + this.id), Mojo.Event.tap, this.actionTapped);
-		Mojo.Event.stopListening(this.controller.get('retweet-' + this.id), Mojo.Event.tap, this.actionTapped);
-		Mojo.Event.stopListening(this.controller.get('favorite-' + this.id), Mojo.Event.tap, this.actionTapped);
-		Mojo.Event.stopListening(this.controller.get('convo-' + this.id), Mojo.Event.tap, this.actionTapped);
-		Mojo.Event.stopListening(this.controller.get('dm-' + this.id), Mojo.Event.tap, this.actionTapped);
-		Mojo.Event.stopListening(this.controller.get('delete-' + this.id), Mojo.Event.tap, this.actionTapped);
-		Mojo.Event.stopListening(this.controller.get('back-' + this.id), Mojo.Event.tap, this.actionTapped);
-		Mojo.Event.stopListening(this.controller.get('opts-' + this.id), Mojo.Event.tap, this.actionTapped);
+		Mojo.Event.stopListening(this.controller.get('reply-' + this.toasterId), Mojo.Event.tap, this.actionTapped);
+		Mojo.Event.stopListening(this.controller.get('retweet-' + this.toasterId), Mojo.Event.tap, this.actionTapped);
+		Mojo.Event.stopListening(this.controller.get('favorite-' + this.toasterId), Mojo.Event.tap, this.actionTapped);
+		Mojo.Event.stopListening(this.controller.get('convo-' + this.toasterId), Mojo.Event.tap, this.actionTapped);
+		Mojo.Event.stopListening(this.controller.get('dm-' + this.toasterId), Mojo.Event.tap, this.actionTapped);
+		Mojo.Event.stopListening(this.controller.get('delete-' + this.toasterId), Mojo.Event.tap, this.actionTapped);
+		Mojo.Event.stopListening(this.controller.get('back-' + this.toasterId), Mojo.Event.tap, this.actionTapped);
+		Mojo.Event.stopListening(this.controller.get('opts-' + this.toasterId), Mojo.Event.tap, this.actionTapped);
 	}
 });

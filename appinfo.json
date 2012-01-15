@@ -13,5 +13,12 @@
 	"copyright": "Copyright 2011 David Strack",
 	"dockMode": true,
 	"noWindow": true,
+	"universalSearch" : {
+      "action" :  { 
+          "displayName" : "Project Macaw",
+          "url"         : "net.minego.phnx",
+          "launchParam" : {"action":"prepPost", "msg":"#{searchTerms}"}
+      }
+    },  
 	"uiRevision": 2
 }
