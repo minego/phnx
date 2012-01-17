@@ -23,10 +23,11 @@ RilLoginAssistant.prototype.setup = function() {
 			hintText: $L("ReadItLater Username"),
 			multiline: false,
 			enterSubmits: false,
-			autoFocus: true
+			autoFocus: false,
+            textCase: Mojo.Widget.steModeLowerCase
 		},
 		this.RilUserValue =  {	
-			value: "",
+			value: this.rilUser,
 			disabled: false
 		}
 	);
@@ -36,10 +37,11 @@ RilLoginAssistant.prototype.setup = function() {
         hintText: $L("ReadItLater Password"),
         multiline: false,
         enterSubmits: false,
-        autoFocus: false
+        autoFocus: false,
+        textCase: Mojo.Widget.steModeLowerCase
     },
     this.RilPassValue = {
-        value: "",
+        value: this.rilPass,
         disabled: false
     }
 );
@@ -48,10 +50,11 @@ RilLoginAssistant.prototype.setup = function() {
         hintText: $L("InstaPaper Email"),
         multiline: false,
         enterSubmits: false,
-        autoFocus: false
+        autoFocus: false,
+        textCase: Mojo.Widget.steModeLowerCase
     },
     this.IpUserValue = {
-        value: "",
+        value: this.ippUser,
         disabled: false
     }
 );
@@ -60,10 +63,11 @@ RilLoginAssistant.prototype.setup = function() {
         hintText: $L("InstaPaper Password"),
         multiline: false,
         enterSubmits: false,
-        autoFocus: false
+        autoFocus: false,
+        textCase: Mojo.Widget.steModeLowerCase
     },
     this.IpPassValue = {
-        value: "",
+        value: this.ippPass,
         disabled: false
     }
 );
@@ -105,34 +109,29 @@ this.logIntoIp.bindAsEventListener(this));
 };    
 
 RilLoginAssistant.prototype.logIntoRil = function(event) {  
- this.controller.stageController.popScene();
-};
-
-RilLoginAssistant.prototype.logIntoIp = function() {
-  this.controller.stageController.popScene();
-};
-
-RilLoginAssistant.prototype.activate = function(event) {
-	this.controller.get('rilUserFieldId').mojo.setValue(this.rilUser);
-    this.controller.get('rilPassFieldId').mojo.setValue(this.rilPass);
-    this.controller.get('ippUserFieldId').mojo.setValue(this.ippUser);
-    this.controller.get('ippPassFieldId').mojo.setValue(this.ippPass)
-    //Mojo.Log.error(this.RilUserValue.value);
-};
-
-RilLoginAssistant.prototype.deactivate = function(event) {
-	this.rilUser = this.RilUserValue.value;
+    this.rilUser = this.RilUserValue.value;
     this.rilPass = this.RilPassValue.value;
-    this.ippUser = this.IpUserValue.value;
-    this.ippPass = this.IpPassValue.value;
     var cookie = new Mojo.Model.Cookie("RilUser");
     cookie.put(this.rilUser);
     var cookie = new Mojo.Model.Cookie("RilPass");
     cookie.put(this.rilPass);
+    banner("Set ReadItLater Username and Pass...");
+};
+
+RilLoginAssistant.prototype.logIntoIp = function() {
+    this.ippUser = this.IpUserValue.value;
+    this.ippPass = this.IpPassValue.value;
     var cookie = new Mojo.Model.Cookie("IppUser");
     cookie.put(this.ippUser);
     var cookie = new Mojo.Model.Cookie("IppPass");
     cookie.put(this.ippPass);
+    banner("Set InstaPaper Username and Pass...")
+};
+
+RilLoginAssistant.prototype.activate = function(event) {
+};
+
+RilLoginAssistant.prototype.deactivate = function(event) {
 };
 
 RilLoginAssistant.prototype.cleanup = function() {
@@ -148,4 +147,8 @@ RilLoginAssistant.prototype.cleanup = function() {
 	cookie.put(this.ippUser);
 	var cookie = new Mojo.Model.Cookie("IppPass");
 	cookie.put(this.ippPass);
+    Mojo.Log.error('RIL Username = ' + this.rilUser);
+    Mojo.Log.error('RIL Password = ' + this.rilPass);
+    Mojo.Log.error('InstaPaper Username = ' + this.ippUser);
+    Mojo.Log.error('InstaPaper Password = ' + this.ippPass)
 };
