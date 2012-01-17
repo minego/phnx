@@ -1,6 +1,13 @@
 all:
 	@palm-package --use-v1-format .
 
+patrick: 
+	@palm-package --use-v1-format .
+	@palm-install *.ipk
+	@rm *.ipk
+	@palm-launch net.minego.phnx
+	@palm-log -f net.minego.phnx
+
 install: all
 	@palm-install *.ipk
 
