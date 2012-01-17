@@ -137,10 +137,10 @@ MainAssistant.prototype = {
 			label: 'Logout @' + this.user.username,
 			command: 'cmdRemoveAccount'
 		});
-		accountMenuItems.push({
+		/*accountMenuItems.push({
 			label: 'Log into ReadItLater and InstaPaper',
 			command: 'cmdLoginRil'
-		});
+		});*/
 
 		var menuItems = [
 			Mojo.Menu.editItem,

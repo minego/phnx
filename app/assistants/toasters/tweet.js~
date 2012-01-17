@@ -21,7 +21,11 @@ var TweetToaster = Class.create(Toaster, {
 		var th = new TweetHelper();
 		var Twitter = new TwitterAPI(this.user);
 		this.twitterId = this.tweet.id_str;
-		this.twitterLink = "https://twitter.com/#!" + this.tweet.user.screen_name + "/" + "status/" + this.twitterId;
+		this.twitterLink = "https://twitter.com/#!" +
+		this.tweet.user.screen_name + "/" + "status/" + this.twitterId;
+		this.ipTwitterLink = "https://twitter.com/%23%21" +
+		this.tweet.user.screen_name + "$2F" + "status%2F" +
+this.twitterId;
 		//this.event = event.target;
 		//var username;
 		this.url = this.tweet.entities && this.tweet.entities.urls;
@@ -79,6 +83,22 @@ var TweetToaster = Class.create(Toaster, {
 			this.controller.get('details-' + this.toasterId).update(tweetHtml);
 			Mojo.Event.listen(this.controller.get('rt-' + this.toasterId), Mojo.Event.tap, this.rtTapped.bind(this));
 		}.bind(this));
+		var cookie = new Mojo.Model.Cookie("RilUser");
+	try {
+		this.rilUser = cookie.get();
+	} catch (e) {Mojo.Log.error("this.rilUser");}
+	var cookie = new Mojo.Model.Cookie("RilPass");
+	try {
+		this.rilPass = cookie.get();
+	} catch (e) {Mojo.Log.error("this.rilPass");}
+	var cookie = new Mojo.Model.Cookie("IppUser");
+	try {
+		this.ippUser = cookie.get();
+	} catch (e) {Mojo.Log.error("this.ippUser");}
+	var cookie = new Mojo.Model.Cookie("IppPass");
+	try {
+		this.ippPass = cookie.get();
+	} catch (e) {Mojo.Log.error("this.ippPass");}
 
 	},
 	actionTapped: function(event) {
@@ -276,11 +296,11 @@ var TweetToaster = Class.create(Toaster, {
 			case 'cmdDataJog':
 				this.dataJog();
 				break;
-			case 'cmdPaperMache':
-				this.addToPaperMache();
+			case 'cmdInstaPaper':
+				this.addToInstaPaper();
 				break;	
-			case 'cmdReadOnTouchPro':
-				this.addToReadOnTouchPro();
+			case 'cmdReadItLater':
+				this.addToReaditLater();
 				break;	
 			case 'cmdEmail':
 				this.email();
@@ -375,29 +395,48 @@ var TweetToaster = Class.create(Toaster, {
 });
 		banner('Sent URL to DataJog');
 	},
-	addToPaperMache: function() {
-		var Twitter = new TwitterAPI(this.user);
-		var id = this.tweet.id_str;
-		var request = new Mojo.Service.Request("palm://com.palm.applicationManager", {
-    method:      'add',
-    parameters:  {
-        id: 'net.ryanwatkins.app.papermache',
-        params: { url: this.twitterLink}
-    }
-});
-				banner('Added URL to Paper Mache');
+	addToInstaPaper: function() {
+		var url = "https://www.instapaper.com/api/add";
+		var params = 'url=' + encodeURIComponent(this.ipTwitterLink);
+			params += "&username=" +
+encodeURIComponent(this.ippUser) + "&password=" +
+encodeURIComponent(this.ippPass);
+			new Ajax.Request(url, {
+				method: 'post',
+				parameters: params,
+				onComplete: function() {
+					banner('Added Tweet URl to InstaPaper');
+				}.bind(this),
+				onFailure: function(transport) {
+				  if (transport.responseText == 403) {
+			banner('Incorrect Instapaper Username/Password');
+				  }
+				  else{
+     banner('The service encountered an error. Please try again later.');
+				}
+				}
+			})
 	},
-	addToReadOnTouchPro: function() {
-		var Twitter = new TwitterAPI(this.user);
-		var tweetid = this.tweet.id_str;
-		//var this.readontouchid = "com.sven-ziegler.readontouch";
-		var request = new Mojo.Service.Request("palm://com.palm.applicationManager", {
-						method: 'open',
-						parameters: {
-							id: 'com.sven-ziegler.readontouch',
-			params: {action: 'addLink', url: this.twitterLink}
-						}});
-				banner('Added URL to ReadOnTouch PRO');
+	addToReaditLater: function() {
+		var url = "https://readitlaterlist.com/v2/send";
+		var params = "new={";
+		params += '"0":{"url":"' + encodeURIComponent(this.twitterLink)
++ '"}';
+		params += "}";
+		params += "&username=" + encodeURIComponent(this.rilUser) +
+"&password=" + encodeURIComponent(this.rilPass) +
+"&apikey=fI1g8vdip517aY2d4eT21ejk9aA8X432";
+new Ajax.Request(url, {
+			method: 'post',
+			parameters: params,
+			onComplete: function(transport) {
+				banner('Added URL to ReadItLater');
+			}.bind(this),
+			onFailure: function(transport) {
+			  banner('Failed to add. Reason: ' +
+transport.responseText);
+			}
+		});
 	},
 	copyUrl: function() {
 		this.controller.stageController.setClipboard(this.twitterLink,true); 
@@ -666,8 +705,10 @@ var TweetToaster = Class.create(Toaster, {
 			{label: $L('Copy URL'), command:'cmdCopyUrl'},
 			{label: $L('Send URL via DataJog'),
 command:'cmdDataJog'},  
-			{label: $L('Add to Paper Mache'), command:'cmdPaperMache'},
-			{label: $L('Add to ReadOnTouch PRO'), command:'cmdReadOnTouchPro'},
+			{label: $L('Add to InstaPaper'),
+command:'cmdInstaPaper'},
+			{label: $L('Add to ReaditLater'),
+command:'cmdReadItLater'},
 			{label: $L('Email'), command: 'cmdEmail'},
 			{label: $L('SMS'), command: 'cmdSms'}
 		]});

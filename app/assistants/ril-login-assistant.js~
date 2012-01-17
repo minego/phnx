@@ -1,4 +1,5 @@
-function RilLoginAssistant() {
+function RilLoginAssistant(sceneAssistant) {
+	this.sceneAssistant = sceneAssistant;
 }
 
 RilLoginAssistant.prototype.setup = function() {
@@ -88,37 +89,12 @@ this.logIntoIp.bindAsEventListener(this));
 
 };    
 
-RilLoginAssistant.prototype.logIntoRil = function(event) {
-  /*this.rilUser = this.RilUserValue.value;
-  var rilPassword = this.RilPassValue.value;
-  var rilApi = 'a4dT4Vd0g7137p788fdD0G9e74pfg7d5';*/
- /*new Ajax.Request('https://readitlaterlist.com/v2/auth',
-  {
-    method:'post',
-    parameters: {username: rilUser, password: rilPassword, apikey: rilApi},
-    onSuccess: function(){
-      Mojo.Log.info('Login successful!')
-    }.bind(this),
-    onFailure: function(){ Mojo.Log.error('Something went wrong in the login')
-}.bind(this)
-  });*/
- Mojo.Log.info('Username is ' + this.RilUserValue.value)
+RilLoginAssistant.prototype.logIntoRil = function(event) {  
+ this.controller.stageController.popScene();
 };
 
 RilLoginAssistant.prototype.logIntoIp = function() {
-  var ipUser = this.IpUserValue.value;
-  var ipPassword = this.IpPassValue.value;
- new Ajax.Request('https://www.instapaper.com/api/authenticate',
-  {
-    method:'post',
-    parameters: {username: ipUser, password: ipPassword},
-    onSuccess: function(){
-      Mojo.Log.info('Login successful!')
-    }.bind(this),
-    onFailure: function(){ Mojo.Log.error('Something went wrong in the login')
-}.bind(this)
-  });
-  Mojo.Log.info('Username is ' + ipUser + ' and the password is ' + ipPassword)
+  this.controller.stageController.popScene();
 };
 
 RilLoginAssistant.prototype.activate = function(event) {
@@ -129,6 +105,17 @@ RilLoginAssistant.prototype.deactivate = function(event) {
 	
 };
 
-RilLoginAssistant.prototype.cleanup = function(event) {
-	
+RilLoginAssistant.prototype.cleanup = function() {
+	this.sceneAssistant.rilUser = this.RilUserValue.value;
+	this.sceneAssistant.rilPass = this.RilPassValue	.value;
+	this.sceneAssistant.ippUser = this.IpUserValue.value;
+	this.sceneAssistant.ippPass = this.IpPassValue.value;
+	var cookie = new Mojo.Model.Cookie("RilUser");
+	cookie.put(this.sceneAssistant.rilUser);
+	var cookie = new Mojo.Model.Cookie("RilPass");
+	cookie.put(this.sceneAssistant.rilPass);
+	var cookie = new Mojo.Model.Cookie("IppUser");
+	cookie.put(this.sceneAssistant.ippUser);
+	var cookie = new Mojo.Model.Cookie("IppPass");
+	cookie.put(this.sceneAssistant.ippPass);
 };
