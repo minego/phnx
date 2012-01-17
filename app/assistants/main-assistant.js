@@ -138,7 +138,7 @@ MainAssistant.prototype = {
 			command: 'cmdRemoveAccount'
 		});
 		accountMenuItems.push({
-			label: 'Log into ReadItLater and InstaPaper',
+			label: 'Login ReadItLater and InstaPaper',
 			command: 'cmdLoginRil'
 		});
 

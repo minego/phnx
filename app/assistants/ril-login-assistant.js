@@ -89,19 +89,22 @@ RilLoginAssistant.prototype.setup = function() {
              disabled: false
          }
      );
-    /*Mojo.Event.listen(this.controller.get("rilUserFieldId"),
-Mojo.Event.propertyChange,
-this.handleUpdateRilUser.bindAsEventListener(this));
-    Mojo.Event.listen(this.controller.get("rilPassFieldId"),
-Mojo.Event.propertyChange, this.handleUpdateRilPw.bindAsEventListener(this));
-    Mojo.Event.listen(this.controller.get("ippUserFieldId"),
-Mojo.Event.propertyChange, this.handleUpdateIpUser.bindAsEventListener(this));
-    Mojo.Event.listen(this.controller.get("ippPassFieldId"),
-Mojo.Event.propertyChange, this.handleUpdateIpPass.bindAsEventListener(this));*/
+     this.controller.setupWidget("back",
+         this.attributes = {
+            type: Mojo.Widget.defaultButton 
+             },
+         this.model = {
+             label : "Back",
+             disabled: false
+         }
+     );
+    
     Mojo.Event.listen(this.controller.get('loginRil'), Mojo.Event.tap,
 this.logIntoRil.bindAsEventListener(this));
     Mojo.Event.listen(this.controller.get('loginIp'), Mojo.Event.tap,
 this.logIntoIp.bindAsEventListener(this));
+Mojo.Event.listen(this.controller.get('back'), Mojo.Event.tap,
+this.backButton.bindAsEventListener(this));
 
 
 
@@ -128,6 +131,9 @@ RilLoginAssistant.prototype.logIntoIp = function() {
     banner("Set InstaPaper Username and Pass...")
 };
 
+RilLoginAssistant.prototype.backButton = function(event) {
+        this.controller.stageController.popScene();
+};
 RilLoginAssistant.prototype.activate = function(event) {
 };
 
@@ -147,8 +153,4 @@ RilLoginAssistant.prototype.cleanup = function() {
 	cookie.put(this.ippUser);
 	var cookie = new Mojo.Model.Cookie("IppPass");
 	cookie.put(this.ippPass);
-    Mojo.Log.error('RIL Username = ' + this.rilUser);
-    Mojo.Log.error('RIL Password = ' + this.rilPass);
-    Mojo.Log.error('InstaPaper Username = ' + this.ippUser);
-    Mojo.Log.error('InstaPaper Password = ' + this.ippPass)
 };
