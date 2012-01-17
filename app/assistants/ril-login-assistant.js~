@@ -60,18 +60,12 @@ this.loginIpModel = {
 );
     this.controller.setupWidget("loginRil", {}, this.loginRilModel);
     this.controller.setupWidget("loginIp", {}, this.loginIpModel);
-    Mojo.Event.listen(this.controller.get("rilUserFieldId"),
-Mojo.Event.propertyChange, this.handleUpdateRilUser.bindAsEventListener(this));
-    Mojo.Event.listen(this.controller.get("rilPassFieldId"),
-Mojo.Event.propertyChange, this.handleUpdateRilPw.bindAsEventListener(this));
-    Mojo.Event.listen(this.controller.get("ippUserFieldId"),
-Mojo.Event.propertyChange, this.handleUpdateIpUser.bindAsEventListener(this));
-    Mojo.Event.listen(this.controller.get("ippPassFieldId"),
-Mojo.Event.propertyChange, this.handleUpdateIpPass.bindAsEventListener(this));
-    Mojo.Event.listen(this.controller.get('loginRil'), Mojo.Event.tap,
-this.logIntoRil.bindAsEventListener(this));
-    Mojo.Event.listen(this.controller.get('loginIp'), Mojo.Event.tap,
-this.logIntoIp.bindAsEventListener(this));
+    Mojo.Event.listen(this.controller.get("rilUserFieldId"), Mojo.Event.propertyChange, this.handleUpdateRilUser/*.bindAsEventListener(this)*/);
+    Mojo.Event.listen(this.controller.get("rilPassFieldId"), Mojo.Event.propertyChange, this.handleUpdateRilPw/*.bindAsEventListener(this)*/);
+    Mojo.Event.listen(this.controller.get("ippUserFieldId"), Mojo.Event.propertyChange, this.handleUpdateIpUser/*.bindAsEventListener(this)*/);
+    Mojo.Event.listen(this.controller.get("ippPassFieldId"), Mojo.Event.propertyChange, this.handleUpdateIpPass/*.bindAsEventListener(this)*/);
+    Mojo.Event.listen(this.controller.get('loginRil'), Mojo.Event.tap, this.logIntoRil/*.bindAsEventListener(this)*/);
+    Mojo.Event.listen(this.controller.get('loginIp'), Mojo.Event.tap, this.logIntoIp/*.bindAsEventListener(this)*/);
 
 
 

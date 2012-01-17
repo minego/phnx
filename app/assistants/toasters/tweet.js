@@ -1,5 +1,5 @@
 var TweetToaster = Class.create(Toaster, {
-	initialize: function(tweet, assistant, user) {
+	initialize: function(tweet, assistant) {
 		this.toasterId = toasterIndex++;
 		this.nodeId = 'toaster-' + this.toasterId;
 		this.visible = false;
@@ -8,7 +8,6 @@ var TweetToaster = Class.create(Toaster, {
 		this.assistant = assistant;
 		this.controller = getController();
 		this.user = this.controller.stageController.user;
-		this.myUser = user;
 		this.tweet = tweet;
 		this.tweet.toasterId = this.toasterId;
 
@@ -21,7 +20,6 @@ var TweetToaster = Class.create(Toaster, {
 
 		var th = new TweetHelper();
 		var Twitter = new TwitterAPI(this.user);
-		this.twitterUsername = this.tweet.user.screen_name;
 		this.twitterId = this.tweet.id_str;
 		this.twitterLink = "https://twitter.com/#!" + this.tweet.user.screen_name + "/" + "status/" + this.twitterId;
 		//this.event = event.target;
@@ -254,12 +252,6 @@ var TweetToaster = Class.create(Toaster, {
 	},
 	popupHandler: function(command) {
 		switch (command) {
-			case 'cmdFollow':
-				this.follow();
-				break;
-			case 'cmdUnfollow':
-				this.unfollow();
-				break;
 			case 'cmdMention':
 				this.mention();
 				break;
@@ -316,33 +308,6 @@ var TweetToaster = Class.create(Toaster, {
 				break;
 
 		}
-	},
-	follow: function() {
-		var Twitter = new TwitterAPI(this.user);
-		Twitter.followUser(this.user.id_str, function(response){
-			banner('Now following @' + this.user.screen_name);
-			this.menuItems[0] = {label: 'Unfollow', command:
-		'cmdUnfollow'};
-		}.bind(this));
-	},
-	unfollow: function() {
-		var opts = {
-			title: 'Are you sure you want to unfollow @' +
-			this.user.screen_name + '?',
-			callback: function(){
-				var Twitter = new TwitterAPI(this.user);
-				Twitter.unfollowUser(this.user.id_str,
-		 function(response){
-					banner('Unfollowed @' +
-					this.user.screen_name);
-					this.menuItems[0] = {label: 'Follow',
-					command: 'cmdFollow'};
-					this.toasters.back();
-				}.bind(this));
-			}.bind(this)
-		};
-
-		this.toasters.add(new ConfirmToaster(opts, this));
 	},
 	mention: function() {
 		var opts = {
@@ -678,18 +643,6 @@ var TweetToaster = Class.create(Toaster, {
 			label: 'Send Direct Message',
 			command: 'cmdMessage'
 		});
-		/*if (this.myUser.following) {
-			this.menuItems.push({
-				label: 'Unfollow',
-				command: 'cmdUnfollow'
-			});
-		}
-		else {
-			this.menuItems.push({
-				label: 'Follow',
-				command: 'cmdFollow'
-			});
-		}*/
 		this.menuItems.push({
 			label: 'Share',
 			items: [
