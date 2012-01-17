@@ -23,6 +23,9 @@ var TweetToaster = Class.create(Toaster, {
 		this.twitterId = this.tweet.id_str;
 		this.twitterLink = "https://twitter.com/#!" +
 		this.tweet.user.screen_name + "/" + "status/" + this.twitterId;
+		this.twitterLinkIp = "https://twitter.com/" +
+		this.tweet.user.screen_name + "/" + "status/" + this.twitterId;
+		this.twitterIpStatusName = this.tweet.user.screen_name + "'s status";
 		//this.event = event.target;
 		//var username;
 		this.url = this.tweet.entities && this.tweet.entities.urls;
@@ -394,7 +397,7 @@ var TweetToaster = Class.create(Toaster, {
 	},
 	addToInstaPaper: function() {
 		var url = "https://www.instapaper.com/api/add";
-		var params = 'url=' + encodeURIComponent(this.twitterLink);
+		var params = 'url=' + encodeURIComponent(this.twitterLinkIp);
 			params += "&username=" +
 encodeURIComponent(this.ippUser) + "&password=" +
 encodeURIComponent(this.ippPass);
@@ -402,7 +405,7 @@ encodeURIComponent(this.ippPass);
 				method: 'post',
 				parameters: params,
 				onComplete: function() {
-					banner('Added Tweet URl to InstaPaper');
+					banner('Added Tweet URL to InstaPaper');
 				}.bind(this),
 				onFailure: function(transport) {
 				  if (transport.responseText == 403) {

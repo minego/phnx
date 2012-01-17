@@ -1,5 +1,20 @@
-function RilLoginAssistant(/*sceneAssistant*/) {
-	//this.sceneAssistant = sceneAssistant;
+function RilLoginAssistant() {
+	 var cookie = new Mojo.Model.Cookie("RilUser");
+    try {
+        this.rilUser = cookie.get();
+    } catch (e) {Mojo.Log.error("this.rilUser");}
+    var cookie = new Mojo.Model.Cookie("RilPass");
+    try {
+        this.rilPass = cookie.get();
+    } catch (e) {Mojo.Log.error("this.rilPass");}
+    var cookie = new Mojo.Model.Cookie("IppUser");
+    try {
+        this.ippUser = cookie.get();
+    } catch (e) {Mojo.Log.error("this.ippUser");}
+    var cookie = new Mojo.Model.Cookie("IppPass");
+    try {
+        this.ippPass = cookie.get();
+    } catch (e) {Mojo.Log.error("this.ippPass");}
 }
 
 RilLoginAssistant.prototype.setup = function() {
@@ -30,7 +45,7 @@ RilLoginAssistant.prototype.setup = function() {
 );
 	this.controller.setupWidget("ippUserFieldId",
 	this.attributes = {
-        hintText: $L("InstaPaper Username"),
+        hintText: $L("InstaPaper Email"),
         multiline: false,
         enterSubmits: false,
         autoFocus: false
@@ -98,16 +113,31 @@ RilLoginAssistant.prototype.logIntoIp = function() {
 };
 
 RilLoginAssistant.prototype.activate = function(event) {
-	
+	this.controller.get('rilUserFieldId').mojo.setValue(this.rilUser);
+    this.controller.get('rilPassFieldId').mojo.setValue(this.rilPass);
+    this.controller.get('ippUserFieldId').mojo.setValue(this.ippUser);
+    this.controller.get('ippPassFieldId').mojo.setValue(this.ippPass)
+    //Mojo.Log.error(this.RilUserValue.value);
 };
 
 RilLoginAssistant.prototype.deactivate = function(event) {
-	
+	this.rilUser = this.RilUserValue.value;
+    this.rilPass = this.RilPassValue.value;
+    this.ippUser = this.IpUserValue.value;
+    this.ippPass = this.IpPassValue.value;
+    var cookie = new Mojo.Model.Cookie("RilUser");
+    cookie.put(this.rilUser);
+    var cookie = new Mojo.Model.Cookie("RilPass");
+    cookie.put(this.rilPass);
+    var cookie = new Mojo.Model.Cookie("IppUser");
+    cookie.put(this.ippUser);
+    var cookie = new Mojo.Model.Cookie("IppPass");
+    cookie.put(this.ippPass);
 };
 
 RilLoginAssistant.prototype.cleanup = function() {
 	this.rilUser = this.RilUserValue.value;
-	this.rilPass = this.RilPassValue	.value;
+	this.rilPass = this.RilPassValue.value;
 	this.ippUser = this.IpUserValue.value;
 	this.ippPass = this.IpPassValue.value;
 	var cookie = new Mojo.Model.Cookie("RilUser");
