@@ -28,9 +28,8 @@ var TweetToaster = Class.create(Toaster, {
 		this.twitterIpStatusName = this.tweet.user.screen_name + "'s status";
 		//this.event = event.target;
 		//var username;
-		this.url = this.tweet.entities && this.tweet.entities.urls;
-		//if (e.id === 'link') {
-		//	var url = e.innerText
+		//if (event.id === 'link') {
+		//	var url = event.innerText
 		//}
 		// Process the tweet again for updates or whatever
 		// this.tweet = th.process(this.tweet);
@@ -263,15 +262,15 @@ var TweetToaster = Class.create(Toaster, {
 			items: this.menuItems
 		});
 	},
-	showOptsUrl: function(url) {
+	showOptsUrl: function() {
 		this.controller.popupSubmenu({
 			onChoose: this.popupHandler.bind(this),
 			placeNear: this.controller.get('opts-' + this.toasterId),
 			items: this.linkMenuItems
-		});
+			});
 	},
 	popupHandler: function(command) {
-		switch (command) {
+		switch (command/*,url*/) {
 			case 'cmdMention':
 				this.mention();
 				break;
@@ -312,7 +311,7 @@ var TweetToaster = Class.create(Toaster, {
 				this.copyLinkUrl();
 				break;
 			case 'cmdAddLinkPaperMache':
-				this.addLinkToPaperMache();
+				this.addLinkToInstaPaper(url);
 				break;
 			case 'cmdAddLinkReadOnTouchPro':
 				this.addLinkReadOnTouchPro();
@@ -473,20 +472,33 @@ transport.responseText);
 });
 	},
 	//Copies the link in a tweet to the clipboard
-	copyLinkUrl: function() {
-		this.controller.stageController.setClipboard(this.url,true);
+	copyLinkUrl: function(src, url) {
+		this.controller.stageController.setClipboard(src,true);
 				banner('Copied link URL to clipboard.');
+				Mojo.Log.error("URL is " + url + "And the SRC is " + src);
 	},
 
-	addLinkToPaperMache: function(url) {
-		var request = new Mojo.Service.Request("palm://com.palm.applicationManager", {
-    method:      'add',
-    parameters:  {
-        id: 'net.ryanwatkins.app.papermache',
-        params: { url: url}
-    }
-});
-				banner('Added URL to Paper Mache');
+	addLinkToInstaPaper: function(src, url) {
+		var url = "https://www.instapaper.com/api/add";
+		var params = 'url=' + encodeURIComponent(src);
+			params += "&username=" +
+encodeURIComponent(this.ippUser) + "&password=" +
+encodeURIComponent(this.ippPass);
+			new Ajax.Request(url, {
+				method: 'post',
+				parameters: params,
+				onComplete: function() {
+					banner('Added URL to InstaPaper');
+				}.bind(this),
+				onFailure: function(transport) {
+				  if (transport.responseText == 403) {
+			banner('Incorrect Instapaper Username/Password');
+				  }
+				  else{
+     banner('The service encountered an error. Please try again later.');
+				}
+				}
+			})
 	},
 
 	addLinkReadOnTouchPro: function(url) {
@@ -544,7 +556,7 @@ transport.responseText);
 		if (e.id === 'link') {
 			var url = e.innerText;
 			this.handleLink(url);
-			//this.copyLinkUrl(url);
+			this.showOptsUrl(url);
 		}
 		else if (e.id === 'hashtag') {
 			var hashtag = e.innerText;
@@ -573,7 +585,7 @@ transport.responseText);
 
 		}
 	},
-	handleLink: function(url) {
+	handleLink: function(url,command) {
 		//looks for images and other neat things in urls
 		var img;
 		if (url.indexOf('http://yfrog.com') > -1) {
@@ -616,6 +628,9 @@ transport.responseText);
 		}
 		else{
 			this.showWebview(url);
+			//this.showOptsUrl();
+			//this.copyLinkUrl(url);
+			//this.popupHandler(url);
 		}
 	},
 	showWebview: function(src, url) {
@@ -731,18 +746,20 @@ command:'cmdReadItLater'},
 			label: 'Share',
 			items: [
 			{label: $L('Copy Link URL'), command:'cmdCopyLinkUrl'},
-			{label: $L('Add to Paper Mache'), command:'cmdAddLinkPaperMache'},
+			{label: $L('Add to Paper Mache'), command:'cmdAddLinkInstaPaper'},
 			{label: $L('Add to ReadOnTouch PRO'), command:'cmdAddLinkReadOnTouchPro'},
 			{label: $L('Email Link'), command: 'cmdEmailLink'},
 			{label: $L('SMS Link'), command: 'cmdSmsLink'}
 		]});
 
 		this.linkMenuItems.push({
-			label: 'Open',
-			items: [
-			{label: $L('Open in Stock Browser'), command:'cmdOpenStockBrowser'},
-			{label: $L('Open in In-App Browser'), command:'cmdOpenInAppBrowser'}
-		]});
+			label: 'Open in Stock Browser',
+			command: 'cmdOpenStockBrowser'
+		});
+		this.linkMenuItems.push({
+			label: 'Open in In-App Browser',
+			command: 'cmdOpenInAppBrowser'
+		});
 
 
 		Mojo.Event.listen(this.controller.get('details-' + this.toasterId), Mojo.Event.tap, this.detailsTapped.bind(this));
