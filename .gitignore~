@@ -4,4 +4,4 @@
 *.ipk
 Packages
 Packages.gz
-
+.directory
