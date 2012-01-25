@@ -5,6 +5,17 @@ body{
 	margin: 0;
 	padding: 0;
 }
+body.small-device {  /* pixi/veer */
+}
+
+body.medium-device {  /* pre/pre+/pre2/pre3 */
+}
+
+body.large-device {  /* touchpad */
+}
+
+body.no-gesture {  /* touchpad/emulator */
+}
 
 /*#loading {
 	position: fixed;
@@ -58,15 +69,15 @@ body{
   from {
     background-position: -320px top;
   }
-  to { 
+  to {
 	background-position: 320px top;
   }
 }
 #loading.show {
 	opacity: .9;
 /*	-webkit-transition: all .2s;*/
-	-webkit-animation-name: progress; 
-	-webkit-animation-duration: 0.8s; 
+	-webkit-animation-name: progress;
+	-webkit-animation-duration: 0.8s;
 	-webkit-animation-iteration-count: infinite;
 	-webkit-animation-timing-function: linear;
 }
@@ -108,33 +119,48 @@ body{
 	background: url('../images/low/header-bar.png') left -25px repeat-x;
 	-webkit-palm-mouse-target: ignore;
 	position: fixed;
-	top: 0;
 	left: 0;
 	z-index: 100;
 }
+.layout-swapped #header {
+	bottom: 0px;
+	padding-top: 30px;
+	margin-bottom: -22px;
+	background: url('../images/low/nav-bar.png') left 5px repeat-x;
+}
+
+.layout-no-toolbar #header {
+	display: none;
+}
+
 .header-icon {
-	display: inline-block;
-	width: 64px;
+	width: 62px;
 	height: 39px;
 	margin-top: 1px;
 }
 .header-icon.left {
-	float: left;
+	position: fixed;
+	left: 0px;
 }
 .header-icon.right {
-	float: right;
+	position: fixed;
+	right: 0px;
+}
+.header-icon.right2 {
+	position: fixed;
+	right: 62px;
 }
 .header-title {
-	display: inline-block;
-	float: left;
+	background: url('../images/low/nav-icon-border.png') left bottom no-repeat, url('../images/low/nav-icon-border.png') right bottom no-repeat;
+	position: fixed;
+	left: 62px;
+	right: 62px;
 	color: #94989c;
 	font-size: 18px;
 	text-align: center;
 	padding-top: 8px;
-	width: 192px;
 	height: 32px;
 	font-family: "Prelude";
-	background: url('../images/low/nav-icon-border.png') left bottom no-repeat, url('../images/low/nav-icon-border.png') right bottom no-repeat;
 }
 .header-title.active {
 	background: url(../images/trans70.png);
@@ -144,7 +170,14 @@ body{
 	display: inline-block;
 	width: 320px;
 	min-height: 350px; /* this is to prevent other timelines from appearing on app launch */
+	background: url('../images/low/nav-icon-border.png') left bottom repeat-y;
 }
+
+.large-device .panel {
+	min-height: 1024px; /* this is to prevent other timelines from appearing on app launch */
+	width: 341px !important;
+}
+
 .tweets-list {
 	padding-bottom: 60px;
 }
@@ -158,19 +191,45 @@ body{
 #new-card{
 	background: url(../images/low/icons/new-card.png) no-repeat center center;
 }
+#back-button{
+	background: url(../images/low/icons/back.png) no-repeat center center;
+}
+
 #nav-bar {
-	height: 73px;
-	width: 100%;
 	display: block;
-	position: fixed;
-	bottom: 0px;
-	left: 0px;
-	background: url(../images/low/nav-bar.png) left bottom repeat-x;
 	padding: 0;
 	margin: 0;
 	-webkit-transition: bottom .2s;
 	z-index: 10;
 }
+
+#nav-bar-scroller {
+	position: fixed;
+	bottom: 0px;
+	left: 0px;
+	display: block;
+	width: 100%;
+	height: 73px;
+	padding: 0;
+	margin: 0;
+	background: url(../images/low/nav-bar.png) left bottom repeat-x;
+	overflow: scroll;
+}
+
+.layout-swapped #nav-bar-scroller {
+	top: 0px;
+	margin-top: -23px;
+	background: url(../images/low/header-bar.png) left 3px repeat-x;
+}
+
+.large-device #nav-bar-scroller {
+	width: 1700px;
+}
+
+.layout-no-nav #nav-bar-scroller {
+	display: none;
+}
+
 #footer {
 	text-align: center;
 	color: #94989c;
@@ -181,13 +240,18 @@ body{
 	width: 100%;
 	z-index: 50;
 }
+
+.layout-no-nav #footer {
+	display: none;
+}
+
 .nav-icon {
 	display: block;
 	width: 64px;
 	height: 51px;
 	padding: 0;
 	margin: 0;
-	background: url(../images/low/nav-icon-border.png) right 4px no-repeat;
+	background: url(../images/low/nav-icon-border.png) left 4px no-repeat;
 	float: left;
 	position: relative;
 	top: 22px;
@@ -196,25 +260,49 @@ body{
 	background: transparent;
 }
 
+.large-device .nav-icon {
+	/* total width is 320 */
+	width: 281px;
+	padding-right: 20px;
+	padding-left: 40px;
+	margin-left: 0px;
+
+	float: left;
+}
+
+.nav-icon p {
+	display: none;
+	-webkit-palm-mouse-target: ignore;
+}
+
+.large-device .nav-icon p {
+	display: inline-block;
+	width: 256px;
+	font-family: "Prelude";
+	color: #94989c;
+	font-size: 18px;
+	margin-top: -2px;
+}
+
 #nav-home {
-	background: url('../images/low/icons/tweets.png') center center no-repeat, url('../images/low/nav-icon-border.png') right 4px no-repeat;
+	background: url('../images/low/icons/tweets.png') 24px center no-repeat;
 }
 #nav-mentions {
-	background: url('../images/low/icons/mentions.png') 22px center no-repeat, url('../images/low/nav-icon-border.png') right 4px no-repeat;
+	background: url('../images/low/icons/mentions.png') 22px center no-repeat, url('../images/low/nav-icon-border.png') left 2px no-repeat;
 }
 #nav-messages {
-	background: url('../images/low/icons/messages.png') 20px center no-repeat, url('../images/low/nav-icon-border.png') right 4px no-repeat;
+	background: url('../images/low/icons/messages.png') 20px center no-repeat, url('../images/low/nav-icon-border.png') left 2px no-repeat;
 }
 #nav-lists {
-	background: url('../images/low/icons/lists.png') 20px center no-repeat, url('../images/low/nav-icon-border.png') right 4px no-repeat;
+	background: url('../images/low/icons/lists.png') 20px center no-repeat, url('../images/low/nav-icon-border.png') left 2px no-repeat;
 }
 #nav-search {
-	background: url('../images/low/icons/search.png') 19px center no-repeat;
+	background: url('../images/low/icons/search.png') 19px center no-repeat, url('../images/low/nav-icon-border.png') left 2px no-repeat;
 }
 .beacon {
 	display: block;
 	position: relative;
-	top: 38px;
+	top: 37px;
 	left: -1px;
 	width: 100%;
 	height: 14px;
@@ -223,9 +311,20 @@ body{
 	-webkit-transition: opacity .3s;
 	-webkit-palm-mouse-target: ignore;
 }
+
+.layout-swapped .beacon {
+	top: 0px;
+	background: url('../images/low/new-content-down.png') center 0px no-repeat;
+}
+
+.layout-no-nav .beacon {
+	display: none;
+}
+
 .beacon.show {
 	opacity: 1;
 }
+
 #indicator {
 	position: relative;
 	top: 14px;
@@ -236,6 +335,17 @@ body{
 	width: 12px;
 	-webkit-transition: left .3s;
 }
+
+.layout-swapped #indicator {
+	position: fixed;
+	top: 44px;
+	background: url(../images/low/indicator-down.png) center center no-repeat;
+}
+
+.layout-no-nav #indicator {
+	display: none;
+}
+
 #indicator.first {
 	left: 26px;
 }
@@ -251,6 +361,11 @@ body{
 #indicator.fifth {
 	left: 281px;
 }
+
+.large-device #indicator {
+	display: none !important;
+}
+
 .search-wrapper {
 	padding: 0 10px;
 }
@@ -287,10 +402,14 @@ body{
 }
 .status-row, .user-row{
 	margin: 0px;
-	padding: 0 0 0px 0;
+	padding: 0px;
 	color: #d2d2d2;
 	clear: both;
 /*	background: url(../images/low/tweet-border.png) center bottom repeat-x;*/
+}
+.user-row {
+	display: inline-block;
+	width: 320px;
 }
 .status-row.last {
 	background: transparent;
@@ -311,6 +430,9 @@ body{
 	color: #bbb;
 	text-decoration: none;
 }
+.large-device .panel .status-row {
+	padding-left: 10px;
+}
 .tweet-username{
 	font-weight: bold;
 	display: inline-block;
@@ -320,10 +442,10 @@ body{
 	float: left;
 }
 .tweet-avatar{
+	display: inline-block;
 	height: 48px;
 	width: 48px;
-	background-size: 48px; 
-	display: inline-block;
+	background-size: 48px;
 	-webkit-border-radius: 4px;
 	margin: 5px 8px 0px 0px;
 	float: left;
@@ -333,6 +455,17 @@ body{
 	width: 40px;
 	background-size: 40px;
 }
+
+.tweet-avatar.retweet{
+	display: none;
+	width: 26px;
+	height: 26px;
+	background-size: 26px;
+}
+.tweet-avatar.retweet.show{
+	display: inline-block;
+}
+
 .tweet-footer{
 	font-size: 11px;
 	color: #bbb;
@@ -384,9 +517,14 @@ body{
 	margin-top: 0px;
 	width: 100%;
 }
+
 .tweet-text{
 	max-width: 236px;
 }
+.toaster .tweet-text{
+	max-width: none;
+}
+
 .tweet-text.user-tweet{
 	max-width: 280px;
 	padding: 0px 10px;
@@ -398,14 +536,14 @@ body{
   from {
     -webkit-transform: rotate(0deg);
   }
-  to { 
+  to {
     -webkit-transform: rotate(360deg);
   }
 }
-.spin { 
-  -webkit-animation-name: spin; 
-  -webkit-animation-duration: 1.0s; 
-  -webkit-animation-iteration-count: infinite; 
+.spin {
+  -webkit-animation-name: spin;
+  -webkit-animation-duration: 1.0s;
+  -webkit-animation-iteration-count: infinite;
   -webkit-animation-timing-function: linear;
 }
 
@@ -419,7 +557,7 @@ body{
 	padding: 12px 0px;
 }
 .load-more.selected{
-	
+
 }
 .no-tweets {
 	display: none;
@@ -462,6 +600,9 @@ span.link{
 	border-width: 9px;
 	-webkit-border-image: url(../images/low/search-box.png) 9 stretch;
 }
+.layout-none .panel-spacer {
+	display: none;
+}
 .search-list-item.first {
 /*	padding-top: 0px;*/
 	margin-top: -8px;
@@ -503,22 +644,31 @@ span.link{
 	color: #f8f9b5;
 }
 #shim, #account-shim{
-	width: 100%;
-	position: fixed;
-	top: 0;
-	left: 0;
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	right: 0px;
+	bottom: 0px;
+
 	z-index: 200;
 	display: block;
 	opacity: 0;
-	-webkit-transition-property: opacity;
+	-webkit-transition-property: all;
 	-webkit-transition-duration: .4s;
 }
 #account-shim {
+	top: 0;
+	left: 0;
+	bottom: 0;
+	right: 0;
+
 	z-index: 500 !important;
 	-webkit-transform: scale(4);
+	background: #000;
+	-webkit-palm-mouse-target: ignore;
 }
 #account-shim.show {
-	opacity: .8 !important;
+	opacity: .7 !important;
 	-webkit-transform: scale(1);
 /*	height: 480px;*/
 }
@@ -526,17 +676,15 @@ span.link{
 	opacity: 1;
 	height: 480px;
 }
-#loading.ignore, #shim.ignore, #account-shim.ignore, #nav-bar.ignore {
+#loading.ignore, #shim.ignore, #account-shim.ignore, #nav-bar.ignore #nav-bar-scroller.ignore {
 	-webkit-palm-mouse-target: ignore;
 }
 
 #account-shim.show .account-card {
 	display: block;
 	position: fixed;
-	top: 30%;
 	width: 100%;
 	-webkit-palm-mouse-target: ignore;
-	text-align: center;
 }
 #account-shim .account-card {
 	display: none;
@@ -552,12 +700,14 @@ span.link{
 	display: block;
 	height: 120px;
 	width: 120px;
+
+	position: relative;
+	left: 20px;
+	top: 20px;
+
 	-webkit-background-size: 120px;
-	background-position: center center;
 	background-repeat: none;
 	-webkit-border-radius: 10px;
-	margin: 10px auto;
-/*	border: 3px solid #fff;*/
 }
 .account-name {
 	font-size: 30px;
@@ -623,6 +773,12 @@ span.link{
 	position: relative;
 }
 
+.toaster-title .toaster-button.back {
+	position: relative;
+	float: right;
+	height: 24px;
+}
+
 .convo-scroller{
 	-webkit-transition-property: all;
 	-webkit-transition-duration: .3s;
@@ -675,44 +831,75 @@ span.link{
 	background: url(../images/low/profile-opts-tapped.png) center center no-repeat;
 }
 .profile-icon-wrapper {
-	padding: 8px 0px 5px 0px;
-	text-align: center;
+	padding: 8px 10px 5px 0px;
 	margin-top: 0px;
+	text-align: center;
+	height: 30px;
 }
+
+.large-device .profile-icon-wrapper {
+	width: 1700px;
+}
+.large-device .profile-icon-wrapper {
+	text-align: left;
+}
+
 .profile-icon {
 	display: inline-block;
 	height: 30px;
 	width: 30px;
 	opacity: .7;
-	padding-right: 20px;
 	-webkit-transition: all .2s;
+	overflow: hidden;
+	padding-right: 20px;
 }
+
+.large-device .profile-icon {
+	/* total width is 320 */
+	width: 252px;
+	padding-right: 20px;
+	padding-left: 28px;
+	margin-left: 20px;
+
+	float: left;
+}
+.profile-icon p {
+	display: none;
+}
+.large-device .profile-icon p {
+	display: inline;
+	font-family: "Prelude";
+	color: #94989c;
+	font-size: 18px;
+	padding-top: 14px;
+}
+
 .profile-icon.selected {
 	opacity: 1;
 }
 .profile-icon.history {
-	background: url(../images/low/icons/profile-history.png) center center no-repeat;
+	background: url(../images/low/icons/profile-history.png) left center no-repeat;
 }
 .profile-icon.history.active {
-	background: url(../images/low/icons/profile-history-tapped.png) center center no-repeat;
+	background: url(../images/low/icons/profile-history-tapped.png) left center no-repeat;
 }
 .profile-icon.mentions {
-	background: url(../images/low/icons/profile-mentions.png) center center no-repeat;
+	background: url(../images/low/icons/profile-mentions.png) center left no-repeat;
 }
 .profile-icon.mentions.active {
-	background: url(../images/low/icons/profile-mentions-tapped.png) center center no-repeat;
+	background: url(../images/low/icons/profile-mentions-tapped.png) left center no-repeat;
 }
 .profile-icon.favorites {
-	background: url(../images/low/icons/profile-favorite.png) center center no-repeat;
+	background: url(../images/low/icons/profile-favorite.png) center left no-repeat;
 }
 .profile-icon.favorites.active {
-	background: url(../images/low/icons/profile-favorite-tapped.png) center center no-repeat;
+	background: url(../images/low/icons/profile-favorite-tapped.png) left center no-repeat;
 }
 .profile-icon.info {
-	background: url(../images/low/icons/profile-info.png) center center no-repeat;
+	background: url(../images/low/icons/profile-info.png) left center no-repeat;
 }
 .profile-icon.info.active {
-	background: url(../images/low/icons/profile-info-tapped.png) center center no-repeat;
+	background: url(../images/low/icons/profile-info-tapped.png) left center no-repeat;
 }
 #profile-menubar {
 	clear: both;
@@ -733,7 +920,7 @@ span.link{
 	font-weight: bold;
 	font-size: 15px;
 	background: url(../images/low/icons/verified.png) left center no-repeat;
-	padding-left: 18px;	
+	padding-left: 18px;
 }
 .profileScroller {
 	margin-top: 40px;
@@ -758,7 +945,7 @@ span.link{
 }
 .profileScrollerContainer{
 	display: block;
-	width: 1280px !important;
+	width: 1700px !important;
 }
 .profile-bio{
 	padding: 0px 15px;
@@ -789,6 +976,7 @@ span.link{
 	background: url('../images/low/toaster-bg.png') left top repeat-x;
 	opacity: .95;
 	color: #d2d2d2;
+	max-height: 1024px;
 }
 .toaster.show {
 	bottom: 0px;
@@ -862,7 +1050,16 @@ span.link{
 	background: url('../images/low/icons/search-button.png') center center no-repeat;
 	display: inline-block;
 }
-.toaster.mine .delete, .toaster.has-convo .convo, .toaster.normal .reply, .toaster.normal .retweet, .toaster.normal .favorite, .toaster.is-dm .dm {
+
+.toaster.mine .delete,
+.toaster.mine .reply,
+.toaster.has-convo .convo,
+.toaster.normal .reply,
+.toaster.normal .retweet,
+.toaster.normal .favorite,
+.toaster.is-dm .dm,
+.toaster.is-sent .delete
+{
 	display: inline-block;
 }
 .toaster.compose {
@@ -913,7 +1110,7 @@ span.link{
 	color: #4d5154;
 	font-weight: bold;
 /*	top: 124px;*/
-	bottom: 68px;
+	bottom: 70px;
 	font-size: 40px;
 /*	width: 100%;*/
 	font-family: "Prelude";
@@ -921,8 +1118,12 @@ span.link{
 .compose-opts {
 /*	background: url('../images/low/compose-opts-bg.png') left top repeat-x;*/
 	width: 100%;
-	height: 68px;
+	height: 70px;
 }
+.large-device .compose-opts {
+	height: 42px;
+}
+
 .compose-opts-wrapper {
 	text-align: center;
 }
@@ -980,6 +1181,32 @@ span.link{
 	-webkit-border-image: url(../images/low/buttons/negative-tapped.png) 6 stretch;
 }
 
+.compose-match {
+	display: inline-block;
+	color: #fff;
+	border-width: 9px;
+	-webkit-border-image: url(../images/low/buttons/positive.png) 6 stretch;
+	font-size: 14px;
+	padding: 0px;
+	margin: 5px;
+	margin-right: 0px;
+	font-weight: bold;
+	font-family: "Prelude";
+}
+.compose-match.selected {
+	-webkit-border-image: url(../images/low/buttons/positive-tapped.png) 6 stretch;
+}
+.compose-over {
+	display: inline-block;
+	color: #fff;
+	font-size: 14px;
+	padding: 0px;
+	margin: 5px;
+	margin-right: 0px;
+	font-weight: bold;
+	font-family: "Prelude";
+}
+
 .toaster.convo {
 	max-height: 80%;
 }
@@ -1022,10 +1249,8 @@ span.link{
 .button.signin.selected {
 	-webkit-border-image: url(../images/low/buttons/signin-tapped.png) 6 stretch;
 }
-.button-wrapper {
-	position: fixed;
+.myaccount-button-wrapper {
 	width: 100%;
-	bottom: 30px;
 	text-align: center;
 }
 .close-button-wrapper {
@@ -1042,6 +1267,16 @@ span.link{
 
 #close-button.selected {
 	background: url(../images/low/back-tapped.png) center center no-repeat;
+}
+
+.close-button-wrapper.photo {
+	position: fixed;
+	right: 5px;
+	top: 15px;
+}
+
+.close-button-wrapper.photo #close-button {
+	margin: 0px;
 }
 
 .dashboard-icon-phnx {
@@ -1076,12 +1311,16 @@ span.link{
 /* Prefs Stuff */
 .scene-title {
 	text-align: center;
-	padding: 15px 0px;
+	padding: 10px 0px;
 	color: #d2d2d2;
 	font-family: "Prelude";
 	font-size: 18px;
+	 width: 100%;
+	 background: url('../images/low/header-bg.png') left top repeat-x;
+	 position: fixed; 
 }
 .section-header {
+	padding: 10px 0px;
 	width: 100%;
 	background: url('../images/low/header-bg.png') left top repeat-x;
 }
@@ -1127,4 +1366,9 @@ span.link{
 	color: #d2d2d2;
 	text-align: center;
 	padding-bottom: 10px;
+}
+a:link {
+	color: #d2d2d2;
+	text-decoration:underline;
+	font-weight:900;
 }

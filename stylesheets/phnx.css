@@ -1311,10 +1311,13 @@ span.link{
 /* Prefs Stuff */
 .scene-title {
 	text-align: center;
-	padding: 15px 0px;
+	padding: 10px 0px;
 	color: #d2d2d2;
 	font-family: "Prelude";
 	font-size: 18px;
+	 width: 100%;
+	 background: url('../images/low/header-bg.png') left top repeat-x;
+	 position: fixed; 
 }
 .section-header {
 	width: 100%;
