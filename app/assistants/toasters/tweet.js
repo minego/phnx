@@ -262,15 +262,15 @@ var TweetToaster = Class.create(Toaster, {
 			items: this.menuItems
 		});
 	},
-	showOptsUrl: function() {
+	showOptsUrl: function(url) {
 		this.controller.popupSubmenu({
-			onChoose: this.popupHandler.bind(this),
+			onChoose: this.popupHandler.bind(this, url),
 			placeNear: this.controller.get('opts-' + this.toasterId),
 			items: this.linkMenuItems
 			});
 	},
-	popupHandler: function(command) {
-		switch (command/*,url*/) {
+	popupHandler: function(command,url) {
+		switch (command,url) {
 			case 'cmdMention':
 				this.mention();
 				break;
@@ -308,7 +308,7 @@ var TweetToaster = Class.create(Toaster, {
 				this.sms();
 				break;
 			case 'cmdCopyLinkUrl':
-				this.copyLinkUrl();
+				this.copyLinkUrl(url);
 				break;
 			case 'cmdAddLinkPaperMache':
 				this.addLinkToInstaPaper(url);

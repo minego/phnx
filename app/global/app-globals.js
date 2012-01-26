@@ -70,11 +70,10 @@ var global = {
 		var service = new Mojo.Service.Request("palm://com.palm.applicationManager", {
 			method: "open",
 			parameters: {
-				id: 'com.palm.app.browser',
-				params: {
-					target: src
-				}
-			}
+				"target": src
+			},
+			onSuccess : function (e){ Mojo.Log.info("Open success, results="+JSON.stringify(e)); },
+      		cdonFailure : function (e){ Mojo.Log.info("Open failure, results="+JSON.stringify(e)); }    
 		});
 		//this.stageController.pushScene('webview');
 	},
