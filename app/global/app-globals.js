@@ -73,7 +73,7 @@ var global = {
 				"target": src
 			},
 			onSuccess : function (e){ Mojo.Log.info("Open success, results="+JSON.stringify(e)); },
-      		cdonFailure : function (e){ Mojo.Log.info("Open failure, results="+JSON.stringify(e)); }    
+      		onFailure : function (e){ Mojo.Log.info("Open failure, results="+JSON.stringify(e)); }    
 		});
 		//this.stageController.pushScene('webview');
 	},
