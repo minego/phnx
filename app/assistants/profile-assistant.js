@@ -472,6 +472,23 @@ ProfileAssistant.prototype = {
 		};
 		this.toasters.add(new ComposeToaster(args, this));
 	},
+	hideTweet: function() {
+		for (var i=0; i < this.assistant.panels.length; i++) {
+			var panel = this.assistant.panels[i];
+
+			if (panel.type === 'timeline') {
+				for (var j=0; j < panel.model.items.length; j++) {
+					var item = panel.model.items[j];
+					if (item.id_str === this.tweet.id_str) {
+						panel.model.items.splice(j, 1);
+
+						this.controller.modelChanged(panel.model);
+						break;
+					}
+				}
+			}
+		}
+	},
 	block: function() {
 		var opts = {
 			title: 'Are you sure you want to block @' + this.user.screen_name + '?',
@@ -480,6 +497,8 @@ ProfileAssistant.prototype = {
 				Twitter.block(this.user.id_str, function(response){
 					banner('Blocked @' + this.user.screen_name);
 					this.toasters.back();
+
+					this.hideTweet();
 				}.bind(this));
 			}.bind(this)
 		};
@@ -494,6 +513,8 @@ ProfileAssistant.prototype = {
 				Twitter.report(this.user.id_str, function(response) {
 					banner('Reported @' + this.user.screen_name);
 					this.toasters.back();
+
+					this.hideTweet();
 				}.bind(this));
 			}.bind(this)
 		};

@@ -21,11 +21,12 @@ var TweetToaster = Class.create(Toaster, {
 		var th = new TweetHelper();
 		var Twitter = new TwitterAPI(this.user);
 		this.twitterId = this.tweet.id_str;
+		this.twitterUsername = this.tweet.user.screen_name;
 		this.twitterLink = "https://twitter.com/#!" +
-		this.tweet.user.screen_name + "/" + "status/" + this.twitterId;
+		this.twitterUsername + "/" + "status/" + this.twitterId;
 		this.twitterLinkIp = "https://twitter.com/" +
-		this.tweet.user.screen_name + "/" + "status/" + this.twitterId;
-		this.twitterIpStatusName = this.tweet.user.screen_name + "'s status";
+		this.twitterUsername + "/" + "status/" + this.twitterId;
+		this.twitterIpStatusName = this.twitterUsername + "'s status";
 		//this.event = event.target;
 		//var username;
 		//if (event.id === 'link') {
@@ -625,6 +626,14 @@ encodeURIComponent(this.ippPass);
 		}
 		else if (url.indexOf('http://phnx.ws/') > -1) {
 			this.showPreview(url + '/normal');
+		}
+		else if (url.indexOf('http://twitter.com/#!/' + this.twitterUsername + '/status/' + this.twitterId) > -1) {
+			this.assistant.toasters.add(new TweetToaster(url, this.assistant));
+			Mojo.Log.error("TweetToaster for http:// called")
+		}
+		else if (url.indexOf('https://twitter.com/#!/' + this.twitterUsername + '/status/' + this.twitterId) > -1) {
+			this.assistant.toasters.add(new TweetToaster(url, this.assistant));
+			Mojo.Log.error("TweetToaster for https:// called")
 		}
 		else{
 			this.showWebview(url);
