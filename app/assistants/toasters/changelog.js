@@ -1,5 +1,10 @@
 var ChangelogToaster = Class.create(Toaster, {
 	items: [
+		{ version: '1.2.20' },
+		{ item: 'ReadItLater and Instapaper support'},
+		{ item: 'Top bar in the preferences scene is now static'},
+		{ item: 'Call the app controller to handle links instead of sending them to the stock browser. This works for if you have a different default browser then the stock browser.'},
+
 		{ version: '1.2.18' },
 		{ item: 'Added help scene' },
 		{ item: 'Use HTTPS for all twitter access' },
