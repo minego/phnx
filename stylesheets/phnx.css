@@ -526,8 +526,8 @@ body.no-gesture {  /* touchpad/emulator */
 }
 
 .tweet-text{
-	max-width: 246px;
-	width: 246px;
+	max-width: 236px;
+	width: 236px;
 	clear: both;
 }
 .toaster .tweet-text{
