@@ -800,6 +800,11 @@ span.link{
 	clear: both;
 	display: block;
 }
+.medium-device #profile-header .close-button-wrapper,
+.small-device  #profile-header .close-button-wrapper {
+	display: none;
+}
+
 #profile-avatar {
 	display: block;
 	height: 60px;
