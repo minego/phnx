@@ -1,5 +1,8 @@
 var ChangelogToaster = Class.create(Toaster, {
 	items: [
+		{ version: '1.2.24' },
+		{ item: 'Display both the twitter screen name and display name in the timeline' },
+
 		{ version: '1.2.22' },
 		{ item: 'Added option to ask the user what to do when a link is clicked on. Option can be enabled in preferences, or by long pressing a URL when viewing a tweet.' },
 		{ item: 'Corrected behavior when clicking on "Tweets" when viewing a user profile' },
