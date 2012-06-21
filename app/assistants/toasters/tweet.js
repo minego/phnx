@@ -127,7 +127,7 @@ var TweetToaster = Class.create(Toaster, {
 				break;
 			case 'optsUrl':
 				this.showOptsUrl();
-				break;	
+				break;
 			case 'back':
 				this.assistant.toasters.back();
 				break;
@@ -263,12 +263,19 @@ var TweetToaster = Class.create(Toaster, {
 			items: this.menuItems
 		});
 	},
-	showOptsUrl: function() {
+	showOptsUrl: function(url) {
+		if (this.canShowPreview(url)) {
+			this.linkShowPreviewItem.disabled = false;
+		} else {
+			this.linkShowPreviewItem.disabled = true;
+		}
+
+		this.url = url;
 		this.controller.popupSubmenu({
-			onChoose: this.popupHandler.bind(this),
-			placeNear: this.controller.get('opts-' + this.toasterId),
-			items: this.linkMenuItems
-			});
+			onChoose:	this.popupHandler.bind(this),
+			placeNear:	this.controller.get('opts-' + this.toasterId),
+			items:		this.linkMenuItems
+		});
 	},
 	popupHandler: function(command) {
 		switch (command) {
@@ -298,10 +305,10 @@ var TweetToaster = Class.create(Toaster, {
 				break;
 			case 'cmdInstaPaper':
 				this.addToInstaPaper();
-				break;	
+				break;
 			case 'cmdReadItLater':
 				this.addToReaditLater();
-				break;	
+				break;
 			case 'cmdEmail':
 				this.email();
 				break;
@@ -309,27 +316,29 @@ var TweetToaster = Class.create(Toaster, {
 				this.sms();
 				break;
 			case 'cmdCopyLinkUrl':
-				this.copyLinkUrl();
+				this.copyLinkUrl(this.url);
 				break;
 			case 'cmdAddLinkPaperMache':
-				this.addLinkToInstaPaper();
+				this.addLinkToInstaPaper(this.url);
 				break;
 			case 'cmdAddLinkReadOnTouchPro':
-				this.addLinkReadOnTouchPro();
+				this.addLinkReadOnTouchPro(this.url);
 				break;
 			case 'cmdEmailLink':
-				this.emailLink();
+				this.emailLink(this.url);
 				break;
 			case 'cmdSmsLink':
-				this.smsLink();
+				this.smsLink(this.url);
+				break;
+			case 'cmdShowPreview':
+				this.handleLink(this.url);
 				break;
 			case 'cmdOpenStockBrowser':
-				this.openStockBrowser();
+				global.openBrowser(this.url);
 				break;
 			case 'cmdOpenInAppBrowser':
-				this.openInAppBrowser();
+				this.controller.stageController.pushScene('webview', this.url);
 				break;
-
 		}
 	},
 	mention: function() {
@@ -415,7 +424,7 @@ encodeURIComponent(this.ippPass);
      banner('The service encountered an error. Please try again later.');
 				}
 				}
-			})
+			});
 	},
 	addToReaditLater: function() {
 		var url = "https://readitlaterlist.com/v2/send";
@@ -472,94 +481,104 @@ transport.responseText);
     onFailure: this.handleErrResponse
 });
 	},
+
 	//Copies the link in a tweet to the clipboard
-	copyLinkUrl: function(src, url) {
-		this.controller.stageController.setClipboard(src,true);
-				banner('Copied link URL to clipboard.');
-				Mojo.Log.error("URL is " + url + "And the SRC is " + src);
+	copyLinkUrl: function(url) {
+		this.controller.stageController.setClipboard(url, true);
+		banner('Copied link URL to clipboard.');
 	},
 
-	addLinkToInstaPaper: function(src, url) {
-		var url = "https://www.instapaper.com/api/add";
-		var params = 'url=' + encodeURIComponent(src);
-			params += "&username=" +
-encodeURIComponent(this.ippUser) + "&password=" +
-encodeURIComponent(this.ippPass);
-			new Ajax.Request(url, {
-				method: 'post',
-				parameters: params,
-				onComplete: function() {
-					banner('Added URL to InstaPaper');
-				}.bind(this),
-				onFailure: function(transport) {
-				  if (transport.responseText == 403) {
-			banner('Incorrect Instapaper Username/Password');
-				  }
-				  else{
-     banner('The service encountered an error. Please try again later.');
+	addLinkToInstaPaper: function(url) {
+		var apiurl = "https://www.instapaper.com/api/add";
+		var params = 'url=' + encodeURIComponent(url);
+
+		params += "&username=" +
+			encodeURIComponent(this.ippUser) + "&password=" +
+			encodeURIComponent(this.ippPass);
+
+		new Ajax.Request(apiurl, {
+			method:		'post',
+			parameters:	params,
+			onComplete:	function() {
+				banner('Added URL to InstaPaper');
+			}.bind(this),
+
+			onFailure: function(transport) {
+				if (transport.responseText == 403) {
+					banner('Incorrect Instapaper Username/Password');
+				} else {
+					banner('The service encountered an error. Please try again later.');
 				}
-				}
-			})
+			}
+		});
 	},
 
 	addLinkReadOnTouchPro: function(url) {
 		var request = new Mojo.Service.Request("palm://com.palm.applicationManager", {
-						method: 'open',
-						parameters: {
-							id: 'com.sven-ziegler.readontouch',
-			params: {action: 'addLink', url: url}
-						}});
-				banner('Added URL to ReadOnTouch PRO');
+			method: 'open',
+			parameters: {
+				id: 'com.sven-ziegler.readontouch',
+				params: {action: 'addLink', url: url}
+		}});
+
+		banner('Added URL to ReadOnTouch PRO');
 	},
 
 	emailLink: function(url) {
 		this.controller.serviceRequest(
-    "palm://com.palm.applicationManager", {
-        method: 'open',
-        parameters: {
-            id: "com.palm.app.email",
-            params: {
-                summary: "I would like to share this link with you",
-                text: url + "<br>" + " -- Sent via Project Macaw for webOS"
-            }
-        }
-    }
-);
+			"palm://com.palm.applicationManager",
+			{
+				method: 'open',
+				parameters: {
+					id: "com.palm.app.email",
+					params: {
+						summary: "I would like to share this link with you",
+						text: url + "<br>" + " -- Sent via Project Macaw for webOS"
+					}
+				}
+			}
+		);
 	},
 
 	smsLink: function(url) {
 		this.controller.serviceRequest('palm://com.palm.applicationManager', {
-    method: 'launch',
-    parameters: {
-        id: 'com.palm.app.messaging',
-        params: {
-            messageText: url
-        }
-    },
-    onSuccess: this.handleOKResponse,
-    onFailure: this.handleErrResponse
-});
+			method: 'launch',
+			parameters: {
+				id: 'com.palm.app.messaging',
+				params: {
+					messageText: url
+				}
+			},
+			onSuccess: this.handleOKResponse,
+			onFailure: this.handleErrResponse
+		});
 	},
-
-	openStockBrowser: function(url) {
-		global.openBrowser(url);
-	},
-
-	openInAppBrowser: function(url) {
-		this.controller.stageController.pushScene('webview', url);
-	},
-
-
 	detailsTapped: function(event) {
+		Mojo.Log.info("detailsTapped");
+		this.detailsAction(event, false);
+	},
+	detailsHeld: function(event) {
+		Mojo.Log.info("detailsHeld");
+		this.detailsAction(event, true);
+
+		/* Prevent the tap event */
+		event.preventDefault();
+	},
+	detailsAction: function(event, held) {
 		var Twitter = new TwitterAPI(this.user);
 		var e = event.target;
 		var username;
+
 		if (e.id === 'link') {
 			var url = e.innerText;
-			this.handleLink(url);
-			this.showOptsUrl(url);
-		}
-		else if (e.id === 'hashtag') {
+			var prefs = new LocalStorage();
+
+			if (held || prefs.read('browserSelection') === 'ask') {
+				this.showOptsUrl(url);
+			} else {
+				this.handleLink(url);
+			}
+		} else if (e.id === 'hashtag') {
 			var hashtag = e.innerText;
 			Twitter.search(hashtag, function(response) {
 				var opts = {
@@ -570,87 +589,92 @@ encodeURIComponent(this.ippPass);
 				};
 				this.controller.stageController.pushScene('status', opts);
 			}.bind(this));
-		}
-		else if (e.id === 'user-avatar') {
+		} else if (e.id === 'user-avatar') {
 			// Have to load the user to get following details, etc, that aren't always returned with the tweet
 			username = this.tweet.user.screen_name;
 			Twitter.getUser(username, function(response) {
 				this.controller.stageController.pushScene({name:'profile', disableSceneScroller: true}, response.responseJSON);
 			}.bind(this));
-		}
-		else if (e.id === 'user') {
+		} else if (e.id === 'user') {
 			username = e.innerText.substr(1);
 			Twitter.getUser(username, function(response) {
 				this.controller.stageController.pushScene({name:'profile', disableSceneScroller: true}, response.responseJSON);
 			}.bind(this));
-
 		}
 	},
-	handleLink: function(url,command) {
+	handleLink: function(url) {
 		//looks for images and other neat things in urls
 		var img;
+
 		if (url.indexOf('http://yfrog.com') > -1) {
 			this.showPreview(url + ':iphone', url);
-		}
-		else if (url.indexOf('http://twitpic.com') > -1) {
+		} else if (url.indexOf('http://twitpic.com') > -1) {
 			img = url.substr(url.indexOf('/', 8) + 1);
 			this.showPreview('http://twitpic.com/show/large/' + img, url);
-		}
-		else if (url.indexOf('plixi') > -1 || url.indexOf('http://lockerz.com/s/') > -1) {
+		} else if (url.indexOf('plixi') > -1 || url.indexOf('http://lockerz.com/s/') > -1) {
 			this.showPreview('http://api.plixi.com/api/tpapi.svc/imagefromurl?size=large&url=' + url, url);
-		}
-		else if (url.indexOf('img.ly') > -1) {
+		} else if (url.indexOf('img.ly') > -1) {
 			img = 'http://img.ly/show/full/' + url.substr(url.indexOf('.ly/') + 4);
 			this.showPreview(img, url);
-		}
-		else if (url.indexOf('http://instagr.am/p/') > -1 || url.indexOf('http://instagram.com/p/') > -1) {
+		} else if (url.indexOf('http://instagr.am/p/') > -1 || url.indexOf('http://instagram.com/p/') > -1) {
 			this.showPreview(url + 'media/?size=l', url);
-		}
-		else if (url.indexOf('http://mlkshk.com/p/') > -1) {
+		} else if (url.indexOf('http://mlkshk.com/p/') > -1) {
 			img = url.replace('/p/', '/r/');
 			this.showPreview(img, url);
-		}
-		else if (url.indexOf('youtube.com/watch') > -1) {
-			this.openYouTube(url);
-		}
-		else if (url.indexOf('youtu.be') > 1) {
-			// YouTube app doesn't like the short URLs so let's convert it to a full URL
-			var video = 'http://youtube.com/watch?v=' + url.substr(url.indexOf('.be/') + 4);
-			this.openYouTube(video);
-		}
-		else if (url.indexOf('campl.us') > -1) {
+		} else if (url.indexOf('campl.us') > -1) {
 			this.showPreview('http://phnxapp.com/services/preview.php?u=' + url);
-		}
-		else if (url.indexOf('.jpg') > -1 || url.indexOf('.png') > -1 || url.indexOf('.gif') > -1 || url.indexOf('.jpeg') > -1) {
+		} else if (url.indexOf('.jpg') > -1 || url.indexOf('.png') > -1 || url.indexOf('.gif') > -1 || url.indexOf('.jpeg') > -1) {
 			this.showPreview(url);
-		}
-		else if (url.indexOf('http://phnx.ws/') > -1) {
+		} else if (url.indexOf('http://phnx.ws/') > -1) {
 			this.showPreview(url + '/normal');
-		}
-		else if (url.indexOf('http://twitter.com/#!/' + this.twitterUsername + '/status/' + this.twitterId) > -1) {
+		} else if (url.indexOf('youtube.com/watch') > -1) {
+			this.openYouTube(url);
+		} else if (url.indexOf('youtu.be') > 1) {
+			// YouTube app doesn't like the short URLs so let's convert it to a full URL
+			this.openYouTube('http://youtube.com/watch?v=' + url.substr(url.indexOf('.be/') + 4));
+		} else if (url.indexOf('http://twitter.com/#!/' + this.twitterUsername + '/status/' + this.twitterId) > -1) {
 			this.assistant.toasters.add(new TweetToaster(url, this.assistant));
-			Mojo.Log.error("TweetToaster for http:// called")
-		}
-		else if (url.indexOf('https://twitter.com/#!/' + this.twitterUsername + '/status/' + this.twitterId) > -1) {
+			Mojo.Log.error("TweetToaster for http:// called");
+		} else if (url.indexOf('https://twitter.com/#!/' + this.twitterUsername + '/status/' + this.twitterId) > -1) {
 			this.assistant.toasters.add(new TweetToaster(url, this.assistant));
-			Mojo.Log.error("TweetToaster for https:// called")
-		}
-		else{
+			Mojo.Log.error("TweetToaster for https:// called");
+		} else{
 			this.showWebview(url);
-			//this.showOptsUrl();
-			//this.copyLinkUrl(url);
-			//this.popupHandler(url);
+		}
+	},
+	canShowPreview: function(url) {
+		// Return true if we can show a preview for this url
+		if (url.indexOf('http://yfrog.com') > -1) {
+			return(true);
+		} else if (url.indexOf('http://twitpic.com') > -1) {
+			return(true);
+		} else if (url.indexOf('plixi') > -1 || url.indexOf('http://lockerz.com/s/') > -1) {
+			return(true);
+		} else if (url.indexOf('img.ly') > -1) {
+			return(true);
+		} else if (url.indexOf('http://instagr.am/p/') > -1 || url.indexOf('http://instagram.com/p/') > -1) {
+			return(true);
+		} else if (url.indexOf('http://mlkshk.com/p/') > -1) {
+			return(true);
+		} else if (url.indexOf('campl.us') > -1) {
+			return(true);
+		} else if (url.indexOf('.jpg') > -1 || url.indexOf('.png') > -1 || url.indexOf('.gif') > -1 || url.indexOf('.jpeg') > -1) {
+			return(true);
+		} else if (url.indexOf('http://phnx.ws/') > -1) {
+			return(true);
+		} else{
+			return(false);
 		}
 	},
 	showWebview: function(src, url) {
 		var prefs = new LocalStorage();
+
 		if (prefs.read('browserSelection') === 'inAppBrowser') {
 			this.controller.stageController.pushScene('webview', src);
-			Mojo.Log.info("Launching In App Browser")
-		}	
-		else {
+			Mojo.Log.info("Launching In App Browser");
+		} else {
 			global.openBrowser(src);
-			Mojo.Log.info("Launching Stock Browser")
+			Mojo.Log.info("Launching Stock Browser");
 		}
 		//this.controller.stageController.pushScene('webview', src);
 	},
@@ -712,66 +736,105 @@ encodeURIComponent(this.ippPass);
 		}.bind(this));
 	},
 	setup: function() {
-		this.menuItems = [];
+		this.menuItems = [
+			{
+				label:				$L('Public Mention'),
+				command:			'cmdMention'
+			},
+			{
+				label:				$L('Send Direct Message'),
+				command:			'cmdMessage'
+			},
+			{
+				label:				$L('Share'),
+				items: [
+					{
+						label:		$L('Copy Text'),
+						command:	'cmdCopy'
+					},
+					{
+						label:		$L('Copy URL'),
+						command:	'cmdCopyUrl'
+					},
+					{
+						label:		$L('Send URL via DataJog'),
+						command:	'cmdDataJog'
+					},
+					{
+						label:		$L('Add to InstaPaper'),
+						command:	'cmdInstaPaper'
+					},
+					{
+						label:		$L('Add to ReaditLater'),
+						command:	'cmdReadItLater'
+					},
+					{
+						label:		$L('Email'),
+						command:	 'cmdEmail'
+					},
+					{
+						label:		$L('SMS'),
+						command:	 'cmdSms'
+					}
+				]
+			},
+			{
+				label:				$L('Block'),
+				command:			'cmdBlock'
+			},
+			{
+				label:				$L('Report Spam'),
+				command:			'cmdSpam'
+			},
+			{
+				label:				$L('Hide'),
+				command:			'cmdHide'
+			}
+		];
 
-		this.menuItems.push({
-			label: 'Public Mention',
-			command: 'cmdMention'
-		});
-		this.menuItems.push({
-			label: 'Send Direct Message',
-			command: 'cmdMessage'
-		});
-		this.menuItems.push({
-			label: 'Share',
-			items: [
-			{label: $L('Copy Text'), command:'cmdCopy'},
-			{label: $L('Copy URL'), command:'cmdCopyUrl'},
-			{label: $L('Send URL via DataJog'),
-command:'cmdDataJog'},  
-			{label: $L('Add to InstaPaper'),
-command:'cmdInstaPaper'},
-			{label: $L('Add to ReaditLater'),
-command:'cmdReadItLater'},
-			{label: $L('Email'), command: 'cmdEmail'},
-			{label: $L('SMS'), command: 'cmdSms'}
-		]});
-		this.menuItems.push({
-			label: 'Block',
-			command: 'cmdBlock'
-		});
-		this.menuItems.push({
-			label: 'Report Spam',
-			command: 'cmdSpam'
-		});
-		this.menuItems.push({
-			label: 'Hide',
-			command: 'cmdHide'
-		});
-		
-		this.linkMenuItems = [];
-
-		this.linkMenuItems.push({
-			label: 'Share',
-			items: [
-			{label: $L('Copy Link URL'), command:'cmdCopyLinkUrl'},
-			{label: $L('Add to Paper Mache'), command:'cmdAddLinkInstaPaper'},
-			{label: $L('Add to ReadOnTouch PRO'), command:'cmdAddLinkReadOnTouchPro'},
-			{label: $L('Email Link'), command: 'cmdEmailLink'},
-			{label: $L('SMS Link'), command: 'cmdSmsLink'}
-		]});
-
-		this.linkMenuItems.push({
-			label: 'Open in Stock Browser',
-			command: 'cmdOpenStockBrowser'
-		});
-		this.linkMenuItems.push({
-			label: 'Open in In-App Browser',
-			command: 'cmdOpenInAppBrowser'
-		});
-
+		this.linkMenuItems = [
+			this.linkShowPreviewItem = {
+				label:				$L('Show Preview'),
+				command:			'cmdShowPreview',
+				disabled:			true
+			},
+			{
+				label:				$L('Open in System Browser'),
+				command:			'cmdOpenStockBrowser'
+			},
+			{
+				label:				$L('Open in In-App Browser'),
+				command:			'cmdOpenInAppBrowser'
+			},
+			{
+				label:				$L('Share'),
+				items: [
+					{
+						label:		$L('Copy Link URL'),
+						command:	'cmdCopyLinkUrl'
+					},
+					{
+						label:		$L('Add to Paper Mache'),
+						command:	'cmdAddLinkInstaPaper'
+					},
+					{
+						label:		$L('Add to ReadOnTouch PRO'),
+						command:	'cmdAddLinkReadOnTouchPro'
+					},
+					{
+						label:		$L('Email Link'),
+						command:	'cmdEmailLink'
+					},
+					{
+						label:		$L('SMS Link'),
+						command:	'cmdSmsLink'
+					}
+				]
+			}
+		];
 
 		Mojo.Event.listen(this.controller.get('details-' + this.toasterId), Mojo.Event.tap, this.detailsTapped.bind(this));
+		Mojo.Event.listen(this.controller.get('details-' + this.toasterId), Mojo.Event.hold, this.detailsHeld.bind(this));
 		Mojo.Event.listen(this.controller.get('rt-' + this.toasterId), Mojo.Event.tap, this.rtTapped.bind(this));
 		// Mojo.Event.listen(this.controller.get('preview'), Mojo.Event.tap, this.previewTapped.bind(this));
 		Mojo.Event.listen(this.controller.get('reply-' + this.toasterId), Mojo.Event.tap, this.actionTapped.bind(this));
@@ -785,6 +848,7 @@ command:'cmdReadItLater'},
 	},
 	cleanup: function() {
 		Mojo.Event.stopListening(this.controller.get('details-' + this.toasterId), Mojo.Event.tap, this.detailsTapped);
+		Mojo.Event.stopListening(this.controller.get('details-' + this.toasterId), Mojo.Event.hold, this.detailsHeld);
 		Mojo.Event.stopListening(this.controller.get('rt-' + this.toasterId), Mojo.Event.tap, this.rtTapped);
 		// Mojo.Event.stopListening(this.controller.get('preview'), Mojo.Event.tap, this.previewTapped.bind(this));
 		Mojo.Event.stopListening(this.controller.get('reply-' + this.toasterId), Mojo.Event.tap, this.actionTapped);
@@ -797,3 +861,4 @@ command:'cmdReadItLater'},
 		Mojo.Event.stopListening(this.controller.get('opts-' + this.toasterId), Mojo.Event.tap, this.actionTapped);
 	}
 });
+

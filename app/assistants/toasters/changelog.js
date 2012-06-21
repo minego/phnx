@@ -1,5 +1,9 @@
 var ChangelogToaster = Class.create(Toaster, {
 	items: [
+		{ version: '1.2.22' },
+		{ item: 'Added option to ask the user what to do when a link is clicked on. Option can be enabled in preferences, or by long pressing a URL when viewing a tweet.' },
+		{ item: 'Corrected behavior when clicking on "Tweets" when viewing a user profile' },
+
 		{ version: '1.2.20' },
 		{ item: 'ReadItLater and Instapaper support'},
 		{ item: 'Top bar in the preferences scene is now static'},
@@ -30,7 +34,6 @@ var ChangelogToaster = Class.create(Toaster, {
 		{ item:	'Hide a tweet after blocking or reporting spam' },
 		{ item:	'Display sent DMs' }
 	],
-
 
 	initialize: function(assistant) {
 		this.id = toasterIndex++;

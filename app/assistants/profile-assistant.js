@@ -15,8 +15,7 @@ ProfileAssistant.prototype = {
 				label: 'Unfollow',
 				command: 'cmdUnfollow'
 			});
-		}
-		else {
+		} else {
 			this.menuItems.push({
 				label: 'Follow',
 				command: 'cmdFollow'
@@ -364,14 +363,14 @@ ProfileAssistant.prototype = {
 	},
 	locationTapped: function(event) {
 		this.controller.serviceRequest("palm://com.palm.applicationManager", {
-    method:"launch",
-    parameters: {
-        id: "com.palm.app.maps",
-        params: {
-            query: this.user.location
-        }
-    }
-});
+			method:"launch",
+			parameters: {
+				id: "com.palm.app.maps",
+				params: {
+					query: this.user.location
+				}
+			}
+		});
 	},
 	urlTapped: function(event) {
 		//global.openBrowser(this.user.url);
@@ -380,15 +379,14 @@ ProfileAssistant.prototype = {
 		var prefs = new LocalStorage();
 		if (prefs.read('browserSelection') === 'inAppBrowser') {
 			this.controller.stageController.pushScene('webview', this.user.url);
-			Mojo.Log.info("Launching In App Browser")
-		}	
-		else {
+			Mojo.Log.info("Launching In App Browser");
+		} else {
 			global.openBrowser(this.user.url);
-			Mojo.Log.info("Launching Stock Browser")
+			Mojo.Log.info("Launching Stock Browser");
 		}
 	},
 	tweetsTapped: function(event) {
-		this.scrollTo(0);
+		this.scrollTo(1);
 	},
 	tweetTapped: function(event) {
 		var tweet = event.item;

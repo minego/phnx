@@ -1,24 +1,25 @@
 {
-	"id": "net.minego.phnx",
-	"version": "1.2.20",
-	"vendor": "Project Macaw",
-	"type": "web",
-	"main": "index.html",
-	"title": "Project Macaw",
-	"icon": "macaw.png",
-	"miniicon":"icon24.png",
-	"splashicon": "icon256.png",
-	"splashBackground":"splash-bg.png",
-	"keywords": ["twitter","tweet"],
-	"copyright": "Copyright 2011 David Strack",
-	"dockMode": true,
-	"noWindow": true,
-	"universalSearch" : {
-      "action" :  { 
-          "displayName" : "Project Macaw",
-          "url"         : "net.minego.phnx",
-          "launchParam" : {"action":"prepPost", "msg":"#{searchTerms}"}
-      }
-    },  
-	"uiRevision": 2
+	"title":				"Project Macaw",
+	"vendor":				"Project Macaw",
+	"id":					"net.minego.phnx",
+	"version":				"1.2.22",
+	"type":					"web",
+	"main":					"index.html",
+	"icon":					"macaw.png",
+	"miniicon":				"icon24.png",
+	"splashicon":			"icon256.png",
+	"splashBackground":		"splash-bg.png",
+	"keywords":				[ "twitter", "tweet" ],
+	"copyright":			"Copyright 2011 David Strack",
+	"dockMode":				true,
+	"noWindow":				true,
+	"universalSearch": {
+		"action":  { 
+			"displayName":	"Project Macaw",
+			"url":			"net.minego.phnx",
+			"launchParam":	{ "action": "prepPost", "msg":"#{searchTerms}" }
+		}
+    },
+	"uiRevision":			2
 }
+

@@ -42,7 +42,8 @@ function PreferencesAssistant() {
 				]},
 				{key: 'browserSelection', type: 'select', label: 'Browser', items: [
 					{label: 'In-App Browser', value: 'inAppBrowser'},
-					{label: 'Stock Browser', value: 'stockBrowser'}
+					{label: 'Stock Browser', value: 'stockBrowser'},
+					{label: 'Ask', value: 'ask' }
 				]},
 				{key: 'fontSize', type: 'select', label: 'Font Size', items: [
 					{label: 'Tiny', value: 'tiny'},
