@@ -434,7 +434,6 @@ body.no-gesture {  /* touchpad/emulator */
 	padding-left: 10px;
 }
 .tweet-username {
-	font-weight: bold;
 	display: inline-block;
 	float: right;
 	color: #bbb;
