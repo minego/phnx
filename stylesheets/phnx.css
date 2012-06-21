@@ -437,6 +437,7 @@ body.no-gesture {  /* touchpad/emulator */
 	font-weight: bold;
 	display: inline-block;
 	float: right;
+	color: #bbb;
 }
 .tweet-screenname {
 	display: inline-block;

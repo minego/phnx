@@ -39,6 +39,7 @@ body.default {
 	color: #666;
 }
 .tweet-footer,
+.tweet-username,
 .tweet-screenname {
 	color: #666;
 }
