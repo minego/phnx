@@ -303,8 +303,8 @@ var TweetToaster = Class.create(Toaster, {
 			case 'cmdDataJog':
 				this.dataJog();
 				break;
-			case 'cmdInstaPaper':
-				this.addToInstaPaper();
+			case 'cmdInstapaper':
+				this.addToInstapaper();
 				break;
 			case 'cmdReadItLater':
 				this.addToReaditLater();
@@ -319,7 +319,7 @@ var TweetToaster = Class.create(Toaster, {
 				this.copyLinkUrl(this.url);
 				break;
 			case 'cmdAddLinkPaperMache':
-				this.addLinkToInstaPaper(this.url);
+				this.addLinkToInstapaper(this.url);
 				break;
 			case 'cmdAddLinkReadOnTouchPro':
 				this.addLinkReadOnTouchPro(this.url);
@@ -404,7 +404,7 @@ var TweetToaster = Class.create(Toaster, {
 });
 		banner('Sent URL to DataJog');
 	},
-	addToInstaPaper: function() {
+	addToInstapaper: function() {
 		var url = "https://www.instapaper.com/api/add";
 		var params = 'url=' + encodeURIComponent(this.twitterLinkIp);
 			params += "&username=" +
@@ -414,7 +414,7 @@ encodeURIComponent(this.ippPass);
 				method: 'post',
 				parameters: params,
 				onComplete: function() {
-					banner('Added Tweet URL to InstaPaper');
+					banner('Added Tweet URL to Instapaper');
 				}.bind(this),
 				onFailure: function(transport) {
 				  if (transport.responseText == 403) {
@@ -488,7 +488,7 @@ transport.responseText);
 		banner('Copied link URL to clipboard.');
 	},
 
-	addLinkToInstaPaper: function(url) {
+	addLinkToInstapaper: function(url) {
 		var apiurl = "https://www.instapaper.com/api/add";
 		var params = 'url=' + encodeURIComponent(url);
 
@@ -500,7 +500,7 @@ transport.responseText);
 			method:		'post',
 			parameters:	params,
 			onComplete:	function() {
-				banner('Added URL to InstaPaper');
+				banner('Added URL to Instapaper');
 			}.bind(this),
 
 			onFailure: function(transport) {
@@ -761,8 +761,8 @@ transport.responseText);
 						command:	'cmdDataJog'
 					},
 					{
-						label:		$L('Add to InstaPaper'),
-						command:	'cmdInstaPaper'
+						label:		$L('Add to Instapaper'),
+						command:	'cmdInstapaper'
 					},
 					{
 						label:		$L('Add to ReaditLater'),
@@ -815,7 +815,7 @@ transport.responseText);
 					},
 					{
 						label:		$L('Add to Paper Mache'),
-						command:	'cmdAddLinkInstaPaper'
+						command:	'cmdAddLinkInstapaper'
 					},
 					{
 						label:		$L('Add to ReadOnTouch PRO'),

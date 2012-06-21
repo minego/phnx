@@ -138,7 +138,7 @@ MainAssistant.prototype = {
 			command: 'cmdRemoveAccount'
 		});
 		accountMenuItems.push({
-			label: 'Login ReadItLater and InstaPaper',
+			label: 'Login ReadItLater and Instapaper',
 			command: 'cmdLoginRil'
 		});
 
@@ -193,8 +193,8 @@ MainAssistant.prototype = {
 					{
 						label: 'View Changelog',
 						command: 'cmdChangelog'
-					},
-					/*{
+					}
+					/*,{
 						label: 'Contact Support',
 						command: 'cmdSupport'
 					}*/
