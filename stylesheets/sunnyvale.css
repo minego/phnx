@@ -40,7 +40,8 @@ body.default {
 .status-row a{
 	color: #4d4d4d;
 }
-.tweet-footer{
+.tweet-footer,
+.tweet-screenname {
 	color: #4d4d4d;
 }
 .rt-button {

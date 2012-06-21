@@ -433,9 +433,16 @@ body.no-gesture {  /* touchpad/emulator */
 .large-device .panel .status-row {
 	padding-left: 10px;
 }
-.tweet-username{
+.tweet-username {
 	font-weight: bold;
 	display: inline-block;
+	float: right;
+}
+.tweet-screenname {
+	display: inline-block;
+	float: left;
+	font-weight: normal;
+	color: #bbb;
 }
 .content-wrapper {
 	display: inline-block;
@@ -519,7 +526,9 @@ body.no-gesture {  /* touchpad/emulator */
 }
 
 .tweet-text{
-	max-width: 236px;
+	max-width: 246px;
+	width: 246px;
+	clear: both;
 }
 .toaster .tweet-text{
 	max-width: none;

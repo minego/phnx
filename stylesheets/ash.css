@@ -42,7 +42,8 @@ body.default.large-device {
 .status-row a{
 	color: #bbb;
 }
-.tweet-footer{
+.tweet-footer,
+.tweet-screenname {
 	color: #bbb;
 }
 .rt-button {
