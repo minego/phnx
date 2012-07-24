@@ -2,7 +2,7 @@
 	"title":				"Project Macaw",
 	"vendor":				"Project Macaw",
 	"id":					"com.lestersoftware.phnx",
-	"version":				"1.2.27",
+	"version":				"1.2.28",
 	"type":					"web",
 	"main":					"index.html",
 	"icon":					"macaw.png",

@@ -17,7 +17,7 @@ function LocalStorage() {
 		enterToSubmit: false,
 		sendAnalytics: true,
 		delReceivedDM: false,
-		hideAvatar: false,
+		hideAvatar: true,
 		limitToLocale: false,
 		cardIcons: 'auto',
 		browserSelection: 'stockBrowser',

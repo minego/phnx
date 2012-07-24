@@ -20,6 +20,7 @@ var StatusListToaster = Class.create(Toaster, {
 		this.controller.setupWidget('status-scroller-' + this.id, {mode: 'vertical'},{});
 		var prefs = new LocalStorage();
 			if (prefs.read('hideAvatar')) {
+				//this.controller.get(this.nodeId).addClassName('hide-avatar'); // added by dc so that you can delete DM's not created by yourself
 				this.controller.setupWidget('status-list-' + this.id, {itemTemplate: "templates/tweets/item-no-avatar",listTemplate: "templates/list", renderLimit: 200}, this.listModel);
 			}
 			else{

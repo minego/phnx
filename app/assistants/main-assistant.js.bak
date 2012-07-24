@@ -93,19 +93,19 @@ MainAssistant.prototype = {
 		**/
 
 		this.panels = [
-			{index: 0, position: 1, id: "home", title: "home", type: "timeline", resource: "home", height: 0, refresh: true, update: true, state: {left: 0, top: 0}, model: {items:homeItems}},
+/*			{index: 0, position: 1, id: "home", title: "home", type: "timeline", resource: "home", height: 0, refresh: true, update: true, state: {left: 0, top: 0}, model: {items:homeItems}},
 			{index: 1, position: 2, id: "mentions", title: "mentions", type: "timeline", resource: "mentions", height: 0, refresh: true, update: true,	state: {left: -133, top: 0}, model: {items:mentionsItems}},
 			{index: 2, position: 3, id: "messages", title: "messages", type: "timeline", resource: "messages", height: 0, refresh: true, update: true,	state: {left: -339, top: 0}, model: {items:messagesItems}},
 			{index: 3, position: 4, id: "lists", title: "lists", type: "lists", height: 0, refresh: false, update: false},
 			{index: 4, position: 5, id: "search", title: "search", type: "search", height: 0, refresh: false, update: false}
+*/
 
-/*
 			{index: 0, position: 1, id: "home", title: "home", type: "timeline", resource: "home", height: 0, refresh: true, update: true, state: {left: 0, top: 0}, model: {items:homeItems}},
 			{index: 1, position: 2, id: "mentions", title: "mentions", type: "timeline", resource: "mentions", height: 0, refresh: true, update: true,	state: {left: -133, top: 0}, model: {items:mentionsItems}},
 			{index: 2, position: 3, id: "lists", title: "lists", type: "lists", height: 0, refresh: false, update: false},
 			{index: 3, position: 4, id: "search", title: "search", type: "search", height: 0, refresh: false, update: false},
 			{index: 4, position: 5, id: "messages", title: "messages", type: "timeline", resource: "messages", height: 0, refresh: true, update: true,	state: {left: -339, top: 0}, model: {items:messagesItems}}
-*/
+
 		];
 
 		this.timeline = 0; //index position of the timeline, default to first one

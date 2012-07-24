@@ -295,7 +295,7 @@ b
 
 		if(this.favStatusChanged) {
 			if (refresh) {
-				this.assistant.refresh();
+				this.assistant.refreshAll();
 			}
 			this.favStatusChanged = false;
 		}

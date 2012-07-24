@@ -1,0 +1,24 @@
+<div class="item-row #{-cssClass}">
+	<div id="tweet-#{-id_str}" x-mojo-tap-highlight='immediate' class="status-row">
+		<div class="palm-row-wrapper row-wrapper">
+	   	<!--div class="tweet-avatar show" style="background-image: url(#{-user.profile_image_url});"></div-->
+			<!--div class="direction-arrow" style="background-image: url(#{-direction_arrow_img});"></div-->
+
+     	<div class="content-wrapper-no-avatar">
+     	 	<div class='tweet-username'>#{-user.name}</div>
+	     	<!--div class="direction-arrow" style="background-image: url(#{-direction_arrow_img});"></div-->
+	     	<div class='tweet-blank'></div> <!-- Needed to prevent normal tweet-text appearing between user and screen name-->
+				<div class='tweet-screenname' >@#{-user.screen_name}</div>
+				<div class='tweet-text-no-avatar'>#{-text}</div>
+				<div class='tweet-footer-no-avatar'>
+					#{-time_str} #{-via} #{-source}
+ 
+					<!--div class="tweet-avatar #{-rt_class} retweet" style="background-image: url(#{-retweeter.profile_image_url});"></div-->
+					#{-footer}
+				</div>
+			</div>
+			<div style="clear:both"></div>
+		</div>
+	</div>
+	<div id="gap" class="new-indicator" x-mojo-tap-highlight="immediate">#{-dividerMessage}</div>
+</div>

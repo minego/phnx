@@ -15,6 +15,7 @@ Timeline.prototype = {
 	setup: function(){
 		var prefs = new LocalStorage();
 			if (prefs.read('hideAvatar')) {
+			//	this.controller.get(this.nodeId).addClassName('hide-avatar'); // added by dc so that you can delete DM's not created by yourself
 				this.controller.setupWidget('list-' + this.panel.id,{itemTemplate: "templates/tweets/item-no-avatar",listTemplate: "templates/list", renderLimit: 1000}, this.toJSON());
 			}
 			else{

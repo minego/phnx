@@ -88,7 +88,6 @@ DashboardAssistant.prototype = {
 			}.bind(this)});
 	},
 	listenDashboard: function() {
-		var prefs = new LocalStorage();
 		this.controller.listen(this.controller.get('dashboard-icon'), Mojo.Event.tap, this.iconTapped.bind(this));
 		if (prefs.read('notificationShieldMessages')) {
 			this.controller.listen(this.controller.get('dashboard-body'), Mojo.Event.tap, this.iconTapped.bind(this));

@@ -14,7 +14,6 @@
 				        	<div class="tweet-avatar" style="background-image: url(https://api.twitter.com/1/users/profile_image/phnxapp.json?size=bigger);"></div>
 				        </td>
 				        <td>
-				        	<!-- changed from "content-wrapper" to "content-wrapper-no-avatar" to align text properly-->
 				        	<div class="content-wrapper-no-avatar">
 					        	<div class='tweet-username'>phnxapp</div>
 								<div class='tweet-text success'>The official phnx Twitter account.</div>
@@ -30,8 +29,7 @@
 				        	<div class="tweet-avatar" style="background-image: url(https://api.twitter.com/1/users/profile_image/projectmacaw.json?size=bigger);"></div>
 				        </td>
 				        <td>
-				        	<!-- changed from "content-wrapper" to "content-wrapper-no-avatar" to align text properly-->
-				        	<div class="content-wrapper-no-avatar">
+				        	<div class="content-wrapper">
 					        	<div class='tweet-username'>Project Macaw</div>
 								<div class='tweet-text success'>The official Project Macaw Twitter account.</div>
 							</div>
@@ -46,8 +44,7 @@
 				        	<div class="tweet-avatar" style="background-image: url(https://api.twitter.com/1/users/profile_image/rmxdave.json?size=bigger);"></div>
 				        </td>
 				        <td>
-				        	<!-- changed from "content-wrapper" to "content-wrapper-no-avatar" to align text properly-->
-				        	<div class="content-wrapper-no-avatar">
+				        	<div class="content-wrapper">
 					        	<div class='tweet-username'>rmxdave</div>
 								<div class='tweet-text success'>The developer of phnx &amp; a pretty decent guy.</div>
 							</div>
@@ -62,8 +59,7 @@
 				        	<div class="tweet-avatar" style="background-image: url(https://api.twitter.com/1/users/profile_image/_minego.json?size=bigger);"></div>
 				        </td>
 				        <td>
-				        	<!-- changed from "content-wrapper" to "content-wrapper-no-avatar" to align text properly-->
-				        	<div class="content-wrapper-no-avatar">
+				        	<div class="content-wrapper">
 					        	<div class='tweet-username'>_minego</div>
 								<div class='tweet-text success'>Project Macaw Lead</div>
 							</div>
@@ -78,8 +74,7 @@
 				        	<div class="tweet-avatar" style="background-image: url(https://api.twitter.com/1/users/profile_image/awesomeapps_.json?size=bigger);"></div>
 				        </td>
 				        <td>
-				        	<!-- changed from "content-wrapper" to "content-wrapper-no-avatar" to align text properly-->
-				        	<div class="content-wrapper-no-avatar">
+				        	<div class="content-wrapper">
 					        	<div class='tweet-username'>awesomeapps_</div>
 								<div class='tweet-text success'>Project Macaw contributor</div>
 							</div>
@@ -94,8 +89,7 @@
 				        	<div class="tweet-avatar" style="background-image: url(https://api.twitter.com/1/users/profile_image/penduin.json?size=bigger);"></div>
 				        </td>
 				        <td>
-				        	<!-- changed from "content-wrapper" to "content-wrapper-no-avatar" to align text properly-->
-				        	<div class="content-wrapper-no-avatar">
+				        	<div class="content-wrapper">
 					        	<div class='tweet-username'>penduin</div>
 								<div class='tweet-text success'>Project Macaw contributor</div>
 							</div>

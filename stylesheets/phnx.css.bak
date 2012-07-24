@@ -514,9 +514,18 @@ body.no-gesture {  /* touchpad/emulator */
 .tweet-avatar.retweet.show{
 	display: inline-block;
 }
+
+.tweet-footer-no-avatar{
+	//Added by DC
+	font-size: 11px;
+	color: #bbb;
+	//max-width: 300px;
+}
+
 .tweet-footer{
 	font-size: 11px;
 	color: #bbb;
+	//max-width: 236px; //DC
 }
 .rt-wrapper {
 	margin-right: 8px;
@@ -606,6 +615,9 @@ body.no-gesture {  /* touchpad/emulator */
 	padding: 0px 10px;
 }
 .tweet-footer.user-tweet{
+	padding: 0px 10px;
+}
+.tweet-footer-no-avatar.user-tweet{
 	padding: 0px 10px;
 }
 

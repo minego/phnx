@@ -38,11 +38,10 @@
 			<div id="mentions-beacon" class="beacon"></div>
 		</div>
 
-		<!-- Add/Remove comment here, and add on nav-messages below for change of messages panel location-->
-		<div id="nav-messages" class="nav-icon">
+		<!--div id="nav-messages" class="nav-icon">
 			<p>Messages</p>
 			<div id="messages-beacon" class="beacon"></div>
-		</div>
+		</div-->
 
 		<div id="nav-lists" class="nav-icon">
 			<p>Lists</p>
@@ -54,11 +53,11 @@
 			<div id="search-beacon" class="beacon"></div>
 		</div>
 
-		<!-- Add/Remove comment here, and add on nav-messages above for change of messages panel location-->
-		<!--div id="nav-messages" class="nav-icon">
+		<!-- Remove comment here, and add on nav-messages above for change of messages panel location-->
+		<div id="nav-messages" class="nav-icon">
 			<p>Messages</p>
 			<div id="messages-beacon" class="beacon"></div>
-		</div-->
+		</div>
 
 
 	</div>

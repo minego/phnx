@@ -199,7 +199,7 @@ var global = {
 		else {
 			Element.addClassName(body, 'disableAvatar');
 		}
-		banner("Please re-start app to enable new pref");
+		banner("Please re-start app to enable new preference");
 	}, // added by DC
 
 };

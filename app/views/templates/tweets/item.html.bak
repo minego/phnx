@@ -4,6 +4,7 @@
 	   	<div class="tweet-avatar show" style="background-image: url(#{-user.profile_image_url});"></div>
 
      	<div class="content-wrapper">
+	   		<div class='hide-avatar'</div>
 	     	<div class='tweet-username'>#{-user.name}</div>
 				<div class='tweet-screenname'>@#{-user.screen_name}</div>
 				<div class='tweet-text'>#{-text}</div>
