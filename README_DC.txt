@@ -1,3 +1,7 @@
+--- Please note: I have NEVER coded ANYTHING in javescript, css OR HTML.  I've just worked my way around the code and learned from that.
+---  Thanks must go to all who have gone before me - the code is extremely well laid out and has helped me to learn.
+---  Sorry if I've screwed things up as I'm new to this.
+
 Modified tweet.js to allow deleting of other people's direct messages (line 62)
 Modified appinfo.json to keep version number 1.27 but change id to com.lestersoftware.phnx to avoid normal update conflicts
 Modified changelog.js for version number and description
@@ -12,3 +16,4 @@ Altering panel order:
 Modified phnx.css for enableAvatar and disableAvatar, app-globals.js and preferences-assistant.js. Displays banner when toggling hideAvatar option
 Added arrow_left.png and arrow_right.png for direct message sent/received, and modified phnx.css, main-assistant.js and item-no-avatar.html to use arrows for dm
 Added star to favorites on timelines - adjusted main-assistant.js and tweet.js.  Auto updates timeline if RefreshAfterPost is set in prefs
+Added search-no-avatar.html and modified profile-assistant.js for hideAvatar

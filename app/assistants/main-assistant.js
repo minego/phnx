@@ -1359,6 +1359,7 @@ MainAssistant.prototype = {
 				// keycodes for punctuation and symbols are not normal
 				// so only ascii chars are passed to the compose toaster for now...
 				var text = Mojo.Char.isValidWrittenChar(e.keyCode);
+				// Need to change index for timeline below if changing order of panels - DC
 				if (this.timeline !== 4 && this.controller.get('txtSearch').value.length === 0) {
 					this.toggleCompose({
 						'text': text

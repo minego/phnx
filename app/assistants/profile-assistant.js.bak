@@ -98,7 +98,6 @@ ProfileAssistant.prototype = {
 
 		var prefs = new LocalStorage();
 			if (prefs.read('hideAvatar')) {
-				//this.controller.get(this.nodeId).addClassName('hide-avatar'); // added by dc so that you can delete DM's not created by yourself
 				this.controller.setupWidget('list-history',{itemTemplate: "templates/tweets/item-no-avatar",listTemplate: "templates/list", renderLimit: this.renderLimit}, this.historyModel);
 				this.controller.setupWidget('list-favorites',{itemTemplate: "templates/tweets/item-no-avatar",listTemplate: "templates/list", renderLimit: this.renderLimit}, this.favoritesModel);
 			}
