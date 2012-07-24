@@ -17,3 +17,4 @@ Modified phnx.css for enableAvatar and disableAvatar, app-globals.js and prefere
 Added arrow_left.png and arrow_right.png for direct message sent/received, and modified phnx.css, main-assistant.js and item-no-avatar.html to use arrows for dm
 Added star to favorites on timelines - adjusted main-assistant.js and tweet.js.  Auto updates timeline if RefreshAfterPost is set in prefs
 Added search-no-avatar.html and modified profile-assistant.js for hideAvatar
+Added from_user_name on searches
