@@ -3,7 +3,7 @@ var ChangelogToaster = Class.create(Toaster, {
 		{ version: '1.2.27' },
 		{ item: 'Modified to allow deletion of received DMs and added preference option - DC' },
 		{ item: 'Modified to allow shielded notifications for received DMs and added preference option - DC' },
-		{ item: 'Modified to allow hiding of Avatars in timelines and added preference option. Need to restart to update - DC' },
+		{ item: 'Modified to allow hiding of Avatars in timelines, lists, searches and trends.  Also added preference option. Need to restart to update - DC' },
 		{ item: 'Modified display of usernames after auth on Welcome scene - DC' },
 		{ item: 'Modified display of usernames in DMs to show who sent/received - DC' },
 		{ item: 'Modified to display warning banner to restart when toggling hideAvatar preference - DC' },

@@ -18,3 +18,4 @@ Added arrow_left.png and arrow_right.png for direct message sent/received, and m
 Added star to favorites on timelines - adjusted main-assistant.js and tweet.js.  Auto updates timeline if RefreshAfterPost is set in prefs
 Added search-no-avatar.html and modified profile-assistant.js for hideAvatar
 Added from_user_name on searches
+Modified status-assistant.js to respect hideAvatar setting for lists, retweets, trends and searches.
