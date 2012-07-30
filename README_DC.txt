@@ -12,10 +12,11 @@ Modified local.js, preferences-assistant.js, phnx.css, main-assistant.js, app-gl
 Added item-no-avatar.html for hideAvatar
 Modified finishAuth-scene.html to use content-wrapper-no-avatar to align username properly
 Altering panel order:
-	Alter main-scene.html (1 place) and main-assistant.js (2 places)
+	Alter main-scene.html (1 place) and main-assistant.js (4 places)
 Modified phnx.css for enableAvatar and disableAvatar, app-globals.js and preferences-assistant.js. Displays banner when toggling hideAvatar option
 Added arrow_left.png and arrow_right.png for direct message sent/received, and modified phnx.css, main-assistant.js and item-no-avatar.html to use arrows for dm
 Added star to favorites on timelines - adjusted main-assistant.js and tweet.js.  Auto updates timeline if RefreshAfterPost is set in prefs
 Added search-no-avatar.html and modified profile-assistant.js for hideAvatar
 Added from_user_name on searches
 Modified status-assistant.js to respect hideAvatar setting for lists, retweets, trends and searches.
+Modified main-assistant.js, preferences-assistant.js, app-globals.js and local.js for panel re-ordering. Last 3 panels can be re-ordered in preferences

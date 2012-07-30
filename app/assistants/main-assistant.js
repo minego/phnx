@@ -10,6 +10,8 @@ function MainAssistant(opts) {
 	this.imagePreview = false;
 	this.favStatusChanged = false; // added by DC
 	this.loading = false;
+				
+	this.panelLabels = ["home","mentions","messages","lists","search"]; // added by DC
 
 	this.savedSearchesLoaded = false;
 	this.searchLoaded = false;
@@ -92,21 +94,70 @@ MainAssistant.prototype = {
 			TODO: make panels truly dynamic
 		**/
 
-		this.panels = [
-			{index: 0, position: 1, id: "home", title: "home", type: "timeline", resource: "home", height: 0, refresh: true, update: true, state: {left: 0, top: 0}, model: {items:homeItems}},
+	//	this.panels = [
+/*			{index: 0, position: 1, id: "home", title: "home", type: "timeline", resource: "home", height: 0, refresh: true, update: true, state: {left: 0, top: 0}, model: {items:homeItems}},
 			{index: 1, position: 2, id: "mentions", title: "mentions", type: "timeline", resource: "mentions", height: 0, refresh: true, update: true,	state: {left: -133, top: 0}, model: {items:mentionsItems}},
 			{index: 2, position: 3, id: "messages", title: "messages", type: "timeline", resource: "messages", height: 0, refresh: true, update: true,	state: {left: -339, top: 0}, model: {items:messagesItems}},
 			{index: 3, position: 4, id: "lists", title: "lists", type: "lists", height: 0, refresh: false, update: false},
 			{index: 4, position: 5, id: "search", title: "search", type: "search", height: 0, refresh: false, update: false}
-
-/*
-			{index: 0, position: 1, id: "home", title: "home", type: "timeline", resource: "home", height: 0, refresh: true, update: true, state: {left: 0, top: 0}, model: {items:homeItems}},
-			{index: 1, position: 2, id: "mentions", title: "mentions", type: "timeline", resource: "mentions", height: 0, refresh: true, update: true,	state: {left: -133, top: 0}, model: {items:mentionsItems}},
-			{index: 2, position: 3, id: "lists", title: "lists", type: "lists", height: 0, refresh: false, update: false},
-			{index: 3, position: 4, id: "search", title: "search", type: "search", height: 0, refresh: false, update: false},
-			{index: 4, position: 5, id: "messages", title: "messages", type: "timeline", resource: "messages", height: 0, refresh: true, update: true,	state: {left: -339, top: 0}, model: {items:messagesItems}}
 */
-		];
+
+		// block added by DC to allow for easier panel order adjustment
+		var prefs = new LocalStorage();
+		var tabOrder = prefs.read('taborder');
+
+		if(tabOrder){
+			switch (tabOrder) {
+				case "hmdls":
+					this.panelLabels = ["home","mentions","messages","lists","search"]; // added by DC
+					break;
+				case "hmdsl":
+					this.panelLabels = ["home","mentions","messages","search","lists"]; // added by DC			
+					break;
+				case "hmsdl":
+					this.panelLabels = ["home","mentions","search","messages","lists"]; // added by DC			
+					break;
+				case "hmsld":
+					this.panelLabels = ["home","mentions","search","lists","messages"]; // added by DC			
+					break;
+				case "hmlds":
+					this.panelLabels = ["home","mentions","lists","messages","search"]; // added by DC			
+					break;
+				case "hmlsd":
+					this.panelLabels = ["home","mentions","lists","search","messages"]; // added by DC
+					break;
+			}
+		}
+
+		this.panels = new Array();
+
+		for (i=0; i<5; i++){
+			switch (this.panelLabels[i]) {
+				case "home":
+					this.panels[i] = {index: i, position: i+1, id: "home", title: "home", type: "timeline", resource: "home", height: 0, refresh: true, update: true, state: {left: 0, top: 0}, model: {items:homeItems}};
+					break;
+				case "mentions":
+					this.panels[i] = {index: i, position: i+1, id: "mentions", title: "mentions", type: "timeline", resource: "mentions", height: 0, refresh: true, update: true,	state: {left: -133, top: 0}, model: {items:mentionsItems}};
+					break;
+				case "lists":
+					this.panels[i] = {index: i, position: i+1, id: "lists", title: "lists", type: "lists", height: 0, refresh: false, update: false};
+					break;
+				case "search":
+					this.panels[i] = {index: i, position: i+1, id: "search", title: "search", type: "search", height: 0, refresh: false, update: false};
+					break;
+				case "messages":
+					this.panels[i] = {index: i, position: i+1, id: "messages", title: "messages", type: "timeline", resource: "messages", height: 0, refresh: true, update: true,	state: {left: -339, top: 0}, model: {items:messagesItems}};
+					break;
+			}
+		} //end block DC
+
+		/*	this.panels[0] = {index: 0, position: 1, id: "home", title: "home", type: "timeline", resource: "home", height: 0, refresh: true, update: true, state: {left: 0, top: 0}, model: {items:homeItems}};
+			this.panels[1] = {index: 1, position: 2, id: "mentions", title: "mentions", type: "timeline", resource: "mentions", height: 0, refresh: true, update: true,	state: {left: -133, top: 0}, model: {items:mentionsItems}};
+			this.panels[2] = {index: 2, position: 3, id: "lists", title: "lists", type: "lists", height: 0, refresh: false, update: false};
+			this.panels[3] = {index: 3, position: 4, id: "search", title: "search", type: "search", height: 0, refresh: false, update: false};
+			this.panels[4] = {index: 4, position: 5, id: "messages", title: "messages", type: "timeline", resource: "messages", height: 0, refresh: true, update: true,	state: {left: -339, top: 0}, model: {items:messagesItems}};
+			*/
+	//	];
 
 		this.timeline = 0; //index position of the timeline, default to first one
 
@@ -579,7 +630,9 @@ MainAssistant.prototype = {
 			this.controller.get(oldPanel.id + '-beacon').removeClassName('show');
 		}
 
-		if (event.value === 4 || screenWidth > panelWidth) {
+		// Need to change index for timeline below if changing order of panels - DC
+		if (panel.id === "search" || screenWidth > panelWidth) {
+		//if (event.value === 4 || screenWidth > panelWidth) {
 			// enable the search box
 			this.controller.get('txtSearch').disabled = false;
 			if (this.searchLoaded === false) {
@@ -761,7 +814,6 @@ MainAssistant.prototype = {
 		var xCount = tweets.length;
 		var th = new TweetHelper();
 		var favSym = "★"; //added by DC
-
 
 		var i;
 
@@ -1164,21 +1216,38 @@ MainAssistant.prototype = {
 	},
 	moveIndicator: function(panelId) {
 		//Edit here for panel order change DC
-		var positions = {
-			'home': 'first',
+
+	var positions = {};
+	
+	var order = ["first","second","third","fourth","fifth"];
+	
+	for (i=0; i<5; i++){
+		positions[this.panelLabels[i]] = order[i];			
+	}
+	/*positions['home'] = 'first';
+	positions['mentions'] = 'second';
+	positions['messages'] = 'third';
+	positions['lists'] = 'fourth';
+	positions['search'] = 'fifth';
+*/
+//		var positions = {
+/*			'home': 'first',
 			'mentions': 'second',
 			'messages': 'third',
 			'lists': 'fourth',
 			'search': 'fifth'
-
+*/
 /*
 			'home': 'first',
 			'mentions': 'second',
+			'messages': 'fifth',
 			'lists': 'third',
-			'search': 'fourth',
-			'messages': 'fifth'
-*/
+			'search': 'fourth'
+
+
 		};
+*/
+
 
 		this.controller.get('indicator').className = ''; // remove existing classes
 		this.controller.get('indicator').addClassName(positions[panelId]);
@@ -1360,7 +1429,9 @@ MainAssistant.prototype = {
 				// so only ascii chars are passed to the compose toaster for now...
 				var text = Mojo.Char.isValidWrittenChar(e.keyCode);
 				// Need to change index for timeline below if changing order of panels - DC
-				if (this.timeline !== 4 && this.controller.get('txtSearch').value.length === 0) {
+				var panel = this.panels[this.timeline];
+				if (panel.id !== "search" && this.controller.get('txtSearch').value.length === 0) {
+				//if (this.timeline !== 4 && this.controller.get('txtSearch').value.length === 0) {
 					this.toggleCompose({
 						'text': text
 					});
@@ -1412,6 +1483,9 @@ MainAssistant.prototype = {
 		var prefs = new LocalStorage();
 		global.setFontSize(body, prefs.read('fontSize'));
 		global.setLayout(body, prefs.read('barlayout'));
+		global.setTabOrder(body, prefs.read('taborder'));
+		
+		
 		//global.setHideAvatar(body, prefs.read('hideAvatar')); // added by DC
 	},
 	deactivate: function(event) {

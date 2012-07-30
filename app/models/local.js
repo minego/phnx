@@ -10,6 +10,7 @@ function LocalStorage() {
 		enterToSend: false,
 		fontSize: 'small',
 		barlayout: 'swapped',
+		taborder: 'hmdls',
 		theme: 'pure',
 		api: 'https://api.twitter.com',
 		defaultAccount: '0',
