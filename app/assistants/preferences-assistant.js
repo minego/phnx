@@ -157,10 +157,20 @@ PreferencesAssistant.prototype = {
 				items: widgetHtml
 			};
 
-			var sectionHtml = Mojo.View.render({
-				object: secObj,
-				template: 'preferences/section'
-			});
+			//Block modified/addded by DC
+			var sectionHtml;
+			if(sectionId === 'General Settings'){
+				sectionHtml = Mojo.View.render({
+					object: secObj,
+					template: 'preferences/top_section'
+				});
+			}
+			else{
+				sectionHtml = Mojo.View.render({
+					object: secObj,
+					template: 'preferences/section'
+				});
+			} //end block
 
 			pageHtml += sectionHtml;
 		}

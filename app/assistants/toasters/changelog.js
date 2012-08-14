@@ -10,6 +10,7 @@ var ChangelogToaster = Class.create(Toaster, {
 		{ item: 'Modified to show star next to favorites in timeline. Pref refreshAfterPost allows auto update of timeline - DC' },
 		{ item: 'Added display name in tweets from searches - DC' },
 		{ item: 'Added preliminary panel re-ordering via preferences.  Requires app restart - DC' },
+		{ item: 'Fixed pref display issue with header of first section - DC' },
 
 		{ version: '1.2.24' },
 		{ item: 'Display both the twitter screen name and display name in the timeline' },

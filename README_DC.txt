@@ -20,3 +20,4 @@ Added search-no-avatar.html and modified profile-assistant.js for hideAvatar
 Added from_user_name on searches
 Modified status-assistant.js to respect hideAvatar setting for lists, retweets, trends and searches.
 Modified main-assistant.js, preferences-assistant.js, app-globals.js and local.js for panel re-ordering. Last 3 panels can be re-ordered in preferences
+Added top_section.html and modified preferences-assistant.js to push down first section heading in prefs

@@ -1331,6 +1331,10 @@ span.link{
 .button.signin.selected {
 	-webkit-border-image: url(../images/low/buttons/signin-tapped.png) 6 stretch;
 }
+.preferences-wrapper{
+	padding-top: 40px;
+}
+
 .myaccount-button-wrapper {
 	padding-top: 50px;
 	padding-bottom: 10px;
@@ -1403,6 +1407,7 @@ span.link{
 	background: url('../images/low/header-bg.png') left top repeat-x;
 	position: fixed;
 }
+
 .section-header {
 	width: 100%;
 	background: url('../images/low/header-bg.png') left top repeat-x;
@@ -1411,6 +1416,17 @@ span.link{
 	font-family: "Prelude";
 	font-size: 16px;
 	padding: 12px 15px 15px 15px;
+	color: #d2d2d2;
+	display: block;
+}
+.section-large-header {
+	width: 100%;
+	background: url('../images/low/header-large-bg.png') left top repeat-x;
+}
+.section-large-header span {
+	font-family: "Prelude";
+	font-size: 16px;
+	padding: 52px 15px 15px 15px;
 	color: #d2d2d2;
 	display: block;
 }
