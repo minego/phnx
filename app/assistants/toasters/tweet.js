@@ -143,7 +143,7 @@ var TweetToaster = Class.create(Toaster, {
 	},
 	createReply: function() {
 		var statusText;
-b
+
 		var args = {
 			'reply_id': this.tweet.id_str
 		};
