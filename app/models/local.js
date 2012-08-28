@@ -3,6 +3,7 @@ function LocalStorage() {
 	this.defaults = {
 		notifications: true,
 		notificationInterval: '00:15',
+		notificationSound: 'notifications',
 		notificationHome: false,
 		notificationMentions: true,
 		notificationMessages: true,

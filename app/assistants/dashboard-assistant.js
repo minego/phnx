@@ -52,9 +52,12 @@ DashboardAssistant.prototype = {
 		
 		//var bannerMessage = '@' + from + ': ' + this.message;
 
+		var notificationSound = prefs.read('notificationSound');
+
 		var bannerParams = {
 			messageText: bannerMessage,
-			soundClass: 'notifications'
+//			soundClass: 'notifications'
+			soundClass: notificationSound
 		};
 		
 		Mojo.Controller.getAppController().showBanner(bannerParams, {source: "notification"}, 'phnx');

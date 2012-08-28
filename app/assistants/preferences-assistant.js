@@ -85,6 +85,12 @@ function PreferencesAssistant() {
 					{label: '6 hours', value: '06:00'},
 					{label: '12 hours', value: '12:00'}
 				]},
+				//Block added by DC
+				{key: 'notificationSound', type: 'select', label: 'Notification Sound', items: [
+					{label: 'Notification', value: 'notifications'},
+					{label: 'Vibrate', value: 'vibrate'},
+					{label: 'Mute', value: 'none' }
+				]}, //End block
 				{key: 'notificationHome', type: 'toggle', label: 'Home Timeline'},
 				{key: 'notificationMentions', type: 'toggle', label: 'Mentions'},
 				{key: 'notificationMessages', type: 'toggle', label: 'Messages'},

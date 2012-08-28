@@ -11,6 +11,7 @@ var ChangelogToaster = Class.create(Toaster, {
 		{ item: 'Added display name in tweets from searches - DC' },
 		{ item: 'Added preliminary panel re-ordering via preferences.  Requires app restart - DC' },
 		{ item: 'Fixed pref display issue with header of first section - DC' },
+		{ item: 'Added notification sound type selection in preferences - DC' },
 
 		{ version: '1.2.24' },
 		{ item: 'Display both the twitter screen name and display name in the timeline' },
