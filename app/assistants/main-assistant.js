@@ -218,6 +218,10 @@ MainAssistant.prototype = {
 					{
 						label: 'Refresh',
 						command: 'cmdRefresh'
+					},
+					{
+						label: 'Refresh Flush',
+						command: 'cmdRefreshFlush'
 					}
 				]
 			},
@@ -522,6 +526,12 @@ MainAssistant.prototype = {
 					this.refreshAll();
 				}
 			}
+			else if (event.command === 'cmdRefreshFlush') {
+				if (Ajax.activeRequestCount === 0) {
+					this.refreshPanelFlush(this.panels[this.timeline]);
+				}
+			}
+
 			else if (event.command === 'cmdFindUser') {
 				this.toasters.add(new LookupToaster(this));
 			}
@@ -722,6 +732,7 @@ MainAssistant.prototype = {
 	refreshPanel: function(panel) {
 		this.loadingMore = false;
 		var lastId = undefined;
+		
 		if (panel.refresh) {
 			if (panel.model.items.length > 0) {
 				// grab the second tweet for gap detection
@@ -747,6 +758,39 @@ MainAssistant.prototype = {
 			this.loadSearch();
 		}
 	},
+	refreshPanelFlush: function(panel) {
+		this.loadingMore = false;
+		var lastId = undefined;
+
+		panel.model.items = {};
+		panel.model.items.length = 0;
+		
+		if (panel.refresh) {
+			if (panel.model.items.length > 0) {
+				// grab the second tweet for gap detection
+				var tweet = panel.model.items[1];
+
+				if (tweet) {
+					if (tweet.is_rt) {
+						lastId = tweet.original_id;
+					}
+					else{
+						lastId = tweet.id_str;
+					}
+				}
+			}
+
+			if (panel.id === 'messages') {
+				this.getDMs(panel, lastId);
+			} else {
+				this.getTweets(panel, lastId);
+			}
+		}
+		else if (panel.id === 'search') {
+			this.loadSearch();
+		}
+	},
+
 	refreshAndScrollTo: function(id) {
 		var panel = this.getPanel(id);
 		this.refreshAll();

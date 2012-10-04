@@ -22,3 +22,4 @@ Modified status-assistant.js to respect hideAvatar setting for lists, retweets, 
 Modified main-assistant.js, preferences-assistant.js, app-globals.js and local.js for panel re-ordering. Last 3 panels can be re-ordered in preferences
 Added top_section.html and modified preferences-assistant.js to push down first section heading in prefs
 Added to preferences-assistant.js, dashboard-assistant.js and local.js to allow for sound/vibrate/mute for notifications
+Added menu to View menu in main-assistant.js to allow for a flush and refresh (this removes previously externally deleted tweets from timeline and cache)
