@@ -526,11 +526,23 @@ MainAssistant.prototype = {
 					this.refreshAll();
 				}
 			}
+			//Block added by DC
 			else if (event.command === 'cmdRefreshFlush') {
+				var screenWidth = this.controller.window.innerWidth;
+				var panelWidth = 320;
 				if (Ajax.activeRequestCount === 0) {
-					this.refreshPanelFlush(this.panels[this.timeline]);
+					//Need to refresh all on Touchpad - DC
+					if (screenWidth <= panelWidth) {
+						this.refreshPanelFlush(this.panels[this.timeline]);
+					}
+					else{
+						for (var j=0; j < this.panels.length; j++) {
+							if(this.panels[j].type === "timeline")
+								this.refreshPanelFlush(this.panels[j]);
+						}
+					}
 				}
-			}
+			} //end block DC
 
 			else if (event.command === 'cmdFindUser') {
 				this.toasters.add(new LookupToaster(this));
