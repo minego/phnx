@@ -70,6 +70,7 @@ function PreferencesAssistant() {
 				]},
 				{key: 'refreshOnMaximize', type: 'toggle', label: 'Auto Refresh'},
 				{key: 'refreshOnSubmit', type: 'toggle', label: 'Refresh after post'},
+				{key: 'refreshFlushAtLaunch', type: 'toggle', label: 'Refresh & flush at launch'},				
 				{key: 'enterToSubmit', type: 'toggle', label: 'Enter to submit'},
 				{key: 'autoCorrect', type: 'toggle', label: 'Auto Correct'},
 				{key: 'hideAvatar', type: 'toggle', label: 'Hide Avatars (requires re-start of app)'}

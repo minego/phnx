@@ -13,6 +13,7 @@ var ChangelogToaster = Class.create(Toaster, {
 		{ item: 'Fixed pref display issue with header of first section - DC' },
 		{ item: 'Added notification sound type selection in preferences - DC' },
 		{ item: 'Added View->RefreshFlush menu to flush timeline of externally deleted tweets - DC' },
+		{ item: 'Added Refresh and Flush at launch preference option - DC' },
 
 		{ version: '1.2.24' },
 		{ item: 'Display both the twitter screen name and display name in the timeline' },

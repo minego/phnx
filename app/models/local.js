@@ -16,6 +16,7 @@ function LocalStorage() {
 		api: 'https://api.twitter.com',
 		defaultAccount: '0',
 		refreshOnSubmit: false,
+		refreshFlushAtLaunch: false,
 		enterToSubmit: false,
 		sendAnalytics: true,
 		delReceivedDM: false,

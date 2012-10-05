@@ -439,7 +439,18 @@ MainAssistant.prototype = {
 
 		this.addListeners();
 		setTimeout(function(){
-			this.refreshAll();
+			var prefs = new LocalStorage();
+
+			if(prefs.read('refreshFlushAtLaunch') == false) {
+				this.refreshAll();
+			}
+			else{
+				for (var j=0; j < this.panels.length; j++) {
+					if(this.panels[j].type === "timeline")
+						this.refreshPanelFlush(this.panels[j]);
+				}
+			}
+					
 			this.loadLists();
 			this.getRetweeted();
 			// get the avatar for the minimized card
@@ -449,9 +460,7 @@ MainAssistant.prototype = {
 				var panel = this.getPanel(this.opts.panel);
 				this.scrollTo(panel.index);
 			}
-
-			var prefs = new LocalStorage();
-
+			
 			if (prefs.read('version') !== Mojo.appInfo.version) {
 				prefs.write('version', Mojo.appInfo.version);
 
