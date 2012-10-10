@@ -24,3 +24,4 @@ Added top_section.html and modified preferences-assistant.js to push down first 
 Added to preferences-assistant.js, dashboard-assistant.js and local.js to allow for sound/vibrate/mute for notifications
 Added menu to View menu in main-assistant.js to allow for a flush and refresh (this removes previously externally deleted tweets from timeline and cache)
 Modified preferences-assistant.js, local.js and main-assistant.js to allow for a flush refresh on app launch
+Version bumped to 1.28 for push back to main git, and added contributor link in finishAuth-scene.html and about-scene.html
