@@ -237,6 +237,9 @@ PreferencesAssistant.prototype = {
 			}
 		}
 
+		// Start the background notifications timer
+		global.setTimer(); //added by DC
+
 		// Manually remove any listeners from above
 		this.controller.stopListening(this.controller.get('select-theme'), Mojo.Event.propertyChange, this.themeChanged);
 		this.controller.stopListening(this.controller.get('select-barlayout'), Mojo.Event.propertyChange, this.layoutChanged);

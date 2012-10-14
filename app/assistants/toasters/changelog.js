@@ -14,6 +14,7 @@ var ChangelogToaster = Class.create(Toaster, {
 		{ item: 'Added notification sound type selection in preferences' },
 		{ item: 'Added View->RefreshFlush menu to flush timeline of externally deleted tweets' },
 		{ item: 'Added Refresh and Flush at launch preference option' },
+		{ item: 'Notifications are applied upon exiting preferences screen, previously required at re-start' },
 
 		{ version: '1.2.24' },
 		{ item: 'Display both the twitter screen name and display name in the timeline' },
