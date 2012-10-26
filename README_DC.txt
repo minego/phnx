@@ -26,3 +26,4 @@ Added menu to View menu in main-assistant.js to allow for a flush and refresh (t
 Modified preferences-assistant.js, local.js and main-assistant.js to allow for a flush refresh on app launch
 Version bumped to 1.28 for push back to main git, and added contributor link in finishAuth-scene.html and about-scene.html
 Added setTimer() to cleanup of preferences-asisstant.js so that background notifications are activated if selected when exited prefs.  Normally it would only be activated on app launch.
+Modified main-assistant.js to give a marker of new tweets when refresh and flush at launch option is used.

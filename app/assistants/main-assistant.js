@@ -17,6 +17,7 @@ function MainAssistant(opts) {
 	this.searchLoaded = false;
 	this.switcher = false;
 
+	this.myLastId = undefined;
 	this.count = 300; //how many tweets to load each request
 	this.renderLimit = 1000; //umm...this scares me. used in list widgets to prevent flickering...
 	this.toasters = new ToasterChain();
@@ -782,6 +783,21 @@ MainAssistant.prototype = {
 	refreshPanelFlush: function(panel) {
 		this.loadingMore = false;
 		var lastId = undefined;
+		//var myLastId = undefined;
+
+			if (panel.model.items.length > 0) {
+				var tweet = panel.model.items[0];
+
+				if (tweet) {
+					if (tweet.is_rt) {
+						panel.model.myLastId = tweet.original_id;
+					}
+					else{
+						panel.model.myLastId = tweet.id_str;
+					}
+				}
+			}
+
 
 		panel.model.items = {};
 		panel.model.items.length = 0;
@@ -801,6 +817,10 @@ MainAssistant.prototype = {
 				}
 			}
 
+//			panel.model.items = {};
+//			panel.model.items.length = 0;
+
+
 			if (panel.id === 'messages') {
 				this.getDMs(panel, lastId);
 			} else {
@@ -809,7 +829,7 @@ MainAssistant.prototype = {
 		}
 		else if (panel.id === 'search') {
 			this.loadSearch();
-		}
+		}			
 	},
 
 	refreshAndScrollTo: function(id) {
@@ -879,7 +899,7 @@ MainAssistant.prototype = {
 		var xCount = tweets.length;
 		var th = new TweetHelper();
 		var favSym = "★"; //added by DC
-
+		
 		var i;
 
 		var filters = (new LocalStorage()).read('filters');
@@ -1007,6 +1027,40 @@ MainAssistant.prototype = {
 					//}
 				}//end block
 			}
+			
+			//Block added by DC - allows new tweet marker to work after refresh and flush
+			if(model.myLastId) {
+				for(k=0; k < model.items.length; k++){
+					if(model.items[k].id_str === model.myLastId){
+						if(k > 0) {
+							// These nouns are used in the "X New {Noun}" message
+							var nouns = {
+								'home': 'Tweet',
+								'mentions': 'Mention',
+								'messages': 'Direct Message'
+							};
+
+							// TODO: Make this message tappable to load gaps
+							var msg = k + ' New ' + nouns[panel.id];
+							if (k > 1) {
+								msg += 's'; //pluralize
+							}
+
+							model.items[k-1].dividerMessage = msg;
+							model.items[k-1].cssClass = 'new-tweet';
+							model.myLastId = undefined;
+					
+							this.controller.get(panel.id + '-beacon').addClassName('show');
+						}
+						else{
+							this.controller.get(panel.id + '-beacon').removeClassName('show');
+						}
+					
+						scrollId = k; // set the index of the new tweet to auto-scroll to
+					}
+				}
+				model.myLastId = undefined;
+			}	//end block
 		}
 
 		this.controller.modelChanged(panel.model);

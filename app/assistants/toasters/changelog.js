@@ -15,6 +15,8 @@ var ChangelogToaster = Class.create(Toaster, {
 		{ item: 'Added View->RefreshFlush menu to flush timeline of externally deleted tweets' },
 		{ item: 'Added Refresh and Flush at launch preference option' },
 		{ item: 'Notifications are applied upon exiting preferences screen, previously required at re-start' },
+		{ item: 'Refresh and Flush at launch shows marker with new tweets' },
+		{ item: 'Fixed beacon lighting with refresh and flush' },
 
 		{ version: '1.2.24' },
 		{ item: 'Display both the twitter screen name and display name in the timeline' },
