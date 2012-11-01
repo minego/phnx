@@ -17,6 +17,9 @@ var ChangelogToaster = Class.create(Toaster, {
 		{ item: 'Notifications are applied upon exiting preferences screen, previously required at re-start' },
 		{ item: 'Refresh and Flush at launch shows marker with new tweets' },
 		{ item: 'Fixed beacon lighting with refresh and flush' },
+		{ item: 'Fixed Refresh and Flush to load only new tweets or last 10 instead of all' },
+		{ item: 'Fixed changeLog and followers/following to show more entries' },
+		{ item: 'Fixed LoadMore bug on TP that only loaded more in Home timeline' },
 
 		{ version: '1.2.24' },
 		{ item: 'Display both the twitter screen name and display name in the timeline' },
@@ -73,7 +76,9 @@ var ChangelogToaster = Class.create(Toaster, {
 		this.controller.setupWidget('convo-list-' + this.id,
 		{
 			itemTemplate:		"templates/changelog-item",
-			listTemplate:		"templates/list"
+			listTemplate:		"templates/list",
+			// Below added by DC as changeLog display was maxing out
+			renderLimit: 100 
 		}, this);
 	},
 	backTapped: function(event) {

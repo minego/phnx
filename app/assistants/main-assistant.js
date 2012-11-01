@@ -922,6 +922,7 @@ MainAssistant.prototype = {
 		}
 
 		var scrollId = 0; // this is the INDEX (not ID, sorry) of the new tweet to scroll to
+		var fullLoad = 0; // added by DC. Used to flag when full 1:1 tweet pull is used
 
 		if (model.items.length > 0 && this.loadingMore) {
 			//loading "more" items (not refreshing), so append to bottom
@@ -996,6 +997,7 @@ MainAssistant.prototype = {
 		else{
 			// the timeline was empty so do a 1:1 mirror of the tweets response
 			model.items = tweets;
+			fullLoad = 1;
 		}
 		// Write a few (10) of the latest tweets to the user's cache (async)
 		this.user[panel.id] = model.items.slice(0,10);
@@ -1009,6 +1011,49 @@ MainAssistant.prototype = {
 			store.write(this.user.id + '_' + panel.id, tweets[0].id_str);
 		}
 
+		//Block added by DC - allows new tweet marker to work after refresh and flush
+		if (panel.update) {
+			if(model.myLastId) {
+				for(k=0; k < model.items.length; k++){
+					if(model.items[k].id_str === model.myLastId){
+						if(k > 0) {
+							// These nouns are used in the "X New {Noun}" message
+							var nouns = {
+								'home': 'Tweet',
+								'mentions': 'Mention',
+								'messages': 'Direct Message'
+							};
+							// TODO: Make this message tappable to load gaps
+							var msg = k + ' New ' + nouns[panel.id];
+							if (k > 1) {
+								msg += 's'; //pluralize
+							}
+							model.items[k-1].dividerMessage = msg;
+							model.items[k-1].cssClass = 'new-tweet';
+							model.myLastId = undefined;
+				
+							this.controller.get(panel.id + '-beacon').addClassName('show');
+						}
+						else{
+							this.controller.get(panel.id + '-beacon').removeClassName('show');
+						}
+						scrollId = k; // set the index of the new tweet to auto-scroll to
+						break; //no need to keep on iterating if we've found our match
+					}
+				}
+				model.myLastId = undefined;
+			}
+		}
+
+		if(fullLoad === 1) {
+			if(scrollId < 10) {
+				model.items = tweets.slice(0,10);
+			}
+			else{
+				model.items = tweets.slice(0,scrollId+1);
+			} 
+		}	//end block 
+		
 		if (panel.update) {
 			for (i = 0; i < model.items.length; i++) {
 				var tweet = model.items[i];
@@ -1027,40 +1072,6 @@ MainAssistant.prototype = {
 					//}
 				}//end block
 			}
-			
-			//Block added by DC - allows new tweet marker to work after refresh and flush
-			if(model.myLastId) {
-				for(k=0; k < model.items.length; k++){
-					if(model.items[k].id_str === model.myLastId){
-						if(k > 0) {
-							// These nouns are used in the "X New {Noun}" message
-							var nouns = {
-								'home': 'Tweet',
-								'mentions': 'Mention',
-								'messages': 'Direct Message'
-							};
-
-							// TODO: Make this message tappable to load gaps
-							var msg = k + ' New ' + nouns[panel.id];
-							if (k > 1) {
-								msg += 's'; //pluralize
-							}
-
-							model.items[k-1].dividerMessage = msg;
-							model.items[k-1].cssClass = 'new-tweet';
-							model.myLastId = undefined;
-					
-							this.controller.get(panel.id + '-beacon').addClassName('show');
-						}
-						else{
-							this.controller.get(panel.id + '-beacon').removeClassName('show');
-						}
-					
-						scrollId = k; // set the index of the new tweet to auto-scroll to
-					}
-				}
-				model.myLastId = undefined;
-			}	//end block
 		}
 
 		this.controller.modelChanged(panel.model);
@@ -1188,6 +1199,32 @@ MainAssistant.prototype = {
 		}
 	},
 	moreButtonTapped: function(event) {
+		//update the index
+		//Block added by DC to fix LoadMore bug on TP
+		var i;
+		
+		for (i=0; i<5; i++){
+			switch (this.panelLabels[i]) {
+				case "home":
+					if(event.srcElement.id == "more-home") {
+						this.timeline = i;
+					}
+					break;
+				case "mentions":
+					if(event.srcElement.id == "more-mentions") {
+						this.timeline = i;
+					}
+					break;
+				case "messages":
+					if(event.srcElement.id == "more-messages") {
+						this.timeline = i;
+					}
+					break;
+				default:
+					break;
+			}
+		}//end block DC
+		
 		this.loadMore(this.timeline);
 	},
 	windowResized: function(event) {

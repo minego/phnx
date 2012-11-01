@@ -13,7 +13,9 @@ var UserListToaster = Class.create(Toaster, {
 		this.render({'toasterId':this.id, title: this.title}, 'templates/toasters/status-list');
 
 		this.controller.setupWidget('status-scroller-' + this.id, {mode: 'vertical'},{});
-		this.controller.setupWidget('status-list-' + this.id, {itemTemplate: "templates/user-item",listTemplate: "templates/list", renderLimit: 100}, this.listModel);
+		//this.controller.setupWidget('status-list-' + this.id, {itemTemplate: "templates/user-item",listTemplate: "templates/list", renderLimit: 100}, this.listModel);
+		// modified by DC - Up'd the render limit to 500
+		this.controller.setupWidget('status-list-' + this.id, {itemTemplate: "templates/user-item",listTemplate: "templates/list", renderLimit: 500}, this.listModel);
 
 	},
 	setup: function() {
