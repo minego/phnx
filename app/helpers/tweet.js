@@ -33,10 +33,20 @@ TweetHelper.prototype = {
 			var links = tweet.entities.urls;
 			for (var i = links.length - 1; i >= 0; i--){
 				if (links[i].expanded_url !== null) {
-					tweet.text = tweet.text.replace(new RegExp(links[i].url, 'g'), links[i].expanded_url);
+					tweet.text = tweet.text.replace(new RegExp(links[i].url, 'g'), links[i].expanded_url);	
 				}
 			}
 		}
+		//media_url parsing added by DC
+		if (tweet.entities && tweet.entities.media) {
+			var media_links = tweet.entities.media;
+			for (var i = media_links.length - 1; i >= 0; i--){
+				if (media_links[i].media_url !== null) {
+					tweet.text = tweet.text.replace(new RegExp(media_links[i].url, 'g'), media_links[i].media_url);	
+				}
+			}
+		} //end block
+
 
 		var d = new Date(tweet.created_at);
 		tweet.time_str = d.toRelativeTime(1500);
@@ -92,8 +102,10 @@ TweetHelper.prototype = {
 		// Auto expands links via ajax
 		if (tweet.entities && tweet.entities.urls) {
 			var urls = tweet.entities.urls;
+
 			for (var i=0; i < urls.length; i++) {
 				var link = urls[i].url;
+	
 				if (link.indexOf('is.gd') > -1) {
 					this.expandIsgd(link, callback);
 				}

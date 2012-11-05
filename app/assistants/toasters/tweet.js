@@ -663,7 +663,7 @@ transport.responseText);
 		} else if (url.indexOf('https://twitter.com/#!/' + this.twitterUsername + '/status/' + this.twitterId) > -1) {
 			this.assistant.toasters.add(new TweetToaster(url, this.assistant));
 			Mojo.Log.error("TweetToaster for https:// called");
-		} else{
+		}	else{
 			this.showWebview(url);
 		}
 	},

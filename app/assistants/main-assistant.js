@@ -911,6 +911,9 @@ MainAssistant.prototype = {
 			} else {
 				tweets.splice(i, 1);
 			}
+				//tweets[i].dividerMessage = "Url: " + tweets[i].entities.urls.expanded_url;
+				//tweets[i].cssClass = 'new-tweet';
+
 		}
 
 		if (tweets.length > 1) {
@@ -1015,6 +1018,7 @@ MainAssistant.prototype = {
 		if (panel.update) {
 			if(model.myLastId) {
 				for(k=0; k < model.items.length; k++){
+					//if(model.items[k].id_str === model.myLastId){
 					if(model.items[k].id_str === model.myLastId){
 						if(k > 0) {
 							// These nouns are used in the "X New {Noun}" message
@@ -1039,7 +1043,7 @@ MainAssistant.prototype = {
 						}
 						scrollId = k; // set the index of the new tweet to auto-scroll to
 						break; //no need to keep on iterating if we've found our match
-					}
+					}			
 				}
 				model.myLastId = undefined;
 			}
@@ -1057,6 +1061,7 @@ MainAssistant.prototype = {
 		if (panel.update) {
 			for (i = 0; i < model.items.length; i++) {
 				var tweet = model.items[i];
+
 				tweet.time_str = this.timeSince(tweet.created_at);
 				// block below added by DC
 				if(tweet.favorited) {
