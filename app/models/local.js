@@ -21,6 +21,7 @@ function LocalStorage() {
 		sendAnalytics: true,
 		delReceivedDM: false,
 		hideAvatar: false,
+		showThumbs: true,
 		limitToLocale: false,
 		cardIcons: 'auto',
 		browserSelection: 'stockBrowser',

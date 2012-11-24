@@ -10,6 +10,13 @@ var TweetToaster = Class.create(Toaster, {
 		this.user = this.controller.stageController.user;
 		this.tweet = tweet;
 		this.tweet.toasterId = this.toasterId;
+		//this.tweet.favstar = "★";
+		if (this.tweet.favorited > 0) {
+			this.tweet.fav_class = 'show';
+		}
+		else {
+			this.tweet.fav_class = 'hide';
+		}
 
 		if (this.tweet.retweet_count > 0) {
 			this.tweet.rt_class = 'show';
@@ -19,6 +26,7 @@ var TweetToaster = Class.create(Toaster, {
 		}
 
 		var favStatusChanged = false; //added by DC
+		
 
 		var th = new TweetHelper();
 		var Twitter = new TwitterAPI(this.user);
@@ -88,6 +96,7 @@ var TweetToaster = Class.create(Toaster, {
 				template: 'templates/tweets/details'
 			});
 			this.controller.get('details-' + this.toasterId).update(tweetHtml);
+			
 			Mojo.Event.listen(this.controller.get('rt-' + this.toasterId), Mojo.Event.tap, this.rtTapped.bind(this));
 		}.bind(this));
 		var cookie = new Mojo.Model.Cookie("RilUser");
@@ -594,8 +603,21 @@ transport.responseText);
 		var e = event.target;
 		var username;
 
+		Mojo.Log.info("e.id: " + e.id );
+		Mojo.Log.info("e.innerText: " + e.innerText );
+		Mojo.Log.info("mediaUrl: " + this.tweet.mediaUrl );
+
 		if (e.id === 'link') {
 			var url = e.innerText;
+			var prefs = new LocalStorage();
+
+			if (held || prefs.read('browserSelection') === 'ask') {
+				this.showOptsUrl(url);
+			} else {
+				this.handleLink(url);
+			}
+		}	if (e.id === 'thumb') {
+			var url = this.tweet.mediaUrl;
 			var prefs = new LocalStorage();
 
 			if (held || prefs.read('browserSelection') === 'ask') {
@@ -627,6 +649,7 @@ transport.responseText);
 			}.bind(this));
 		}
 	},
+
 	handleLink: function(url) {
 		//looks for images and other neat things in urls
 		var img;

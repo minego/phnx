@@ -453,7 +453,15 @@ body.no-gesture {  /* touchpad/emulator */
 	font-weight: normal;
 	color: #bbb;
 }
-
+.tweet-favstar {
+	display: none;
+	float: right;
+	font-weight: bold;
+	color: #bb0;
+}
+.tweet-favstar.show {
+	display: inline-block;
+}
 .tweet-blank {
 	display: inline-block;
 	float: center;
@@ -461,6 +469,13 @@ body.no-gesture {  /* touchpad/emulator */
 	color: #bbb;
 }
 
+.dmDir {
+	display: inline-block;
+	float: right;
+	font-weight: bold;
+	color: #bbb;
+	margin-left: 4px;
+}
 
 .direction-arrow {
 	display: inline-block;
@@ -489,7 +504,50 @@ body.no-gesture {  /* touchpad/emulator */
 	display: inline-block;
 	float: left;
 }
+.inline-thumb{
+	display: none;
+	height: 64px;
+	text-align: center;
+	//position: absolute;
+	//width: 80px;
+	//background-size: 64px;
+	background-size: auto 64px;
+	background-repeat: no-repeat;
+	background-position: center center;
+	-webkit-border-radius: 4px;
+	margin: 5px 8px 0px 0px;
+	margin-left: auto;
+	margin-right: auto;
+}
+.inline-thumb.show{
+	display: block;
+	//margin: 10px auto;
+}
+.large-device .inline-thumb-large{
+	height: 256px;
+	background-size: auto 256x;
+}
+.large-device .inline-thumb-large.small{
+	height: 128px;
+	background-size: auto 128x;
+}
+.inline-thumb-large{
+	height: 128px;
+	background-size: auto 128px;
+}
 
+.thumb-wrapper{
+	//position: relative;
+}
+#thumb-wrapper img
+{
+max-width:100%; 
+max-height:100%;
+margin:auto;
+display:block;
+	-webkit-border-radius: 4px;
+
+}
 .tweet-avatar{
 	display: inline-block;
 	height: 48px;

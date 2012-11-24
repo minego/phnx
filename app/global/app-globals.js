@@ -289,6 +289,16 @@ var global = {
 		}
 		banner("Please re-start app to enable new pref");
 	}, // added by DC
+	setShowThumbs: function(body, showThumbsStatus) {
+		Element.removeClassName(body, 'showThumbs');
+		if(showThumbsStatus === 'false'){
+			Element.addClassName(body, 'enableThumbs');
+		}
+		else {
+			Element.addClassName(body, 'disableThumbs');
+		}
+		banner("Please re-start app to enable new pref");
+	}, // added by DC
 
 };
 

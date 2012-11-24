@@ -291,6 +291,8 @@ MainAssistant.prototype = {
 				else{
 					this.controller.setupWidget('list-' + panel.id,{itemTemplate: "templates/tweets/item",listTemplate: "templates/list", renderLimit: this.renderLimit}, panel.model);
 				}  // added by DC
+				showThumbs = prefs.read('showThumbs'); // added by DC
+
 				//this.controller.setupWidget('list-' + panel.id,{itemTemplate: "templates/tweets/item",listTemplate: "templates/list", renderLimit: this.renderLimit}, panel.model);
 
 				//ask tweetmarker where we left off
@@ -911,9 +913,6 @@ MainAssistant.prototype = {
 			} else {
 				tweets.splice(i, 1);
 			}
-				//tweets[i].dividerMessage = "Url: " + tweets[i].entities.urls.expanded_url;
-				//tweets[i].cssClass = 'new-tweet';
-
 		}
 
 		if (tweets.length > 1) {
@@ -1066,14 +1065,18 @@ MainAssistant.prototype = {
 				// block below added by DC
 				if(tweet.favorited) {
 					if (!tweet.favSet){
-						tweet.user.name = favSym + tweet.user.name;
+						//tweet.user.name = favSym + tweet.user.name;
 						tweet.favSet = true;
+						//tweet.favstar = favSym;
 					}
+					tweet.fav_class = 'show';
 				}
 				else {
 					//if(tweet.favSet){
-						tweet.user.name = tweet.user.name.replace(favSym,"");
+						//tweet.user.name = tweet.user.name.replace(favSym,"");
 						tweet.favSet = false;
+						tweet.fav_class = 'hide';
+						//tweet.favstar = "";
 					//}
 				}//end block
 			}
@@ -1103,8 +1106,8 @@ MainAssistant.prototype = {
 		}
 		var Twitter = new TwitterAPI(this.user);
 		var prefs = new LocalStorage(); //added by DC
-		var dmTo = " ←"; //"◄←"; //"☞"; //"To:"; 
-		var dmFrom = " →"; //"►→"; //"☜"; "From:";
+		var dmTo = "←"; //"◄←"; //"☞"; //"To:"; 
+		var dmFrom = "→"; //"►→"; //"☜"; "From:";
 		// Not reading prefs for some reason.  probably out of context
 		//if (prefs.read('hideAvatar')) {
 			//dmTo = "To:";
@@ -1116,7 +1119,8 @@ MainAssistant.prototype = {
 				for (var i = 0, tweet; tweet = r1.responseJSON[i]; i++) {
 					tweet.user = tweet.sender;
 					tweet.dm						= true;
-					tweet.user.name = tweet.user.name + dmFrom;// added by DC
+					//tweet.user.name = tweet.user.name + dmFrom;// added by DC
+					tweet.dir = dmFrom;
 					// Use unicode above instead of bitmap below.  This way it scales with the font selection
 					//tweet.direction_arrow_img = "images/low/arrow_left.png";
 				}
@@ -1127,7 +1131,8 @@ MainAssistant.prototype = {
 
 					tweet.user = tweet.recipient;
 
-					tweet.user.name = tweet.user.name + dmTo;  // added by DC
+					//tweet.user.name = tweet.user.name + dmTo;  // added by DC
+					tweet.dir = dmTo;
 					// Use unicode above instead of bitmap below.  This way it scales with the font selection
 					//tweet.direction_arrow_img = "images/low/arrow_right.png";
 					tweet.user.profile_image_url	= img;

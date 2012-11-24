@@ -20,7 +20,10 @@ var ChangelogToaster = Class.create(Toaster, {
 		{ item: 'Fixed Refresh and Flush to load only new tweets or last 10 instead of all' },
 		{ item: 'Fixed changeLog and followers/following to show more entries' },
 		{ item: 'Fixed LoadMore bug on TP that only loaded more in Home timeline' },
-		{ item: 'Media parsing allows for t.co photos to be shown in preview and not twitter webpage' },
+		{ item: 'Media parsing allows for pic.twitter photos to be shown in preview and not twitter webpage' },
+		{ item: 'Added ShowInlineThumbnails to prefs to show thumbs in timelines and details view' },
+		{ item: 'Thumbnail can now be tapped in details view to view media' },
+		{ item: 'Time (or date) of tweet now shown in tweet details view and "via" removed from dm details' },
 
 		{ version: '1.2.24' },
 		{ item: 'Display both the twitter screen name and display name in the timeline' },

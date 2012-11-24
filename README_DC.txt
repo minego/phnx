@@ -29,4 +29,7 @@ Added setTimer() to cleanup of preferences-asisstant.js so that background notif
 Modified main-assistant.js to give a marker of new tweets when refresh and flush at launch option is used.
 Modified changelog.js to increase renderLimit to show more entries. Also increased renderLimit for userLists for followers and following.
 Modified main-assistant.js moreButtonTapped() to check for which panel the LoadMore button was tapped on.  Fixes bug with TouchPad always refreshing Home Timeline.
-Added entities.media parsing to tweet.js so that twitter (t.co) photos show up with preview and not the twitter webpage 
+Added entities.media parsing to tweet.js so that twitter (t.co) photos show up with preview and not the twitter webpage
+Modified item.html, item-no-avatar.html, phnx.css, preferences-assistant.js, local.js, main-assistant.js, app-globals and tweet.js to show inline image thumbnails 
+Updated way that favourite star works in timelines and direction arrows of DMs.
+Modified tweet.js to show time of tweet (or date if over 24hrs) in details view and removed "via" from details view of DMs
