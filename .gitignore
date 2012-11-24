@@ -5,4 +5,6 @@
 Packages
 Packages.gz
 .directory
+
 *~
+*.bak

@@ -24,6 +24,7 @@ function PreferencesAssistant() {
 		);
 	}
 	advanced.push({key: 'sendAnalytics', type: 'toggle', label: 'Send <strong>anonymous</strong> statistics to the developer to help improve phnx'});
+	advanced.push({key: 'delReceivedDM', type: 'toggle', label: 'Allow deletion of received DMs'});
 
 	this.sections = {
 			'General Settings': [
@@ -31,7 +32,7 @@ function PreferencesAssistant() {
 					{label: 'Rebirth', value: 'rebirth'},
 					{label: 'Ash', value: 'ash'},
 					{label: 'Pure', value: 'pure'}
-					// {label: 'Sunnyvale', value: 'sunnyvale'}
+					//{label: 'Sunnyvale', value: 'sunnyvale'}
 				]},
 				{key: 'barlayout', type: 'select', label: 'Layout', items: [
 					{label: 'Tabs above Toolbar', value: 'swapped'},
@@ -40,6 +41,16 @@ function PreferencesAssistant() {
 					{label: 'Hide Tabs', value: 'no-nav'},
 					{label: 'Hide Tabs & Toolbar', value: 'none'}
 				]},
+				// block inserted by DC
+				{key: 'taborder', type: 'select', label: 'TabOrder', items: [
+					{label: 'Home,@,DM,L,S', value: 'hmdls'},
+					{label: 'Home,@,DM,S,L', value: 'hmdsl'},
+					{label: 'Home,@,S,DM,L', value: 'hmsdl'},
+					{label: 'Home,@,S,L,DM', value: 'hmsld'},
+					{label: 'Home,@,L,DM,S', value: 'hmlds'},
+					{label: 'Home,@,L,S,DM', value: 'hmlsd'}
+				]},
+				// end block
 				{key: 'browserSelection', type: 'select', label: 'Browser', items: [
 					{label: 'In-App Browser', value: 'inAppBrowser'},
 					{label: 'Stock Browser', value: 'stockBrowser'},
@@ -59,8 +70,11 @@ function PreferencesAssistant() {
 				]},
 				{key: 'refreshOnMaximize', type: 'toggle', label: 'Auto Refresh'},
 				{key: 'refreshOnSubmit', type: 'toggle', label: 'Refresh after post'},
+				{key: 'refreshFlushAtLaunch', type: 'toggle', label: 'Refresh & flush at launch'},				
 				{key: 'enterToSubmit', type: 'toggle', label: 'Enter to submit'},
-				{key: 'autoCorrect', type: 'toggle', label: 'Auto Correct'}
+				{key: 'autoCorrect', type: 'toggle', label: 'Auto Correct'},
+				{key: 'hideAvatar', type: 'toggle', label: 'Hide Avatars (requires re-start of app)'},
+				{key: 'showThumbs', type: 'toggle', label: 'Show Inline Thumbnail previews'}
 			],
 			'Notifications': [
 				{key: 'notifications', type: 'toggle', label: 'Notifications'},
@@ -73,9 +87,16 @@ function PreferencesAssistant() {
 					{label: '6 hours', value: '06:00'},
 					{label: '12 hours', value: '12:00'}
 				]},
+				//Block added by DC
+				{key: 'notificationSound', type: 'select', label: 'Notification Sound', items: [
+					{label: 'Notification', value: 'notifications'},
+					{label: 'Vibrate', value: 'vibrate'},
+					{label: 'Mute', value: 'none' }
+				]}, //End block
 				{key: 'notificationHome', type: 'toggle', label: 'Home Timeline'},
 				{key: 'notificationMentions', type: 'toggle', label: 'Mentions'},
-				{key: 'notificationMessages', type: 'toggle', label: 'Messages'}
+				{key: 'notificationMessages', type: 'toggle', label: 'Messages'},
+				{key: 'notificationShieldMessages', type: 'toggle', label: 'Shield Messages'}
 			],
 			'Advanced Settings': advanced
 	};
@@ -144,10 +165,20 @@ PreferencesAssistant.prototype = {
 				items: widgetHtml
 			};
 
-			var sectionHtml = Mojo.View.render({
-				object: secObj,
-				template: 'preferences/section'
-			});
+			//Block modified/addded by DC
+			var sectionHtml;
+			if(sectionId === 'General Settings'){
+				sectionHtml = Mojo.View.render({
+					object: secObj,
+					template: 'preferences/top_section'
+				});
+			}
+			else{
+				sectionHtml = Mojo.View.render({
+					object: secObj,
+					template: 'preferences/section'
+				});
+			} //end block
 
 			pageHtml += sectionHtml;
 		}
@@ -160,7 +191,10 @@ PreferencesAssistant.prototype = {
 
 		this.controller.listen(this.controller.get('select-theme'), Mojo.Event.propertyChange, this.themeChanged.bind(this));
 		this.controller.listen(this.controller.get('select-barlayout'), Mojo.Event.propertyChange, this.layoutChanged.bind(this));
+		this.controller.listen(this.controller.get('select-taborder'), Mojo.Event.propertyChange, this.tabOrderChanged.bind(this));
 		this.controller.listen(this.controller.get('select-fontSize'), Mojo.Event.propertyChange, this.fontChanged.bind(this));
+		this.controller.listen(this.controller.get('toggle-hideAvatar'), Mojo.Event.propertyChange, this.hideAvatarChanged.bind(this)); //added by DC
+		this.controller.listen(this.controller.get('toggle-showThumbs'), Mojo.Event.propertyChange, this.showThumbsChanged.bind(this)); //added by DC
 	},
 	closeTapped: function() {
 		this.controller.stageController.popScene();
@@ -184,6 +218,21 @@ PreferencesAssistant.prototype = {
 		var body = this.controller.stageController.document.getElementsByTagName("body")[0];
 		global.setLayout(body, event.value);
 	},
+	//block added by DC
+	tabOrderChanged: function(event) {
+		var body = this.controller.stageController.document.getElementsByTagName("body")[0];
+		global.setTabOrder(body, event.value);
+		banner("Please re-start to re-order panels");
+	}, //end block DC	
+	hideAvatarChanged: function(event) {
+		var body = this.controller.stageController.document.getElementsByTagName("body")[0];
+		global.setHideAvatar(body, event.value);
+	}, // added by DC
+	showThumbsChanged: function(event) {
+		var body = this.controller.stageController.document.getElementsByTagName("body")[0];
+		global.setShowThumbs(body, event.value);
+	}, // added by DC
+
 	cleanup: function() {
 		// Save preferences on exit.
 		for (var sectionId in this.sections) {
@@ -194,10 +243,16 @@ PreferencesAssistant.prototype = {
 			}
 		}
 
+		// Start the background notifications timer
+		global.setTimer(); //added by DC
+
 		// Manually remove any listeners from above
 		this.controller.stopListening(this.controller.get('select-theme'), Mojo.Event.propertyChange, this.themeChanged);
 		this.controller.stopListening(this.controller.get('select-barlayout'), Mojo.Event.propertyChange, this.layoutChanged);
+		this.controller.stopListening(this.controller.get('select-taborder'), Mojo.Event.propertyChange, this.tabOrderChanged);	
 		this.controller.stopListening(this.controller.get('select-fontSize'), Mojo.Event.propertyChange, this.fontChanged);
 		this.controller.stopListening(this.controller.get("close-button"), Mojo.Event.tap, this.closeTapped);
+		this.controller.stopListening(this.controller.get('toggle-hideAvatar'), Mojo.Event.propertyChange, this.hideAvatarChanged); // added by DC
+		this.controller.stopListening(this.controller.get('toggle-showThumbs'), Mojo.Event.propertyChange, this.shotThumbsChanged); // added by DC
 	}
 };

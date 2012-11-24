@@ -1,5 +1,30 @@
 var ChangelogToaster = Class.create(Toaster, {
 	items: [
+		{ version: '1.2.28' },
+		{ item: 'Modified to allow deletion of received DMs and added preference option' },
+		{ item: 'Modified to allow shielded notifications for received DMs and added preference option' },
+		{ item: 'Modified to allow hiding of Avatars in timelines, lists, searches and trends.  Also added preference option. Need to restart to update' },
+		{ item: 'Modified display of usernames after auth on Welcome scene' },
+		{ item: 'Modified display of usernames in DMs to show who sent/received' },
+		{ item: 'Modified to display warning banner to restart when toggling hideAvatar preference' },
+		{ item: 'Modified to show star next to favorites in timeline. Pref refreshAfterPost allows auto update of timeline' },
+		{ item: 'Added display name in tweets from searches' },
+		{ item: 'Added preliminary panel re-ordering via preferences.  Requires app restart' },
+		{ item: 'Fixed pref display issue with header of first section' },
+		{ item: 'Added notification sound type selection in preferences' },
+		{ item: 'Added View->RefreshFlush menu to flush timeline of externally deleted tweets' },
+		{ item: 'Added Refresh and Flush at launch preference option' },
+		{ item: 'Notifications are applied upon exiting preferences screen, previously required at re-start' },
+		{ item: 'Refresh and Flush at launch shows marker with new tweets' },
+		{ item: 'Fixed beacon lighting with refresh and flush' },
+		{ item: 'Fixed Refresh and Flush to load only new tweets or last 10 instead of all' },
+		{ item: 'Fixed changeLog and followers/following to show more entries' },
+		{ item: 'Fixed LoadMore bug on TP that only loaded more in Home timeline' },
+		{ item: 'Media parsing allows for pic.twitter photos to be shown in preview and not twitter webpage' },
+		{ item: 'Added ShowInlineThumbnails to prefs to show thumbs in timelines and details view' },
+		{ item: 'Thumbnail can now be tapped in details view to view media' },
+		{ item: 'Time (or date) of tweet now shown in tweet details view and "via" removed from dm details' },
+
 		{ version: '1.2.24' },
 		{ item: 'Display both the twitter screen name and display name in the timeline' },
 
@@ -55,7 +80,9 @@ var ChangelogToaster = Class.create(Toaster, {
 		this.controller.setupWidget('convo-list-' + this.id,
 		{
 			itemTemplate:		"templates/changelog-item",
-			listTemplate:		"templates/list"
+			listTemplate:		"templates/list",
+			// Below added by DC as changeLog display was maxing out
+			renderLimit: 100 
 		}, this);
 	},
 	backTapped: function(event) {

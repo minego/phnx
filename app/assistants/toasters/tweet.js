@@ -10,6 +10,13 @@ var TweetToaster = Class.create(Toaster, {
 		this.user = this.controller.stageController.user;
 		this.tweet = tweet;
 		this.tweet.toasterId = this.toasterId;
+		//this.tweet.favstar = "★";
+		if (this.tweet.favorited > 0) {
+			this.tweet.fav_class = 'show';
+		}
+		else {
+			this.tweet.fav_class = 'hide';
+		}
 
 		if (this.tweet.retweet_count > 0) {
 			this.tweet.rt_class = 'show';
@@ -17,6 +24,9 @@ var TweetToaster = Class.create(Toaster, {
 		else {
 			this.tweet.rt_class = 'hide';
 		}
+
+		var favStatusChanged = false; //added by DC
+		
 
 		var th = new TweetHelper();
 		var Twitter = new TwitterAPI(this.user);
@@ -42,6 +52,7 @@ var TweetToaster = Class.create(Toaster, {
 			template: 'templates/tweets/details'
 		});
 
+		
 		this.content.tweetHtml = tweetHtml;
 		this.render(this.content, 'templates/toasters/tweet');
 
@@ -58,7 +69,11 @@ var TweetToaster = Class.create(Toaster, {
 			}
 		}
 		else if (this.tweet.dm) {
+			var prefs = new LocalStorage();
 			this.controller.get(this.nodeId).addClassName('is-dm');
+			if (prefs.read('delReceivedDM')) {
+				this.controller.get(this.nodeId).addClassName('is-sent'); // added by dc so that you can delete DM's not created by yourself
+			}
 		}
 		else {
 			this.controller.get(this.nodeId).addClassName('normal');
@@ -81,6 +96,7 @@ var TweetToaster = Class.create(Toaster, {
 				template: 'templates/tweets/details'
 			});
 			this.controller.get('details-' + this.toasterId).update(tweetHtml);
+			
 			Mojo.Event.listen(this.controller.get('rt-' + this.toasterId), Mojo.Event.tap, this.rtTapped.bind(this));
 		}.bind(this));
 		var cookie = new Mojo.Model.Cookie("RilUser");
@@ -129,7 +145,8 @@ var TweetToaster = Class.create(Toaster, {
 				this.showOptsUrl();
 				break;
 			case 'back':
-				this.assistant.toasters.back();
+				this.refreshBack(); // added by DC
+				//this.assistant.toasters.back();
 				break;
 		}
 	},
@@ -202,14 +219,18 @@ var TweetToaster = Class.create(Toaster, {
 			Twitter.action('favorite', this.tweet.id_str, function(response, meta){
 				this.tweet.favorited = true;
 				this.controller.get('favorite-' + this.toasterId).addClassName('favorited');
+				this.tweet.favSet = false;
 			}.bind(this));
 		}
 		else {
 			Twitter.action('unfavorite', this.tweet.id_str, function(response){
 				this.tweet.favorited = false;
 				this.controller.get('favorite-' + this.toasterId).removeClassName('favorited');
+				//this.tweet.favSet = true;
 			}.bind(this));
 		}
+		this.favStatusChanged = true;
+		this.assistant.favStatusChanged = true;
 	},
 	hideTweet: function() {
 		for (var i=0; i < this.assistant.panels.length; i++) {
@@ -276,6 +297,19 @@ var TweetToaster = Class.create(Toaster, {
 			placeNear:	this.controller.get('opts-' + this.toasterId),
 			items:		this.linkMenuItems
 		});
+	},
+	//refreshBack fun added by DC
+	refreshBack: function() {
+		var refresh = (new LocalStorage()).read('refreshOnSubmit');
+
+		if(this.favStatusChanged) {
+			if (refresh) {
+				this.assistant.refresh();
+			}
+			this.favStatusChanged = false;
+		}
+
+		this.assistant.toasters.back();
 	},
 	popupHandler: function(command) {
 		switch (command) {
@@ -569,8 +603,21 @@ transport.responseText);
 		var e = event.target;
 		var username;
 
+		Mojo.Log.info("e.id: " + e.id );
+		Mojo.Log.info("e.innerText: " + e.innerText );
+		Mojo.Log.info("mediaUrl: " + this.tweet.mediaUrl );
+
 		if (e.id === 'link') {
 			var url = e.innerText;
+			var prefs = new LocalStorage();
+
+			if (held || prefs.read('browserSelection') === 'ask') {
+				this.showOptsUrl(url);
+			} else {
+				this.handleLink(url);
+			}
+		}	if (e.id === 'thumb') {
+			var url = this.tweet.mediaUrl;
 			var prefs = new LocalStorage();
 
 			if (held || prefs.read('browserSelection') === 'ask') {
@@ -602,6 +649,7 @@ transport.responseText);
 			}.bind(this));
 		}
 	},
+
 	handleLink: function(url) {
 		//looks for images and other neat things in urls
 		var img;
@@ -638,7 +686,7 @@ transport.responseText);
 		} else if (url.indexOf('https://twitter.com/#!/' + this.twitterUsername + '/status/' + this.twitterId) > -1) {
 			this.assistant.toasters.add(new TweetToaster(url, this.assistant));
 			Mojo.Log.error("TweetToaster for https:// called");
-		} else{
+		}	else{
 			this.showWebview(url);
 		}
 	},

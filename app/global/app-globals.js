@@ -184,13 +184,122 @@ var global = {
 			Element.addClassName(body, 'layout-no-nav');
 		}
 	},
+	//block added by DC
+	setTabOrder: function(body, tabOrder) {
+		var tabOrders = ['hmdls', 'hmdsl', 'hmsdl', 'hmsld', 'hmlds', 'hmlsd'];
+
+/*		for (var i=0; i < tabOrders.length; i++) {
+			Element.removeClassName(body, 'tabOrder-' + tabOrders[i]);
+		}
+
+		Element.addClassName(body, 'tabOrder-' + tabOrder);
+*/
+
+		//something with the appendChild can cause refresh probs on launch at least in the emulator.  Need to investigate - DC
+		switch (tabOrder) {
+			case "hmdls":
+				//var node=global.doc.getElementById("nav-home");
+				global.doc.getElementById("nav-bar").appendChild(global.doc.getElementById("nav-home"));
+				//node=global.doc.getElementById("nav-mentions");
+				global.doc.getElementById("nav-bar").appendChild(global.doc.getElementById("nav-mentions"));
+				//node=global.doc.getElementById("nav-messages");
+				global.doc.getElementById("nav-bar").appendChild(global.doc.getElementById("nav-messages"));
+				//node=global.doc.getElementById("nav-lists");
+				global.doc.getElementById("nav-bar").appendChild(global.doc.getElementById("nav-lists"));
+				//node=global.doc.getElementById("nav-search");
+				global.doc.getElementById("nav-bar").appendChild(global.doc.getElementById("nav-search"));
+				break;
+			case "hmdsl":
+				//var node=global.doc.getElementById("nav-home");
+				global.doc.getElementById("nav-bar").appendChild(global.doc.getElementById("nav-home"));
+				//node=global.doc.getElementById("nav-mentions");
+				global.doc.getElementById("nav-bar").appendChild(global.doc.getElementById("nav-mentions"));
+				//node=global.doc.getElementById("nav-messages");
+				global.doc.getElementById("nav-bar").appendChild(global.doc.getElementById("nav-messages"));
+				//node=global.doc.getElementById("nav-search");
+				global.doc.getElementById("nav-bar").appendChild(global.doc.getElementById("nav-search"));
+				//node=global.doc.getElementById("nav-lists");
+				global.doc.getElementById("nav-bar").appendChild(global.doc.getElementById("nav-lists"));
+				break;
+			case "hmsdl":
+//				var node=global.doc.getElementById("nav-home");
+				global.doc.getElementById("nav-bar").appendChild(global.doc.getElementById("nav-home"));
+//				node=global.doc.getElementById("nav-mentions");
+				global.doc.getElementById("nav-bar").appendChild(global.doc.getElementById("nav-mentions"));
+//				node=global.doc.getElementById("nav-search");
+				global.doc.getElementById("nav-bar").appendChild(global.doc.getElementById("nav-search"));
+//				node=global.doc.getElementById("nav-messages");
+				global.doc.getElementById("nav-bar").appendChild(global.doc.getElementById("nav-messages"));
+//				node=global.doc.getElementById("nav-lists");
+				global.doc.getElementById("nav-bar").appendChild(global.doc.getElementById("nav-lists"));
+				break;
+			case "hmsld":
+				//var node=global.doc.getElementById("nav-home");
+				global.doc.getElementById("nav-bar").appendChild(global.doc.getElementById("nav-home"));
+				//node=global.doc.getElementById("nav-mentions");
+				global.doc.getElementById("nav-bar").appendChild(global.doc.getElementById("nav-mentions"));
+				//node=global.doc.getElementById("nav-search");
+				global.doc.getElementById("nav-bar").appendChild(global.doc.getElementById("nav-search"));
+				//node=global.doc.getElementById("nav-lists");
+				global.doc.getElementById("nav-bar").appendChild(global.doc.getElementById("nav-lists"));
+				//node=global.doc.getElementById("nav-messages");
+				global.doc.getElementById("nav-bar").appendChild(global.doc.getElementById("nav-messages"));
+				break;
+			case "hmlds":
+				//var node=global.doc.getElementById("nav-home");
+				global.doc.getElementById("nav-bar").appendChild(global.doc.getElementById("nav-home"));
+				//node=global.doc.getElementById("nav-mentions");
+				global.doc.getElementById("nav-bar").appendChild(global.doc.getElementById("nav-mentions"));
+				//node=global.doc.getElementById("nav-lists");
+				global.doc.getElementById("nav-bar").appendChild(global.doc.getElementById("nav-lists"));
+				//node=global.doc.getElementById("nav-messages");
+				global.doc.getElementById("nav-bar").appendChild(global.doc.getElementById("nav-messages"));
+				//node=global.doc.getElementById("nav-search");
+				global.doc.getElementById("nav-bar").appendChild(global.doc.getElementById("nav-search"));
+				break;
+			case "hmlsd":
+				//var node=global.doc.getElementById("nav-home");
+				global.doc.getElementById("nav-bar").appendChild(global.doc.getElementById("nav-home"));
+				//node=global.doc.getElementById("nav-mentions");
+				global.doc.getElementById("nav-bar").appendChild(global.doc.getElementById("nav-mentions"));
+				//node=global.doc.getElementById("nav-lists");
+				global.doc.getElementById("nav-bar").appendChild(global.doc.getElementById("nav-lists"));
+				//node=global.doc.getElementById("nav-search");
+				global.doc.getElementById("nav-bar").appendChild(global.doc.getElementById("nav-search"));
+				//node=global.doc.getElementById("nav-messages");
+				global.doc.getElementById("nav-bar").appendChild(global.doc.getElementById("nav-messages"));
+				break;
+		}
+		//banner("Please re-start to re-order panels");
+	}, // end black DC
 	setFontSize: function(body, font) {
 		var fonts = ['tiny','small', 'medium', 'large','huge'];
 		for (var i=0; i < fonts.length; i++) {
 			Element.removeClassName(body, 'font-' + fonts[i]);
 		}
 		Element.addClassName(body, 'font-' + font);
-	}
+	},
+	setHideAvatar: function(body, hideAvatarStatus) {
+		Element.removeClassName(body, 'hideAvatar');
+		if(hideAvatarStatus === 'false'){
+			Element.addClassName(body, 'enableAvatar');
+		}
+		else {
+			Element.addClassName(body, 'disableAvatar');
+		}
+		banner("Please re-start app to enable new pref");
+	}, // added by DC
+	setShowThumbs: function(body, showThumbsStatus) {
+		Element.removeClassName(body, 'showThumbs');
+		if(showThumbsStatus === 'false'){
+			Element.addClassName(body, 'enableThumbs');
+		}
+		else {
+			Element.addClassName(body, 'disableThumbs');
+		}
+		banner("Please re-start app to enable new pref");
+	}, // added by DC
+
 };
 
 /* This is an auto-incremented number for toaster IDs */
