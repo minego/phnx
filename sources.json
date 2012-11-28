@@ -12,6 +12,7 @@
     {"source": "app/models/toaster-chain.js"},
     {"source": "app/models/metrix.js"},
     {"source": "app/models/asyncWrappers.js"},
+    {"source": "app/models/emoji.js"},
     {"source": "app/assistants/toasters/retweet.js"},
     {"source": "app/assistants/toasters/tweet.js"},
     {"source": "app/assistants/toasters/convo.js"},

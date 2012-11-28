@@ -99,6 +99,18 @@ var TweetToaster = Class.create(Toaster, {
 			
 			Mojo.Event.listen(this.controller.get('rt-' + this.toasterId), Mojo.Event.tap, this.rtTapped.bind(this));
 		}.bind(this));
+		
+		// Emojify - added by DC
+		//this.tweet.text = emojify(this.tweet.text,22);
+		//Mojo.Log.info(this.tweet.text);
+		// re-render the tweet HTML
+		//var tweetHtml = Mojo.View.render({
+		//	object: this.tweet,
+		//	template: 'templates/tweets/details'
+		//});
+		//this.controller.get('details-' + this.toasterId).update(tweetHtml);
+
+		
 		var cookie = new Mojo.Model.Cookie("RilUser");
 	try {
 		this.rilUser = cookie.get();

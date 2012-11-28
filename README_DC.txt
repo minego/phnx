@@ -33,3 +33,4 @@ Added entities.media parsing to tweet.js so that twitter (t.co) photos show up w
 Modified item.html, item-no-avatar.html, phnx.css, preferences-assistant.js, local.js, main-assistant.js, app-globals and tweet.js to show inline image thumbnails 
 Updated way that favourite star works in timelines and direction arrows of DMs.
 Modified tweet.js to show time of tweet (or date if over 24hrs) in details view and removed "via" from details view of DMs
+Modified item-no-avatar.html, item.html, phnx.cc, details.html, tweet.js(helpers) and added emoji.js to support display of tweets containing unicode emoji

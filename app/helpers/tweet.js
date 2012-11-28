@@ -28,6 +28,8 @@ TweetHelper.prototype = {
 			tweet.link = 'https://twitter.com/#!' + tweet.user.screen_name + '/status/' + tweet.id_str;
 		}
 
+
+
 		// Expand some shortened links automatically via the entities payload
 		// thumbnail passing added by DC
 		if (tweet.entities && tweet.entities.urls) {
@@ -131,7 +133,6 @@ TweetHelper.prototype = {
 			}
 		} //end block
 
-
 		var d = new Date(tweet.created_at);
 		tweet.time_tweeted = (d.toTimeString(d)).slice(0,8);
 		tweet.time_str = d.toRelativeTime(1500);
@@ -143,6 +144,11 @@ TweetHelper.prototype = {
 		//keep the plaintext version for quote-style RTs (so HTML doesn't get tossed in there)
 		tweet.stripped = tweet.text;
 		tweet.text = tweet.text.parseLinks();
+
+		// Emojify - added by DC
+		tweet.text = emojify(tweet.text,16);
+		//Mojo.Log.info(tweet.emojify);
+
 		return tweet;
 	},
 	filter: function(tweet, filters) {

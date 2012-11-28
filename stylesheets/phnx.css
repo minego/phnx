@@ -102,6 +102,40 @@ body.no-gesture {  /* touchpad/emulator */
 	font-size: 26px;
 }
 
+//Block added by DC
+#emoji{
+	position:relative;
+	top:2px;
+}
+
+.font-tiny .timeline #emoji{
+	height: 12px;
+}
+
+.font-small .timeline #emoji{
+	height: 14px;
+}
+
+.font-medium .timeline #emoji{
+	height: 16px;
+}
+
+.font-large .timeline #emoji{
+	height: 18px;
+}
+
+.font-huge .timeline #emoji{
+	height: 22px;
+}
+
+.font-magoo .timeline #emoji{
+	height: 26px;
+}
+.details #emoji{
+	height: 18px;
+}
+//end block DC
+
 #launch-scene{
 	width: 100%;
 	height: 320px;
