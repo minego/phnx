@@ -102,7 +102,7 @@ body.no-gesture {  /* touchpad/emulator */
 	font-size: 26px;
 }
 
-//Block added by DC
+/*Block added by DC*/
 #emoji{
 	position:relative;
 	top:2px;
@@ -134,7 +134,7 @@ body.no-gesture {  /* touchpad/emulator */
 .details #emoji{
 	height: 18px;
 }
-//end block DC
+/*end block DC*/
 
 #launch-scene{
 	width: 100%;
