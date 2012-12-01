@@ -7,11 +7,12 @@
      		<div class="dmDir">#{-dir}</div>
 	     	<div class='tweet-username'>#{-user.name}</div>
 				<div class='tweet-screenname'>@#{-user.screen_name}</div>
-				<div class="tweet-favstar #{-fav_class}">#{-favstar}</div>
+				<div class="tweet-favstar #{-fav_class}">★</div>
 				<div class='tweet-text timeline #{-emoji_class}'>#{-text}</div>
 				<div id="thumb-wrapper">
 					<!--div class='inline-thumb #{-thumb_class}' style="background-image: url(#{-thumbnail});"></div-->
-					<div class="inline-thumb timeline #{-thumb_class}"><img src=#{-thumbnail} alt="..."/></div>	
+					<!--div class="inline-thumb timeline #{-thumb_class}"><img src=#{-thumbnail} alt="..."/></div-->
+					<div class="timeline #{-thumb_class}"><img class="inline-thumb" src=#{-thumbnail} alt="..."/></div>		
 				</div>
 				<div class='tweet-footer'>
 					#{-time_str} #{-via} #{-source}

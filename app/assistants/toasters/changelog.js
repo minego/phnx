@@ -25,7 +25,7 @@ var ChangelogToaster = Class.create(Toaster, {
 		{ item: 'Thumbnail can now be tapped in details view to view media' },
 		{ item: 'Time (or date) of tweet now shown in tweet details view and "via" removed from dm details' },
 		{ item: 'Added support for display of unicode emoji (thanks to Tarek Galal\'s code for "wazzap")' },
-		{ item: 'Prefs option to show or hide emoji' },
+		{ item: 'Prefs option to show emoji/thumbnails in timeline and details, details only, or never' },
 
 		{ version: '1.2.24' },
 		{ item: 'Display both the twitter screen name and display name in the timeline' },

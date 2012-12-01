@@ -1648,11 +1648,11 @@ MainAssistant.prototype = {
 	activate: function(event) {
 		var body = this.controller.stageController.document.getElementsByTagName("body")[0];
 		var prefs = new LocalStorage();
+		global.setShowThumbs(body, prefs.read('showThumbs'));
+		global.setShowEmoji(body, prefs.read('showEmoji'));
 		global.setFontSize(body, prefs.read('fontSize'));
 		global.setLayout(body, prefs.read('barlayout'));
-		global.setTabOrder(body, prefs.read('taborder'));
-		global.setShowThumbs(body, prefs.read('showThumbs'));
-		global.setShowEmoji(body, prefs.read('showEmoji'));		
+		global.setTabOrder(body, prefs.read('taborder'));		
 		
 		//global.setHideAvatar(body, prefs.read('hideAvatar')); // added by DC
 	},

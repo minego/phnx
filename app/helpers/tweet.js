@@ -44,17 +44,13 @@ TweetHelper.prototype = {
 						tweet.thumbnail = links[i].expanded_url+"media/?size=m"; //Changed from ?size=t so Touchpad details looks better
 						//tweet.dividerMessage = tweet.mediaUrl;
 						//tweet.cssClass = 'new-tweet';
-						if(showThumbs === 'showThumbs') {
-							tweet.thumb_class = 'show';
-						}
+						tweet.thumb_class = 'show';
 					} else if (links[i].expanded_url.indexOf('http://twitpic.com') > -1){
 						var img = links[i].expanded_url.substr(links[i].expanded_url.indexOf('/', 8) + 1);
 						tweet.mediaUrl = links[i].expanded_url;
 						tweet.thumbnail = "http://twitpic.com/show/thumb/" + img;
-						if(showThumbs === 'showThumbs') {
-							tweet.thumb_class = 'show';
-							tweet.thumb_type = 'small';
-						}
+						tweet.thumb_class = 'show';
+						tweet.thumb_type = 'small';
 					} else if (links[i].expanded_url.indexOf('http://youtu.be') > -1){
 						var img = links[i].expanded_url.substr(links[i].expanded_url.indexOf("/", 8)+1);
 						if(img.indexOf('&',0) > -1) {
@@ -69,9 +65,7 @@ TweetHelper.prototype = {
 						tweet.mediaUrl = links[i].expanded_url;
 						tweet.thumbnail = "http://img.youtube.com/vi/" + img + "/hqdefault.jpg";//1.jpg
 						//tweet.dividerMessage = tweet.thumbnail;
-						if(showThumbs === 'showThumbs') {
-							tweet.thumb_class = 'show';
-						}					
+						tweet.thumb_class = 'show';
 					} else if (links[i].expanded_url.indexOf('youtube.com/watch') > -1){
 						var img = links[i].expanded_url.substr(links[i].expanded_url.indexOf("v=", 8)+2);
 						if(img.indexOf('&',0) > -1) {
@@ -87,33 +81,24 @@ TweetHelper.prototype = {
 						tweet.thumbnail = "http://img.youtube.com/vi/" + img + "/hqdefault.jpg"; //1.jpg;
 						//tweet.dividerMessage = links[i].expanded_url + " : " + tweet.thumbnail;
 						//tweet.cssClass = 'new-tweet';
-						if(showThumbs === 'showThumbs') {
-							tweet.thumb_class = 'show';
-						}
+						tweet.thumb_class = 'show';
 					} else if (links[i].expanded_url.indexOf('http://yfrog.com') > -1) {
 						tweet.mediaUrl = links[i].expanded_url;
 						tweet.thumbnail =  links[i].expanded_url + ":iphone"; //changed from :small so Touchpad details looks better
 						//tweet.dividerMessage = tweet.thumbnail;
-						if(showThumbs === 'showThumbs') {
-							tweet.thumb_class = 'show';
-						}
+						tweet.thumb_class = 'show';
 					} else if (links[i].expanded_url.indexOf('img.ly') > -1) {
 						var img = links[i].expanded_url.substr(links[i].expanded_url.indexOf('/', 8) + 1);
 						tweet.mediaUrl = links[i].expanded_url;
 						tweet.thumbnail = "http://img.ly/show/medium/" + img; // changed from thumb so Touchpad details looks better
 						//tweet.dividerMessage = tweet.thumbnail;
-						if(showThumbs === 'showThumbs') {
-							tweet.thumb_class = 'show';
-						}
+						tweet.thumb_class = 'show';
 					} else if (links[i].expanded_url.indexOf('http://phnx.ws/') > -1) {
 						tweet.mediaUrl = links[i].expanded_url;
 						tweet.thumbnail =  links[i].expanded_url + "/thumb";
 						//tweet.dividerMessage = tweet.thumbnail;
-						if(showThumbs === 'showThumbs') {
-							tweet.thumb_class = 'show';
-							tweet.thumb_type = 'small';
-						}
-
+						tweet.thumb_class = 'show';
+						tweet.thumb_type = 'small';
 					}
 				}
 			}
@@ -126,9 +111,7 @@ TweetHelper.prototype = {
 					tweet.text = tweet.text.replace(new RegExp(media_links[i].url, 'g'), media_links[i].media_url);	
 					tweet.mediaUrl = media_links[i].media_url;
 					tweet.thumbnail = media_links[i].media_url+":small";  // using small instead of thumb to keep aspect ratio
-					if(showThumbs === 'showThumbs') {
-						tweet.thumb_class = 'show';
-					}
+					tweet.thumb_class = 'show';
 				}
 			}
 		} //end block
