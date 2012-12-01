@@ -11,10 +11,10 @@
 					<div class='tweet-username'>#{-user.name}</div>
 					<div class='tweet-screenname'>@#{-user.screen_name}</div>
 					<div class="tweet-favstar #{-fav_class}">★</div>
-					<div class="tweet-text details">#{-text}</div>
+					<div class="tweet-text details #{-emoji_class}">#{-text}</div>
 					<div id="thumb-wrapper">
 						<!--div id="thumb-#{-toasterId}" class="inline-thumb #{-thumb_class} inline-thumb-large" x-mojo-tap-highlight="immediate" style="background-image: url(#{-thumbnail});"></div-->
-						<div id="thumb-#{-toasterId}" class="inline-thumb #{-thumb_class} inline-thumb-large #{-thumb_type}" x-mojo-tap-highlight="immediate"><img id="thumb" src=#{-thumbnail} alt="..."/></div>	
+						<div id="thumb-#{-toasterId}" class="inline-thumb details #{-thumb_class} inline-thumb-large #{-thumb_type}" x-mojo-tap-highlight="immediate"><img id="thumb" src=#{-thumbnail} alt="..."/></div>	
 					</div>
 					<div class="tweet-footer">#{-time_str} (#{-time_tweeted}) #{-via} #{-source}</div>
 				</div> 

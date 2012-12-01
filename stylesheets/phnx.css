@@ -103,35 +103,48 @@ body.no-gesture {  /* touchpad/emulator */
 }
 
 /*Block added by DC*/
-#emoji{
+.emoji{
+	display: none;
 	position:relative;
 	top:2px;
 }
 
-.font-tiny .timeline #emoji{
+.showEmoji .timeline .emoji{
+	display: inline;
+}
+
+.detailsEmoji .details .emoji{
+	display: inline;
+}
+
+.showEmoji .details .emoji{
+	display: inline;
+}
+
+.font-tiny .timeline .emoji{
 	height: 12px;
 }
 
-.font-small .timeline #emoji{
+.font-small .timeline .emoji{
 	height: 14px;
 }
 
-.font-medium .timeline #emoji{
+.font-medium .timeline .emoji{
 	height: 16px;
 }
 
-.font-large .timeline #emoji{
+.font-large .timeline .emoji{
 	height: 18px;
 }
 
-.font-huge .timeline #emoji{
+.font-huge .timeline .emoji{
 	height: 22px;
 }
 
-.font-magoo .timeline #emoji{
+.font-magoo .timeline .emoji{
 	height: 26px;
 }
-.details #emoji{
+.details .emoji{
 	height: 18px;
 }
 /*end block DC*/
@@ -553,10 +566,23 @@ body.no-gesture {  /* touchpad/emulator */
 	margin-left: auto;
 	margin-right: auto;
 }
-.inline-thumb.show{
+//.inline-thumb.show{
+//	display: block;
+//	//margin: 10px auto;
+//}
+.showThumbs .timeline.show .inline-thumb{
 	display: block;
 	//margin: 10px auto;
 }
+.detailsThumbs .details .inline-thumb.show{
+	display: block;
+	//margin: 10px auto;
+}
+.showThumbs .details .inline-thumb.show{
+	display: block;
+	//margin: 10px auto;
+}
+
 .large-device .inline-thumb-large{
 	height: 256px;
 	background-size: auto 256x;
@@ -573,12 +599,12 @@ body.no-gesture {  /* touchpad/emulator */
 .thumb-wrapper{
 	//position: relative;
 }
-#thumb-wrapper img
+.showThumbs #thumb-wrapper img
 {
 max-width:100%; 
 max-height:100%;
 margin:auto;
-display:block;
+//  display:block;
 	-webkit-border-radius: 4px;
 
 }

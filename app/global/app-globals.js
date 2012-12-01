@@ -291,13 +291,21 @@ var global = {
 	}, // added by DC
 	setShowThumbs: function(body, showThumbsStatus) {
 		Element.removeClassName(body, 'showThumbs');
-		if(showThumbsStatus === 'false'){
-			Element.addClassName(body, 'enableThumbs');
+		Element.removeClassName(body, 'detailsThumbs');
+		if(showThumbsStatus === 'showThumbs'){
+			Element.addClassName(body, 'showThumbs');
+		}	else if(showThumbsStatus === 'detailsThumbs'){
+			Element.addClassName(body, 'detailsThumbs');
 		}
-		else {
-			Element.addClassName(body, 'disableThumbs');
+	}, // added by DC
+	setShowEmoji: function(body, showEmojiStatus) {
+		Element.removeClassName(body, 'showEmoji');
+		Element.removeClassName(body, 'detailsEmoji');
+		if(showEmojiStatus === 'showEmoji'){
+			Element.addClassName(body, 'showEmoji');
+		} else if(showEmojiStatus === 'detailsEmoji'){
+			Element.addClassName(body, 'detailsEmoji');
 		}
-		banner("Please re-start app to enable new pref");
 	}, // added by DC
 
 };

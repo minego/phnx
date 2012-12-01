@@ -68,7 +68,7 @@ function ord(string) {
 
 function emojify(stringInput, size) {
 	if (!size)
-		size = 24;
+		size = 24; 
 
 	prevCode = 0;
 	var pass = 1;
@@ -77,20 +77,20 @@ function emojify(stringInput, size) {
 	var regx = /([\ue001-\ue537])/g;
 	replacedText = stringInput.replace(regx, function(s, eChar) {
 		//return '<img height="' + size + '" width="' + size + '" src="images/emoji/' + eChar.charCodeAt(0).toString(16).toUpperCase() + '.png" />';
-		return '<img id="emoji" src="images/emoji/' + eChar.charCodeAt(0).toString(16).toUpperCase() + '.png" />';
+		return '<img class="emoji" src="images/emoji/' + eChar.charCodeAt(0).toString(16).toUpperCase() + '.png" />';
 	});
 	
 	regx = this.getRegxSingles();
 	replacedText = replacedText.replace(regx, function(s, eChar) {
 		//return '<img height="' + size + '" width="' + size + '" src="images/emoji/' + eChar.charCodeAt(0).toString(16).toUpperCase() + '.png" />';		
-		return '<img id="emoji" src="images/emoji/' + eChar.charCodeAt(0).toString(16).toUpperCase() + '.png" />';		
+		return '<img class="emoji" src="images/emoji/' + eChar.charCodeAt(0).toString(16).toUpperCase() + '.png" />';		
 	});
 
 	//Added by DC
 	regx = /(\u0023\u20E3|[\u0030-\u0039]\u20E3)/g;
 	replacedText = replacedText.replace(regx, function(s, eChar){
 		//return '<img height="' + size + '" width="' + size + '" src="images/emoji/' + eChar.charCodeAt(0).toString(16).toUpperCase() + '_20E3.png" />';
-		return '<img id="emoji" src="images/emoji/' + eChar.charCodeAt(0).toString(16).toUpperCase() + '_20E3.png" />';
+		return '<img class="emoji" src="images/emoji/' + eChar.charCodeAt(0).toString(16).toUpperCase() + '_20E3.png" />';
 	}); //end block DC
 
 	// var replaceRegex = /([\u0080-\uFFFF])/g;
@@ -121,7 +121,7 @@ function emojify(stringInput, size) {
 	  		//return res.replace(/^([\da-f]+)$/i, '<img height="' + size + '" width="' + size + '" src="images/emoji/$1.png" />');		
 	  		pass = 2;
 	  		//return res.replace(/^([\da-f]+)$/i, '<img height="' + size + '" width="' + size + '" src="images/emoji/$1');
-	  		return res.replace(/^([\da-f]+)$/i, '<img id="emoji" src="images/emoji/$1');
+				return res.replace(/^([\da-f]+)$/i, '<img class="emoji" src="images/emoji/$1');
 			}		
 			else if(pass === 2) {
 				if(res === "1F1F3" | res === "1F1EA" | res=== "1F1F8" | res === "1F1F7" | res === "1F1E7" | res === "1F1F9" | res === "1F1F5" | res === "1F1F7" | res === "1F1FA" | res === "1F1F8"){
@@ -136,7 +136,7 @@ function emojify(stringInput, size) {
 			else {
 				//Below is the original line
 				//return res.replace(/^([\da-f]+)$/i, '<img height="' + size + '" width="' + size + '" src="images/emoji/$1.png" />');
-				return res.replace(/^([\da-f]+)$/i, '<img id="emoji" src="images/emoji/$1.png" />');
+				return res.replace(/^([\da-f]+)$/i, '<img class="emoji" src="images/emoji/$1.png" />');
 				pass = 1;
 			}
 		}

@@ -74,7 +74,18 @@ function PreferencesAssistant() {
 				{key: 'enterToSubmit', type: 'toggle', label: 'Enter to submit'},
 				{key: 'autoCorrect', type: 'toggle', label: 'Auto Correct'},
 				{key: 'hideAvatar', type: 'toggle', label: 'Hide Avatars (requires re-start of app)'},
-				{key: 'showThumbs', type: 'toggle', label: 'Show Inline Thumbnail previews'}
+				//{key: 'showThumbs', type: 'toggle', label: 'Show Inline Thumbnail previews'},
+				{key: 'showThumbs', type: 'select', label: 'Show Inline Thumbnail previews', items: [
+					{label: 'Never', value: 'noThumbs'},
+					{label: 'Details Only', value: 'detailsThumbs'},
+					{label: 'Always', value: 'showThumbs'}
+				]},
+				//{key: 'showEmoji', type: 'toggle', label: 'Show emoji'}
+				{key: 'showEmoji', type: 'select', label: 'Show emoji', items: [
+					{label: 'Never', value: 'noEmoji'},
+					{label: 'Details Only', value: 'detailsEmoji'},
+					{label: 'Always', value: 'showEmoji'}
+				]}
 			],
 			'Notifications': [
 				{key: 'notifications', type: 'toggle', label: 'Notifications'},
@@ -194,7 +205,8 @@ PreferencesAssistant.prototype = {
 		this.controller.listen(this.controller.get('select-taborder'), Mojo.Event.propertyChange, this.tabOrderChanged.bind(this));
 		this.controller.listen(this.controller.get('select-fontSize'), Mojo.Event.propertyChange, this.fontChanged.bind(this));
 		this.controller.listen(this.controller.get('toggle-hideAvatar'), Mojo.Event.propertyChange, this.hideAvatarChanged.bind(this)); //added by DC
-		this.controller.listen(this.controller.get('toggle-showThumbs'), Mojo.Event.propertyChange, this.showThumbsChanged.bind(this)); //added by DC
+		this.controller.listen(this.controller.get('select-showThumbs'), Mojo.Event.propertyChange, this.showThumbsChanged.bind(this)); //added by DC
+		this.controller.listen(this.controller.get('select-showEmoji'), Mojo.Event.propertyChange, this.showEmojiChanged.bind(this)); //added by DC
 	},
 	closeTapped: function() {
 		this.controller.stageController.popScene();
@@ -232,6 +244,10 @@ PreferencesAssistant.prototype = {
 		var body = this.controller.stageController.document.getElementsByTagName("body")[0];
 		global.setShowThumbs(body, event.value);
 	}, // added by DC
+	showEmojiChanged: function(event) {
+		var body = this.controller.stageController.document.getElementsByTagName("body")[0];
+		global.setShowEmoji(body, event.value);
+	}, // added by DC
 
 	cleanup: function() {
 		// Save preferences on exit.
@@ -253,6 +269,7 @@ PreferencesAssistant.prototype = {
 		this.controller.stopListening(this.controller.get('select-fontSize'), Mojo.Event.propertyChange, this.fontChanged);
 		this.controller.stopListening(this.controller.get("close-button"), Mojo.Event.tap, this.closeTapped);
 		this.controller.stopListening(this.controller.get('toggle-hideAvatar'), Mojo.Event.propertyChange, this.hideAvatarChanged); // added by DC
-		this.controller.stopListening(this.controller.get('toggle-showThumbs'), Mojo.Event.propertyChange, this.shotThumbsChanged); // added by DC
+		this.controller.stopListening(this.controller.get('select-showThumbs'), Mojo.Event.propertyChange, this.showThumbsChanged); // added by DC
+		this.controller.stopListening(this.controller.get('select-showEmoji'), Mojo.Event.propertyChange, this.showEmojiChanged); // added by DC
 	}
 };

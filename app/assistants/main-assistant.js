@@ -292,6 +292,7 @@ MainAssistant.prototype = {
 					this.controller.setupWidget('list-' + panel.id,{itemTemplate: "templates/tweets/item",listTemplate: "templates/list", renderLimit: this.renderLimit}, panel.model);
 				}  // added by DC
 				showThumbs = prefs.read('showThumbs'); // added by DC
+				showEmoji = prefs.read('showEmoji'); // added by DC
 
 				//this.controller.setupWidget('list-' + panel.id,{itemTemplate: "templates/tweets/item",listTemplate: "templates/list", renderLimit: this.renderLimit}, panel.model);
 
@@ -1650,7 +1651,8 @@ MainAssistant.prototype = {
 		global.setFontSize(body, prefs.read('fontSize'));
 		global.setLayout(body, prefs.read('barlayout'));
 		global.setTabOrder(body, prefs.read('taborder'));
-		
+		global.setShowThumbs(body, prefs.read('showThumbs'));
+		global.setShowEmoji(body, prefs.read('showEmoji'));		
 		
 		//global.setHideAvatar(body, prefs.read('hideAvatar')); // added by DC
 	},

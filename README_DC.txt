@@ -34,3 +34,4 @@ Modified item.html, item-no-avatar.html, phnx.css, preferences-assistant.js, loc
 Updated way that favourite star works in timelines and direction arrows of DMs.
 Modified tweet.js to show time of tweet (or date if over 24hrs) in details view and removed "via" from details view of DMs
 Modified item-no-avatar.html, item.html, phnx.cc, details.html, tweet.js(helpers) and added emoji.js to support display of tweets containing unicode emoji
+Modified handling of emoji display and inline thumbnails to allow for display in timeline and details, details only, or never.  No longer requires restart when changing preference.
