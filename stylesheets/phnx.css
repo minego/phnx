@@ -509,6 +509,13 @@ body.no-gesture {  /* touchpad/emulator */
 .tweet-favstar.show {
 	display: inline-block;
 }
+.tweet-has-emoji{
+	display: none;
+}
+.tweet-has-emoji.show{
+	display: inline;
+}
+
 .tweet-blank {
 	display: inline-block;
 	float: center;

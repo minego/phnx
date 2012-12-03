@@ -102,7 +102,7 @@ var TweetToaster = Class.create(Toaster, {
 		
 		// Emojify - added by DC
 		//this.tweet.text = emojify(this.tweet.text,22);
-		//Mojo.Log.info(this.tweet.text);
+		Mojo.Log.info(this.tweet.text);
 		// re-render the tweet HTML
 		//var tweetHtml = Mojo.View.render({
 		//	object: this.tweet,

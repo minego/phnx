@@ -130,6 +130,10 @@ TweetHelper.prototype = {
 
 		// Emojify - added by DC
 		tweet.text = emojify(tweet.text,16);
+		if(tweet.text.indexOf('<img class="emoji" src=') > -1){
+			tweet.emoji_class = 'show';
+		}
+		
 		//Mojo.Log.info(tweet.emojify);
 
 		return tweet;

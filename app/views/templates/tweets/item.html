@@ -8,7 +8,7 @@
 	     	<div class='tweet-username'>#{-user.name}</div>
 				<div class='tweet-screenname'>@#{-user.screen_name}</div>
 				<div class="tweet-favstar #{-fav_class}">★</div>
-				<div class='tweet-text timeline #{-emoji_class}'>#{-text}</div>
+				<div class='tweet-text timeline'>#{-text}</div>
 				<div id="thumb-wrapper">
 					<!--div class='inline-thumb #{-thumb_class}' style="background-image: url(#{-thumbnail});"></div-->
 					<!--div class="inline-thumb timeline #{-thumb_class}"><img src=#{-thumbnail} alt="..."/></div-->
@@ -16,6 +16,7 @@
 				</div>
 				<div class='tweet-footer'>
 					#{-time_str} #{-via} #{-source}
+					<div class='tweet-has-emoji #{-emoji_class}'>☺</div>
 					<div class="tweet-avatar #{-rt_class} retweet" style="background-image: url(#{-retweeter.profile_image_url});"></div>
 					#{-footer}
 				</div>
