@@ -5,4 +5,7 @@
 Packages
 Packages.gz
 .directory
+Thumbs.db
+
 *~
+*.bak

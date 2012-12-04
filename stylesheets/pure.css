@@ -120,6 +120,10 @@ body.default {
 .section-header span {
 	color: white;
 }
+.section-large-header span {
+	background: #333;
+	color: white;
+}
 .pref-row-wrapper .title {
 	color: #d2d2d2;
 }

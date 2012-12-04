@@ -97,11 +97,28 @@ StatusAssistant.prototype = {
 			}
 		}
 
-		var templates = {
-			"search": "search",
-			"list": "item",
-			"retweets": "item"
-		};
+		//block added by DC
+		var prefs = new LocalStorage();
+		var templates = {};
+		if (prefs.read('hideAvatar')) {
+			templates = {
+				"search": "search-no-avatar",
+				"list": "item-no-avatar",
+				"retweets": "item-no-avatar"
+			};
+		}
+		else{
+			templates = {
+				"search": "search",
+				"list": "item",
+				"retweets": "item"
+			};
+		} // end block
+		/*var templates = {
+				"search": "search",
+				"list": "item",
+				"retweets": "item"
+		};*/
 
 		this.itemsModel.items = items;
 		this.controller.setupWidget('list-items', {itemTemplate: "templates/tweets/" + templates[type],listTemplate: "templates/list", renderLimit: 1000}, this.itemsModel);
