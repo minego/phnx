@@ -511,6 +511,9 @@ body.no-gesture {  /* touchpad/emulator */
 }
 .tweet-has-emoji{
 	display: none;
+	float: right;
+	font-weight: bold;
+	color: #bbb;
 }
 .tweet-has-emoji.show{
 	display: inline;
