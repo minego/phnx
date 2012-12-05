@@ -97,8 +97,8 @@ ProfileAssistant.prototype = {
 		}
 
 		this.controller.setupWidget('list-history',{itemTemplate: "templates/tweets/item",listTemplate: "templates/list", renderLimit: this.renderLimit}, this.historyModel);
-		this.controller.setupWidget('list-mentions',{itemTemplate: "templates/tweets/search",listTemplate: "templates/list", renderLimit: this.renderLimit}, this.mentionsModel);
 		this.controller.setupWidget('list-favorites',{itemTemplate: "templates/tweets/item",listTemplate: "templates/list", renderLimit: this.renderLimit}, this.favoritesModel);
+		this.controller.setupWidget('list-mentions',{itemTemplate: "templates/tweets/search",listTemplate: "templates/list", renderLimit: this.renderLimit}, this.mentionsModel);
 
 		for (var i=0; i < this.panels.length; i++) {
 			this.controller.setupWidget(this.panels[i] + "-scroller",{mode: 'vertical'},{});

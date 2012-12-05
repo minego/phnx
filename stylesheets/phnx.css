@@ -102,6 +102,53 @@ body.no-gesture {  /* touchpad/emulator */
 	font-size: 26px;
 }
 
+/*Block added by DC*/
+.emoji{
+	display: none;
+	position:relative;
+	top:2px;
+}
+
+.showEmoji .timeline .emoji{
+	display: inline;
+}
+
+.detailsEmoji .details .emoji{
+	display: inline;
+}
+
+.showEmoji .details .emoji{
+	display: inline;
+}
+
+.font-tiny .timeline .emoji{
+	height: 12px;
+}
+
+.font-small .timeline .emoji{
+	height: 14px;
+}
+
+.font-medium .timeline .emoji{
+	height: 16px;
+}
+
+.font-large .timeline .emoji{
+	height: 18px;
+}
+
+.font-huge .timeline .emoji{
+	height: 22px;
+}
+
+.font-magoo .timeline .emoji{
+	height: 26px;
+}
+.details .emoji{
+	height: 18px;
+}
+/*end block DC*/
+
 #launch-scene{
 	width: 100%;
 	height: 320px;
@@ -287,11 +334,11 @@ body.no-gesture {  /* touchpad/emulator */
 #nav-home {
 	background: url('../images/low/icons/tweets.png') 24px center no-repeat;
 }
-#nav-mentions {
-	background: url('../images/low/icons/mentions.png') 22px center no-repeat, url('../images/low/nav-icon-border.png') left 2px no-repeat;
-}
 #nav-messages {
 	background: url('../images/low/icons/messages.png') 20px center no-repeat, url('../images/low/nav-icon-border.png') left 2px no-repeat;
+}
+#nav-mentions {
+	background: url('../images/low/icons/mentions.png') 22px center no-repeat, url('../images/low/nav-icon-border.png') left 2px no-repeat;
 }
 #nav-lists {
 	background: url('../images/low/icons/lists.png') 20px center no-repeat, url('../images/low/nav-icon-border.png') left 2px no-repeat;
@@ -299,6 +346,7 @@ body.no-gesture {  /* touchpad/emulator */
 #nav-search {
 	background: url('../images/low/icons/search.png') 19px center no-repeat, url('../images/low/nav-icon-border.png') left 2px no-repeat;
 }
+
 .beacon {
 	display: block;
 	position: relative;
@@ -444,13 +492,133 @@ body.no-gesture {  /* touchpad/emulator */
 	font-weight: normal;
 	color: #bbb;
 }
+.tweet-favstar {
+	display: none;
+	float: right;
+	font-weight: bold;
+	color: #bb0;
+}
+.tweet-favstar.show {
+	display: inline-block;
+}
+.tweet-has-emoji{
+	display: none;
+	float: right;
+	font-weight: bold;
+	color: #bbb;
+}
+.tweet-has-emoji.show{
+	display: inline;
+}
+
+.tweet-blank {
+	display: inline-block;
+	float: center;
+	font-weight: normal;
+	color: #bbb;
+}
+
+.dmDir {
+	display: inline-block;
+	float: right;
+	font-weight: bold;
+	color: #bbb;
+	margin-left: 4px;
+}
+
+.direction-arrow {
+	display: inline-block;
+	height: 16px;
+	width: 10px;
+	background-size: 10px;
+	background: no-repeat;
+	margin: 4px 2px 0px 0px;
+	float: right;
+} //added by DC
+
+.direction-arrow .font-tiny {
+	height: 44px;
+	width: 48px;
+	background-size: 48px;
+} //added by DC
+
+
+//.content-wrapper-no-avatar {
+	//Added by DC
+//	display: inline-block;
+//	float: left;
+//}
+
 .content-wrapper {
 	display: inline-block;
 	float: left;
+	//width: 300px;
+	width: 300px;
 }
 
+.showAvatar .content-wrapper {
+	width: 236px;
+}
+
+.inline-thumb{
+	display: none;
+	height: 64px;
+	text-align: center;
+	//position: absolute;
+	//width: 80px;
+	//background-size: 64px;
+	background-size: auto 64px;
+	background-repeat: no-repeat;
+	background-position: center center;
+	-webkit-border-radius: 4px;
+	margin: 5px 8px 0px 0px;
+	margin-left: auto;
+	margin-right: auto;
+}
+//.inline-thumb.show{
+//	display: block;
+//	//margin: 10px auto;
+//}
+.showThumbs .timeline.show .inline-thumb{
+	display: block;
+	//margin: 10px auto;
+}
+.detailsThumbs .details .inline-thumb.show{
+	display: block;
+	//margin: 10px auto;
+}
+.showThumbs .details .inline-thumb.show{
+	display: block;
+	//margin: 10px auto;
+}
+
+.large-device .inline-thumb-large{
+	height: 256px;
+	background-size: auto 256x;
+}
+.large-device .inline-thumb-large.small{
+	height: 128px;
+	background-size: auto 128x;
+}
+.inline-thumb-large{
+	height: 128px;
+	background-size: auto 128px;
+}
+
+//.thumb-wrapper{
+	//position: relative;
+//}
+
+#thumb-wrapper img
+{
+max-width:100%; 
+max-height:100%;
+margin:auto;
+//  display:block;
+	-webkit-border-radius: 4px;
+}
 .tweet-avatar{
-	display: inline-block;
+	display: none;
 	height: 48px;
 	width: 48px;
 	background-size: 48px;
@@ -458,6 +626,15 @@ body.no-gesture {  /* touchpad/emulator */
 	margin: 5px 8px 0px 0px;
 	float: left;
 }
+
+.showAvatar .tweet-avatar{
+	display: inline-block;
+}
+
+.tweet-avatar.details{
+	display: inline-block;
+}
+
 .font-tiny .tweet-avatar {
 	height: 40px;
 	width: 40px;
@@ -470,14 +647,13 @@ body.no-gesture {  /* touchpad/emulator */
 	height: 26px;
 	background-size: 26px;
 }
-.tweet-avatar.retweet.show{
+.showAvatar .tweet-avatar.retweet.show{
 	display: inline-block;
 }
 
 .tweet-footer{
 	font-size: 11px;
 	color: #bbb;
-	max-width: 236px;
 }
 .rt-wrapper {
 	margin-right: 8px;
@@ -526,9 +702,19 @@ body.no-gesture {  /* touchpad/emulator */
 	width: 100%;
 }
 
-.content-wrapper {
-	width: 236px;
-}
+//.content-wrapper-no-avatar {
+	//Added by DC
+//	width: 300px;
+//}
+
+//.content-wrapper {
+//	width: 300px;
+//}
+
+//.showAvatar .content-wrapper {
+//	width: 236px;
+//}
+
 
 .toaster .content-wrapper {
 	width: 100%;
@@ -538,11 +724,27 @@ body.no-gesture {  /* touchpad/emulator */
 	clear: both;
 }
 
+.small-device .tweet-text-no-avatar,
+.medium-device .tweet-text-no-avatar {
+	//Added by DC
+	max-width: 300px;
+	width: 300px;
+
+}
+
 .small-device .tweet-text,
 .medium-device .tweet-text {
+	max-width: 300px;
+	width: 300px;
+}
+
+.showAvatar.small-device .tweet-text,
+.showAvatar.medium-device .tweet-text {
 	max-width: 236px;
 	width: 236px;
 }
+
+
 
 .toaster .tweet-text{
 	max-width: none;
@@ -870,6 +1072,7 @@ span.link{
 .large-device .profile-icon-wrapper {
 	width: 1700px;
 }
+
 .large-device .profile-icon-wrapper {
 	text-align: left;
 }
@@ -1278,6 +1481,10 @@ span.link{
 .button.signin.selected {
 	-webkit-border-image: url(../images/low/buttons/signin-tapped.png) 6 stretch;
 }
+.preferences-wrapper{
+	padding-top: 40px;
+}
+
 .myaccount-button-wrapper {
 	padding-top: 50px;
 	padding-bottom: 10px;
@@ -1350,6 +1557,7 @@ span.link{
 	background: url('../images/low/header-bg.png') left top repeat-x;
 	position: fixed;
 }
+
 .section-header {
 	width: 100%;
 	background: url('../images/low/header-bg.png') left top repeat-x;
@@ -1358,6 +1566,17 @@ span.link{
 	font-family: "Prelude";
 	font-size: 16px;
 	padding: 12px 15px 15px 15px;
+	color: #d2d2d2;
+	display: block;
+}
+.section-large-header {
+	width: 100%;
+	background: url('../images/low/header-large-bg.png') left top repeat-x;
+}
+.section-large-header span {
+	font-family: "Prelude";
+	font-size: 16px;
+	padding: 52px 15px 15px 15px;
 	color: #d2d2d2;
 	display: block;
 }

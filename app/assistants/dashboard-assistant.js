@@ -20,6 +20,7 @@ DashboardAssistant.prototype = {
 		this.resource = resource;
 		this.account = account;
 		this.accounts = accounts;
+		var prefs = new LocalStorage();
 		// Show a new notification and update the dashboard
 		var from;
 		if (items[0].user) {
@@ -28,17 +29,35 @@ DashboardAssistant.prototype = {
 		}
 		else {
 			// Direct messages have different property names
-			this.title = 'Message from @' + items[0].sender.screen_name;
-			from = items[0].sender.screen_name;
+			if (prefs.read('notificationShieldMessages')) {
+				this.title = 'New update';
+				from = "";
+			}
+			else{
+				this.title = 'Message from @' + items[0].sender.screen_name;
+				from = items[0].sender.screen_name;
+			}
 		}
-		this.message = items[0].text;
+	
+		var bannerMessage = '';	
+		if (prefs.read('notificationShieldMessages')) {
+			this.message = "New tweets";
+			var bannerMessage = this.message;
+		}
+		else{
+			this.message = items[0].text;
+			var bannerMessage = '@' + from + ': ' + this.message;
+		}
 		this.count += items.length;
 		
-		var bannerMessage = '@' + from + ': ' + this.message;
+		//var bannerMessage = '@' + from + ': ' + this.message;
+
+		var notificationSound = prefs.read('notificationSound');
 
 		var bannerParams = {
 			messageText: bannerMessage,
-			soundClass: 'notifications'
+//			soundClass: 'notifications'
+			soundClass: notificationSound
 		};
 		
 		Mojo.Controller.getAppController().showBanner(bannerParams, {source: "notification"}, 'phnx');
@@ -72,8 +91,14 @@ DashboardAssistant.prototype = {
 			}.bind(this)});
 	},
 	listenDashboard: function() {
+		var prefs = new LocalStorage();
 		this.controller.listen(this.controller.get('dashboard-icon'), Mojo.Event.tap, this.iconTapped.bind(this));
-		this.controller.listen(this.controller.get('dashboard-body'), Mojo.Event.tap, this.bodyTapped.bind(this));
+		if (prefs.read('notificationShieldMessages')) {
+			this.controller.listen(this.controller.get('dashboard-body'), Mojo.Event.tap, this.iconTapped.bind(this));
+		}
+		else {
+			this.controller.listen(this.controller.get('dashboard-body'), Mojo.Event.tap, this.bodyTapped.bind(this));
+		}
 	},
 	iconTapped: function(event) {
 		var launchArgs = {

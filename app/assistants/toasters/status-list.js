@@ -20,6 +20,8 @@ var StatusListToaster = Class.create(Toaster, {
 		this.controller.setupWidget('status-scroller-' + this.id, {mode: 'vertical'},{});
 		this.controller.setupWidget('status-list-' + this.id, {itemTemplate: "templates/tweets/item",listTemplate: "templates/list", renderLimit: 200}, this.listModel);
 
+//		this.controller.setupWidget('status-list-' + this.id, {itemTemplate: "templates/tweets/item",listTemplate: "templates/list", renderLimit: 200}, this.listModel);
+
 	},
 	setup: function() {
 		this.controller.instantiateChildWidgets(get('toasters'));

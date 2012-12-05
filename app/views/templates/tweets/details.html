@@ -1,18 +1,24 @@
 <div class="palm-row-wrapper">
 	<table width="100%" border="0">
-	    <tr>
-	        <td valign="top" width="40">
-	        	<div id="user-avatar" class="tweet-avatar details" style="background-image: url(#{-user.profile_image_url});"></div>
+		<tr>
+	   	<td valign="top" width="40">
+	     	<div id="user-avatar" class="tweet-avatar details" style="background-image: url(#{-user.profile_image_url});"></div>
 				<div id="rt-#{-toasterId}" class="rt-wrapper"><span class="rt-button #{-rt_class}" x-mojo-tap-highlight="immediate">#{-retweet_count}</span></div>
-	        </td>
-	        <td>
-	        	<div class="content-wrapper">
+	    </td>
+	    <td>
+	     	<div class="content-wrapper">
+	     		<div class="dmDir">#{-dir}</div>
 					<div class='tweet-username'>#{-user.name}</div>
 					<div class='tweet-screenname'>@#{-user.screen_name}</div>
-					<div class="tweet-text">#{-text}</div>
-					<div class="tweet-footer">#{-time_str} via #{-source}</div>
-				</div>
-	        </td>
-	    </tr>
+					<div class="tweet-favstar #{-fav_class}">★</div>
+					<div class="tweet-text details">#{-text}</div>
+					<div id="thumb-wrapper">
+						<!--div id="thumb-#{-toasterId}" class="inline-thumb #{-thumb_class} inline-thumb-large" x-mojo-tap-highlight="immediate" style="background-image: url(#{-thumbnail});"></div-->
+						<div id="thumb-#{-toasterId}" class="inline-thumb details #{-thumb_class} inline-thumb-large #{-thumb_type}" x-mojo-tap-highlight="immediate"><img id="thumb" src=#{-thumbnail} alt="..."/></div>	
+					</div>
+					<div class="tweet-footer">#{-time_str} (#{-time_tweeted}) #{-via} #{-source}</div>
+				</div> 
+	    </td>
+	   </tr>
 	</table>
 </div>

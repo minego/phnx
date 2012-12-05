@@ -97,10 +97,12 @@ StatusAssistant.prototype = {
 			}
 		}
 
+		//block added by DC
+		var prefs = new LocalStorage();
 		var templates = {
-			"search": "search",
-			"list": "item",
-			"retweets": "item"
+				"search": "search",
+				"list": "item",
+				"retweets": "item"
 		};
 
 		this.itemsModel.items = items;

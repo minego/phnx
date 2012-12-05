@@ -99,6 +99,9 @@ body.default.large-device {
 .section-header span {
 	color: #d2d2d2;
 }
+.section-large-header span {
+	color: #d2d2d2;
+}
 .pref-row-wrapper .title {
 	color: #d2d2d2;
 }

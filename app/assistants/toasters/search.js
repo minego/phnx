@@ -19,8 +19,14 @@ var SearchToaster = Class.create(Toaster, {
 		this.render({'toasterId':this.id, title: this.title}, 'templates/toasters/status-list');
 		
 		this.controller.setupWidget('status-scroller-' + this.id, {mode: 'vertical'},{});
-		this.controller.setupWidget('status-list-' + this.id, {itemTemplate: "templates/tweets/search",listTemplate: "templates/list", renderLimit: 200}, this.listModel);
 
+		var prefs = new LocalStorage();
+		if (prefs.read('hideAvatar')) {
+			this.controller.setupWidget('status-list-' + this.id, {itemTemplate: "templates/tweets/search-no-avatar",listTemplate: "templates/list", renderLimit: 200}, this.listModel);
+		}
+		else{
+			this.controller.setupWidget('status-list-' + this.id, {itemTemplate: "templates/tweets/search",listTemplate: "templates/list", renderLimit: 200}, this.listModel);
+		} //added by DC
 	},
 	setup: function() {
 		this.controller.instantiateChildWidgets(get('toasters'));
