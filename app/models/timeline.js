@@ -13,14 +13,7 @@ function Timeline(params){
 
 Timeline.prototype = {
 	setup: function(){
-		var prefs = new LocalStorage();
-			if (prefs.read('hideAvatar')) {
-				this.controller.setupWidget('list-' + this.panel.id,{itemTemplate: "templates/tweets/item-no-avatar",listTemplate: "templates/list", renderLimit: 1000}, this.toJSON());
-			}
-			else{
-				this.controller.setupWidget('list-' + this.panel.id,{itemTemplate: "templates/tweets/item",listTemplate: "templates/list", renderLimit: 1000}, this.toJSON());
-			}
-		//this.controller.setupWidget('list-' + this.panel.id,{itemTemplate: "templates/tweets/item",listTemplate: "templates/list", renderLimit: 1000}, this.toJSON());
+		this.controller.setupWidget('list-' + this.panel.id,{itemTemplate: "templates/tweets/item",listTemplate: "templates/list", renderLimit: 1000}, this.toJSON());
 		this.controller.listen('list-' + this.panel.id, Mojo.Event.listTap, this.scene.tweetTapped.bind(this));
 		this.controller.listen('more-' + this.panel.id, Mojo.Event.tap, this.moreButtonTapped.bind(this));
 	},

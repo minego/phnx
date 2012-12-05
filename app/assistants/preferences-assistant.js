@@ -73,7 +73,7 @@ function PreferencesAssistant() {
 				{key: 'refreshFlushAtLaunch', type: 'toggle', label: 'Refresh & flush at launch'},				
 				{key: 'enterToSubmit', type: 'toggle', label: 'Enter to submit'},
 				{key: 'autoCorrect', type: 'toggle', label: 'Auto Correct'},
-				{key: 'hideAvatar', type: 'toggle', label: 'Hide Avatars (requires re-start of app)'},
+				{key: 'hideAvatar', type: 'toggle', label: 'Hide Avatars'},
 				//{key: 'showThumbs', type: 'toggle', label: 'Show Inline Thumbnail previews'},
 				{key: 'showThumbs', type: 'select', label: 'Show Inline Thumbnail previews', items: [
 					{label: 'Never', value: 'noThumbs'},

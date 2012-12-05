@@ -283,18 +283,9 @@ MainAssistant.prototype = {
 
 			this.controller.setupWidget(panel.id + "-scroller",{mode: 'vertical'},{});
 			if (panel.type === "timeline") {
-				var prefs = new LocalStorage();
-				if (prefs.read('hideAvatar')) {
-					//this.controller.get(this.nodeId).addClassName('hide-avatar'); // added by dc so that you can delete DM's not created by yourself
-					this.controller.setupWidget('list-' + panel.id,{itemTemplate: "templates/tweets/item-no-avatar",listTemplate: "templates/list", renderLimit: this.renderLimit}, panel.model);
-				}
-				else{
-					this.controller.setupWidget('list-' + panel.id,{itemTemplate: "templates/tweets/item",listTemplate: "templates/list", renderLimit: this.renderLimit}, panel.model);
-				}  // added by DC
+				this.controller.setupWidget('list-' + panel.id,{itemTemplate: "templates/tweets/item",listTemplate: "templates/list", renderLimit: this.renderLimit}, panel.model);
 				showThumbs = prefs.read('showThumbs'); // added by DC
 				showEmoji = prefs.read('showEmoji'); // added by DC
-
-				//this.controller.setupWidget('list-' + panel.id,{itemTemplate: "templates/tweets/item",listTemplate: "templates/list", renderLimit: this.renderLimit}, panel.model);
 
 				//ask tweetmarker where we left off
 /*
@@ -1654,7 +1645,7 @@ MainAssistant.prototype = {
 		global.setLayout(body, prefs.read('barlayout'));
 		global.setTabOrder(body, prefs.read('taborder'));		
 		
-		//global.setHideAvatar(body, prefs.read('hideAvatar')); // added by DC
+		global.setHideAvatar(body, prefs.read('hideAvatar')); // added by DC
 	},
 	deactivate: function(event) {
 		this.controller.get(this.controller.document).stopObserving("keyup");

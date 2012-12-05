@@ -3,7 +3,7 @@
 ---  Sorry if I've screwed things up as I'm new to this.
 
 Modified tweet.js to allow deleting of other people's direct messages (line 62)
-Modified appinfo.json to keep version number 1.27 but change id to com.lestersoftware.phnx to avoid normal update conflicts
+Modified appinfo.json to keep version number 1.28 but change id to com.lestersoftware.phnx to avoid normal update conflicts
 Modified changelog.js for version number and description
 Modified preferences-assistant.js, local.js and tweet.js to give option for received DMs ('delReceivedDM')
 Modified preferences-assistant.js and local.js to give option to shield DMs (notificationShieldMessages)
@@ -35,3 +35,4 @@ Updated way that favourite star works in timelines and direction arrows of DMs.
 Modified tweet.js to show time of tweet (or date if over 24hrs) in details view and removed "via" from details view of DMs
 Modified item-no-avatar.html, item.html, phnx.cc, details.html, tweet.js(helpers) and added emoji.js to support display of tweets containing unicode emoji
 Modified handling of emoji display and inline thumbnails to allow for display in timeline and details, details only, or never.  No longer requires restart when changing preference.
+HideAvatars no longer needs app restart and in the process removed item-no-avatar.html

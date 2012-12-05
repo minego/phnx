@@ -180,14 +180,6 @@ body.no-gesture {  /* touchpad/emulator */
 	display: none;
 }
 
-.enableAvatar {
-	hideAvatar: false;
-}
-
-.disableAvatar {
-	hideAvatar: true;
-}
-
 .header-icon {
 	width: 62px;
 	height: 39px;
@@ -551,16 +543,23 @@ body.no-gesture {  /* touchpad/emulator */
 } //added by DC
 
 
-.content-wrapper-no-avatar {
+//.content-wrapper-no-avatar {
 	//Added by DC
-	display: inline-block;
-	float: left;
-}
+//	display: inline-block;
+//	float: left;
+//}
 
 .content-wrapper {
 	display: inline-block;
 	float: left;
+	//width: 300px;
+	width: 300px;
 }
+
+.showAvatar .content-wrapper {
+	width: 236px;
+}
+
 .inline-thumb{
 	display: none;
 	height: 64px;
@@ -618,9 +617,8 @@ margin:auto;
 //  display:block;
 	-webkit-border-radius: 4px;
 }
-
 .tweet-avatar{
-	display: inline-block;
+	display: none;
 	height: 48px;
 	width: 48px;
 	background-size: 48px;
@@ -628,6 +626,15 @@ margin:auto;
 	margin: 5px 8px 0px 0px;
 	float: left;
 }
+
+.showAvatar .tweet-avatar{
+	display: inline-block;
+}
+
+.tweet-avatar.details{
+	display: inline-block;
+}
+
 .font-tiny .tweet-avatar {
 	height: 40px;
 	width: 40px;
@@ -640,9 +647,10 @@ margin:auto;
 	height: 26px;
 	background-size: 26px;
 }
-.tweet-avatar.retweet.show{
+.showAvatar .tweet-avatar.retweet.show{
 	display: inline-block;
 }
+
 .tweet-footer{
 	font-size: 11px;
 	color: #bbb;
@@ -694,14 +702,19 @@ margin:auto;
 	width: 100%;
 }
 
-.content-wrapper-no-avatar {
+//.content-wrapper-no-avatar {
 	//Added by DC
-	width: 300px;
-}
+//	width: 300px;
+//}
 
-.content-wrapper {
-	width: 236px;
-}
+//.content-wrapper {
+//	width: 300px;
+//}
+
+//.showAvatar .content-wrapper {
+//	width: 236px;
+//}
+
 
 .toaster .content-wrapper {
 	width: 100%;
@@ -721,9 +734,17 @@ margin:auto;
 
 .small-device .tweet-text,
 .medium-device .tweet-text {
+	max-width: 300px;
+	width: 300px;
+}
+
+.showAvatar.small-device .tweet-text,
+.showAvatar.medium-device .tweet-text {
 	max-width: 236px;
 	width: 236px;
 }
+
+
 
 .toaster .tweet-text{
 	max-width: none;

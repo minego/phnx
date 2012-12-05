@@ -18,13 +18,7 @@ var StatusListToaster = Class.create(Toaster, {
 		this.render({'toasterId':this.id, title: this.title}, 'templates/toasters/status-list');
 
 		this.controller.setupWidget('status-scroller-' + this.id, {mode: 'vertical'},{});
-		var prefs = new LocalStorage();
-			if (prefs.read('hideAvatar')) {
-				this.controller.setupWidget('status-list-' + this.id, {itemTemplate: "templates/tweets/item-no-avatar",listTemplate: "templates/list", renderLimit: 200}, this.listModel);
-			}
-			else{
-				this.controller.setupWidget('status-list-' + this.id, {itemTemplate: "templates/tweets/item",listTemplate: "templates/list", renderLimit: 200}, this.listModel);
-			}//added by DC
+		this.controller.setupWidget('status-list-' + this.id, {itemTemplate: "templates/tweets/item",listTemplate: "templates/list", renderLimit: 200}, this.listModel);
 
 //		this.controller.setupWidget('status-list-' + this.id, {itemTemplate: "templates/tweets/item",listTemplate: "templates/list", renderLimit: 200}, this.listModel);
 

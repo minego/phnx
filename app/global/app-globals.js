@@ -280,14 +280,11 @@ var global = {
 		Element.addClassName(body, 'font-' + font);
 	},
 	setHideAvatar: function(body, hideAvatarStatus) {
-		Element.removeClassName(body, 'hideAvatar');
-		if(hideAvatarStatus === 'false'){
-			Element.addClassName(body, 'enableAvatar');
+		//Element.removeClassName(body, 'hideAvatar');
+		Element.removeClassName(body, 'showAvatar');
+		if(!hideAvatarStatus){
+			Element.addClassName(body, 'showAvatar');
 		}
-		else {
-			Element.addClassName(body, 'disableAvatar');
-		}
-		banner("Please re-start app to enable new pref");
 	}, // added by DC
 	setShowThumbs: function(body, showThumbsStatus) {
 		Element.removeClassName(body, 'showThumbs');
