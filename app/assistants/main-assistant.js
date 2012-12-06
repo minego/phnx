@@ -8,12 +8,16 @@ function MainAssistant(opts) {
 
 	this.loadingMore = false; //flag to determine if items should go to the bottom of a list
 	this.imagePreview = false;
+	this.favStatusChanged = false; // added by DC
 	this.loading = false;
+				
+	this.panelLabels = ["home","mentions","messages","lists","search"]; // added by DC
 
 	this.savedSearchesLoaded = false;
 	this.searchLoaded = false;
 	this.switcher = false;
 
+	this.myLastId = undefined;
 	this.count = 300; //how many tweets to load each request
 	this.renderLimit = 1000; //umm...this scares me. used in list widgets to prevent flickering...
 	this.toasters = new ToasterChain();
@@ -91,13 +95,70 @@ MainAssistant.prototype = {
 			TODO: make panels truly dynamic
 		**/
 
-		this.panels = [
-			{index: 0, position: 1, id: "home", title: "home", type: "timeline", resource: "home", height: 0, refresh: true, update: true, state: {left: 0, top: 0}, model: {items:homeItems}},
+	//	this.panels = [
+/*			{index: 0, position: 1, id: "home", title: "home", type: "timeline", resource: "home", height: 0, refresh: true, update: true, state: {left: 0, top: 0}, model: {items:homeItems}},
 			{index: 1, position: 2, id: "mentions", title: "mentions", type: "timeline", resource: "mentions", height: 0, refresh: true, update: true,	state: {left: -133, top: 0}, model: {items:mentionsItems}},
 			{index: 2, position: 3, id: "messages", title: "messages", type: "timeline", resource: "messages", height: 0, refresh: true, update: true,	state: {left: -339, top: 0}, model: {items:messagesItems}},
 			{index: 3, position: 4, id: "lists", title: "lists", type: "lists", height: 0, refresh: false, update: false},
 			{index: 4, position: 5, id: "search", title: "search", type: "search", height: 0, refresh: false, update: false}
-		];
+*/
+
+		// block added by DC to allow for easier panel order adjustment
+		var prefs = new LocalStorage();
+		var tabOrder = prefs.read('taborder');
+
+		if(tabOrder){
+			switch (tabOrder) {
+				case "hmdls":
+					this.panelLabels = ["home","mentions","messages","lists","search"]; // added by DC
+					break;
+				case "hmdsl":
+					this.panelLabels = ["home","mentions","messages","search","lists"]; // added by DC			
+					break;
+				case "hmsdl":
+					this.panelLabels = ["home","mentions","search","messages","lists"]; // added by DC			
+					break;
+				case "hmsld":
+					this.panelLabels = ["home","mentions","search","lists","messages"]; // added by DC			
+					break;
+				case "hmlds":
+					this.panelLabels = ["home","mentions","lists","messages","search"]; // added by DC			
+					break;
+				case "hmlsd":
+					this.panelLabels = ["home","mentions","lists","search","messages"]; // added by DC
+					break;
+			}
+		}
+
+		this.panels = new Array();
+
+		for (i=0; i<5; i++){
+			switch (this.panelLabels[i]) {
+				case "home":
+					this.panels[i] = {index: i, position: i+1, id: "home", title: "home", type: "timeline", resource: "home", height: 0, refresh: true, update: true, state: {left: 0, top: 0}, model: {items:homeItems}};
+					break;
+				case "mentions":
+					this.panels[i] = {index: i, position: i+1, id: "mentions", title: "mentions", type: "timeline", resource: "mentions", height: 0, refresh: true, update: true,	state: {left: -133, top: 0}, model: {items:mentionsItems}};
+					break;
+				case "lists":
+					this.panels[i] = {index: i, position: i+1, id: "lists", title: "lists", type: "lists", height: 0, refresh: false, update: false};
+					break;
+				case "search":
+					this.panels[i] = {index: i, position: i+1, id: "search", title: "search", type: "search", height: 0, refresh: false, update: false};
+					break;
+				case "messages":
+					this.panels[i] = {index: i, position: i+1, id: "messages", title: "messages", type: "timeline", resource: "messages", height: 0, refresh: true, update: true,	state: {left: -339, top: 0}, model: {items:messagesItems}};
+					break;
+			}
+		} //end block DC
+
+		/*	this.panels[0] = {index: 0, position: 1, id: "home", title: "home", type: "timeline", resource: "home", height: 0, refresh: true, update: true, state: {left: 0, top: 0}, model: {items:homeItems}};
+			this.panels[1] = {index: 1, position: 2, id: "mentions", title: "mentions", type: "timeline", resource: "mentions", height: 0, refresh: true, update: true,	state: {left: -133, top: 0}, model: {items:mentionsItems}};
+			this.panels[2] = {index: 2, position: 3, id: "lists", title: "lists", type: "lists", height: 0, refresh: false, update: false};
+			this.panels[3] = {index: 3, position: 4, id: "search", title: "search", type: "search", height: 0, refresh: false, update: false};
+			this.panels[4] = {index: 4, position: 5, id: "messages", title: "messages", type: "timeline", resource: "messages", height: 0, refresh: true, update: true,	state: {left: -339, top: 0}, model: {items:messagesItems}};
+			*/
+	//	];
 
 		this.timeline = 0; //index position of the timeline, default to first one
 
@@ -158,6 +219,10 @@ MainAssistant.prototype = {
 					{
 						label: 'Refresh',
 						command: 'cmdRefresh'
+					},
+					{
+						label: 'Refresh Flush',
+						command: 'cmdRefreshFlush'
 					}
 				]
 			},
@@ -219,6 +284,8 @@ MainAssistant.prototype = {
 			this.controller.setupWidget(panel.id + "-scroller",{mode: 'vertical'},{});
 			if (panel.type === "timeline") {
 				this.controller.setupWidget('list-' + panel.id,{itemTemplate: "templates/tweets/item",listTemplate: "templates/list", renderLimit: this.renderLimit}, panel.model);
+				showThumbs = prefs.read('showThumbs'); // added by DC
+				showEmoji = prefs.read('showEmoji'); // added by DC
 
 				//ask tweetmarker where we left off
 /*
@@ -367,7 +434,18 @@ MainAssistant.prototype = {
 
 		this.addListeners();
 		setTimeout(function(){
-			this.refreshAll();
+			var prefs = new LocalStorage();
+
+			if(prefs.read('refreshFlushAtLaunch') == false) {
+				this.refreshAll();
+			}
+			else{
+				for (var j=0; j < this.panels.length; j++) {
+					if(this.panels[j].type === "timeline")
+						this.refreshPanelFlush(this.panels[j]);
+				}
+			}
+					
 			this.loadLists();
 			this.getRetweeted();
 			// get the avatar for the minimized card
@@ -377,9 +455,7 @@ MainAssistant.prototype = {
 				var panel = this.getPanel(this.opts.panel);
 				this.scrollTo(panel.index);
 			}
-
-			var prefs = new LocalStorage();
-
+			
 			if (prefs.read('version') !== Mojo.appInfo.version) {
 				prefs.write('version', Mojo.appInfo.version);
 
@@ -389,10 +465,21 @@ MainAssistant.prototype = {
 	},
 	handleCommand: function(event) {
 		if (event.type === Mojo.Event.back) {
+			var prefs = new LocalStorage(); //added by DC
+			var refresh = prefs.read('refreshOnSubmit'); //added by DC
 			if (this.toasters.items.length > 0) {
 				if (this.imagePreview) {
 					this.toasters.items[this.toasters.items.length - 1].closePreview();
 				}
+				//block added by DC
+				else if (this.favStatusChanged) {
+					if (refresh) {
+						this.refresh();
+					}
+					this.favStatusChanged = false;
+					
+					this.toasters.back();
+				}//end block
 				else {
 					this.toasters.back();
 				}
@@ -443,6 +530,24 @@ MainAssistant.prototype = {
 					this.refreshAll();
 				}
 			}
+			//Block added by DC
+			else if (event.command === 'cmdRefreshFlush') {
+				var screenWidth = this.controller.window.innerWidth;
+				var panelWidth = 320;
+				if (Ajax.activeRequestCount === 0) {
+					//Need to refresh all on Touchpad - DC
+					if (screenWidth <= panelWidth) {
+						this.refreshPanelFlush(this.panels[this.timeline]);
+					}
+					else{
+						for (var j=0; j < this.panels.length; j++) {
+							if(this.panels[j].type === "timeline")
+								this.refreshPanelFlush(this.panels[j]);
+						}
+					}
+				}
+			} //end block DC
+
 			else if (event.command === 'cmdFindUser') {
 				this.toasters.add(new LookupToaster(this));
 			}
@@ -551,7 +656,9 @@ MainAssistant.prototype = {
 			this.controller.get(oldPanel.id + '-beacon').removeClassName('show');
 		}
 
-		if (event.value === 4 || screenWidth > panelWidth) {
+		// Need to change index for timeline below if changing order of panels - DC
+		if (panel.id === "search" || screenWidth > panelWidth) {
+		//if (event.value === 4 || screenWidth > panelWidth) {
 			// enable the search box
 			this.controller.get('txtSearch').disabled = false;
 			if (this.searchLoaded === false) {
@@ -616,9 +723,10 @@ MainAssistant.prototype = {
 		}.bind(this));
 	},
 	refreshAll: function() {
-		this.refreshPanel(this.panels[0]);
-		this.refreshPanel(this.panels[1]);
-		this.refreshPanel(this.panels[2]);
+		for (var j=0; j < this.panels.length; j++) {
+			if(this.panels[j].type === "timeline")
+				this.refreshPanel(this.panels[j]); //modified by DC to allow for possible re-ordering of panels at a later date
+		}
 
 		// Load the list of people being followed for auto complete
 		if (!global.following || !global.following.length) {
@@ -640,6 +748,7 @@ MainAssistant.prototype = {
 	refreshPanel: function(panel) {
 		this.loadingMore = false;
 		var lastId = undefined;
+		
 		if (panel.refresh) {
 			if (panel.model.items.length > 0) {
 				// grab the second tweet for gap detection
@@ -665,6 +774,58 @@ MainAssistant.prototype = {
 			this.loadSearch();
 		}
 	},
+	refreshPanelFlush: function(panel) {
+		this.loadingMore = false;
+		var lastId = undefined;
+		//var myLastId = undefined;
+
+			if (panel.model.items.length > 0) {
+				var tweet = panel.model.items[0];
+
+				if (tweet) {
+					if (tweet.is_rt) {
+						panel.model.myLastId = tweet.original_id;
+					}
+					else{
+						panel.model.myLastId = tweet.id_str;
+					}
+				}
+			}
+
+
+		panel.model.items = {};
+		panel.model.items.length = 0;
+		
+		if (panel.refresh) {
+			if (panel.model.items.length > 0) {
+				// grab the second tweet for gap detection
+				var tweet = panel.model.items[1];
+
+				if (tweet) {
+					if (tweet.is_rt) {
+						lastId = tweet.original_id;
+					}
+					else{
+						lastId = tweet.id_str;
+					}
+				}
+			}
+
+//			panel.model.items = {};
+//			panel.model.items.length = 0;
+
+
+			if (panel.id === 'messages') {
+				this.getDMs(panel, lastId);
+			} else {
+				this.getTweets(panel, lastId);
+			}
+		}
+		else if (panel.id === 'search') {
+			this.loadSearch();
+		}			
+	},
+
 	refreshAndScrollTo: function(id) {
 		var panel = this.getPanel(id);
 		this.refreshAll();
@@ -731,7 +892,8 @@ MainAssistant.prototype = {
 		var tweets = response.responseJSON;
 		var xCount = tweets.length;
 		var th = new TweetHelper();
-
+		var favSym = "★"; //added by DC
+		
 		var i;
 
 		var filters = (new LocalStorage()).read('filters');
@@ -754,6 +916,7 @@ MainAssistant.prototype = {
 		}
 
 		var scrollId = 0; // this is the INDEX (not ID, sorry) of the new tweet to scroll to
+		var fullLoad = 0; // added by DC. Used to flag when full 1:1 tweet pull is used
 
 		if (model.items.length > 0 && this.loadingMore) {
 			//loading "more" items (not refreshing), so append to bottom
@@ -828,6 +991,7 @@ MainAssistant.prototype = {
 		else{
 			// the timeline was empty so do a 1:1 mirror of the tweets response
 			model.items = tweets;
+			fullLoad = 1;
 		}
 		// Write a few (10) of the latest tweets to the user's cache (async)
 		this.user[panel.id] = model.items.slice(0,10);
@@ -841,10 +1005,72 @@ MainAssistant.prototype = {
 			store.write(this.user.id + '_' + panel.id, tweets[0].id_str);
 		}
 
+		//Block added by DC - allows new tweet marker to work after refresh and flush
+		if (panel.update) {
+			if(model.myLastId) {
+				for(k=0; k < model.items.length; k++){
+					//if(model.items[k].id_str === model.myLastId){
+					if(model.items[k].id_str === model.myLastId){
+						if(k > 0) {
+							// These nouns are used in the "X New {Noun}" message
+							var nouns = {
+								'home': 'Tweet',
+								'mentions': 'Mention',
+								'messages': 'Direct Message'
+							};
+							// TODO: Make this message tappable to load gaps
+							var msg = k + ' New ' + nouns[panel.id];
+							if (k > 1) {
+								msg += 's'; //pluralize
+							}
+							model.items[k-1].dividerMessage = msg;
+							model.items[k-1].cssClass = 'new-tweet';
+							model.myLastId = undefined;
+				
+							this.controller.get(panel.id + '-beacon').addClassName('show');
+						}
+						else{
+							this.controller.get(panel.id + '-beacon').removeClassName('show');
+						}
+						scrollId = k; // set the index of the new tweet to auto-scroll to
+						break; //no need to keep on iterating if we've found our match
+					}			
+				}
+				model.myLastId = undefined;
+			}
+		}
+
+		if(fullLoad === 1) {
+			if(scrollId < 10) {
+				model.items = tweets.slice(0,10);
+			}
+			else{
+				model.items = tweets.slice(0,scrollId+1);
+			} 
+		}	//end block 
+		
 		if (panel.update) {
 			for (i = 0; i < model.items.length; i++) {
 				var tweet = model.items[i];
+
 				tweet.time_str = this.timeSince(tweet.created_at);
+				// block below added by DC
+				if(tweet.favorited) {
+					if (!tweet.favSet){
+						//tweet.user.name = favSym + tweet.user.name;
+						tweet.favSet = true;
+						//tweet.favstar = favSym;
+					}
+					tweet.fav_class = 'show';
+				}
+				else {
+					//if(tweet.favSet){
+						//tweet.user.name = tweet.user.name.replace(favSym,"");
+						tweet.favSet = false;
+						tweet.fav_class = 'hide';
+						//tweet.favstar = "";
+					//}
+				}//end block
 			}
 		}
 
@@ -858,6 +1084,7 @@ MainAssistant.prototype = {
 		this.loading = false;
 	},
 	getDMs: function(panel, lastId, maxId) {
+		
 		var args = {
 			'count': this.count,
 			'include_entities': 'true'
@@ -870,12 +1097,24 @@ MainAssistant.prototype = {
 			args.max_id = maxId;
 		}
 		var Twitter = new TwitterAPI(this.user);
+		var prefs = new LocalStorage(); //added by DC
+		var dmTo = "←"; //"◄←"; //"☞"; //"To:"; 
+		var dmFrom = "→"; //"►→"; //"☜"; "From:";
+		// Not reading prefs for some reason.  probably out of context
+		//if (prefs.read('hideAvatar')) {
+			//dmTo = "To:";
+			//dmFrom = "From:";
+		//} //added by DC
 
 		Twitter.timeline(panel, function(r1, m1) {
 			Twitter.timeline(panel, function(r2, m2) {
 				for (var i = 0, tweet; tweet = r1.responseJSON[i]; i++) {
 					tweet.user = tweet.sender;
 					tweet.dm						= true;
+					//tweet.user.name = tweet.user.name + dmFrom;// added by DC
+					tweet.dir = dmFrom;
+					// Use unicode above instead of bitmap below.  This way it scales with the font selection
+					//tweet.direction_arrow_img = "images/low/arrow_left.png";
 				}
 
 				for (var i = 0, tweet; tweet = r2.responseJSON[i]; i++) {
@@ -884,6 +1123,10 @@ MainAssistant.prototype = {
 
 					tweet.user = tweet.recipient;
 
+					//tweet.user.name = tweet.user.name + dmTo;  // added by DC
+					tweet.dir = dmTo;
+					// Use unicode above instead of bitmap below.  This way it scales with the font selection
+					//tweet.direction_arrow_img = "images/low/arrow_right.png";
 					tweet.user.profile_image_url	= img;
 					tweet.user.id_str				= id;
 					tweet.dm						= true;
@@ -958,6 +1201,32 @@ MainAssistant.prototype = {
 		}
 	},
 	moreButtonTapped: function(event) {
+		//update the index
+		//Block added by DC to fix LoadMore bug on TP
+		var i;
+		
+		for (i=0; i<5; i++){
+			switch (this.panelLabels[i]) {
+				case "home":
+					if(event.srcElement.id == "more-home") {
+						this.timeline = i;
+					}
+					break;
+				case "mentions":
+					if(event.srcElement.id == "more-mentions") {
+						this.timeline = i;
+					}
+					break;
+				case "messages":
+					if(event.srcElement.id == "more-messages") {
+						this.timeline = i;
+					}
+					break;
+				default:
+					break;
+			}
+		}//end block DC
+		
 		this.loadMore(this.timeline);
 	},
 	windowResized: function(event) {
@@ -1104,13 +1373,39 @@ MainAssistant.prototype = {
 		}
 	},
 	moveIndicator: function(panelId) {
-		var positions = {
-			'home': 'first',
+		//Edit here for panel order change DC
+
+	var positions = {};
+	
+	var order = ["first","second","third","fourth","fifth"];
+	
+	for (i=0; i<5; i++){
+		positions[this.panelLabels[i]] = order[i];			
+	}
+	/*positions['home'] = 'first';
+	positions['mentions'] = 'second';
+	positions['messages'] = 'third';
+	positions['lists'] = 'fourth';
+	positions['search'] = 'fifth';
+*/
+//		var positions = {
+/*			'home': 'first',
 			'mentions': 'second',
 			'messages': 'third',
 			'lists': 'fourth',
 			'search': 'fifth'
+*/
+/*
+			'home': 'first',
+			'mentions': 'second',
+			'messages': 'fifth',
+			'lists': 'third',
+			'search': 'fourth'
+
+
 		};
+*/
+
 
 		this.controller.get('indicator').className = ''; // remove existing classes
 		this.controller.get('indicator').addClassName(positions[panelId]);
@@ -1291,7 +1586,10 @@ MainAssistant.prototype = {
 				// keycodes for punctuation and symbols are not normal
 				// so only ascii chars are passed to the compose toaster for now...
 				var text = Mojo.Char.isValidWrittenChar(e.keyCode);
-				if (this.timeline !== 4 && this.controller.get('txtSearch').value.length === 0) {
+				// Need to change index for timeline below if changing order of panels - DC
+				var panel = this.panels[this.timeline];
+				if (panel.id !== "search" && this.controller.get('txtSearch').value.length === 0) {
+				//if (this.timeline !== 4 && this.controller.get('txtSearch').value.length === 0) {
 					this.toggleCompose({
 						'text': text
 					});
@@ -1341,8 +1639,13 @@ MainAssistant.prototype = {
 	activate: function(event) {
 		var body = this.controller.stageController.document.getElementsByTagName("body")[0];
 		var prefs = new LocalStorage();
+		global.setShowThumbs(body, prefs.read('showThumbs'));
+		global.setShowEmoji(body, prefs.read('showEmoji'));
 		global.setFontSize(body, prefs.read('fontSize'));
 		global.setLayout(body, prefs.read('barlayout'));
+		global.setTabOrder(body, prefs.read('taborder'));		
+		
+		global.setHideAvatar(body, prefs.read('hideAvatar')); // added by DC
 	},
 	deactivate: function(event) {
 		this.controller.get(this.controller.document).stopObserving("keyup");
