@@ -9,7 +9,6 @@ Modified preferences-assistant.js, local.js and tweet.js to give option for rece
 Modified preferences-assistant.js and local.js to give option to shield DMs (notificationShieldMessages)
 Modified dashboard-assistant.js to perform the DM shielding
 Modified local.js, preferences-assistant.js, phnx.css, main-assistant.js, app-globals.js, profile-assistant.js, timeline.js, status-list.js for hideAvatar
-Added item-no-avatar.html for hideAvatar
 Modified finishAuth-scene.html to use content-wrapper-no-avatar to align username properly
 Altering panel order:
 	Alter main-scene.html (1 place) and main-assistant.js (4 places)
@@ -36,3 +35,4 @@ Modified tweet.js to show time of tweet (or date if over 24hrs) in details view 
 Modified item-no-avatar.html, item.html, phnx.cc, details.html, tweet.js(helpers) and added emoji.js to support display of tweets containing unicode emoji
 Modified handling of emoji display and inline thumbnails to allow for display in timeline and details, details only, or never.  No longer requires restart when changing preference.
 HideAvatars no longer needs app restart and in the process removed item-no-avatar.html
+Added a showPanels class in finishAuth-scene.html to always show the avatars of the contribs, regardless of the HideAvatar pref.
