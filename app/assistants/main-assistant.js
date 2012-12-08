@@ -10,7 +10,7 @@ function MainAssistant(opts) {
 	this.imagePreview = false;
 	this.favStatusChanged = false; // added by DC
 	this.loading = false;
-				
+
 	this.panelLabels = ["home","mentions","messages","lists","search"]; // added by DC
 
 	this.savedSearchesLoaded = false;
@@ -445,7 +445,7 @@ MainAssistant.prototype = {
 						this.refreshPanelFlush(this.panels[j]);
 				}
 			}
-					
+
 			this.loadLists();
 			this.getRetweeted();
 			// get the avatar for the minimized card
@@ -455,7 +455,7 @@ MainAssistant.prototype = {
 				var panel = this.getPanel(this.opts.panel);
 				this.scrollTo(panel.index);
 			}
-			
+
 			if (prefs.read('version') !== Mojo.appInfo.version) {
 				prefs.write('version', Mojo.appInfo.version);
 
@@ -477,7 +477,7 @@ MainAssistant.prototype = {
 						this.refresh();
 					}
 					this.favStatusChanged = false;
-					
+
 					this.toasters.back();
 				}//end block
 				else {
@@ -641,7 +641,32 @@ MainAssistant.prototype = {
 		//this moves the horizontal scroller
 		this.controller.get("sideScroller").mojo.setSnapIndex(idx, true);
 	},
-	scrollerChanged: function(event) {
+
+	/*
+		This event detects the scroll position when the user's finger leaves the
+		screen. If the user is pulling the list down, and is past a specific
+		threshold then trigger a refresh.
+
+		TODO: Detect when the user scrolls past this threshold and show a visual
+		indicator that pull-to-refresh is about to be activated.
+
+		NOTE: This callback has this bound to the panel, and panel.assistant is
+		set to the assistant.
+	*/
+	scrollStopped: function(event) {
+		var		panel		= this;
+		var		scroller	= panel.assistant.controller.get(panel.id + '-scroller');
+		var		pos;
+
+		if ((pos = scroller.mojo.getScrollPosition())) {
+			if (pos.top > 50 && Ajax.activeRequestCount === 0) {
+				panel.assistant.refreshPanel(panel);
+			}
+			Mojo.Log.error(pos.top);
+		}
+	},
+
+	sideScrollerChanged: function(event) {
 		var panel = this.panels[event.value];
 		var screenWidth = this.controller.window.innerWidth;
 		var panelWidth = 320;
@@ -748,7 +773,7 @@ MainAssistant.prototype = {
 	refreshPanel: function(panel) {
 		this.loadingMore = false;
 		var lastId = undefined;
-		
+
 		if (panel.refresh) {
 			if (panel.model.items.length > 0) {
 				// grab the second tweet for gap detection
@@ -795,7 +820,7 @@ MainAssistant.prototype = {
 
 		panel.model.items = {};
 		panel.model.items.length = 0;
-		
+
 		if (panel.refresh) {
 			if (panel.model.items.length > 0) {
 				// grab the second tweet for gap detection
@@ -823,7 +848,7 @@ MainAssistant.prototype = {
 		}
 		else if (panel.id === 'search') {
 			this.loadSearch();
-		}			
+		}
 	},
 
 	refreshAndScrollTo: function(id) {
@@ -893,7 +918,6 @@ MainAssistant.prototype = {
 		var xCount = tweets.length;
 		var th = new TweetHelper();
 		var favSym = "★"; //added by DC
-		
 		var i;
 
 		var filters = (new LocalStorage()).read('filters');
@@ -1026,7 +1050,7 @@ MainAssistant.prototype = {
 							model.items[k-1].dividerMessage = msg;
 							model.items[k-1].cssClass = 'new-tweet';
 							model.myLastId = undefined;
-				
+
 							this.controller.get(panel.id + '-beacon').addClassName('show');
 						}
 						else{
@@ -1034,7 +1058,7 @@ MainAssistant.prototype = {
 						}
 						scrollId = k; // set the index of the new tweet to auto-scroll to
 						break; //no need to keep on iterating if we've found our match
-					}			
+					}
 				}
 				model.myLastId = undefined;
 			}
@@ -1046,9 +1070,9 @@ MainAssistant.prototype = {
 			}
 			else{
 				model.items = tweets.slice(0,scrollId+1);
-			} 
-		}	//end block 
-		
+			}
+		}	//end block
+
 		if (panel.update) {
 			for (i = 0; i < model.items.length; i++) {
 				var tweet = model.items[i];
@@ -1198,7 +1222,7 @@ MainAssistant.prototype = {
 		//update the index
 		//Block added by DC to fix LoadMore bug on TP
 		var i;
-		
+
 		for (i=0; i<5; i++){
 			switch (this.panelLabels[i]) {
 				case "home":
@@ -1220,7 +1244,7 @@ MainAssistant.prototype = {
 					break;
 			}
 		}//end block DC
-		
+
 		this.loadMore(this.timeline);
 	},
 	windowResized: function(event) {
@@ -1370,11 +1394,11 @@ MainAssistant.prototype = {
 		//Edit here for panel order change DC
 
 	var positions = {};
-	
+
 	var order = ["first","second","third","fourth","fifth"];
-	
+
 	for (i=0; i<5; i++){
-		positions[this.panelLabels[i]] = order[i];			
+		positions[this.panelLabels[i]] = order[i];
 	}
 	/*positions['home'] = 'first';
 	positions['mentions'] = 'second';
@@ -1551,7 +1575,16 @@ MainAssistant.prototype = {
 		}
 	},
 	addListeners: function(event) {
-		this.controller.listen(this.controller.get('sideScroller'), Mojo.Event.propertyChange, this.scrollerChanged.bind(this));
+		for (var j=0; j < this.panels.length; j++) {
+			var panel = this.panels[j];
+
+			panel.assistant = this;
+
+			this.controller.listen(this.controller.get(panel.id + '-scroller'), Mojo.Event.scrollStarting, this.scrollStarted.bind(panel));
+			this.controller.listen(this.controller.get(panel.id + '-scroller'), Mojo.Event.dragEnd, this.scrollStopped.bind(panel));
+		}
+
+		this.controller.listen(this.controller.get('sideScroller'), Mojo.Event.propertyChange, this.sideScrollerChanged.bind(this));
 		this.controller.listen(this.controller.get('sideScroller'), 'scroll', this.sideScrollChanged.bind(this));
 		this.controller.listen(this.controller.get('rt-others'), Mojo.Event.tap, this.rtTapped.bind(this));
 		this.controller.listen(this.controller.get('rt-yours'), Mojo.Event.tap, this.rtTapped.bind(this));
@@ -1610,7 +1643,14 @@ MainAssistant.prototype = {
 		}.bind(this));
 	},
 	stopListening: function() {
-		this.controller.stopListening(this.controller.get('sideScroller'), Mojo.Event.propertyChange, this.scrollerChanged);
+		for (var j=0; j < this.panels.length; j++) {
+			var panel = this.panels[j];
+
+			this.controller.stopListening(this.controller.get(panel.id + '-scroller'), Mojo.Event.scrollStarting, this.scrollStarted);
+			this.controller.stopListening(this.controller.get(panel.id + '-scroller'), Mojo.Event.dragEnd, this.scrollStopped);
+		}
+
+		this.controller.stopListening(this.controller.get('sideScroller'), Mojo.Event.propertyChange, this.sideScrollerChanged);
 		this.controller.stopListening(this.controller.get('sideScroller'), 'scroll', this.sideScrollChanged);
 		this.controller.stopListening(this.controller.get('rt-others'), Mojo.Event.tap, this.rtTapped);
 		this.controller.stopListening(this.controller.get('rt-yours'), Mojo.Event.tap, this.rtTapped);

@@ -1,5 +1,8 @@
 var ChangelogToaster = Class.create(Toaster, {
 	items: [
+		{ version: '1.2.31' },
+		{ item: 'Implemented basic pull-to-refresh support (limited due to mojo)' },
+
 		{ version: '1.2.28' },
 		{ item: 'Modified to allow deletion of received DMs and added preference option' },
 		{ item: 'Modified to allow shielded notifications for received DMs and added preference option' },
