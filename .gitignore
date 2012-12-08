@@ -3,7 +3,6 @@
 .filename
 *.ipk
 Packages
-Packages.gz
 .directory
 Thumbs.db
 
