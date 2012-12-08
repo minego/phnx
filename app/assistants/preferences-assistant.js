@@ -42,6 +42,7 @@ function PreferencesAssistant() {
 					{label: 'Hide Tabs & Toolbar', value: 'none'}
 				]},
 				// block inserted by DC
+/*
 				{key: 'taborder', type: 'select', label: 'TabOrder', items: [
 					{label: 'Home,@,DM,L,S', value: 'hmdls'},
 					{label: 'Home,@,DM,S,L', value: 'hmdsl'},
@@ -50,6 +51,7 @@ function PreferencesAssistant() {
 					{label: 'Home,@,L,DM,S', value: 'hmlds'},
 					{label: 'Home,@,L,S,DM', value: 'hmlsd'}
 				]},
+*/
 				// end block
 				{key: 'browserSelection', type: 'select', label: 'Browser', items: [
 					{label: 'In-App Browser', value: 'inAppBrowser'},
@@ -202,7 +204,7 @@ PreferencesAssistant.prototype = {
 
 		this.controller.listen(this.controller.get('select-theme'), Mojo.Event.propertyChange, this.themeChanged.bind(this));
 		this.controller.listen(this.controller.get('select-barlayout'), Mojo.Event.propertyChange, this.layoutChanged.bind(this));
-		this.controller.listen(this.controller.get('select-taborder'), Mojo.Event.propertyChange, this.tabOrderChanged.bind(this));
+		// this.controller.listen(this.controller.get('select-taborder'), Mojo.Event.propertyChange, this.tabOrderChanged.bind(this));
 		this.controller.listen(this.controller.get('select-fontSize'), Mojo.Event.propertyChange, this.fontChanged.bind(this));
 		this.controller.listen(this.controller.get('toggle-hideAvatar'), Mojo.Event.propertyChange, this.hideAvatarChanged.bind(this)); //added by DC
 		this.controller.listen(this.controller.get('select-showThumbs'), Mojo.Event.propertyChange, this.showThumbsChanged.bind(this)); //added by DC
@@ -231,11 +233,14 @@ PreferencesAssistant.prototype = {
 		global.setLayout(body, event.value);
 	},
 	//block added by DC
+/*
 	tabOrderChanged: function(event) {
 		var body = this.controller.stageController.document.getElementsByTagName("body")[0];
 		global.setTabOrder(body, event.value);
 		banner("Please re-start to re-order panels");
-	}, //end block DC	
+	},
+*/
+	//end block DC
 	hideAvatarChanged: function(event) {
 		var body = this.controller.stageController.document.getElementsByTagName("body")[0];
 		global.setHideAvatar(body, event.value);
@@ -265,7 +270,7 @@ PreferencesAssistant.prototype = {
 		// Manually remove any listeners from above
 		this.controller.stopListening(this.controller.get('select-theme'), Mojo.Event.propertyChange, this.themeChanged);
 		this.controller.stopListening(this.controller.get('select-barlayout'), Mojo.Event.propertyChange, this.layoutChanged);
-		this.controller.stopListening(this.controller.get('select-taborder'), Mojo.Event.propertyChange, this.tabOrderChanged);	
+		// this.controller.stopListening(this.controller.get('select-taborder'), Mojo.Event.propertyChange, this.tabOrderChanged);	
 		this.controller.stopListening(this.controller.get('select-fontSize'), Mojo.Event.propertyChange, this.fontChanged);
 		this.controller.stopListening(this.controller.get("close-button"), Mojo.Event.tap, this.closeTapped);
 		this.controller.stopListening(this.controller.get('toggle-hideAvatar'), Mojo.Event.propertyChange, this.hideAvatarChanged); // added by DC

@@ -9,7 +9,7 @@ var ChangelogToaster = Class.create(Toaster, {
 		{ item: 'Modified to display warning banner to restart when toggling hideAvatar preference' },
 		{ item: 'Modified to show star next to favorites in timeline. Pref refreshAfterPost allows auto update of timeline' },
 		{ item: 'Added display name in tweets from searches' },
-		{ item: 'Added preliminary panel re-ordering via preferences.  Requires app restart' },
+		// { item: 'Added preliminary panel re-ordering via preferences.  Requires app restart' },
 		{ item: 'Fixed pref display issue with header of first section' },
 		{ item: 'Added notification sound type selection in preferences' },
 		{ item: 'Added View->RefreshFlush menu to flush timeline of externally deleted tweets' },
