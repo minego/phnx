@@ -280,9 +280,9 @@ var global = {
 		Element.addClassName(body, 'font-' + font);
 	},
 	setHideAvatar: function(body, hideAvatarStatus) {
-		//Element.removeClassName(body, 'hideAvatar');
-		Element.removeClassName(body, 'showAvatar');
-		if(!hideAvatarStatus){
+		if(hideAvatarStatus){
+			Element.removeClassName(body, 'showAvatar');
+		} else {
 			Element.addClassName(body, 'showAvatar');
 		}
 	}, // added by DC
@@ -303,8 +303,7 @@ var global = {
 		} else if(showEmojiStatus === 'detailsEmoji'){
 			Element.addClassName(body, 'detailsEmoji');
 		}
-	}, // added by DC
-
+	} // added by DC
 };
 
 /* This is an auto-incremented number for toaster IDs */

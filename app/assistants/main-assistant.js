@@ -1084,7 +1084,6 @@ MainAssistant.prototype = {
 		this.loading = false;
 	},
 	getDMs: function(panel, lastId, maxId) {
-		
 		var args = {
 			'count': this.count,
 			'include_entities': 'true'
@@ -1100,11 +1099,6 @@ MainAssistant.prototype = {
 		var prefs = new LocalStorage(); //added by DC
 		var dmTo = "←"; //"◄←"; //"☞"; //"To:"; 
 		var dmFrom = "→"; //"►→"; //"☜"; "From:";
-		// Not reading prefs for some reason.  probably out of context
-		//if (prefs.read('hideAvatar')) {
-			//dmTo = "To:";
-			//dmFrom = "From:";
-		//} //added by DC
 
 		Twitter.timeline(panel, function(r1, m1) {
 			Twitter.timeline(panel, function(r2, m2) {
@@ -1643,9 +1637,13 @@ MainAssistant.prototype = {
 		global.setShowEmoji(body, prefs.read('showEmoji'));
 		global.setFontSize(body, prefs.read('fontSize'));
 		global.setLayout(body, prefs.read('barlayout'));
-		global.setTabOrder(body, prefs.read('taborder'));		
-		
-		global.setHideAvatar(body, prefs.read('hideAvatar')); // added by DC
+		global.setTabOrder(body, prefs.read('taborder'));
+
+		try {
+			global.setHideAvatar(body, prefs.read('hideAvatar')); // added by DC
+		} catch (e) {
+			global.setHideAvatar(body, false);
+		}
 	},
 	deactivate: function(event) {
 		this.controller.get(this.controller.document).stopObserving("keyup");
