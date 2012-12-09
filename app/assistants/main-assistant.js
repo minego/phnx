@@ -126,9 +126,6 @@ MainAssistant.prototype = {
 			} else if (tmp == 'none') {
 				prefs.write('hideToolbar',	true);
 				prefs.write('hideTabs',		true);
-			} else {
-				prefs.write('hideToolbar',	false);
-				prefs.write('hideTabs',		false);
 			}
 		}
 
