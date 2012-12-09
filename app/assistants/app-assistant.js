@@ -30,50 +30,56 @@ AppAssistant.prototype = {
 		}
 		// code for x-launch-params still work-in-progress
 		else if(params.composeTweet) {
-			Mojo.Log.info("Called Launch Param correctly")
+			Mojo.Log.info("Called Launch Param correctly");
         	params.action = 'prepPost';
 			params.msg = params.composeTweet;
-        }	
+        }
 		else {
 			Mojo.Log.info('params: ' + params);
 			// Launch the app normally, load the default user if it exists.
 			this.launchMain();
 			this.toasters.add({}, new ComposeToaster(this));
 			// this.checkNotifications(); // for debugging
-		}	
-		var stageCallback = function(stageController) {
-		Mojo.Log.error('RUNNING stageCallback');
-
-		switch(params.action) {
-
-			/**
-			 * {
-			 *   action:"prepPost",
-			 *   msg:"Some Text",
-			 *   account:"ACCOUNT_HASH" // optional
-			 * }
-			 */
-			case 'prepPost':
-			case 'post':
-					this.toasters.add(new ComposeToaster({
-					'text':launchParams.msg}, this
-				));
-				break;
 		}
-	}
+		var stageCallback = function(stageController) {
+			Mojo.Log.error('RUNNING stageCallback');
+
+			switch(params.action) {
+
+				/**
+				 * {
+				 *   action:"prepPost",
+				 *   msg:"Some Text",
+				 *   account:"ACCOUNT_HASH" // optional
+				 * }
+				 */
+				case 'prepPost':
+				case 'post':
+						this.toasters.add(new ComposeToaster({
+						'text':launchParams.msg}, this
+					));
+					break;
+			}
+		};
 	},
 	handleCommand: function(event) {
 		var stage = this.controller.getActiveStageController();
+
 		if (event.command === 'cmdPreferences') {
 			stage.pushScene('preferences');
-		}
-		else if (event.command === 'cmdAbout') {
+		} else if (event.command === 'cmdPreferencesGeneral') {
+			stage.pushScene('preferences', 'General Settings');
+		} else if (event.command === 'cmdPreferencesAppearance') {
+			stage.pushScene('preferences', 'Appearance');
+		} else if (event.command === 'cmdPreferencesNotifications') {
+			stage.pushScene('preferences', 'Notifications');
+		} else if (event.command === 'cmdPreferencesAdvanced') {
+			stage.pushScene('preferences', 'Advanced Settings');
+		} else if (event.command === 'cmdAbout') {
 			stage.pushScene('about');
-		}
-		else if (event.command === 'cmdSupport') {
+		} else if (event.command === 'cmdSupport') {
 			stage.pushScene('help');
-		}
-		else if (event.command === 'cmdSupport') {
+		} else if (event.command === 'cmdSupport') {
 			var service = new Mojo.Service.Request('palm://com.palm.applicationManager', {
 				method: 'open',
 				parameters: {

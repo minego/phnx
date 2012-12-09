@@ -228,15 +228,26 @@ MainAssistant.prototype = {
 				label: 'Lookup User',
 				command: 'cmdFindUser'
 			},
-/*
-			{
-				label: 'Add Filter',
-				command: 'cmdAddFilter'
-			},
-*/
 			{
 				label: 'Preferences',
-				command: 'cmdPreferences'
+				items: [
+					{
+						label: 'General Settings',
+						command: 'cmdPreferencesGeneral'
+					},
+					{
+						label: 'Appearance',
+						command: 'cmdPreferencesAppearance'
+					},
+					{
+						label: 'Notifications',
+						command: 'cmdPreferencesNotifications'
+					},
+					{
+						label: 'Advanced Settings',
+						command: 'cmdPreferencesAdvanced'
+					}
+				]
 			},
 			{
 				label: 'Manage Filters',
@@ -558,9 +569,6 @@ MainAssistant.prototype = {
 			else if (event.command === 'cmdChangelog') {
 				this.toasters.add(new ChangelogToaster(this));
 			}
-			// else if (event.command === 'cmdPreferences') {
-			//	// this.controller.stageController.pushScene('preferences');
-			// }
 			else if (event.command === 'cmdRemoveAccount') {
 				this.logout();
 			}

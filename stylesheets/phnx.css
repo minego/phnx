@@ -1610,6 +1610,11 @@ span.link{
 	color: #d2d2d2;
 	display: block;
 }
+.pref-title {
+	font-weight: bold;
+	font-family: "Prelude";
+	font-size: 18px;
+}
 .pref-row {
 	background: url('../images/low/tweet-border.png') left bottom repeat-x !important;
 }

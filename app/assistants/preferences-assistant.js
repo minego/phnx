@@ -1,5 +1,6 @@
-function PreferencesAssistant() {
+function PreferencesAssistant(section) {
 	this.prefs = new LocalStorage();
+	this.section = section;
 
 	var accounts = [];
 	for (var i=0; i < global.accounts.length; i++) {
@@ -28,6 +29,24 @@ function PreferencesAssistant() {
 
 	this.sections = {
 			'General Settings': [
+				// end block
+				{key: 'browserSelection', type: 'select', label: 'Browser', items: [
+					{label: 'In-App Browser', value: 'inAppBrowser'},
+					{label: 'Stock Browser', value: 'stockBrowser'},
+					{label: 'Ask', value: 'ask' }
+				]},
+				{key: 'cardIcons', type: 'select', label: 'Card icons', items: [
+					{label: 'Automatic', value: 'auto'},
+					{label: 'Always Show', value: 'always'},
+					{label: 'Never Show', value: 'never'}
+				]},
+				{key: 'refreshOnMaximize', type: 'toggle', label: 'Auto Refresh'},
+				{key: 'refreshOnSubmit', type: 'toggle', label: 'Refresh after post'},
+				{key: 'refreshFlushAtLaunch', type: 'toggle', label: 'Refresh & flush at launch'},
+				{key: 'enterToSubmit', type: 'toggle', label: 'Enter to submit'},
+				{key: 'autoCorrect', type: 'toggle', label: 'Auto Correct'}
+			],
+			'Appearance': [
 				{key: 'theme', type: 'select', label: 'Theme', items: [
 					{label: 'Rebirth', value: 'rebirth'},
 					{label: 'Ash', value: 'ash'},
@@ -53,12 +72,7 @@ function PreferencesAssistant() {
 					{label: 'Home,@,L,S,DM', value: 'hmlsd'}
 				]},
 */
-				// end block
-				{key: 'browserSelection', type: 'select', label: 'Browser', items: [
-					{label: 'In-App Browser', value: 'inAppBrowser'},
-					{label: 'Stock Browser', value: 'stockBrowser'},
-					{label: 'Ask', value: 'ask' }
-				]},
+
 				{key: 'fontSize', type: 'select', label: 'Font Size', items: [
 					{label: 'Tiny', value: 'tiny'},
 					{label: 'Small', value: 'small'},
@@ -66,28 +80,18 @@ function PreferencesAssistant() {
 					{label: 'Large', value: 'large'},
 					{label: 'Huge', value: 'huge'}
 				]},
-				{key: 'cardIcons', type: 'select', label: 'Show card icons', items: [
-					{label: 'Automatic', value: 'auto'},
-					{label: 'Always', value: 'always'},
-					{label: 'Never', value: 'never'}
-				]},
-				{key: 'refreshOnMaximize', type: 'toggle', label: 'Auto Refresh'},
-				{key: 'refreshOnSubmit', type: 'toggle', label: 'Refresh after post'},
-				{key: 'refreshFlushAtLaunch', type: 'toggle', label: 'Refresh & flush at launch'},				
-				{key: 'enterToSubmit', type: 'toggle', label: 'Enter to submit'},
-				{key: 'autoCorrect', type: 'toggle', label: 'Auto Correct'},
+
 				{key: 'hideAvatar', type: 'toggle', label: 'Hide Avatars'},
-				//{key: 'showThumbs', type: 'toggle', label: 'Show Inline Thumbnail previews'},
-				{key: 'showThumbs', type: 'select', label: 'Show Inline Thumbnail previews', items: [
-					{label: 'Never', value: 'noThumbs'},
+
+				{key: 'showThumbs', type: 'select', label: 'Thumbnails', items: [
+					{label: 'Never Show', value: 'noThumbs'},
 					{label: 'Details Only', value: 'detailsThumbs'},
-					{label: 'Always', value: 'showThumbs'}
+					{label: 'Always Show', value: 'showThumbs'}
 				]},
-				//{key: 'showEmoji', type: 'toggle', label: 'Show emoji'}
-				{key: 'showEmoji', type: 'select', label: 'Show emoji', items: [
-					{label: 'Never', value: 'noEmoji'},
+				{key: 'showEmoji', type: 'select', label: 'emoji', items: [
+					{label: 'Never Show', value: 'noEmoji'},
 					{label: 'Details Only', value: 'detailsEmoji'},
-					{label: 'Always', value: 'showEmoji'}
+					{label: 'Always Show', value: 'showEmoji'}
 				]}
 			],
 			'Notifications': [
@@ -101,12 +105,11 @@ function PreferencesAssistant() {
 					{label: '6 hours', value: '06:00'},
 					{label: '12 hours', value: '12:00'}
 				]},
-				//Block added by DC
-				{key: 'notificationSound', type: 'select', label: 'Notification Sound', items: [
-					{label: 'Notification', value: 'notifications'},
+				{key: 'notificationSound', type: 'select', label: 'Alert', items: [
+					{label: 'Sound', value: 'notifications'},
 					{label: 'Vibrate', value: 'vibrate'},
 					{label: 'Mute', value: 'none' }
-				]}, //End block
+				]},
 				{key: 'notificationHome', type: 'toggle', label: 'Home Timeline'},
 				{key: 'notificationMentions', type: 'toggle', label: 'Mentions'},
 				{key: 'notificationMessages', type: 'toggle', label: 'Messages'},
@@ -116,8 +119,14 @@ function PreferencesAssistant() {
 	};
 
 	if (global.accounts.length > 1) {
-		this.sections['General Settings'].push({key: 'defaultAccount', type: 'select', label: 'Default User', items: accounts});
+		this.sections['General Settings'].push({
+			key: 'defaultAccount',
+			type: 'select',
+			label: 'Default User',
+			items: accounts
+		});
 	}
+
 	this.widgets = {}; // holds attributes and models for widgets
 }
 
@@ -129,6 +138,11 @@ PreferencesAssistant.prototype = {
 		var pageHtml = '';
 		for (var sectionId in this.sections) {
 			var sectionItems = this.sections[sectionId];
+
+			if (this.section && this.section != sectionId) {
+				continue;
+			}
+
 			widgetHtml = '';
 			for (var i=0; i < sectionItems.length; i++) {
 				var widget = sectionItems[i];
@@ -152,8 +166,7 @@ PreferencesAssistant.prototype = {
 							value: this.prefs.read(widget.key)
 						}
 					);
-				}
-				else if (widget.type === 'select') {
+				} else if (widget.type === 'select') {
 					html = Mojo.View.render({
 						object: widget,
 						template: 'preferences/select'
@@ -179,22 +192,10 @@ PreferencesAssistant.prototype = {
 				items: widgetHtml
 			};
 
-			//Block modified/addded by DC
-			var sectionHtml;
-			if(sectionId === 'General Settings'){
-				sectionHtml = Mojo.View.render({
-					object: secObj,
-					template: 'preferences/top_section'
-				});
-			}
-			else{
-				sectionHtml = Mojo.View.render({
-					object: secObj,
-					template: 'preferences/section'
-				});
-			} //end block
-
-			pageHtml += sectionHtml;
+			pageHtml += Mojo.View.render({
+				object: secObj,
+				template: 'preferences/section'
+			});
 		}
 
 		this.controller.get('sections').update(pageHtml);
@@ -203,13 +204,15 @@ PreferencesAssistant.prototype = {
 		this.closeTapped = this.closeTapped.bind(this);
 		this.controller.listen(this.controller.get("close-button"), Mojo.Event.tap, this.closeTapped);
 
-		this.controller.listen(this.controller.get('select-theme'), Mojo.Event.propertyChange, this.themeChanged.bind(this));
-		this.controller.listen(this.controller.get('select-barlayout'), Mojo.Event.propertyChange, this.layoutChanged.bind(this));
-		// this.controller.listen(this.controller.get('select-taborder'), Mojo.Event.propertyChange, this.tabOrderChanged.bind(this));
-		this.controller.listen(this.controller.get('select-fontSize'), Mojo.Event.propertyChange, this.fontChanged.bind(this));
-		this.controller.listen(this.controller.get('toggle-hideAvatar'), Mojo.Event.propertyChange, this.hideAvatarChanged.bind(this)); //added by DC
-		this.controller.listen(this.controller.get('select-showThumbs'), Mojo.Event.propertyChange, this.showThumbsChanged.bind(this)); //added by DC
-		this.controller.listen(this.controller.get('select-showEmoji'), Mojo.Event.propertyChange, this.showEmojiChanged.bind(this)); //added by DC
+		if (!this.section || this.section == "Appearance") {
+			this.controller.listen(this.controller.get('select-theme'), Mojo.Event.propertyChange, this.themeChanged.bind(this));
+			this.controller.listen(this.controller.get('select-barlayout'), Mojo.Event.propertyChange, this.layoutChanged.bind(this));
+			// this.controller.listen(this.controller.get('select-taborder'), Mojo.Event.propertyChange, this.tabOrderChanged.bind(this));
+			this.controller.listen(this.controller.get('select-fontSize'), Mojo.Event.propertyChange, this.fontChanged.bind(this));
+			this.controller.listen(this.controller.get('toggle-hideAvatar'), Mojo.Event.propertyChange, this.hideAvatarChanged.bind(this)); //added by DC
+			this.controller.listen(this.controller.get('select-showThumbs'), Mojo.Event.propertyChange, this.showThumbsChanged.bind(this)); //added by DC
+			this.controller.listen(this.controller.get('select-showEmoji'), Mojo.Event.propertyChange, this.showEmojiChanged.bind(this)); //added by DC
+		}
 	},
 	closeTapped: function() {
 		this.controller.stageController.popScene();
@@ -259,6 +262,11 @@ PreferencesAssistant.prototype = {
 		// Save preferences on exit.
 		for (var sectionId in this.sections) {
 			var sectionItems = this.sections[sectionId];
+
+			if (this.section && this.section != sectionId) {
+				continue;
+			}
+
 			for (var i=0; i < sectionItems.length; i++) {
 				var item = sectionItems[i];
 				this.prefs.write(item.key, this.widgets['model_' + item.key].value);
@@ -269,13 +277,17 @@ PreferencesAssistant.prototype = {
 		global.setTimer(); //added by DC
 
 		// Manually remove any listeners from above
-		this.controller.stopListening(this.controller.get('select-theme'), Mojo.Event.propertyChange, this.themeChanged);
-		this.controller.stopListening(this.controller.get('select-barlayout'), Mojo.Event.propertyChange, this.layoutChanged);
-		// this.controller.stopListening(this.controller.get('select-taborder'), Mojo.Event.propertyChange, this.tabOrderChanged);	
-		this.controller.stopListening(this.controller.get('select-fontSize'), Mojo.Event.propertyChange, this.fontChanged);
+
 		this.controller.stopListening(this.controller.get("close-button"), Mojo.Event.tap, this.closeTapped);
-		this.controller.stopListening(this.controller.get('toggle-hideAvatar'), Mojo.Event.propertyChange, this.hideAvatarChanged); // added by DC
-		this.controller.stopListening(this.controller.get('select-showThumbs'), Mojo.Event.propertyChange, this.showThumbsChanged); // added by DC
-		this.controller.stopListening(this.controller.get('select-showEmoji'), Mojo.Event.propertyChange, this.showEmojiChanged); // added by DC
+
+		if (!this.section || this.section == "Appearance") {
+			this.controller.stopListening(this.controller.get('select-theme'), Mojo.Event.propertyChange, this.themeChanged);
+			this.controller.stopListening(this.controller.get('select-barlayout'), Mojo.Event.propertyChange, this.layoutChanged);
+			// this.controller.stopListening(this.controller.get('select-taborder'), Mojo.Event.propertyChange, this.tabOrderChanged);	
+			this.controller.stopListening(this.controller.get('select-fontSize'), Mojo.Event.propertyChange, this.fontChanged);
+			this.controller.stopListening(this.controller.get('toggle-hideAvatar'), Mojo.Event.propertyChange, this.hideAvatarChanged); // added by DC
+			this.controller.stopListening(this.controller.get('select-showThumbs'), Mojo.Event.propertyChange, this.showThumbsChanged); // added by DC
+			this.controller.stopListening(this.controller.get('select-showEmoji'), Mojo.Event.propertyChange, this.showEmojiChanged); // added by DC
+		}
 	}
 };
