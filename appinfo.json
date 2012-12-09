@@ -2,7 +2,7 @@
 	"title":				"Project Macaw",
 	"vendor":				"Project Macaw",
 	"id":					"net.minego.phnx",
-	"version":				"1.2.31",
+	"version":				"1.2.32",
 	"type":					"web",
 	"main":					"index.html",
 	"icon":					"macaw.png",

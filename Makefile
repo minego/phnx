@@ -53,15 +53,15 @@ Packages: filename
 			"\"Feed\":\"minego\", "											\
 			"\"Title\":\"Project Macaw\", "									\
 			"\"HomePage\":\"http://www.github.com/minego/phnx\", "			\
-			"\"Icon\":\"http://www.minego.net/preware/macaw/icon.png\", "	\
+			"\"Icon\":\"http://cloud.github.com/downloads/minego/phnx/icon.png\", "	\
 			"\"Type\":\"Application\", "									\
 			"\"Category\":\"Social Networks\", "							\
 			"\"License\":\"Open; see homepage\", "							\
 			"\"LastUpdated\":\"`date -u +%s`\", "							\
 			"\"MinWebOSVersion\":\"1.4.5\", "								\
 			"\"Screenshots\":["												\
-			"	\"http://www.minego.net/preware/macaw/screenshot1.png\","	\
-			"	\"http://www.minego.net/preware/macaw/screenshot2.png\""	\
+			"	\"http://cloud.github.com/downloads/minego/phnx/screenshot1.png\","	\
+			"	\"http://cloud.github.com/downloads/minego/phnx/screenshot2.png\""	\
 			"], "															\
 			"\"FullDescription\":\""										\
 				"Project Macaw is an attempt to update the wonderful phnx "	\
