@@ -229,6 +229,20 @@ body.no-gesture {  /* touchpad/emulator */
 	padding-bottom: 60px;
 }
 
+.ptr-text {
+	position: absolute;
+	top: 0px;
+	width: 320px;
+
+	display: none;
+}
+
+.ptr-text-showing {
+	display: block;
+	z-index: 100000;
+}
+
+
 #new-tweet{
 	background: url(../images/low/icons/compose.png) no-repeat 23px 14px;
 }

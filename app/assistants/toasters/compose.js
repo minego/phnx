@@ -1,5 +1,9 @@
 var ComposeToaster = Class.create(Toaster, {
 	initialize: function(opts, assistant) {
+		if (!assistant) {
+			return;
+		}
+
 		this.id = toasterIndex++;
 		this.nodeId = 'toaster-' + this.id;
 		this.textarea = 'txtCompose-' + this.id;

@@ -1,7 +1,7 @@
 var ChangelogToaster = Class.create(Toaster, {
 	items: [
 		{ version: '1.2.31' },
-		{ item: 'Implemented basic pull-to-refresh support (limited due to mojo)' },
+		{ item: 'Implemented pull to refresh' },
 
 		{ version: '1.2.28' },
 		{ item: 'Modified to allow deletion of received DMs and added preference option' },
@@ -9,7 +9,6 @@ var ChangelogToaster = Class.create(Toaster, {
 		{ item: 'Modified to allow hiding of Avatars in timelines, lists, searches and trends.  Also added preference option.' },
 		{ item: 'Modified display of usernames after auth on Welcome scene' },
 		{ item: 'Modified display of usernames in DMs to show who sent/received' },
-		{ item: 'Modified to display warning banner to restart when toggling hideAvatar preference' },
 		{ item: 'Modified to show star next to favorites in timeline. Pref refreshAfterPost allows auto update of timeline' },
 		{ item: 'Added display name in tweets from searches' },
 		// { item: 'Added preliminary panel re-ordering via preferences.  Requires app restart' },

@@ -113,16 +113,16 @@ MainAssistant.prototype = {
 					this.panelLabels = ["home","mentions","messages","lists","search"]; // added by DC
 					break;
 				case "hmdsl":
-					this.panelLabels = ["home","mentions","messages","search","lists"]; // added by DC			
+					this.panelLabels = ["home","mentions","messages","search","lists"]; // added by DC
 					break;
 				case "hmsdl":
-					this.panelLabels = ["home","mentions","search","messages","lists"]; // added by DC			
+					this.panelLabels = ["home","mentions","search","messages","lists"]; // added by DC
 					break;
 				case "hmsld":
-					this.panelLabels = ["home","mentions","search","lists","messages"]; // added by DC			
+					this.panelLabels = ["home","mentions","search","lists","messages"]; // added by DC
 					break;
 				case "hmlds":
-					this.panelLabels = ["home","mentions","lists","messages","search"]; // added by DC			
+					this.panelLabels = ["home","mentions","lists","messages","search"]; // added by DC
 					break;
 				case "hmlsd":
 					this.panelLabels = ["home","mentions","lists","search","messages"]; // added by DC
@@ -150,15 +150,13 @@ MainAssistant.prototype = {
 					this.panels[i] = {index: i, position: i+1, id: "messages", title: "messages", type: "timeline", resource: "messages", height: 0, refresh: true, update: true,	state: {left: -339, top: 0}, model: {items:messagesItems}};
 					break;
 			}
-		} //end block DC
 
-		/*	this.panels[0] = {index: 0, position: 1, id: "home", title: "home", type: "timeline", resource: "home", height: 0, refresh: true, update: true, state: {left: 0, top: 0}, model: {items:homeItems}};
-			this.panels[1] = {index: 1, position: 2, id: "mentions", title: "mentions", type: "timeline", resource: "mentions", height: 0, refresh: true, update: true,	state: {left: -133, top: 0}, model: {items:mentionsItems}};
-			this.panels[2] = {index: 2, position: 3, id: "lists", title: "lists", type: "lists", height: 0, refresh: false, update: false};
-			this.panels[3] = {index: 3, position: 4, id: "search", title: "search", type: "search", height: 0, refresh: false, update: false};
-			this.panels[4] = {index: 4, position: 5, id: "messages", title: "messages", type: "timeline", resource: "messages", height: 0, refresh: true, update: true,	state: {left: -339, top: 0}, model: {items:messagesItems}};
-			*/
-	//	];
+			if (!this.panels[i].model) {
+				this.panels[i].model = {};
+			}
+
+			this.panels[i].model.id = this.panels[i].id;
+		}
 
 		this.timeline = 0; //index position of the timeline, default to first one
 
@@ -643,12 +641,30 @@ MainAssistant.prototype = {
 	},
 
 	/*
+		NOTE: This callback has this bound to the panel, and panel.assistant is
+		set to the assistant.
+	*/
+	scrollStarted: function(event) {
+		var		panel		= this;
+		var		scroller	= panel.assistant.controller.get(panel.id + '-scroller');
+
+		panel.assistant.controller.get(panel.id + "-ptr-text").removeClassName('ptr-text-showing');
+
+		/* Show the "release to refresh" text, after a delay */
+		if (panel.refresh) {
+			clearTimeout(panel.timeout);
+
+			panel.timeout = setTimeout(function() {
+				panel.ptr = true;
+				panel.assistant.controller.get(panel.id + "-ptr-text").addClassName('ptr-text-showing');
+			}.bind(panel), 500);
+		}
+	},
+
+	/*
 		This event detects the scroll position when the user's finger leaves the
 		screen. If the user is pulling the list down, and is past a specific
 		threshold then trigger a refresh.
-
-		TODO: Detect when the user scrolls past this threshold and show a visual
-		indicator that pull-to-refresh is about to be activated.
 
 		NOTE: This callback has this bound to the panel, and panel.assistant is
 		set to the assistant.
@@ -658,11 +674,25 @@ MainAssistant.prototype = {
 		var		scroller	= panel.assistant.controller.get(panel.id + '-scroller');
 		var		pos;
 
+		clearTimeout(panel.timeout);
+		if (!panel.refresh) {
+			return;
+		}
+
+		if (!panel.ptr) {
+			/* They haven't been holding it long enough */
+			return;
+		}
+		panel.ptr = false;
+
+		/* Hide the "release to refresh" text */
+		panel.assistant.controller.get(panel.id + "-ptr-text").removeClassName('ptr-text-showing');
+
 		if ((pos = scroller.mojo.getScrollPosition())) {
-			if (pos.top > 50 && Ajax.activeRequestCount === 0) {
+			if (pos.top > 10 && Ajax.activeRequestCount === 0) {
 				panel.assistant.refreshPanel(panel);
 			}
-			Mojo.Log.error(pos.top);
+			// Mojo.Log.info(pos.top);
 		}
 	},
 
@@ -1580,7 +1610,7 @@ MainAssistant.prototype = {
 
 			panel.assistant = this;
 
-			this.controller.listen(this.controller.get(panel.id + '-scroller'), Mojo.Event.scrollStarting, this.scrollStarted.bind(panel));
+			this.controller.listen(this.controller.get(panel.id + '-scroller'), Mojo.Event.dragStart, this.scrollStarted.bind(panel));
 			this.controller.listen(this.controller.get(panel.id + '-scroller'), Mojo.Event.dragEnd, this.scrollStopped.bind(panel));
 		}
 
@@ -1646,7 +1676,7 @@ MainAssistant.prototype = {
 		for (var j=0; j < this.panels.length; j++) {
 			var panel = this.panels[j];
 
-			this.controller.stopListening(this.controller.get(panel.id + '-scroller'), Mojo.Event.scrollStarting, this.scrollStarted);
+			this.controller.stopListening(this.controller.get(panel.id + '-scroller'), Mojo.Event.dragStart, this.scrollStarted);
 			this.controller.stopListening(this.controller.get(panel.id + '-scroller'), Mojo.Event.dragEnd, this.scrollStopped);
 		}
 
