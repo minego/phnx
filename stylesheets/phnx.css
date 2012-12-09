@@ -103,45 +103,49 @@ body.no-gesture {  /* touchpad/emulator */
 }
 
 /*Block added by DC*/
-.emoji{
+.emoji {
 	display: none;
 	position:relative;
 	top:2px;
 }
 
-.showEmoji .timeline .emoji{
+.showEmoji .timeline .emoji {
 	display: inline;
 }
 
-.detailsEmoji .details .emoji{
+.showEmoji .content-wrapper .emoji {
 	display: inline;
 }
 
-.showEmoji .details .emoji{
+.detailsEmoji .details .emoji {
 	display: inline;
 }
 
-.font-tiny .timeline .emoji{
+.showEmoji .details .emoji {
+	display: inline;
+}
+
+.font-tiny .timeline .emoji, .font-tiny .content-wrapper .emoji {
 	height: 12px;
 }
 
-.font-small .timeline .emoji{
+.font-small .timeline .emoji, .font-small .content-wrapper .emoji {
 	height: 14px;
 }
 
-.font-medium .timeline .emoji{
+.font-medium .timeline .emoji, .font-medium .content-wrapper .emoji {
 	height: 16px;
 }
 
-.font-large .timeline .emoji{
+.font-large .timeline .emoji, .font-large .content-wrapper .emoji {
 	height: 18px;
 }
 
-.font-huge .timeline .emoji{
+.font-huge .timeline .emoji, .font-huge .content-wrapper .emoji {
 	height: 22px;
 }
 
-.font-magoo .timeline .emoji{
+.font-magoo .timeline .emoji, .font-magoo .content-wrapper .emoji {
 	height: 26px;
 }
 .details .emoji{
@@ -1396,6 +1400,10 @@ span.link{
 	background: url('../images/low/icons/geotag-active.png') center center no-repeat;
 }
 
+.compose-button.emoji {
+    background: url('../images/emoticon.png') center center no-repeat;
+}
+
 .compose-submit {
 	float: right;
 	display: inline-block;
@@ -1638,4 +1646,58 @@ a:link {
 	color: #d2d2d2;
 	text-decoration:underline;
 	font-weight:900;
+}
+
+/* emoji */
+
+.grid-layout .palm-list .palm-row {
+	clear: none;
+	float: left;
+	height: 53px;
+	width: 53px;
+	margin-bottom: 0px;
+	margin-right: 0px;
+}
+
+.grid-layout .palm-list .palm-row.selected {
+	width: 53px;
+	height: 53px;
+	background: none;
+	margin-right: 0px;
+}
+
+.emoji-icon {
+    margin: 10px;
+}
+
+.people-emoji {
+	background: url(../images/emoji-E415.png) center center no-repeat;
+}
+
+.places-emoji {
+	background: url(../images/emoji-E036.png) center center no-repeat;
+}
+
+.nature-emoji {
+	background: url(../images/emoji-E04A.png) center center no-repeat;
+}
+
+.events-emoji {
+	background: url(../images/emoji-E325.png) center center no-repeat;
+}
+
+.symbols-emoji {
+	background: url(../images/emoji-E210.png) center center no-repeat;
+}
+
+.palm-button.emojibutton-subject {
+	width: 40px;
+	height: 40px;
+}
+
+.icon.emojibutton-icon
+{
+	margin-left: -10px;
+	margin-top: -5px;
+	background: url(../images/emoticon.png) center center no-repeat;	
 }
