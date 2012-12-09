@@ -208,10 +208,6 @@ PreferencesAssistant.prototype = {
 		if (!this.section || this.section == "Appearance") {
 			this.controller.listen(this.controller.get('select-theme'), Mojo.Event.propertyChange, this.themeChanged.bind(this));
 			// this.controller.listen(this.controller.get('select-taborder'), Mojo.Event.propertyChange, this.tabOrderChanged.bind(this));
-			this.controller.listen(this.controller.get('select-fontSize'), Mojo.Event.propertyChange, this.fontChanged.bind(this));
-			this.controller.listen(this.controller.get('toggle-hideAvatar'), Mojo.Event.propertyChange, this.hideAvatarChanged.bind(this)); //added by DC
-			this.controller.listen(this.controller.get('select-showThumbs'), Mojo.Event.propertyChange, this.showThumbsChanged.bind(this)); //added by DC
-			this.controller.listen(this.controller.get('select-showEmoji'), Mojo.Event.propertyChange, this.showEmojiChanged.bind(this)); //added by DC
 		}
 	},
 	closeTapped: function() {
@@ -228,10 +224,6 @@ PreferencesAssistant.prototype = {
 		// Apply the new theme
 		this.controller.stageController.loadStylesheet('stylesheets/' + newTheme + '.css');
 	},
-	fontChanged: function(event) {
-		var body = this.controller.stageController.document.getElementsByTagName("body")[0];
-		global.setFontSize(body, event.value);
-	},
 	//block added by DC
 /*
 	tabOrderChanged: function(event) {
@@ -241,19 +233,6 @@ PreferencesAssistant.prototype = {
 	},
 */
 	//end block DC
-	hideAvatarChanged: function(event) {
-		var body = this.controller.stageController.document.getElementsByTagName("body")[0];
-		global.setHideAvatar(body, event.value);
-	}, // added by DC
-	showThumbsChanged: function(event) {
-		var body = this.controller.stageController.document.getElementsByTagName("body")[0];
-		global.setShowThumbs(body, event.value);
-	}, // added by DC
-	showEmojiChanged: function(event) {
-		var body = this.controller.stageController.document.getElementsByTagName("body")[0];
-		global.setShowEmoji(body, event.value);
-	}, // added by DC
-
 	cleanup: function() {
 		// Save preferences on exit.
 		for (var sectionId in this.sections) {
@@ -275,21 +254,20 @@ PreferencesAssistant.prototype = {
 			prefs.read('hideToolbar'),
 			prefs.read('hideTabs')
 		);
+		global.setHideAvatar(body,	prefs.read('hideAvatar'));
+		global.setShowThumbs(body,	prefs.read('showThumbs'));
+		global.setShowEmoji(body,	prefs.read('showEmoji'));
+		global.setFontSize(body,	prefx.read('fontSize'));
 
 		// Start the background notifications timer
-		global.setTimer(); //added by DC
+		global.setTimer();
 
 		// Manually remove any listeners from above
-
 		this.controller.stopListening(this.controller.get("close-button"), Mojo.Event.tap, this.closeTapped);
 
 		if (!this.section || this.section == "Appearance") {
 			this.controller.stopListening(this.controller.get('select-theme'), Mojo.Event.propertyChange, this.themeChanged);
 			// this.controller.stopListening(this.controller.get('select-taborder'), Mojo.Event.propertyChange, this.tabOrderChanged);
-			this.controller.stopListening(this.controller.get('select-fontSize'), Mojo.Event.propertyChange, this.fontChanged);
-			this.controller.stopListening(this.controller.get('toggle-hideAvatar'), Mojo.Event.propertyChange, this.hideAvatarChanged); // added by DC
-			this.controller.stopListening(this.controller.get('select-showThumbs'), Mojo.Event.propertyChange, this.showThumbsChanged); // added by DC
-			this.controller.stopListening(this.controller.get('select-showEmoji'), Mojo.Event.propertyChange, this.showEmojiChanged); // added by DC
 		}
 	}
 };
