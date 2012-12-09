@@ -38,7 +38,7 @@ AppAssistant.prototype = {
 			Mojo.Log.info('params: ' + params);
 			// Launch the app normally, load the default user if it exists.
 			this.launchMain();
-			this.toasters.add(new ComposeToaster(this));
+			this.toasters.add({}, new ComposeToaster(this));
 			// this.checkNotifications(); // for debugging
 		}	
 		var stageCallback = function(stageController) {

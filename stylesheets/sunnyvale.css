@@ -1,62 +1,84 @@
 body.default {
-	background: #e4e4e2 url('../images/low/scene-top.png') left top repeat-x;
-	
+	background: url('../images/low/scene-top.png') left top repeat-x,url(../images/low/themes/sunnyvale/bg.png) no-repeat left top;
+	background-size: 100%;
+}
+
+.header-title {
+	color: #94989c;
 }
 
 #header {
 	background: url('../images/low/themes/sunnyvale/header-bar.png') left -25px repeat-x;
 }
-.header-title {
-	color: #fff;
-	background: url('../images/low/themes/sunnyvale/nav-icon-border.png') left bottom no-repeat, url('../images/low/themes/sunnyvale/nav-icon-border.png') right bottom no-repeat;
-}
-#nav-bar {
+#nav-bar-scroller {
 	background: url(../images/low/themes/sunnyvale/nav-bar.png) left bottom repeat-x;
 }
-#nav-home {
-	background: url('../images/low/icons/tweets.png') center center no-repeat, url('../images/low/themes/sunnyvale/nav-icon-border.png') right 4px no-repeat;
+
+.layout-swapped #header {
+	background: url('../images/low/themes/sunnyvale/nav-bar.png') left 5px repeat-x;
 }
-#nav-mentions {
-	background: url('../images/low/icons/mentions.png') 22px center no-repeat, url('../images/low/themes/sunnyvale/nav-icon-border.png') right 4px no-repeat;
+.layout-swapped #nav-bar-scroller {
+	background: url(../images/low/themes/sunnyvale/header-bar.png) left 3px repeat-x;
 }
-#nav-messages {
-	background: url('../images/low/icons/messages.png') 20px center no-repeat, url('../images/low/themes/sunnyvale/nav-icon-border.png') right 4px no-repeat;
-}
-#nav-lists {
-	background: url('../images/low/icons/lists.png') 20px center no-repeat, url('../images/low/themes/sunnyvale/nav-icon-border.png') right 4px no-repeat;
-}
-#nav-search {
-	background: url('../images/low/icons/search.png') 19px center no-repeat;
-}
-.beacon {
-	background: url('../images/low/new-content.png') center bottom no-repeat;
-}
+
+
+
 #indicator {
 	background: url(../images/low/themes/sunnyvale/indicator.png) center center no-repeat;
 }
+
+.layout-swapped #indicator {
+	background: url(../images/low/themes/sunnyvale/indicator-down.png) center center no-repeat;
+}
+
+
 .status-row, .user-row{
-	color: #4d4d4d;
+	color: #444;
 }
 .status-row a{
-	color: #4d4d4d;
+	color: #666;
 }
 .tweet-footer,
 .tweet-username,
 .tweet-screenname {
-	color: #4d4d4d;
+	color: #777;
 }
 .rt-button {
-	color: #d2d2d2;
+	color: #444;
 }
 .panel-list-title {
-	color: #d2d2d2;
+	color: #444;
 }
 .search-list-item {
-	color: #d2d2d2;
+	color: #444;
 }
 .top-tweet {
+	color: #333;
+}
+
+
+.toaster .status-row, .user-row{
+	color: #d2d2d2;
+}
+.toaster .status-row a{
+	color: #bbb;
+}
+.toaster .tweet-footer{
+	color: #bbb;
+}
+.toaster .rt-button {
+	color: #d2d2d2;
+}
+.toaster .panel-list-title {
+	color: #d2d2d2;
+}
+.toaster .search-list-item {
+	color: #d2d2d2;
+}
+.toaster .top-tweet {
 	color: #f8f9b5;
 }
+
 #success-scene{
 	color: #fff;
 }
@@ -67,21 +89,22 @@ body.default {
 /* Toasters */
 .toaster {
 	background: url('../images/low/themes/sunnyvale/toaster-bg.png') left top repeat-x;
-	color: #fff;
+	color: #d2d2d2;
 }
 .toaster.compose {
-	background: url('../images/low/themes/sunnyvale/toaster-bg.png') left 50px repeat-x;
+	background: url('../images/low/themes/sunnyvale/compose-bg.png') left top repeat-x;
 }
 .toaster-controls {
 	background: url('../images/low/toaster-controls.png') left top repeat-x;
 }
 .dm-title {
-	color: #fff;
+	color: #d2d2d2;
 }
 .compose-txt {
 	-webkit-border-image: url('../images/low/textarea-border.png') 12 stretch;
 }
-.compose-txt textarea{
+.compose-txt textarea,
+.search-box textarea {
 	color: #fff;
 }
 .compose-txt .counter {
@@ -90,19 +113,16 @@ body.default {
 .compose-opts {
 /*	background: url('../images/low/compose-opts-bg.png') left top repeat-x;*/
 }
-.compose-submit {
-	color: #fff;
-	-webkit-border-image: url(../images/low/buttons/submit.png) 9 stretch;
-}
-.compose-submit.selected {
-	-webkit-border-image: url(../images/low/buttons/submit-tapped.png) 9 stretch;	
-}
 
 .scene-title {
-	color: #d2d2d2;
+	color: white;
 }
 .section-header span {
-	color: #d2d2d2;
+	color: white;
+}
+.section-large-header span {
+	background: #333;
+	color: white;
 }
 .pref-row-wrapper .title {
 	color: #d2d2d2;
@@ -113,3 +133,52 @@ body.default {
 #verified span{
 	color: #d2d2d2;
 }
+
+#profile-header,
+.section-header {
+	background: #333;
+}
+
+.section-items {
+	background: #444
+}
+
+.new-indicator {
+	color: #666;
+}
+
+#about-body {
+	text-align: center;
+	font-size: 12px;
+	color: #4D4D4D;
+	font-family: "Prelude";
+}
+
+a:link {
+	color: #4D4D4D;
+	text-decoration:underline;
+	font-weight:900;
+}
+
+#about-footer {
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	width: 100%;
+	font-size: 11px;
+	color: #4D4D4D;
+	text-align: center;
+	padding-bottom: 10px;
+}
+
+#txtSearch, .searchbox, #about-body {
+	color: #666 !important;
+}
+
+.tweet-has-emoji{
+	color: #777;
+}
+.dmDir {
+	color: #777;
+}
+

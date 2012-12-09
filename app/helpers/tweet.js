@@ -166,6 +166,13 @@ TweetHelper.prototype = {
 		//keep the plaintext version for quote-style RTs (so HTML doesn't get tossed in there)
 		tweet.stripped = tweet.text;
 		tweet.text = tweet.text.parseLinks();
+
+		// Emojify - added by DC
+		tweet.text = emojify(tweet.text,16);
+		if(tweet.text.indexOf('<img class="emoji" src=') > -1){
+			tweet.emoji_class = 'show';
+		}
+
 		return tweet;
 	},
 	isRetweeted: function(tweet, user) {
