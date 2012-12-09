@@ -238,7 +238,8 @@ body.no-gesture {  /* touchpad/emulator */
 	top: 0px;
 	width: 320px;
 
-	display: none;
+	opacity: 0;
+	-webkit-transition: opacity .5s;
 }
 
 .layout-none .ptr-text {
@@ -250,7 +251,7 @@ body.no-gesture {  /* touchpad/emulator */
 }
 
 .ptr-text-showing {
-	display: block;
+	opacity: 1;
 	z-index: 100000;
 }
 
