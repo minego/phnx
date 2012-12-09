@@ -56,11 +56,11 @@ function PreferencesAssistant(section) {
 				]},
 				{key: 'barlayout', type: 'select', label: 'Layout', items: [
 					{label: 'Tabs above Toolbar', value: 'swapped'},
-					{label: 'Toolbar above Tabs', value: 'original'},
-					{label: 'Hide Toolbar', value: 'no-toolbar'},
-					{label: 'Hide Tabs', value: 'no-nav'},
-					{label: 'Hide Tabs & Toolbar', value: 'none'}
+					{label: 'Toolbar above Tabs', value: 'original'}
 				]},
+				{key: 'hideTabs', type: 'toggle', label: 'Hide Tabs'},
+				{key: 'hideToolbar', type: 'toggle', label: 'Hide Toolbar'},
+
 				// block inserted by DC
 /*
 				{key: 'taborder', type: 'select', label: 'TabOrder', items: [
@@ -132,10 +132,11 @@ function PreferencesAssistant(section) {
 
 PreferencesAssistant.prototype = {
 	setup: function() {
-		this.controller.setupWidget(Mojo.Menu.appMenu, {omitDefaultItems: true}, {visible: true, items: global.prefsMenu});
-
 		var widgetHtml, html;
 		var pageHtml = '';
+
+		this.controller.setupWidget(Mojo.Menu.appMenu, {omitDefaultItems: true}, {visible: true, items: global.prefsMenu});
+
 		for (var sectionId in this.sections) {
 			var sectionItems = this.sections[sectionId];
 
@@ -206,7 +207,6 @@ PreferencesAssistant.prototype = {
 
 		if (!this.section || this.section == "Appearance") {
 			this.controller.listen(this.controller.get('select-theme'), Mojo.Event.propertyChange, this.themeChanged.bind(this));
-			this.controller.listen(this.controller.get('select-barlayout'), Mojo.Event.propertyChange, this.layoutChanged.bind(this));
 			// this.controller.listen(this.controller.get('select-taborder'), Mojo.Event.propertyChange, this.tabOrderChanged.bind(this));
 			this.controller.listen(this.controller.get('select-fontSize'), Mojo.Event.propertyChange, this.fontChanged.bind(this));
 			this.controller.listen(this.controller.get('toggle-hideAvatar'), Mojo.Event.propertyChange, this.hideAvatarChanged.bind(this)); //added by DC
@@ -231,10 +231,6 @@ PreferencesAssistant.prototype = {
 	fontChanged: function(event) {
 		var body = this.controller.stageController.document.getElementsByTagName("body")[0];
 		global.setFontSize(body, event.value);
-	},
-	layoutChanged: function(event) {
-		var body = this.controller.stageController.document.getElementsByTagName("body")[0];
-		global.setLayout(body, event.value);
 	},
 	//block added by DC
 /*
@@ -273,6 +269,13 @@ PreferencesAssistant.prototype = {
 			}
 		}
 
+		var body = this.controller.stageController.document.getElementsByTagName("body")[0];
+		global.setLayout(body,
+			prefs.read('barlayout'),
+			prefs.read('hideToolbar'),
+			prefs.read('hideTabs')
+		);
+
 		// Start the background notifications timer
 		global.setTimer(); //added by DC
 
@@ -282,8 +285,7 @@ PreferencesAssistant.prototype = {
 
 		if (!this.section || this.section == "Appearance") {
 			this.controller.stopListening(this.controller.get('select-theme'), Mojo.Event.propertyChange, this.themeChanged);
-			this.controller.stopListening(this.controller.get('select-barlayout'), Mojo.Event.propertyChange, this.layoutChanged);
-			// this.controller.stopListening(this.controller.get('select-taborder'), Mojo.Event.propertyChange, this.tabOrderChanged);	
+			// this.controller.stopListening(this.controller.get('select-taborder'), Mojo.Event.propertyChange, this.tabOrderChanged);
 			this.controller.stopListening(this.controller.get('select-fontSize'), Mojo.Event.propertyChange, this.fontChanged);
 			this.controller.stopListening(this.controller.get('toggle-hideAvatar'), Mojo.Event.propertyChange, this.hideAvatarChanged); // added by DC
 			this.controller.stopListening(this.controller.get('select-showThumbs'), Mojo.Event.propertyChange, this.showThumbsChanged); // added by DC

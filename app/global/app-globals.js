@@ -165,7 +165,7 @@ var global = {
 		Mojo.Event.listen(stageController.document, Mojo.Event.stageActivate, activate);
 		Mojo.Event.listen(stageController.document, Mojo.Event.stageDeactivate, deactivate);
 	},
-	setLayout: function(body, layout) {
+	setLayout: function(body, layout, hideToolbar, hideTabs) {
 		var layouts = ['swapped', 'original', 'no-toolbar', 'no-nav', 'none'];
 
 		for (var i=0; i < layouts.length; i++) {
@@ -174,13 +174,11 @@ var global = {
 
 		Element.addClassName(body, 'layout-' + layout);
 
-		if (layout == 'no-toolbar') {
-			/* If navigation only then put it on the top (for now) */
-			Element.addClassName(body, 'layout-swapped');
+		if (hideToolbar) {
+			Element.addClassName(body, 'layout-no-toolbar');
 		}
 
-		if (layout == 'none') {
-			Element.addClassName(body, 'layout-no-toolbar');
+		if (hideTabs) {
 			Element.addClassName(body, 'layout-no-nav');
 		}
 	},

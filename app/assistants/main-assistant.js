@@ -106,6 +106,31 @@ MainAssistant.prototype = {
 		// block added by DC to allow for easier panel order adjustment
 		var prefs = new LocalStorage();
 		var tabOrder = prefs.read('taborder');
+		var tmp;
+
+		/* Update old settings */
+		if ((tmp = prefs.read('barlayout'))) {
+			if (tmp != 'swapped') {
+				prefs.write('barlayout',	'original');
+			}
+
+			if (tmp == 'no-toolbar') {
+				prefs.write('hideToolbar',	true);
+				prefs.write('hideTabs',		false);
+
+				/* If you only have the toolbar then put it on top */
+				prefs.write('barlayout',	'swapped');
+			} else if (tmp == 'no-nav') {
+				prefs.write('hideToolbar',	false);
+				prefs.write('hideTabs',		true);
+			} else if (tmp == 'none') {
+				prefs.write('hideToolbar',	true);
+				prefs.write('hideTabs',		true);
+			} else {
+				prefs.write('hideToolbar',	false);
+				prefs.write('hideTabs',		false);
+			}
+		}
 
 		if(tabOrder){
 			switch (tabOrder) {
@@ -1726,8 +1751,13 @@ MainAssistant.prototype = {
 		global.setShowThumbs(body, prefs.read('showThumbs'));
 		global.setShowEmoji(body, prefs.read('showEmoji'));
 		global.setFontSize(body, prefs.read('fontSize'));
-		global.setLayout(body, prefs.read('barlayout'));
 		global.setHideAvatar(body, prefs.read('hideAvatar'));
+
+		global.setLayout(body,
+			prefs.read('barlayout'),
+			prefs.read('hideToolbar'),
+			prefs.read('hideTabs')
+		);
 
 		try {
 			global.setTabOrder(body, prefs.read('taborder'));
