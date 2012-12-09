@@ -74,14 +74,12 @@ function PreferencesAssistant(section) {
 */
 
 				{key: 'fontSize', type: 'select', label: 'Font Size', items: [
-					{label: 'Tiny', value: 'tiny'},
-					{label: 'Small', value: 'small'},
-					{label: 'Medium', value: 'medium'},
-					{label: 'Large', value: 'large'},
-					{label: 'Huge', value: 'huge'}
+					{label: 'Tiny',		value: 'tiny'},
+					{label: 'Small',	value: 'small'},
+					{label: 'Medium',	value: 'medium'},
+					{label: 'Large',	value: 'large'},
+					{label: 'Huge',		value: 'huge'}
 				]},
-
-				{key: 'hideAvatar', type: 'toggle', label: 'Hide Avatars'},
 
 				{key: 'showThumbs', type: 'select', label: 'Thumbnails', items: [
 					{label: 'Never Show', value: 'noThumbs'},
@@ -92,7 +90,13 @@ function PreferencesAssistant(section) {
 					{label: 'Never Show', value: 'noEmoji'},
 					{label: 'Details Only', value: 'detailsEmoji'},
 					{label: 'Always Show', value: 'showEmoji'}
-				]}
+				]},
+
+				{key: 'hideAvatar',		type: 'toggle', label: 'Hide Avatars'},
+				{key: 'hideUsername',	type: 'toggle', label: 'Hide Name'},
+				{key: 'hideScreenname',	type: 'toggle', label: 'Hide Username'},
+				{key: 'hideTime',		type: 'toggle', label: 'Hide Time'},
+				{key: 'hideVia',		type: 'toggle', label: 'Hide Client Name'}
 			],
 			'Notifications': [
 				{key: 'notifications', type: 'toggle', label: 'Notifications'},
@@ -254,10 +258,17 @@ PreferencesAssistant.prototype = {
 			prefs.read('hideToolbar'),
 			prefs.read('hideTabs')
 		);
-		global.setHideAvatar(body,	prefs.read('hideAvatar'));
 		global.setShowThumbs(body,	prefs.read('showThumbs'));
 		global.setShowEmoji(body,	prefs.read('showEmoji'));
 		global.setFontSize(body,	prefx.read('fontSize'));
+
+		global.setHide(body,
+			prefs.read('hideAvatar'),
+			prefs.read('hideUsername'),
+			prefs.read('hideScreenname'),
+			prefs.read('hideTime'),
+			prefs.read('hideVia')
+		);
 
 		// Start the background notifications timer
 		global.setTimer();

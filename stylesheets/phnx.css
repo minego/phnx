@@ -507,6 +507,7 @@ body.no-gesture {  /* touchpad/emulator */
 .large-device .panel .status-row {
 	padding-left: 10px;
 }
+
 .tweet-username {
 	display: inline-block;
 	float: right;
@@ -518,6 +519,14 @@ body.no-gesture {  /* touchpad/emulator */
 	font-weight: normal;
 	color: #bbb;
 }
+
+.hideUsername .tweet-username,
+.hideScreenname .tweet-screenname,
+.hideTime .tweet-time,
+.hideVia .tweet-via {
+	display: none;
+}
+
 .tweet-favstar {
 	display: none;
 	float: right;

@@ -1748,15 +1748,22 @@ MainAssistant.prototype = {
 		var body = this.controller.stageController.document.getElementsByTagName("body")[0];
 		var prefs = new LocalStorage();
 
-		global.setShowThumbs(body, prefs.read('showThumbs'));
-		global.setShowEmoji(body, prefs.read('showEmoji'));
-		global.setFontSize(body, prefs.read('fontSize'));
-		global.setHideAvatar(body, prefs.read('hideAvatar'));
+		global.setShowThumbs(body,	prefs.read('showThumbs'));
+		global.setShowEmoji(body,	prefs.read('showEmoji'));
+		global.setFontSize(body,	prefs.read('fontSize'));
 
 		global.setLayout(body,
 			prefs.read('barlayout'),
 			prefs.read('hideToolbar'),
 			prefs.read('hideTabs')
+		);
+
+		global.setHide(body,
+			prefs.read('hideAvatar'),
+			prefs.read('hideUsername'),
+			prefs.read('hideScreenname'),
+			prefs.read('hideTime'),
+			prefs.read('hideVia')
 		);
 
 		try {

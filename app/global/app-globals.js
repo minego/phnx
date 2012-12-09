@@ -269,13 +269,37 @@ var global = {
 		}
 		Element.addClassName(body, 'font-' + font);
 	},
-	setHideAvatar: function(body, hideAvatarStatus) {
-		if(hideAvatarStatus){
+	setHide: function(body, hideAvatar, hideUsername, hideScreenname, hideTime, hideVia) {
+		if (hideAvatar) {
 			Element.removeClassName(body, 'showAvatar');
 		} else {
 			Element.addClassName(body, 'showAvatar');
 		}
-	}, // added by DC
+
+		if (hideUsername) {
+			Element.addClassName(body, 'hideUsername');
+		} else {
+			Element.removeClassName(body, 'hideUsername');
+		}
+
+		if (hideScreenname) {
+			Element.addClassName(body, 'hideScreenname');
+		} else {
+			Element.removeClassName(body, 'hideScreenname');
+		}
+
+		if (hideTime) {
+			Element.addClassName(body, 'hideTime');
+		} else {
+			Element.removeClassName(body, 'hideTime');
+		}
+
+		if (hideVia) {
+			Element.addClassName(body, 'hideVia');
+		} else {
+			Element.removeClassName(body, 'hideVia');
+		}
+	},
 	setShowThumbs: function(body, showThumbsStatus) {
 		Element.removeClassName(body, 'showThumbs');
 		Element.removeClassName(body, 'detailsThumbs');
