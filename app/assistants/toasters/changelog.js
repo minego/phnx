@@ -1,9 +1,15 @@
 var ChangelogToaster = Class.create(Toaster, {
 	items: [
+		{ version: '1.2.33' },
+		{ item: 'Minor bug fixes' },
+		{ item: 'Change colour of emoji denote symbol "?" and DM direction for Pure style' },
+
+		{ version: '1.2.32' },
+		{ item: 'Minor bug fixes' },
+
 		{ version: '1.2.31' },
 		{ item: 'Implemented pull to refresh' },
 		{ item: 'Change colour of emoji denote symbol "?" and DM direction for Pure style ' },
-		
 
 		{ version: '1.2.28' },
 		{ item: 'Modified to allow deletion of received DMs and added preference option' },

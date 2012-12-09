@@ -188,14 +188,6 @@ var global = {
 	setTabOrder: function(body, tabOrder) {
 		var tabOrders = ['hmdls', 'hmdsl', 'hmsdl', 'hmsld', 'hmlds', 'hmlsd'];
 
-/*		for (var i=0; i < tabOrders.length; i++) {
-			Element.removeClassName(body, 'tabOrder-' + tabOrders[i]);
-		}
-
-		Element.addClassName(body, 'tabOrder-' + tabOrder);
-*/
-
-		//something with the appendChild can cause refresh probs on launch at least in the emulator.  Need to investigate - DC
 		switch (tabOrder) {
 			case "hmdls":
 				//var node=global.doc.getElementById("nav-home");
@@ -222,15 +214,15 @@ var global = {
 				global.doc.getElementById("nav-bar").appendChild(global.doc.getElementById("nav-lists"));
 				break;
 			case "hmsdl":
-//				var node=global.doc.getElementById("nav-home");
+				//var node=global.doc.getElementById("nav-home");
 				global.doc.getElementById("nav-bar").appendChild(global.doc.getElementById("nav-home"));
-//				node=global.doc.getElementById("nav-mentions");
+				//node=global.doc.getElementById("nav-mentions");
 				global.doc.getElementById("nav-bar").appendChild(global.doc.getElementById("nav-mentions"));
-//				node=global.doc.getElementById("nav-search");
+				//node=global.doc.getElementById("nav-search");
 				global.doc.getElementById("nav-bar").appendChild(global.doc.getElementById("nav-search"));
-//				node=global.doc.getElementById("nav-messages");
+				//node=global.doc.getElementById("nav-messages");
 				global.doc.getElementById("nav-bar").appendChild(global.doc.getElementById("nav-messages"));
-//				node=global.doc.getElementById("nav-lists");
+				//node=global.doc.getElementById("nav-lists");
 				global.doc.getElementById("nav-bar").appendChild(global.doc.getElementById("nav-lists"));
 				break;
 			case "hmsld":
@@ -271,7 +263,7 @@ var global = {
 				break;
 		}
 		//banner("Please re-start to re-order panels");
-	}, // end black DC
+	},
 	setFontSize: function(body, font) {
 		var fonts = ['tiny','small', 'medium', 'large','huge'];
 		for (var i=0; i < fonts.length; i++) {

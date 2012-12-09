@@ -581,6 +581,10 @@ var ComposeToaster = Class.create(Toaster, {
 		this.assistant.toasters.back();
 	},
 	setup: function() {
+		if (!get(this.textarea)) {
+			return;
+		}
+
 		var prefs = new LocalStorage();
 		if (prefs.read('enterToSubmit')) {
 			get(this.textarea).observe('keydown', function(e){
@@ -641,6 +645,10 @@ var ComposeToaster = Class.create(Toaster, {
 		Mojo.Event.listen(get('complete-bar-' + this.id), Mojo.Event.tap, this.addUser.bind(this));
 	},
 	cleanup: function() {
+		if (!get(this.textarea)) {
+			return;
+		}
+
 		get(this.textarea).stopObserving('click');
 		get(this.textarea).stopObserving('focus');
 		get(this.textarea).stopObserving('blur');

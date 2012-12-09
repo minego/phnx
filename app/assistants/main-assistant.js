@@ -1711,16 +1711,23 @@ MainAssistant.prototype = {
 	activate: function(event) {
 		var body = this.controller.stageController.document.getElementsByTagName("body")[0];
 		var prefs = new LocalStorage();
+
 		global.setShowThumbs(body, prefs.read('showThumbs'));
 		global.setShowEmoji(body, prefs.read('showEmoji'));
 		global.setFontSize(body, prefs.read('fontSize'));
 		global.setLayout(body, prefs.read('barlayout'));
-		global.setTabOrder(body, prefs.read('taborder'));
+		global.setHideAvatar(body, prefs.read('hideAvatar'));
 
 		try {
-			global.setHideAvatar(body, prefs.read('hideAvatar')); // added by DC
+			global.setTabOrder(body, prefs.read('taborder'));
 		} catch (e) {
-			global.setHideAvatar(body, false);
+			/*
+				Calling this moves around elements that may not have been
+				rendered yet. If it fails, just try again a bit later.
+			*/
+			setTimeout(function() {
+				global.setTabOrder(body, prefs.read('taborder'));
+			}, 1000);
 		}
 	},
 	deactivate: function(event) {

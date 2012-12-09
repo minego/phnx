@@ -34,7 +34,11 @@ var Toaster = {
 	},
 	animateShow: function() {
 		// CSS Animation method
-		get(this.nodeId).addClassName('show');
+		var n;
+
+		if ((n = get(this.nodeId))) {
+			n.addClassName('show');
+		}
 
 		// Javascript Animation method
 		// var from = get(this.nodeId).getHeight();
@@ -77,7 +81,11 @@ var Toaster = {
 		this.hide();
 		var id = this.id;
 		setTimeout(function(){
-			get('toaster-' + id).remove();
+			var toaster;
+
+			if ((toaster = get('toaster-' + id))) {
+				toaster.remove();
+			}
 		}, 1000);
 	},
 	setup: function() {
