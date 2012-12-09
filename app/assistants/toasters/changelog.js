@@ -5,7 +5,9 @@ var ChangelogToaster = Class.create(Toaster, {
         { item: 'Add displaying emoji to a few more locations (search, dashboard).' },
         { item: 'Add hires icons.' },
         { item: 'Re-add Sunnyvale theme as Pure+Rebirth.' },
-        
+        { item: 'Reorganized the preferences page' },
+        { item: 'Added additional options for layout, and for which fields are displayed for a tweet' },
+
 		{ version: '1.2.33' },
 		{ item: 'Added the "black" theme' },
 		{ item: 'Minor bug fixes' },
@@ -102,7 +104,7 @@ var ChangelogToaster = Class.create(Toaster, {
 			itemTemplate:		"templates/changelog-item",
 			listTemplate:		"templates/list",
 			// Below added by DC as changeLog display was maxing out
-			renderLimit: 100 
+			renderLimit: 100
 		}, this);
 	},
 	backTapped: function(event) {
