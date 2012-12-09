@@ -166,7 +166,7 @@ var global = {
 		Mojo.Event.listen(stageController.document, Mojo.Event.stageDeactivate, deactivate);
 	},
 	setLayout: function(body, layout, hideToolbar, hideTabs) {
-		var layouts = ['swapped', 'original', 'no-toolbar', 'no-nav', 'none'];
+		var layouts = ['swapped', 'original', 'no-toolbar', 'no-nav', 'none', 'no-top'];
 
 		for (var i=0; i < layouts.length; i++) {
 			Element.removeClassName(body, 'layout-' + layouts[i]);
@@ -180,6 +180,11 @@ var global = {
 
 		if (hideTabs) {
 			Element.addClassName(body, 'layout-no-nav');
+		}
+
+		if (layout == 'swapped' ? hideTabs : hideToolbar) {
+			/* Hide the space at the top if there is no top bar */
+			Element.addClassName(body, 'layout-no-top');
 		}
 	},
 	//block added by DC

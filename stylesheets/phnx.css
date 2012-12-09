@@ -242,7 +242,7 @@ body.no-gesture {  /* touchpad/emulator */
 	-webkit-transition: opacity .5s;
 }
 
-.layout-none .ptr-text {
+.layout-no-top .ptr-text {
 	top: -36px;
 }
 
@@ -863,7 +863,7 @@ span.link{
 	border-width: 9px;
 	-webkit-border-image: url(../images/low/search-box.png) 9 stretch;
 }
-.layout-none .panel-spacer {
+.layout-no-top .panel-spacer {
 	display: none;
 }
 .search-list-item.first {
