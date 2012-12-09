@@ -24,7 +24,9 @@ ToasterChain.prototype = {
 
 		// store and show the new toaster
 		this.items.push(toaster);
-		toaster.show();
+		if (toaster.show) {
+			toaster.show();
+		}
 	},
 	back: function() {
 		// Remove the topmost toaster and show the one "behind" it
