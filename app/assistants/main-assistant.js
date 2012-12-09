@@ -647,6 +647,7 @@ MainAssistant.prototype = {
 	scrollStarted: function(event) {
 		var		panel		= this;
 		var		scroller	= panel.assistant.controller.get(panel.id + '-scroller');
+		var		pos;
 
 		panel.assistant.controller.get(panel.id + "-ptr-text").removeClassName('ptr-text-showing');
 
@@ -654,9 +655,16 @@ MainAssistant.prototype = {
 		if (panel.refresh) {
 			clearTimeout(panel.timeout);
 
+			if (!(pos = scroller.mojo.getScrollPosition()) || pos.top < -5) {
+				/* The scroll has to start near the top */
+				return;
+			}
+
 			panel.timeout = setTimeout(function() {
-				panel.ptr = true;
-				panel.assistant.controller.get(panel.id + "-ptr-text").addClassName('ptr-text-showing');
+				if ((pos = scroller.mojo.getScrollPosition()) && pos.top >= 1) {
+					panel.ptr = true;
+					panel.assistant.controller.get(panel.id + "-ptr-text").addClassName('ptr-text-showing');
+				}
 			}.bind(panel), 500);
 		}
 	},
