@@ -577,6 +577,16 @@ var ComposeToaster = Class.create(Toaster, {
 			}
 		}
 	},
+    emojiTapped: function(event) {
+        var callback = function(result) {
+            if (result && result.selectedEmoji != null) {
+                var text = this.controller.get(this.textarea).value;
+                this.controller.get(this.textarea).value = text + convertUnicodeCodePointsToString(['0x' + result.selectedEmoji]);
+            }
+        }.bind(this);
+        
+        this.controller.stageController.pushScene("emoji-dialog", callback);
+    },
 	cancelTapped: function(event) {
 		this.assistant.toasters.back();
 	},
@@ -637,6 +647,7 @@ var ComposeToaster = Class.create(Toaster, {
 		Mojo.Event.listen(get('photo-' + this.id), Mojo.Event.tap, this.photoTapped.bind(this));
 		Mojo.Event.listen(get('geotag-' + this.id), Mojo.Event.tap, this.geotagTapped.bind(this));
 		Mojo.Event.listen(get('link-' + this.id), Mojo.Event.tap, this.linkTapped.bind(this));
+		Mojo.Event.listen(get('emoji-' + this.id), Mojo.Event.tap, this.emojiTapped.bind(this));
 		Mojo.Event.listen(get('cancel-' + this.id), Mojo.Event.tap, this.cancelTapped.bind(this));
 		Mojo.Event.listen(get('complete-bar-' + this.id), Mojo.Event.tap, this.addUser.bind(this));
 	},
@@ -658,6 +669,7 @@ var ComposeToaster = Class.create(Toaster, {
 		Mojo.Event.stopListening(get('photo-' + this.id), Mojo.Event.tap, this.photoTapped);
 		Mojo.Event.stopListening(get('geotag-' + this.id), Mojo.Event.tap, this.geotagTapped);
 		Mojo.Event.stopListening(get('link-' + this.id), Mojo.Event.tap, this.linkTapped);
+		Mojo.Event.stopListening(get('emoji-' + this.id), Mojo.Event.tap, this.emojiTapped);
 		Mojo.Event.stopListening(get('cancel-' + this.id), Mojo.Event.tap, this.cancelTapped);
 		Mojo.Event.stopListening(get('complete-bar-' + this.id), Mojo.Event.tap, this.addUser);
 	}

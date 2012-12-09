@@ -12,13 +12,23 @@ var ProfileToaster = Class.create(Toaster, {
 			Twitter.getUser(user, function(response){
 				this.user = response;
 				this.user.toasterId = this.id;
+                this.user.description = this.processDescription(this.user.description);
 				this.render(this.user, 'templates/toasters/profile');
 			}.bind(this));
 		}
 		else {
 			this.user = user;
 			this.user.toasterId = this.id;
+            this.user.description = this.processDescription(this.user.description);
 			this.render(this.user, 'templates/toasters/profile');
 		}
-	}
+	},
+    processDescription: function(desc) {
+		var parsed = emojify(desc,16);
+		/*if(desc.indexOf('<img class="emoji" src=') > -1){
+			tweet.emoji_class = 'show';
+		}*/
+        
+        return parsed;
+    }
 });
