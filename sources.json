@@ -93,5 +93,9 @@
     {
         "scenes": "compose-tweet",
         "source": "app/assistants/compose-tweet-assistant.js"
+    },
+    {
+        "scenes": "emoji-dialog",
+		"source": "app/assistants/emoji-dialog-assistant.js"
     }
 ]

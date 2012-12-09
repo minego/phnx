@@ -31,8 +31,8 @@ function PreferencesAssistant() {
 				{key: 'theme', type: 'select', label: 'Theme', items: [
 					{label: 'Rebirth', value: 'rebirth'},
 					{label: 'Ash', value: 'ash'},
-					{label: 'Pure', value: 'pure'}
-					//{label: 'Sunnyvale', value: 'sunnyvale'}
+					{label: 'Pure', value: 'pure'},
+					{label: 'Sunnyvale', value: 'sunnyvale'}
 				]},
 				{key: 'barlayout', type: 'select', label: 'Layout', items: [
 					{label: 'Tabs above Toolbar', value: 'swapped'},
