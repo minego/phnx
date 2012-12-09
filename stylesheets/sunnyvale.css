@@ -115,32 +115,34 @@ body.default {
 }
 
 .scene-title {
+    background-color: #1a242b;
 	color: white;
 }
 .section-header span {
 	color: white;
 }
 .section-large-header span {
-	background: #333;
+	background: #1a242b;
 	color: white;
 }
 .pref-row-wrapper .title {
 	color: #d2d2d2;
 }
+
+#profile-header,
+.section-header {
+	background: #1a242b;
+}
+
+.section-items {
+	background: #303940;
+}
+
 .profile-title-wrapper {
 	color: #d2d2d2;
 }
 #verified span{
 	color: #d2d2d2;
-}
-
-#profile-header,
-.section-header {
-	background: #333;
-}
-
-.section-items {
-	background: #444
 }
 
 .new-indicator {

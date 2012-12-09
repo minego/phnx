@@ -1,5 +1,11 @@
 var ChangelogToaster = Class.create(Toaster, {
 	items: [
+        { version: '1.3.00' },
+        { item: 'Implemented emoji support for composing tweets.' },
+        { item: 'Add displaying emoji to a few more locations (search, dashboard).' },
+        { item: 'Add hires icons.' },
+        { item: 'Re-add Sunnyvale theme as Pure+Rebirth.' },
+        
 		{ version: '1.2.33' },
 		{ item: 'Added the "black" theme' },
 		{ item: 'Minor bug fixes' },

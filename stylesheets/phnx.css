@@ -1405,7 +1405,7 @@ span.link{
 }
 
 .compose-button.emoji {
-    background: url('../images/emoticon.png') center center no-repeat;
+    background: url('../images/low/icons/emoticon.png') center center no-repeat;
 }
 
 .compose-submit {
