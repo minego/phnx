@@ -238,6 +238,8 @@ PreferencesAssistant.prototype = {
 */
 	//end block DC
 	cleanup: function() {
+		var prefs = this.prefs;
+
 		// Save preferences on exit.
 		for (var sectionId in this.sections) {
 			var sectionItems = this.sections[sectionId];
@@ -248,7 +250,7 @@ PreferencesAssistant.prototype = {
 
 			for (var i=0; i < sectionItems.length; i++) {
 				var item = sectionItems[i];
-				this.prefs.write(item.key, this.widgets['model_' + item.key].value);
+				prefs.write(item.key, this.widgets['model_' + item.key].value);
 			}
 		}
 
@@ -260,7 +262,7 @@ PreferencesAssistant.prototype = {
 		);
 		global.setShowThumbs(body,	prefs.read('showThumbs'));
 		global.setShowEmoji(body,	prefs.read('showEmoji'));
-		global.setFontSize(body,	prefx.read('fontSize'));
+		global.setFontSize(body,	prefs.read('fontSize'));
 
 		global.setHide(body,
 			prefs.read('hideAvatar'),
