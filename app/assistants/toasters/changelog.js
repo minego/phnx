@@ -1,6 +1,7 @@
 var ChangelogToaster = Class.create(Toaster, {
 	items: [
 		{ version: '1.2.33' },
+		{ item: 'Added the "black" theme' },
 		{ item: 'Minor bug fixes' },
 		{ item: 'Change colour of emoji denote symbol "?" and DM direction for Pure style' },
 
