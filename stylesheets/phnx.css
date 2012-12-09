@@ -237,6 +237,10 @@ body.no-gesture {  /* touchpad/emulator */
 	display: none;
 }
 
+.layout-none .ptr-text {
+	top: -36px;
+}
+
 .large-device .ptr-text {
 	width: 341px !important;
 }
