@@ -6,6 +6,7 @@ Packages
 Packages.gz
 .directory
 Thumbs.db
+images\Thumbs.db
 
 *~
 *.bak
