@@ -28,6 +28,8 @@ MainAssistant.prototype = {
 		// set css classes based on device
 		console.log(Mojo.Environment.DeviceInfo.modelNameAscii);
 
+		createEmojiHash();
+
 		if (Mojo.Environment.DeviceInfo.modelNameAscii == "Pixi" ||
 			Mojo.Environment.DeviceInfo.modelNameAscii == "Veer") {
 			this.controller.document.body.addClassName("small-device");

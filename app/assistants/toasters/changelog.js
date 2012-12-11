@@ -1,6 +1,10 @@
 var ChangelogToaster = Class.create(Toaster, {
 	items: [
-        { version: '1.3.01' },
+				{ version: '1.3.2' },
+				{ item: 'Updated emoji compose support to use Unicode rather than Softbank encoding' },
+				{ item: 'Tweets containing emoji using Softbank codes (aka V1.3.1 of Project Macaw and older and sub-IOS5) are now transcoded to Unicode and displayed in tweets' },
+				
+        { version: '1.3.1' },
         { item: 'Fixed bugs related to the new layout options' },
 
         { version: '1.3.00' },
@@ -15,14 +19,13 @@ var ChangelogToaster = Class.create(Toaster, {
 		{ version: '1.2.33' },
 		{ item: 'Added the "black" theme' },
 		{ item: 'Minor bug fixes' },
-		{ item: 'Change colour of emoji denote symbol "?" and DM direction for Pure style' },
+		{ item: 'Change colour of emoji denote symbol "☺" and DM direction for Pure style' },
 
 		{ version: '1.2.32' },
 		{ item: 'Minor bug fixes' },
 
 		{ version: '1.2.31' },
 		{ item: 'Implemented pull to refresh' },
-		{ item: 'Change colour of emoji denote symbol "?" and DM direction for Pure style ' },
 
 		{ version: '1.2.28' },
 		{ item: 'Modified to allow deletion of received DMs and added preference option' },

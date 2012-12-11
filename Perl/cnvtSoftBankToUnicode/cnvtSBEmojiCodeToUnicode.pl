@@ -13,12 +13,12 @@ use English;
 my $version = 1.00;
 
 # help and usage
-my $program = "cnvtSoftBankToUnicode.pl";
+my $program = "cnvtSBEmojiCodeToUnicode.pl";
 my $error = "$program error:";
 my $warn = "$program warning:";
 
 my $helpText = "Version $version\n"
-          . "Usage: $program [-h|help][-g|go] <srcPngDir> <dstPngDir>\n";
+          . "Usage: $program [-h|help] <srcEmojiList>\n";
 
 # parse commandline arguments
 my $opt=1;
@@ -44,12 +44,6 @@ while ($opt && ($arg=shift @ARGV)) {
   elsif ($arg eq '-h') {
     die $helpText;
   }
-  elsif ($arg eq '-g') {
-	$goFlag = 1;
-  }
-  elsif ($arg eq '-go') {
-	$goFlag = 1;
-  }
   elsif (substr($arg,0,1) eq '-') {
     warn "$error Unknown option $arg\n\n";
     die $helpText;
@@ -61,10 +55,11 @@ while ($opt && ($arg=shift @ARGV)) {
 }
 
 die $helpText unless ($ARGV[1]);
-my $pngSrcFolder = $ARGV[0]; 
-my $pngDstFolder = $ARGV[1]; 
-my @errorArray = ();
+my $srcEmojiList = $ARGV[0]; 
+my %emojiCodeHash = ();
 
+open EMOJICODELIST, "$srcEmojiList";
+ 
 while (<STDIN>) {
   chomp $_;
 	my @filenames = split('\t',$_);
@@ -74,24 +69,30 @@ while (<STDIN>) {
 		$filenames[$i] =~ s/\\u/_/i;	
 		$filenames[$i+1] =~ s/\\u0*//i;	
 		$filenames[$i+1] =~ s/\\u/_/i;	
-		#print "src: $pngSrcFolder/emoji-$filenames[$i+1].png dst: $pngDstFolder/$filenames[$i].png\n";
-		print "src: $pngSrcFolder/$filenames[$i+1].png dst: $pngDstFolder/$filenames[$i].png\n";
 		
-		if($goFlag == 1){
-			#my $cpCmd = "cp $pngSrcFolder/emoji-$filenames[$i+1].png $pngDstFolder/$filenames[$i].png";
-			my $cpCmd = "cp $pngSrcFolder/$filenames[$i+1].png $pngDstFolder/$filenames[$i].png";
-			print "$cpCmd\n";
-			if(system($cpCmd)){
-				push(@errorArray,$cpCmd);
-			}
-		}
+		#print "src: $filenames[$i+1] dst: $filenames[$i]\n";
+		$emojiCodeHash{$filenames[$i+1]} = $filenames[$i];
 		$index++;
+	}
+
+}
+
+#while ( my ($key, $value) = each(%emojiCodeHash) ) {
+#	print "$key => $value\n";
+#}
+
+while (<EMOJICODELIST>){
+	my $input = $_;
+	chomp $input;
+	if($input){
+		if($emojiCodeHash{$input}){
+			#print "$input => " . $emojiCodeHash{$input} . "\n";
+			print "'" . $emojiCodeHash{$input} . "',";
+		} else{
+			#print "$input => " . $input . "\n";
+			print "'" . $input . "',";
+		}
 	}
 }
 
-
-print "--------------------\n";
-
-foreach my $i (@errorArray){
-	print "$i\n";
-}
+close EMOJICODELIST;

@@ -581,7 +581,11 @@ var ComposeToaster = Class.create(Toaster, {
         var callback = function(result) {
             if (result && result.selectedEmoji != null) {
                 var text = this.controller.get(this.textarea).value;
-                this.controller.get(this.textarea).value = text + convertUnicodeCodePointsToString(['0x' + result.selectedEmoji]);
+                if(result.selectedEmoji2){
+                	this.controller.get(this.textarea).value = text + convertUnicodeCodePointsToString(['0x' + result.selectedEmoji]) + convertUnicodeCodePointsToString(['0x' + result.selectedEmoji2]);
+            		} else{
+            			this.controller.get(this.textarea).value = text + convertUnicodeCodePointsToString(['0x' + result.selectedEmoji]);
+            		}
             }
         }.bind(this);
         

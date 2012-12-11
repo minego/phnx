@@ -63,19 +63,24 @@ EmojiDialogAssistant.prototype.handleCommand = function(event) {
                 });
                 break;
             case 'people':
-                this.loadEmoji(0, 189)
+                //this.loadEmoji(0, 189)
+                this.loadEmojiUnicode(0, 189)
                 break;
             case 'nature':
-                this.loadEmoji(189, 305)
+                //this.loadEmoji(189, 305)
+                this.loadEmojiUnicode(189, 305)
                 break;
             case 'events':
-                this.loadEmoji(305, 535)
+                //this.loadEmoji(305, 535)
+                this.loadEmojiUnicode(305, 535)
                 break;
             case 'places':
-				this.loadEmoji(535, 637)            
+								//this.loadEmoji(535, 637)
+								this.loadEmojiUnicode(535, 637)            
                 break;
             case 'symbols':
-                this.loadEmoji(637, 846)
+                //this.loadEmoji(637, 846)
+                this.loadEmojiUnicode(637, 846)
                 break;
         }
         
@@ -98,12 +103,42 @@ EmojiDialogAssistant.prototype.loadEmoji = function(start, end) {
     this.controller.modelChanged(this.emojiListModel, this);
 }
 
+EmojiDialogAssistant.prototype.loadEmojiUnicode = function(start, end) {
+    var list = [];
+    for (var i = start; i < end; i++) {
+        list.push({
+            emojiPath : "images/emoji/" + emoji_code_unicode[i] + ".png",
+            emojiCode : emoji_code_unicode[i]
+        });
+    }
+
+    this.emojiListModel.items = list;
+ 
+    this.controller.modelChanged(this.emojiListModel, this);
+}
+
 EmojiDialogAssistant.prototype.listTapHandler = function(event) {
+    var myEmojiCode = event.item.emojiCode;
+    var myEmojiCode1;
+    var myEmojiCode2;
+    
+    if(myEmojiCode.indexOf('_') > -1){
+    	myEmojiCode1 = myEmojiCode.replace(/([\da-f]+)_000([\da-f]+)/i, '$1');
+    	myEmojiCode2 = myEmojiCode.replace(/([\da-f]+)_000([\da-f]+)/i, '$2');
+    } else{
+    	myEmojiCode1 = myEmojiCode;
+    }
+    
+    //Mojo.Log.info("code1: " + myEmojiCode1);
+    //Mojo.Log.info("code2: " + myEmojiCode2);
+    
     if (this.callBackFunc) {
-        this.callBackFunc({ selectedEmoji : event.item.emojiCode });
+        this.callBackFunc({ selectedEmoji : myEmojiCode1,
+        										selectedEmoji2 : myEmojiCode2 });
     }
     this.controller.stageController.popScene({
-        selectedEmoji : event.item.emojiCode
+        selectedEmoji : myEmojiCode1,
+        selectedEmoji2 : myEmojiCode2
     });
 }
 
