@@ -41,14 +41,22 @@ TweetHelper.prototype = {
 					//tweet.cssClass = 'new-tweet';
 					if (links[i].expanded_url.indexOf('http://instagr.am/p/') > -1 || links[i].expanded_url.indexOf('http://instagram.com/p/') > -1){
 						tweet.mediaUrl = links[i].expanded_url;
-						tweet.thumbnail = links[i].expanded_url+"media/?size=m"; //Changed from ?size=t so Touchpad details looks better
+						if(i === 0){
+							tweet.thumbnail = links[i].expanded_url+"media/?size=m"; //Changed from ?size=t so Touchpad details looks better
+						} else {
+							tweet.thumbnail2 = links[i].expanded_url+"media/?size=m"; //Changed from ?size=t so Touchpad details looks better
+						}
 						//tweet.dividerMessage = tweet.mediaUrl;
 						//tweet.cssClass = 'new-tweet';
 						tweet.thumb_class = 'show';
 					} else if (links[i].expanded_url.indexOf('http://twitpic.com') > -1){
 						var img = links[i].expanded_url.substr(links[i].expanded_url.indexOf('/', 8) + 1);
 						tweet.mediaUrl = links[i].expanded_url;
-						tweet.thumbnail = "http://twitpic.com/show/thumb/" + img;
+						if(i === 0){
+							tweet.thumbnail = "http://twitpic.com/show/thumb/" + img;
+						} else {
+							tweet.thumbnail2 = "http://twitpic.com/show/thumb/" + img;
+						}
 						tweet.thumb_class = 'show';
 						tweet.thumb_type = 'small';
 					} else if (links[i].expanded_url.indexOf('http://youtu.be') > -1){
@@ -63,7 +71,11 @@ TweetHelper.prototype = {
 							img = img.slice(0,img.indexOf('#',0));
 						}
 						tweet.mediaUrl = links[i].expanded_url;
-						tweet.thumbnail = "http://img.youtube.com/vi/" + img + "/hqdefault.jpg";//1.jpg
+						if(i === 0){
+							tweet.thumbnail = "http://img.youtube.com/vi/" + img + "/hqdefault.jpg";//1.jpg
+						} else{
+							tweet.thumbnail2 = "http://img.youtube.com/vi/" + img + "/hqdefault.jpg";//1.jpg
+						}
 						//tweet.dividerMessage = tweet.thumbnail;
 						tweet.thumb_class = 'show';
 					} else if (links[i].expanded_url.indexOf('youtube.com/watch') > -1){
@@ -78,24 +90,40 @@ TweetHelper.prototype = {
 							img = img.slice(0,img.indexOf('#',0));
 						}
 						tweet.mediaUrl = links[i].expanded_url;
-						tweet.thumbnail = "http://img.youtube.com/vi/" + img + "/hqdefault.jpg"; //1.jpg;
+						if(i === 0){
+							tweet.thumbnail = "http://img.youtube.com/vi/" + img + "/hqdefault.jpg"; //1.jpg;
+						} else{
+							tweet.thumbnail2 = "http://img.youtube.com/vi/" + img + "/hqdefault.jpg"; //1.jpg;
+						}
 						//tweet.dividerMessage = links[i].expanded_url + " : " + tweet.thumbnail;
 						//tweet.cssClass = 'new-tweet';
 						tweet.thumb_class = 'show';
 					} else if (links[i].expanded_url.indexOf('http://yfrog.com') > -1) {
 						tweet.mediaUrl = links[i].expanded_url;
-						tweet.thumbnail =  links[i].expanded_url + ":iphone"; //changed from :small so Touchpad details looks better
+						if(i === 0){
+							tweet.thumbnail =  links[i].expanded_url + ":iphone"; //changed from :small so Touchpad details looks better
+						} else {
+							tweet.thumbnail2 =  links[i].expanded_url + ":iphone"; //changed from :small so Touchpad details looks better
+						}
 						//tweet.dividerMessage = tweet.thumbnail;
 						tweet.thumb_class = 'show';
 					} else if (links[i].expanded_url.indexOf('img.ly') > -1) {
 						var img = links[i].expanded_url.substr(links[i].expanded_url.indexOf('/', 8) + 1);
 						tweet.mediaUrl = links[i].expanded_url;
-						tweet.thumbnail = "http://img.ly/show/medium/" + img; // changed from thumb so Touchpad details looks better
+						if(i === 0){
+							tweet.thumbnail = "http://img.ly/show/medium/" + img; // changed from thumb so Touchpad details looks better
+						} else {
+							tweet.thumbnail2 = "http://img.ly/show/medium/" + img; // changed from thumb so Touchpad details looks better
+						}
 						//tweet.dividerMessage = tweet.thumbnail;
 						tweet.thumb_class = 'show';
 					} else if (links[i].expanded_url.indexOf('http://phnx.ws/') > -1) {
 						tweet.mediaUrl = links[i].expanded_url;
-						tweet.thumbnail =  links[i].expanded_url + "/thumb";
+						if(i === 0){
+							tweet.thumbnail =  links[i].expanded_url + "/thumb";
+						} else {
+							tweet.thumbnail2 =  links[i].expanded_url + "/thumb";
+						}
 						//tweet.dividerMessage = tweet.thumbnail;
 						tweet.thumb_class = 'show';
 						tweet.thumb_type = 'small';
@@ -110,7 +138,11 @@ TweetHelper.prototype = {
 				if (media_links[i].media_url !== null) {
 					tweet.text = tweet.text.replace(new RegExp(media_links[i].url, 'g'), media_links[i].media_url);	
 					tweet.mediaUrl = media_links[i].media_url;
-					tweet.thumbnail = media_links[i].media_url+":small";  // using small instead of thumb to keep aspect ratio
+					if(i === 0){
+						tweet.thumbnail = media_links[i].media_url+":small";  // using small instead of thumb to keep aspect ratio
+					} else {
+						tweet.thumbnail2 = media_links[i].media_url+":small";  // using small instead of thumb to keep aspect ratio
+					}
 					tweet.thumb_class = 'show';
 				}
 			}

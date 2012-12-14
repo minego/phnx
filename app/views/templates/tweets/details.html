@@ -14,7 +14,12 @@
 					<div class="tweet-text details">#{-text}</div>
 					<div id="thumb-wrapper">
 						<!--div id="thumb-#{-toasterId}" class="inline-thumb #{-thumb_class} inline-thumb-large" x-mojo-tap-highlight="immediate" style="background-image: url(#{-thumbnail});"></div-->
-						<div id="thumb-#{-toasterId}" class="inline-thumb details #{-thumb_class} inline-thumb-large #{-thumb_type}" x-mojo-tap-highlight="immediate"><img id="thumb" src=#{-thumbnail} alt="..."/></div>	
+						<!--div id="thumb-#{-toasterId}" class="inline-thumb details #{-thumb_class} inline-thumb-large #{-thumb_type}" x-mojo-tap-highlight="immediate"><img id="thumb" src=#{-thumbnail} alt="..."/></div-->	
+						<div id="thumb-#{-toasterId}" 
+							<div class="inline-thumb details #{-thumb_class} inline-thumb-large #{-thumb_type}" x-mojo-tap-highlight="immediate">
+								<img id="thumb" src=#{-thumbnail} alt="..."/>
+								<img id="thumb" src=#{-thumbnail2} alt="..."/>
+							</div>
 					</div>
 					<div class="tweet-footer">#{-time_str} (#{-time_tweeted}) #{-via} #{-source}</div>
 				</div> 
