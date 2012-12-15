@@ -615,10 +615,10 @@ body.no-gesture {  /* touchpad/emulator */
 //	display: block;
 //	//margin: 10px auto;
 //}
-.thumb2 {
+.inline-thumb2 {
 	display: none;
 }
-.thumb2.show {
+.inline-thumb2.show {
 	display: inline;
 }
 

@@ -46,6 +46,7 @@ TweetHelper.prototype = {
 						} else {
 							tweet.thumbnail2 = links[i].expanded_url+"media/?size=m"; //Changed from ?size=t so Touchpad details looks better
 							tweet.thumb2_class = 'show';
+							tweet.mediaUrl2 = links[i].expanded_url;
 						}
 						//tweet.dividerMessage = tweet.mediaUrl;
 						//tweet.cssClass = 'new-tweet';
@@ -58,6 +59,7 @@ TweetHelper.prototype = {
 						} else {
 							tweet.thumbnail2 = "http://twitpic.com/show/thumb/" + img;
 							tweet.thumb2_class = 'show';
+							tweet.mediaUrl2 = links[i].expanded_url;
 						}
 						tweet.thumb_class = 'show';
 						tweet.thumb_type = 'small';
@@ -78,6 +80,7 @@ TweetHelper.prototype = {
 						} else{
 							tweet.thumbnail2 = "http://img.youtube.com/vi/" + img + "/hqdefault.jpg";//1.jpg
 							tweet.thumb2_class = 'show';
+							tweet.mediaUrl2 = links[i].expanded_url;
 						}
 						//tweet.dividerMessage = tweet.thumbnail;
 						tweet.thumb_class = 'show';
@@ -98,6 +101,7 @@ TweetHelper.prototype = {
 						} else{
 							tweet.thumbnail2 = "http://img.youtube.com/vi/" + img + "/hqdefault.jpg"; //1.jpg;
 							tweet.thumb2_class = 'show';
+							tweet.mediaUrl2 = links[i].expanded_url;
 						}
 						//tweet.dividerMessage = links[i].expanded_url + " : " + tweet.thumbnail;
 						//tweet.cssClass = 'new-tweet';
@@ -109,6 +113,7 @@ TweetHelper.prototype = {
 						} else {
 							tweet.thumbnail2 =  links[i].expanded_url + ":iphone"; //changed from :small so Touchpad details looks better
 							tweet.thumb2_class = 'show';
+							tweet.mediaUrl2 = links[i].expanded_url;
 						}
 						//tweet.dividerMessage = tweet.thumbnail;
 						tweet.thumb_class = 'show';
@@ -120,6 +125,7 @@ TweetHelper.prototype = {
 						} else {
 							tweet.thumbnail2 = "http://img.ly/show/medium/" + img; // changed from thumb so Touchpad details looks better
 							tweet.thumb2_class = 'show';
+							tweet.mediaUrl2 = links[i].expanded_url;
 						}
 						//tweet.dividerMessage = tweet.thumbnail;
 						tweet.thumb_class = 'show';
@@ -130,6 +136,7 @@ TweetHelper.prototype = {
 						} else {
 							tweet.thumbnail2 =  links[i].expanded_url + "/thumb";
 							tweet.thumb2_class = 'show';
+							tweet.mediaUrl2 = links[i].expanded_url;
 						}
 						//tweet.dividerMessage = tweet.thumbnail;
 						tweet.thumb_class = 'show';
@@ -150,6 +157,7 @@ TweetHelper.prototype = {
 					} else {
 						tweet.thumbnail2 = media_links[i].media_url+":small";  // using small instead of thumb to keep aspect ratio
 						tweet.thumb2_class = 'show';
+						tweet.mediaUrl2 = media_links[i].media_url;
 					}
 					tweet.thumb_class = 'show';
 				}

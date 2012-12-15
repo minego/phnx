@@ -637,6 +637,15 @@ transport.responseText);
 			} else {
 				this.handleLink(url);
 			}
+		}	if (e.id === 'thumb2') {
+			var url = this.tweet.mediaUrl2;
+			var prefs = new LocalStorage();
+
+			if (held || prefs.read('browserSelection') === 'ask') {
+				this.showOptsUrl(url);
+			} else {
+				this.handleLink(url);
+			}
 		} else if (e.id === 'hashtag') {
 			var hashtag = e.innerText;
 			Twitter.search(hashtag, function(response) {
