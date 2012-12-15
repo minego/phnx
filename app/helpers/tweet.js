@@ -45,6 +45,7 @@ TweetHelper.prototype = {
 							tweet.thumbnail = links[i].expanded_url+"media/?size=m"; //Changed from ?size=t so Touchpad details looks better
 						} else {
 							tweet.thumbnail2 = links[i].expanded_url+"media/?size=m"; //Changed from ?size=t so Touchpad details looks better
+							tweet.thumb2_class = 'show';
 						}
 						//tweet.dividerMessage = tweet.mediaUrl;
 						//tweet.cssClass = 'new-tweet';
@@ -56,6 +57,7 @@ TweetHelper.prototype = {
 							tweet.thumbnail = "http://twitpic.com/show/thumb/" + img;
 						} else {
 							tweet.thumbnail2 = "http://twitpic.com/show/thumb/" + img;
+							tweet.thumb2_class = 'show';
 						}
 						tweet.thumb_class = 'show';
 						tweet.thumb_type = 'small';
@@ -75,6 +77,7 @@ TweetHelper.prototype = {
 							tweet.thumbnail = "http://img.youtube.com/vi/" + img + "/hqdefault.jpg";//1.jpg
 						} else{
 							tweet.thumbnail2 = "http://img.youtube.com/vi/" + img + "/hqdefault.jpg";//1.jpg
+							tweet.thumb2_class = 'show';
 						}
 						//tweet.dividerMessage = tweet.thumbnail;
 						tweet.thumb_class = 'show';
@@ -94,6 +97,7 @@ TweetHelper.prototype = {
 							tweet.thumbnail = "http://img.youtube.com/vi/" + img + "/hqdefault.jpg"; //1.jpg;
 						} else{
 							tweet.thumbnail2 = "http://img.youtube.com/vi/" + img + "/hqdefault.jpg"; //1.jpg;
+							tweet.thumb2_class = 'show';
 						}
 						//tweet.dividerMessage = links[i].expanded_url + " : " + tweet.thumbnail;
 						//tweet.cssClass = 'new-tweet';
@@ -104,6 +108,7 @@ TweetHelper.prototype = {
 							tweet.thumbnail =  links[i].expanded_url + ":iphone"; //changed from :small so Touchpad details looks better
 						} else {
 							tweet.thumbnail2 =  links[i].expanded_url + ":iphone"; //changed from :small so Touchpad details looks better
+							tweet.thumb2_class = 'show';
 						}
 						//tweet.dividerMessage = tweet.thumbnail;
 						tweet.thumb_class = 'show';
@@ -114,6 +119,7 @@ TweetHelper.prototype = {
 							tweet.thumbnail = "http://img.ly/show/medium/" + img; // changed from thumb so Touchpad details looks better
 						} else {
 							tweet.thumbnail2 = "http://img.ly/show/medium/" + img; // changed from thumb so Touchpad details looks better
+							tweet.thumb2_class = 'show';
 						}
 						//tweet.dividerMessage = tweet.thumbnail;
 						tweet.thumb_class = 'show';
@@ -123,6 +129,7 @@ TweetHelper.prototype = {
 							tweet.thumbnail =  links[i].expanded_url + "/thumb";
 						} else {
 							tweet.thumbnail2 =  links[i].expanded_url + "/thumb";
+							tweet.thumb2_class = 'show';
 						}
 						//tweet.dividerMessage = tweet.thumbnail;
 						tweet.thumb_class = 'show';
@@ -142,6 +149,7 @@ TweetHelper.prototype = {
 						tweet.thumbnail = media_links[i].media_url+":small";  // using small instead of thumb to keep aspect ratio
 					} else {
 						tweet.thumbnail2 = media_links[i].media_url+":small";  // using small instead of thumb to keep aspect ratio
+						tweet.thumb2_class = 'show';
 					}
 					tweet.thumb_class = 'show';
 				}
