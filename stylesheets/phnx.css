@@ -1422,6 +1422,7 @@ span.link{
 }
 
 .compose-button.emoji {
+		top: -1px;
     background: url('../images/low/icons/emoticon.png') center center no-repeat;
 }
 
@@ -1683,6 +1684,7 @@ a:link {
 	width: 53px;
 	margin-bottom: 0px;
 	margin-right: 0px;
+	margin-left: 10px;
 }
 
 .grid-layout .palm-list .palm-row.selected {
