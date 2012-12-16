@@ -38,6 +38,7 @@ body.default.large-device {
 
 .status-row, .user-row{
 	color: #d2d2d2;
+	background: url(../images/low/tweet-border-light.png) center bottom repeat-x;
 }
 .status-row a{
 	color: #bbb;

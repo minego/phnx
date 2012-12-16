@@ -1762,7 +1762,8 @@ MainAssistant.prototype = {
 			prefs.read('hideUsername'),
 			prefs.read('hideScreenname'),
 			prefs.read('hideTime'),
-			prefs.read('hideVia')
+			prefs.read('hideVia'),
+			prefs.read('hideTweetBorder')
 		);
 
 		try {

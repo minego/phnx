@@ -96,7 +96,8 @@ function PreferencesAssistant(section) {
 				{key: 'hideUsername',	type: 'toggle', label: 'Hide Name'},
 				{key: 'hideScreenname',	type: 'toggle', label: 'Hide Username'},
 				{key: 'hideTime',		type: 'toggle', label: 'Hide Time'},
-				{key: 'hideVia',		type: 'toggle', label: 'Hide Client Name'}
+				{key: 'hideVia',		type: 'toggle', label: 'Hide Client Name'},
+				{key: 'hideTweetBorder',		type: 'toggle', label: 'Hide Border between Tweets'}
 			],
 			'Notifications': [
 				{key: 'notifications', type: 'toggle', label: 'Notifications'},
@@ -269,7 +270,8 @@ PreferencesAssistant.prototype = {
 			prefs.read('hideUsername'),
 			prefs.read('hideScreenname'),
 			prefs.read('hideTime'),
-			prefs.read('hideVia')
+			prefs.read('hideVia'),
+			prefs.read('hideTweetBorder')
 		);
 
 		// Start the background notifications timer

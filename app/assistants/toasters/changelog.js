@@ -1,6 +1,7 @@
 var ChangelogToaster = Class.create(Toaster, {
 	items: [
 				{ version: '1.3.2' },
+				{ item: 'Added "Hide Tweet Borders" option to Appearance preference page' },
 				{ item: 'Up to 2 inline thumbnails can now be shown in timeline and details' },
 				{ item: 'Updated emoji compose support to use Unicode rather than Softbank encoding' },
 				{ item: 'Tweets containing emoji using Softbank codes (aka V1.3.1 of Project Macaw and older and sub-IOS5) are now transcoded to Unicode and displayed in tweets' },

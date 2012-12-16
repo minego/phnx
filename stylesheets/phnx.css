@@ -480,7 +480,10 @@ body.no-gesture {  /* touchpad/emulator */
 	padding: 0px;
 	color: #d2d2d2;
 	clear: both;
-/*	background: url(../images/low/tweet-border.png) center bottom repeat-x;*/
+	background: url(../images/low/tweet-border.png) center bottom repeat-x;
+}
+.hideTweetBorder .status-row, .user-row{
+	background: url() center bottom repeat-x;
 }
 .user-row {
 	display: inline-block;
@@ -1685,6 +1688,7 @@ a:link {
 	margin-bottom: 0px;
 	margin-right: 0px;
 	margin-left: 10px;
+	background: transparent;
 }
 
 .grid-layout .palm-list .palm-row.selected {
