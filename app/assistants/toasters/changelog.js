@@ -1,6 +1,8 @@
 var ChangelogToaster = Class.create(Toaster, {
 	items: [
 				{ version: '1.3.2' },
+				{ item: 'Unified all emoji, and converted highres images to 48x48 from 64x64 (thanks again to Antonio Morales MojoWhatsup)' },
+				{ item: 'Emoji dialog now uses 48x48 images on all platforms' },
 				{ item: 'Added "Hide Tweet Borders" option to Appearance preference page' },
 				{ item: 'Up to 2 inline thumbnails can now be shown in timeline and details' },
 				{ item: 'Updated emoji compose support to use Unicode rather than Softbank encoding' },

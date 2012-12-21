@@ -39,5 +39,6 @@ Added a showPanels class in finishAuth-scene.html to always show the avatars of 
 Updated emoji-dialog-assistant.js, compose.js, sources.js and emoji.js (plus added hashTable.js) to compse using unicode characters. Also updated all 1.5 icons to unicode names and added a couple missing ones from the normal emoji folder. Finally transcodes between Softbank to Unicode on display.
 Updated item.html, details.html and tweet.js to allow for up to 2 inline thumbnails.
 Updated phnx.css to do slight repo on emoji icon in compose toaster and slight change to layout of emoji list.
-Updated preferences-assistant.js, phnx.css, black.css, main-assistant.js, app-globals.js and local.js to allow for HideTwetBorder option.
+Updated preferences-assistant.js, phnx.css, black.css, main-assistant.js, app-globals.js and local.js to allow for HideTweetBorder option.
 Added "background:transparent" in phnx.css to get rid of lower border in emoji dialogue
+Made sure all emoji exist under normal (32x32) and 1.5 (48x48) and converted the 1.5 from 64x64 to 48x48, as they aren't required any bigger. Change inspired by Antonio Morales' MojoWhatsup. Also, force using the 48x48 for emoji dialog.

@@ -107,7 +107,8 @@ EmojiDialogAssistant.prototype.loadEmojiUnicode = function(start, end) {
     var list = [];
     for (var i = start; i < end; i++) {
         list.push({
-            emojiPath : "images/emoji/" + emoji_code_unicode[i] + ".png",
+            //emojiPath : "images/emoji/" + emoji_code_unicode[i] + ".png",
+            emojiPath : "images/emoji/1.5/" + emoji_code_unicode[i] + ".png",
             emojiCode : emoji_code_unicode[i]
         });
     }
