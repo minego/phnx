@@ -1069,7 +1069,8 @@ span.link{
 	background: #000;
 }*/
 #profile-header {
-	padding: 20px 12px 15px 12px;
+	//padding: 20px 12px 15px 12px;
+	padding-bottom: 15px;
 	clear: both;
 	display: block;
 	text-align: center;
@@ -1087,14 +1088,24 @@ span.link{
 	display: block;
 	z-index: 1;
 	opacity: 0.5;
-	height: 149px;
-	width: 298px;
+	//height: 149px;
+	//width: 298px;
+	height: 160px;
+	width: 320px;
 	background-repeat: no-repeat;
 	position: absolute;
 	text-align: center;
-	-webkit-border-radius: 4px;
-	background-size: 298px;
+	//-webkit-border-radius: 4px;
+	//background-size: 298px;
+	background-size: 320px;
 }
+
+.large-device #profile-banner {
+	height: 170px;
+	width: 340px;
+	background-size: 340px;
+}
+
 #profile-avatar {
 	display: block;
 	position: relative;
@@ -1103,24 +1114,39 @@ span.link{
 	z-index: 10;
 	height: 60px;
 	width: 60px;
-	left: 117px;
-	top: 20px;
+	//left: 117px;
+	//top: 20px;
+	left: 129px;
+	top:30px;
 	margin-bottom: 20px;
 	border:2px solid white;
 	-webkit-border-radius: 4px;
 	background-size: 60px;
 }
+.large-device #profile-avatar{
+	left: 139px;
+}
+
 .profile-avatar-wrapper {
 	//float:center;
-	height: 149px;
-	width: 298px;
+	//height: 149px;
+	//width: 298px;
+	height: 160px;
+	width: 320px;
 }
+.large-device .profile-avatar-wrapper{
+	height: 170px;
+	width: 340px;
+}
+
 .profile-avatar-sub-wrapper {
 }
 .profile-title-wrapper {
 	float: center;
 	//margin-left: 10px;
 	margin-top: 8px;
+	//margin-top: 28px;
+	top: 10px;
 	font-size: 16px;
 	font-weight: bold;
 	position:relative;
@@ -1128,6 +1154,7 @@ span.link{
 }
 .profile-options-wrapper {
 	float: right;
+	padding-right: 12px;
 	position:relative;
 	z-index: 5;
 
@@ -1218,10 +1245,14 @@ span.link{
 	clear: both;
 	position: fixed;
 	//top: 90px;
-	top: 179px;
+	//top: 179px;
+	top: 159px;
 	left: 0px;
 	width: 100%;
 	z-index: 20;
+}
+.large-device #profile-menubar{
+	top: 169px;
 }
 #verified {
 	text-align: center;
@@ -1237,7 +1268,8 @@ span.link{
 	padding-left: 18px;
 }
 .profileScroller {
-	margin-top: 40px;
+	//margin-top: 40px;
+	margin-top: 26px;
 }
 .profile-label {
 	float: left;
