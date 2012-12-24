@@ -45,7 +45,9 @@ Packages: filename
 	@echo "Maintainer: "													\
 			"Micah N Gorrell <macaw@minego.net>, "							\
 			"Owen Swerkstrom, "												\
-			"Patrick Campanale <patrickappcreator@gmail.com>"		>> Packages
+			"Patrick Campanale, "											\
+			"Dave Cole, "													\
+			"Donald Kirker"											>> Packages
 	@echo "Filename: `cat .filename`"								>> Packages
 	@echo "Size: `cat \`cat .filename\` | wc -c`"					>> Packages
 	@echo "MD5Sum: `cat \`cat .filename\` | md5sum | sed 's/ *-//'`">> Packages
