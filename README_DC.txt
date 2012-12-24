@@ -42,3 +42,5 @@ Updated phnx.css to do slight repo on emoji icon in compose toaster and slight c
 Updated preferences-assistant.js, phnx.css, black.css, main-assistant.js, app-globals.js and local.js to allow for HideTweetBorder option.
 Added "background:transparent" in phnx.css to get rid of lower border in emoji dialogue
 Made sure all emoji exist under normal (32x32) and 1.5 (48x48) and converted the 1.5 from 64x64 to 48x48, as they aren't required any bigger. Change inspired by Antonio Morales' MojoWhatsup. Also, force using the 48x48 for emoji dialog.
+Updated phnx.css, profile-assistant.js and content.html so profile_banner is applied to profile page if it exists. Also modified pure.css and sunnyvale.css so banner could be seen over bg color.
+Updated app-globals.js to refer to Project Macaw instead of phnx in menu.

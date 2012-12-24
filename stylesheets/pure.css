@@ -56,7 +56,6 @@ body.default {
 	color: #333;
 }
 
-
 .toaster .status-row, .user-row{
 	color: #d2d2d2;
 }
@@ -136,7 +135,7 @@ body.default {
 
 #profile-header,
 .section-header {
-	background: #333;
+	background-color: #333;
 }
 
 .section-items {

@@ -1,16 +1,19 @@
 <div id="profile-header">
+	<div id="profile-banner" style="background-image: url(#{-profile_banner_url}/web)"></div>
+		<div class="close-button-wrapper">
+			<div id="close-button" x-mojo-tap-highlight="immediate"></div>
+		</div>
+		<div class="profile-options-wrapper">
+			<div id="options" x-mojo-tap-highlight="immediate"></div>
+		</div>	
 	<div class="profile-avatar-wrapper">
-		<div id="profile-avatar" style="background-image: url(https://api.twitter.com/1/users/profile_image/#{-screen_name}.json?size=bigger)"></div>
-	</div>
-	<div class="profile-title-wrapper">
-		<div class="profile-name">#{-name}</div>
-		<div class="profile-username">@#{-screen_name}</div>
-	</div>
-	<div class="close-button-wrapper">
-		<div id="close-button" x-mojo-tap-highlight="immediate"></div>
-	</div>
-	<div class="profile-options-wrapper">
-		<div id="options" x-mojo-tap-highlight="immediate"></div>
+		<div class="profile-avatar-sub-wrapper"> 
+			<div id="profile-avatar" style="background-image: url(https://api.twitter.com/1/users/profile_image/#{-screen_name}.json?size=bigger)"></div>
+		</div>
+		<div class="profile-title-wrapper">
+			<div class="profile-name">#{-name}</div>
+			<div class="profile-username">@#{-screen_name}</div>
+		</div>
 	</div>
 	<div style="clear: both"></div>
 </div>

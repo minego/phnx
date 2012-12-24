@@ -1072,30 +1072,65 @@ span.link{
 	padding: 20px 12px 15px 12px;
 	clear: both;
 	display: block;
+	text-align: center;
+	//top: 90px;
+	
+	//position: static;
 }
 .medium-device #profile-header .close-button-wrapper,
 .small-device  #profile-header .close-button-wrapper {
 	display: none;
 }
 
+
+#profile-banner {
+	display: block;
+	z-index: 1;
+	opacity: 0.5;
+	height: 149px;
+	width: 298px;
+	background-repeat: no-repeat;
+	position: absolute;
+	text-align: center;
+	-webkit-border-radius: 4px;
+	background-size: 298px;
+}
 #profile-avatar {
 	display: block;
+	position: relative;
+	text-align: center;
+	background-repeat: no-repeat;
+	z-index: 10;
 	height: 60px;
 	width: 60px;
+	left: 117px;
+	top: 20px;
+	margin-bottom: 20px;
+	border:2px solid white;
 	-webkit-border-radius: 4px;
 	background-size: 60px;
 }
 .profile-avatar-wrapper {
-	float:left;
+	//float:center;
+	height: 149px;
+	width: 298px;
+}
+.profile-avatar-sub-wrapper {
 }
 .profile-title-wrapper {
-	float: left;
-	margin-left: 10px;
+	float: center;
+	//margin-left: 10px;
 	margin-top: 8px;
 	font-size: 16px;
+	font-weight: bold;
+	position:relative;
+	z-index: 5;
 }
 .profile-options-wrapper {
 	float: right;
+	position:relative;
+	z-index: 5;
+
 }
 #options {
 	display: block;
@@ -1182,7 +1217,8 @@ span.link{
 #profile-menubar {
 	clear: both;
 	position: fixed;
-	top: 90px;
+	//top: 90px;
+	top: 179px;
 	left: 0px;
 	width: 100%;
 	z-index: 20;
@@ -1543,6 +1579,8 @@ span.link{
 	text-align: center;
 }
 .close-button-wrapper {
+	position:relative;
+	z-index: 5;
 	float: right;
 }
 #close-button {

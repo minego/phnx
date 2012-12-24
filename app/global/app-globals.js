@@ -24,7 +24,7 @@ var global = {
 			command: 'cmdPreferences'
 		},
 		{
-			label: 'About phnx',
+			label: 'About Project Macaw',
 			command: 'cmdAbout'
 		},
 		{
