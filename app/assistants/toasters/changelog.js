@@ -1,18 +1,18 @@
 var ChangelogToaster = Class.create(Toaster, {
 	items: [
-				{ version: '1.3.3' },
-				{ item: 'Added Blink notification toggle' },
-				{ item: 'Updated how profile-banner is displayed' },
-				
-				{ version: '1.3.2' },
-				{ item: 'If profile-banner exists, then it is displayed on newly laid out profile page' }, 
-				{ item: 'Unified all emoji, and converted highres images to 48x48 from 64x64 (thanks again to Antonio Morales MojoWhatsup)' },
-				{ item: 'Emoji dialog now uses 48x48 images on all platforms' },
-				{ item: 'Added "Hide Tweet Borders" option to Appearance preference page' },
-				{ item: 'Up to 2 inline thumbnails can now be shown in timeline and details' },
-				{ item: 'Updated emoji compose support to use Unicode rather than Softbank encoding' },
-				{ item: 'Tweets containing emoji using Softbank codes (aka V1.3.1 of Project Macaw and older and sub-IOS5) are now transcoded to Unicode and displayed in tweets' },
-				
+		{ version: '1.3.3' },
+		{ item: 'Added Blink notification toggle' },
+		{ item: 'Updated how profile-banner is displayed' },
+
+		{ version: '1.3.2' },
+		{ item: 'If profile-banner exists, then it is displayed on newly laid out profile page' }, 
+		{ item: 'Unified all emoji, and converted highres images to 48x48 from 64x64 (thanks again to Antonio Morales MojoWhatsup)' },
+		{ item: 'Emoji dialog now uses 48x48 images on all platforms' },
+		{ item: 'Added "Hide Tweet Borders" option to Appearance preference page' },
+		{ item: 'Up to 2 inline thumbnails can now be shown in timeline and details' },
+		{ item: 'Updated emoji compose support to use Unicode rather than Softbank encoding' },
+		{ item: 'Tweets containing emoji using Softbank codes (aka V1.3.1 of Project Macaw and older and sub-IOS5) are now transcoded to Unicode and displayed in tweets' },
+
         { version: '1.3.1' },
         { item: 'Fixed bugs related to the new layout options' },
 
