@@ -1,6 +1,7 @@
 var ChangelogToaster = Class.create(Toaster, {
 	items: [
 				{ version: '1.3.3' },
+				{ item: 'Added Blink notification toggle' },
 				{ item: 'Updated how profile-banner is displayed' },
 				
 				{ version: '1.3.2' },

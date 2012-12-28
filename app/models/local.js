@@ -4,6 +4,7 @@ function LocalStorage() {
 		notifications: true,
 		notificationInterval: '00:15',
 		notificationSound: 'notifications',
+		notificationBlink: true,
 		notificationHome: false,
 		notificationMentions: true,
 		notificationMessages: true,

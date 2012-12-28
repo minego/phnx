@@ -115,6 +115,7 @@ function PreferencesAssistant(section) {
 					{label: 'Vibrate', value: 'vibrate'},
 					{label: 'Mute', value: 'none' }
 				]},
+				{key: 'notificationBlink', type: 'toggle', label: 'Blink'},
 				{key: 'notificationHome', type: 'toggle', label: 'Home Timeline'},
 				{key: 'notificationMentions', type: 'toggle', label: 'Mentions'},
 				{key: 'notificationMessages', type: 'toggle', label: 'Messages'},

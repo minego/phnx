@@ -62,7 +62,9 @@ DashboardAssistant.prototype = {
 		};
 		
 		Mojo.Controller.getAppController().showBanner(bannerParams, {source: "notification"}, 'phnx');
-		this.controller.stageController.indicateNewContent(true); // flashy
+		if(prefs.read('notificationBlink')){	
+			this.controller.stageController.indicateNewContent(true); // flashy
+		}
 		var info = {title: this.title, message: this.message, count: this.count};
 
 		var renderedInfo = Mojo.View.render({object: info, template: 'dashboard/item-info'});
