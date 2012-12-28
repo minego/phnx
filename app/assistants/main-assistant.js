@@ -819,8 +819,9 @@ MainAssistant.prototype = {
 	},
 	refreshAll: function() {
 		for (var j=0; j < this.panels.length; j++) {
-			if(this.panels[j].type === "timeline")
-				this.refreshPanel(this.panels[j]); //modified by DC to allow for possible re-ordering of panels at a later date
+			if (this.panels[j].type === "timeline") {
+				this.refreshPanel(this.panels[j]);
+			}
 		}
 
 		// Load the list of people being followed for auto complete
@@ -845,27 +846,28 @@ MainAssistant.prototype = {
 		var lastId = undefined;
 
 		if (panel.refresh) {
-			if (panel.model.items.length > 0) {
-				// grab the second tweet for gap detection
-				var tweet = panel.model.items[1];
+			setTimeout(function() {
+				if (panel.model.items.length > 0) {
+					// grab the second tweet for gap detection
+					var tweet = panel.model.items[1];
 
-				if (tweet) {
-					if (tweet.is_rt) {
-						lastId = tweet.original_id;
-					}
-					else{
-						lastId = tweet.id_str;
+					if (tweet) {
+						if (tweet.is_rt) {
+							lastId = tweet.original_id;
+						}
+						else{
+							lastId = tweet.id_str;
+						}
 					}
 				}
-			}
 
-			if (panel.id === 'messages') {
-				this.getDMs(panel, lastId);
-			} else {
-				this.getTweets(panel, lastId);
-			}
-		}
-		else if (panel.id === 'search') {
+				if (panel.id === 'messages') {
+					this.getDMs(panel, lastId);
+				} else {
+					this.getTweets(panel, lastId);
+				}
+			}.bind(this), 200);
+		} else if (panel.id === 'search') {
 			this.loadSearch();
 		}
 	},
@@ -950,7 +952,7 @@ MainAssistant.prototype = {
 	},
 	loadMore: function(timeline) {
         var model = this.panels[this.timeline].model;
-        
+
         if (model && model.items && model.items.length > 0) {
             this.loadingMore = true;
             var maxId = model.items[model.items.length - 1].id_str;

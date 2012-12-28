@@ -84,8 +84,21 @@ var ComposeToaster = Class.create(Toaster, {
 		}.bind(this), 0);
 	},
 	updateCounter: function() {
-		var count = this.availableChars - get(this.textarea).value.length;
-		get('count-' + this.id).update(count);
+		var txt		= get(this.textarea).value;
+
+		if (txt.length <= this.availableChars) {
+			get('count-' + this.id).update(this.availableChars - txt.length);
+			return;
+		}
+
+		var info	= this.splitPrep(txt);
+
+		var avail	= this.availableChars - info.needed;
+		var used	= txt.length - info.needed;
+		var tweets	= parseInt(used / avail) + 1;
+		var count	= avail - (used % avail);
+
+		get('count-' + this.id).update(count + 'x' + tweets);
 	},
 	autoComplete: function() {
 		var bar		= get(this.completebar);
@@ -216,34 +229,25 @@ var ComposeToaster = Class.create(Toaster, {
 		this.refocus = false;
 		get(this.textarea).blur();
 	},
-	submitTweet: function(event) {
-		var txt = get(this.textarea).value;
-		var Twitter = new TwitterAPI(this.user);
-		var args;
 
-		if (this.uploading) {
-			ex('An upload is in progress.');
-		} else if (this.sending) {
-			;
-		} else if (txt.length > this.availableChars) {
-			var words		= txt.match(/[^\s]+/g);
-			var todone		= false;
-			var to			= [];
-			var mentions	= [];
-			var messages	= [];
-			var length		= 0;
+	splitPrep: function(txt) {
+		var words		= txt.match(/[^\s]+/g);
+		var todone		= false;
+		var to			= [];
+		var mentions	= [];
+		var needed		= 0;
 
-			// Find all mentions in the message. Each part should cc all
-			// of them. Include any hashes too.
-			//
-			// Count the length of these words so we know how much space
-			// to save at the end of each aprt.
+		/*
+			Find all mentions in the message. Each part should cc all of them.
+
+			Count the length of these words so we know how much space to save
+			in each tweet.
+		*/
+		if (!this.dm) {
 			for (var i = 0, word; word = words[i]; i++) {
 				if (0 == word.indexOf('.@')) {
 					todone = true;
 					word = word.slice(1);
-				} else if (0 == word.indexOf('#')) {
-					todone = true;
 				} else if (0 == word.indexOf('@')) {
 					;
 				} else {
@@ -251,34 +255,87 @@ var ComposeToaster = Class.create(Toaster, {
 					continue;
 				}
 
-				// Count the length of the word, even if it is already in our
-				// list so that it can be included in the right order.
-				length += word.length + 1;
+				/*
+					Count the length of the word, even if it is already in our list
+					so that it can be included in the right order.
+				*/
+				needed += word.length + 1;
 
 				if (-1 != mentions.indexOf(word) ||
 					-1 != to.indexOf(word)
 				) {
-					// We've already found this guy
+					/* No point in including the same recipient twice */
 					continue;
 				}
 
 				if (!todone) {
-					// The message is addressed directly to this user
+					/*
+						The message is addressed directly to these users, so they
+						need to be included at the start of each part.
+					*/
 					to.push(word);
 
-					// These will be inserted before the message, so they do not
-					// need to be in the message itself.
+					/*
+						These will be inserted before the message, so they do not
+						need to be in the message itself.
+					*/
 					words.shift();
 					i--;
 				} else {
-					// The message mentioned this user
+					/* The message mentioned this user */
 					mentions.push(word);
 				}
 			}
+		}
 
-			if (length > 100 || this.dm) {
-				// TODO	Allow splitting a DM in the future
+		/* Include 15 chars padding for the "x of y" text */
+		return({
+			words:		words,
+			to:			to,
+			mentions:	mentions,
+			needed:		needed + 15
+		});
+	},
 
+	submitTweet: function(event) {
+		var txt = get(this.textarea).value;
+		var Twitter = new TwitterAPI(this.user);
+		var args;
+
+		var sendfunc;
+
+		if (!this.dm) {
+			sendfunc = function sendTweet(txt, cb) {
+				args = {'status': txt};
+
+				if (this.reply) {
+					args.in_reply_to_status_id = this.reply_id;
+				}
+
+				if (this.geo) {
+					args['lat'] = this.lat;
+					args['long'] = this.lng;
+				}
+
+				Twitter.postTweet(args, cb);
+			}.bind(this);
+		} else {
+			sendfunc = function sendDM(txt, cb) {
+				args = {'text': txt, 'user_id': this.to.id_str};
+
+				Twitter.newDM(args, cb);
+			}.bind(this);
+		}
+
+		if (this.uploading) {
+			ex('An upload is in progress.');
+		} else if (this.sending) {
+			;
+		} else if (txt.length > this.availableChars) {
+			var messages	= [];
+			var info		= this.splitPrep(txt);
+
+			if (info.needed > 100) {
 				// Ya gotta give me a little bit of room to work with. How am I
 				// supposed to split that? Jerk!
 
@@ -286,36 +343,39 @@ var ComposeToaster = Class.create(Toaster, {
 				return;
 			}
 
-			console.log('Mentions require ' + length + ' chars');
+			console.log('Mentions require ' + info.needed + ' chars');
 
 			var opts = {
 				title: 'Your message is over 140 characters. Would you like to split it into multiple messages?',
 				callback: function() {
 					this.assistant.toasters.back();
 
-					this.easterEggs(txt); //display some joke banners teehee
+					if (!this.dm) {
+						//display some joke banners teehee
+						this.easterEggs(txt);
+					}
 
-					while (words.length) {
-						var left	= this.availableChars - length - 15;
+					while (info.words.length) {
+						var left	= this.availableChars - info.needed;
 						var msg		= [];
 
-						while (words.length && left > 0) {
-							if (0 == words[0].indexOf('@') ||
-								0 == words[0].indexOf('#')
-							) {
-								// This is a mention or tag, so it's length is
-								// already accounted for
-								msg.push(words.shift());
-							} else if (words[0].length < left) {
-								left -= (words[0].length + 1);
-								msg.push(words.shift());
+						while (info.words.length && left > 0) {
+							if (0 == info.words[0].indexOf('@')) {
+								/*
+									This is a mention, so it's length is already
+									accounted for.
+								*/
+								msg.push(info.words.shift());
+							} else if (info.words[0].length < left) {
+								left -= (info.words[0].length + 1);
+								msg.push(info.words.shift());
 							} else {
 								break;
 							}
 						}
 
 						var add = [];
-						for (var i = 0, word; word = mentions[i]; i++) {
+						for (var i = 0, word; word = info.mentions[i]; i++) {
 							if (-1 == msg.indexOf(word)) {
 								add.push(word);
 							}
@@ -328,19 +388,18 @@ var ComposeToaster = Class.create(Toaster, {
 						messages.push(msg.join(' '));
 					}
 
-					// Add a prefix to each message: "x of y: "
+					/* Add a prefix to each message: "x of y: " */
 					var totext = '';
 
-					if (to.length) {
-						totext = to.join(' ') + ' ';
+					if (info.to.length) {
+						totext = info.to.join(' ') + ' ';
 					}
 
 					for (var i = 0; messages[i]; i++) {
 						messages[i] = totext + (i + 1) + ' of ' + messages.length + ': ' + messages[i];
 					}
 
-					var sendfunc = function()
-					{
+					var sendnext = function(response) {
 						var msg = messages.shift();
 
 						if (!msg) {
@@ -351,7 +410,7 @@ var ComposeToaster = Class.create(Toaster, {
 								this.assistant.refreshAll();
 							}
 
-							if (!this.rt) {
+							if (!this.rt || this.dm) {
 								this.assistant.toasters.back();
 							} else {
 								// If it's a retweet we want to go back 2 toasters to close the RT toaster
@@ -360,29 +419,11 @@ var ComposeToaster = Class.create(Toaster, {
 							return;
 						}
 
-						args = { 'status': msg };
-
-						if (this.reply) {
-							args.in_reply_to_status_id = this.reply_id;
-						}
-
-						if (this.geo) {
-							args['lat' ] = this.lat;
-							args['long'] = this.lng;
-						}
-
-						Twitter.postTweet(args, function(response, meta) {
-							// Make the next message a reply to this one
-							// this.reply = true;
-							// this.reply_id = response.responseJSON.id;
-
-							// Send the next part
-							sendfunc();
-						}.bind(this));
+						sendfunc(msg, sendnext);
 					}.bind(this);
 
-					// kick it off
-					sendfunc();
+					/* kick it off */
+					sendnext();
 
 					this.sending = true;
 					get('submit-' + this.id).setStyle({'opacity': '.4'});
@@ -401,23 +442,13 @@ var ComposeToaster = Class.create(Toaster, {
 			this.assistant.toasters.add(new ConfirmToaster(opts, this.assistant));
 		} else if (txt.length === 0) {
 			ex('That tweet is kind of empty.');
-		} else if (!this.dm) {
-			this.easterEggs(txt); //display some joke banners teehee
-			args = {'status': txt};
-
-			if (this.reply) {
-				args.in_reply_to_status_id = this.reply_id;
+		} else {
+			if (!this.dm) {
+				//display some joke banners teehee
+				this.easterEggs(txt);
 			}
 
-			if (this.geo) {
-				args['lat'] = this.lat;
-				args['long'] = this.lng;
-			}
-
-			this.sending = true;
-			get('submit-' + this.id).setStyle({'opacity': '.4'});
-
-			Twitter.postTweet(args, function(response, meta) {
+			sendfunc(txt, function(response) {
 				var prefs = new LocalStorage();
 				var refresh = prefs.read('refreshOnSubmit');
 
@@ -425,28 +456,12 @@ var ComposeToaster = Class.create(Toaster, {
 					this.assistant.refreshAll();
 				}
 
-				if (!this.rt) {
+				if (!this.rt || this.dm) {
 					this.assistant.toasters.back();
 				} else {
 					// If it's a retweet we want to go back 2 toasters to close the RT toaster
 					this.assistant.toasters.backX(2);
 				}
-			}.bind(this));
-		} else {
-			args = {'text': txt, 'user_id': this.to.id_str};
-
-			this.sending = true;
-			get('submit-' + this.id).setStyle({'opacity': '.4'});
-
-			Twitter.newDM(args, function(response) {
-				var prefs = new LocalStorage();
-				var refresh = prefs.read('refreshOnSubmit');
-
-				if (refresh) {
-					this.assistant.refreshAll();
-				}
-
-				this.assistant.toasters.back();
 			}.bind(this));
 		}
 	},

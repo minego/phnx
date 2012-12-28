@@ -1,6 +1,8 @@
 var ChangelogToaster = Class.create(Toaster, {
 	items: [
 		{ version: '1.3.3' },
+		{ item: 'Allow splitting DMs that are longer than 140 characters' },
+		{ item: 'Display the number of tweets that will be required to split a long message when composing a tweet' },
 		{ item: 'Added Blink notification toggle' },
 		{ item: 'Updated how profile-banner is displayed' },
 
