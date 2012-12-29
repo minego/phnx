@@ -257,6 +257,7 @@ PreferencesAssistant.prototype = {
 	},
 
 	sectionChanged: function(event) {
+		this.cleanup();
 		this.controller.stageController.swapScene('preferences', event.value);
 	},
 
