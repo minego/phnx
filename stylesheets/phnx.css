@@ -636,15 +636,14 @@ body.no-gesture {  /* touchpad/emulator */
 }
 
 @media only screen and (orientation:portrait){
-	.content-wrapper {
+	.large-device .content-wrapper {
 		width: 343px;
 	}
 
-	.showAvatar .content-wrapper {
+	.large-device .showAvatar .content-wrapper {
 		width: 279px;
 	}
 }
-
 
 
 .inline-thumb{
