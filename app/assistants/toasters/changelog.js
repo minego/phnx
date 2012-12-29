@@ -1,8 +1,10 @@
 var ChangelogToaster = Class.create(Toaster, {
 	items: [
 		{ version: '1.3.3' },
+		{ item: 'Fixed issues with loading tweet details after a search' },
 		{ item: 'Reorganized the app menu' },
 		{ item: 'Corrected a number of minor bugs in the filters dialog' },
+		{ item: 'Allow adding a new filter by tapping on a hashtag when viewing a tweet' },
 		{ item: 'Allow splitting DMs that are longer than 140 characters' },
 		{ item: 'Display the number of tweets that will be required to split a long message when composing a tweet' },
 		{ item: 'Added Blink notification toggle' },

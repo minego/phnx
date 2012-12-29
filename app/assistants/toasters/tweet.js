@@ -648,15 +648,53 @@ transport.responseText);
 			}
 		} else if (e.id === 'hashtag') {
 			var hashtag = e.innerText;
-			Twitter.search(hashtag, function(response) {
-				var opts = {
-					type: 'search',
-					query: hashtag,
-					items: response.responseJSON.results,
-					user: this.user
-				};
-				this.controller.stageController.pushScene('status', opts);
-			}.bind(this));
+
+			this.controller.popupSubmenu({
+				items: [
+					{
+						label:		$L('Filter tweets with') + ' ' + hashtag,
+						command:	'cmdFilter'
+					},
+					{
+						label:		$L('Search for') + ' ' + hashtag,
+						command:	'cmdSearch'
+					},
+					{
+						label:		$L('Cancel'),
+						command:	'cmdCancel'
+					}
+				],
+
+				onChoose: function(command) {
+					switch (command) {
+						case 'cmdSearch':
+							Twitter.search(hashtag, function(response) {
+								var opts = {
+									type: 'search',
+									query: hashtag,
+									items: response.responseJSON.results,
+									user: this.user
+								};
+								this.controller.stageController.pushScene('status', opts);
+							}.bind(this));
+							break;
+
+						case 'cmdFilter':
+							var prefs	= new LocalStorage();
+							var value	= hashtag.toLowerCase();
+
+							if (value && value.length > 0) {
+								var filters = prefs.read('filters');
+
+								if (-1 == filters.indexOf(value)) {
+									filters.push(value);
+								}
+								prefs.write('filters', filters);
+							}
+							break;
+					}
+				}.bind(this)
+			});
 		} else if (e.id === 'user-avatar') {
 			// Have to load the user to get following details, etc, that aren't always returned with the tweet
 			username = this.tweet.user.screen_name;

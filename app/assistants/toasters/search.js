@@ -13,11 +13,11 @@ var SearchToaster = Class.create(Toaster, {
 		for (var i=0; i < items.length; i++) {
 			items[i] = th.processSearch(items[i]);
 		}
-		
+
 		this.listModel = {"items": items};
-		
+
 		this.render({'toasterId':this.id, title: this.title}, 'templates/toasters/status-list');
-		
+
 		this.controller.setupWidget('status-scroller-' + this.id, {mode: 'vertical'},{});
 
 		var prefs = new LocalStorage();
@@ -30,7 +30,7 @@ var SearchToaster = Class.create(Toaster, {
 	},
 	setup: function() {
 		this.controller.instantiateChildWidgets(get('toasters'));
-		
+
 		var screenHeight = this.controller.window.innerHeight;
 		get('status-scroller-' + this.id).setStyle({'max-height': (screenHeight - 65) + 'px'});
 		get(this.nodeId).setStyle({'max-height': (screenHeight - 45) + 'px'});

@@ -39,6 +39,8 @@ StatusAssistant.prototype = {
 			this.initList();
 		}
 
+		this.controller.get('shim').setStyle({'height': screenHeight + 'px'});
+
 		this.controller.listen('shim', Mojo.Event.tap, this.shimTapped.bind(this));
 		this.controller.listen('refresh', Mojo.Event.tap, this.refreshTapped.bind(this));
 		this.controller.listen('footer', Mojo.Event.tap, this.footerTapped.bind(this));
@@ -196,16 +198,20 @@ StatusAssistant.prototype = {
 		this.updateCount();
 	},
 	tweetTapped: function(event) {
-		if (this.opts.type === 'search') {
-			var Twitter = new TwitterAPI(this.opts.user, this.controller.stageController);
-			Twitter.getStatus(event.item.id_str, function(response){
-				var th = new TweetHelper();
-				var tweet = th.process(response.responseJSON);
-				this.toasters.add(new TweetToaster(tweet, this));
-			}.bind(this));
-		}
-		else if (this.opts.type === 'list' || this.opts.type === 'retweets') {
-			this.toasters.add(new TweetToaster(event.item, this));
+		if (this.toasters.items.length === 0) {
+			if (this.opts.type === 'search') {
+				var Twitter = new TwitterAPI(this.opts.user, this.controller.stageController);
+				Twitter.getStatus(event.item.id_str, function(response){
+					var th = new TweetHelper();
+					var tweet = th.process(response.responseJSON);
+					this.toasters.add(new TweetToaster(tweet, this));
+				}.bind(this));
+			} else if (this.opts.type === 'list' || this.opts.type === 'retweets') {
+				this.toasters.add(new TweetToaster(event.item, this));
+			}
+		} else {
+			// This is a bit of a hack because shimTapped isn't being hit..
+			this.toasters.nuke();
 		}
 	},
 	updateCount: function() {
