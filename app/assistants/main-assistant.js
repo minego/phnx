@@ -227,34 +227,30 @@ MainAssistant.prototype = {
 
 		var menuItems = [
 			Mojo.Menu.editItem,
+
 			{
-				label: 'Accounts',
-				items: accountMenuItems
+				label: 'Compose',
+				command: 'cmdNewTweet'
 			},
 			{
-				label: 'View',
-				items: [
-					{
-						label: 'Compose',
-						command: 'cmdNewTweet'
-					},
-					{
-						label: 'Refresh',
-						command: 'cmdRefresh'
-					},
-					{
-						label: 'Refresh Flush',
-						command: 'cmdRefreshFlush'
-					}
-				]
+				label: 'Refresh',
+				command: 'cmdRefresh'
+			},
+			{
+				label: 'Refresh & Flush',
+				command: 'cmdRefreshFlush'
 			},
 			{
 				label: 'Lookup User',
 				command: 'cmdFindUser'
 			},
 			{
-				label: 'Preferences',
+				label: 'Preferences & Accounts',
 				items: [
+					{
+						label: 'Accounts',
+						items: accountMenuItems
+					},
 					{
 						label: 'General Settings',
 						command: 'cmdPreferencesGeneral'
@@ -270,12 +266,12 @@ MainAssistant.prototype = {
 					{
 						label: 'Advanced Settings',
 						command: 'cmdPreferencesAdvanced'
+					},
+					{
+						label: 'Manage Filters',
+						command: 'cmdManageFilters'
 					}
 				]
-			},
-			{
-				label: 'Manage Filters',
-				command: 'cmdManageFilters'
 			},
 			{
 				label: 'About',

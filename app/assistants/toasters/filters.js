@@ -81,7 +81,7 @@ console.log(Object.toJSON(filters));
 		this.controller.instantiateChildWidgets(get('toasters'));
 
 		var screenHeight = this.controller.window.innerHeight;
-		get('convo-scroller-' + this.id).setStyle({'max-height': (screenHeight - 85) + 'px'});
+		get('convo-scroller-' + this.id).setStyle({'max-height': (screenHeight - 155) + 'px'});
 		get(this.nodeId).setStyle({'max-height': (screenHeight - 65) + 'px'});
 		this.controller.listen(get('convo-list-' + this.id), Mojo.Event.listDelete, this.filterDelete.bind(this));
 
