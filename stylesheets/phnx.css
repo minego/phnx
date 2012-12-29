@@ -1320,7 +1320,6 @@ span.link{
 	-webkit-transition: bottom .5s;
 	z-index: 300;
 	background: url('../images/low/toaster-bg.png') left top repeat-x;
-	opacity: .95;
 	color: #d2d2d2;
 	max-height: 1024px;
 }

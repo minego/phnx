@@ -1,6 +1,7 @@
 var ChangelogToaster = Class.create(Toaster, {
 	items: [
 		{ version: '1.3.3' },
+		{ item: 'Toasters are no longer transparent' },
 		{ item: 'Fixed issues with loading tweet details after a search' },
 		{ item: 'Reorganized the app menu' },
 		{ item: 'Corrected a number of minor bugs in the filters dialog' },
