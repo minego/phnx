@@ -94,7 +94,7 @@ var ComposeToaster = Class.create(Toaster, {
 		var info	= this.splitPrep(txt);
 
 		var avail	= this.availableChars - info.needed;
-		var used	= txt.length - info.needed;
+		var used	= info.length;
 		var tweets	= parseInt(used / avail) + 1;
 		var count	= avail - (used % avail);
 
@@ -236,6 +236,7 @@ var ComposeToaster = Class.create(Toaster, {
 		var to			= [];
 		var mentions	= [];
 		var needed		= 0;
+		var length		= 0;
 
 		/*
 			Find all mentions in the message. Each part should cc all of them.
@@ -252,6 +253,11 @@ var ComposeToaster = Class.create(Toaster, {
 					;
 				} else {
 					todone = true;
+
+					if (length) {
+						length++;
+					}
+					length += word.length;
 					continue;
 				}
 
@@ -288,12 +294,13 @@ var ComposeToaster = Class.create(Toaster, {
 			}
 		}
 
-		/* Include 15 chars padding for the "x of y" text */
+		/* Include 10 chars padding for the "x of y" text */
 		return({
 			words:		words,
 			to:			to,
 			mentions:	mentions,
-			needed:		needed + 15
+			length:		length,
+			needed:		needed + (mentions.length ? 14 : 10)
 		});
 	},
 
@@ -356,11 +363,17 @@ var ComposeToaster = Class.create(Toaster, {
 					}
 
 					while (info.words.length) {
-						var left	= this.availableChars - info.needed;
+						/*
+							Include 1 extra character when counting the length
+							since the check below will assume a space.
+						*/
+						var left	= this.availableChars - info.needed + 1;
 						var msg		= [];
 
 						while (info.words.length && left > 0) {
-							if (0 == info.words[0].indexOf('@')) {
+							if (0 == info.words[0].indexOf('@') ||
+								0 == info.words[0].indexOf('.@')
+							) {
 								/*
 									This is a mention, so it's length is already
 									accounted for.
