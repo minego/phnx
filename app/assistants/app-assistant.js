@@ -5,11 +5,6 @@ function AppAssistant(opts){
 AppAssistant.prototype = {
 	setup: function() {
 		var prefs = new LocalStorage();
-
-		if (prefs.read('sendAnalytics')) {
-			global.Metrix = new Metrix();
-			global.Metrix.postDeviceData();
-		}
 	},
 	handleLaunch: function(params, opts) {
 		if (params.action === 'checkNotifications') {
@@ -79,20 +74,6 @@ AppAssistant.prototype = {
 			stage.pushScene('about');
 		} else if (event.command === 'cmdSupport') {
 			stage.pushScene('help');
-		} else if (event.command === 'cmdSupport') {
-			var service = new Mojo.Service.Request('palm://com.palm.applicationManager', {
-				method: 'open',
-				parameters: {
-					id: 'com.palm.app.email',
-					params: {
-						summary: "phnx support",
-						recipients: [{
-							value : 'support@phnxapp.com',
-							contactDisplay : 'support@phnxapp.com'
-						}]
-					}
-				}
-			});
 		}
 	},
 	launchMain: function() {

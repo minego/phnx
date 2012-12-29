@@ -35,7 +35,7 @@ var global = {
 	prefsMenu: [
 		Mojo.Menu.editItem,
 		{
-			label: 'About phnx',
+			label: 'About Project Macaw',
 			command: 'cmdAbout'
 		},
 		{

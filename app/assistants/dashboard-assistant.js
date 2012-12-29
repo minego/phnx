@@ -9,9 +9,9 @@ function DashboardAssistant(items, resource, account, accounts) {
 
 DashboardAssistant.prototype = {
 	setup: function() {
-		
+
 		this.controller.listen(this.controller.stageController.document, Mojo.Event.stageActivate, this.stageActivate.bind(this));
-		
+
 		// Display the dashboard
 		this.update(this.items, this.resource, this.account, this.accounts);
 	},
@@ -38,8 +38,8 @@ DashboardAssistant.prototype = {
 				from = items[0].sender.screen_name;
 			}
 		}
-	
-		var bannerMessage = '';	
+
+		var bannerMessage = '';
 		if (prefs.read('notificationShieldMessages')) {
 			this.message = "New tweets";
 			var bannerMessage = this.message;
@@ -50,7 +50,7 @@ DashboardAssistant.prototype = {
 			var bannerMessage = '@' + from + ': ' + this.message;
 		}
 		this.count += items.length;
-		
+
 		//var bannerMessage = '@' + from + ': ' + this.message;
 
 		var notificationSound = prefs.read('notificationSound');
@@ -60,9 +60,9 @@ DashboardAssistant.prototype = {
 //			soundClass: 'notifications'
 			soundClass: notificationSound
 		};
-		
+
 		Mojo.Controller.getAppController().showBanner(bannerParams, {source: "notification"}, 'phnx');
-		if(prefs.read('notificationBlink')){	
+		if(prefs.read('notificationBlink')){
 			this.controller.stageController.indicateNewContent(true); // flashy
 		}
 		var info = {title: this.title, message: this.message, count: this.count};
@@ -71,10 +71,10 @@ DashboardAssistant.prototype = {
 		var infoElement = this.controller.get('dashboardinfo');
 		infoElement.innerHTML = renderedInfo;
 		this.listenDashboard();
-		
+
 		//Send notification message to BT watch SE MBW-150 via metaviews MW150
 		this.getTweaksPrefs = new Mojo.Service.Request("palm://org.webosinternals.tweaks.prefs/", {
-			method: 'get', parameters: {'owner': "bluetooth-mbw150", 
+			method: 'get', parameters: {'owner': "bluetooth-mbw150",
 			keys: ["mbwMacaw"]},
 			onSuccess: function(response) {
 				if(response) {
@@ -109,7 +109,7 @@ DashboardAssistant.prototype = {
 			users: this.accounts,
 			autoScroll: false
 		};
-		this.createStage(launchArgs);		
+		this.createStage(launchArgs);
 	},
 	bodyTapped: function(event) {
 		var launchArgs = {
@@ -128,14 +128,14 @@ DashboardAssistant.prototype = {
 			name: stageName,
 			lightweight: true
 		};
-		
+
 		var pushMainScene = function(stageController) {
 			global.stageActions(stageController);
 			stageController.pushScene('launch', launchArgs);
 		};
-		
+
 		var userStage = app.getStageProxy(stageName);
-		
+
 		if (!userStage) {
 			app.createStageWithCallback(args, pushMainScene, "card");
 		}
@@ -144,7 +144,7 @@ DashboardAssistant.prototype = {
 			if (launchArgs.autoScroll) {
 				userStage.delegateToSceneAssistant('refreshAndScrollTo', this.resource.name);
 			}
-		}		
+		}
 	},
 	stageActivate: function(event) {
 		this.controller.stageController.indicateNewContent(false); // no more flashy

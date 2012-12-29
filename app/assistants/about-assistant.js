@@ -41,7 +41,7 @@ AboutAssistant.prototype = {
 		}.bind(this));
 	},
 	coolio: function(event) {
-		global.openBrowser('http://phnxapp.com');
+		global.openBrowser('http://github.com/minego/phnx');
 	},
 	cleanup: function() {
 		this.controller.stopListening('about-body', Mojo.Event.tap, this.awesomeSauce);

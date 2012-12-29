@@ -1,8 +1,8 @@
 ============================================
- phnx - a twitter app			
+ phnx - a twitter app
 ============================================
 
-Author: 	David Strack 
+Author: 	David Strack
 Twitter:	@rmxdave
 Email: 		davidstrack@gmail.com
 Web:		http://davidstrack.com

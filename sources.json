@@ -10,7 +10,6 @@
     {"source": "app/models/account.js"},
     {"source": "app/models/toaster.js"},
     {"source": "app/models/toaster-chain.js"},
-    {"source": "app/models/metrix.js"},
     {"source": "app/models/asyncWrappers.js"},
     {"source": "app/models/hashTable.js"},
     {"source": "app/models/emoji.js"},

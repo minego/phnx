@@ -26,7 +26,7 @@ var TweetToaster = Class.create(Toaster, {
 		}
 
 		var favStatusChanged = false; //added by DC
-		
+
 
 		var th = new TweetHelper();
 		var Twitter = new TwitterAPI(this.user);
@@ -52,7 +52,7 @@ var TweetToaster = Class.create(Toaster, {
 			template: 'templates/tweets/details'
 		});
 
-		
+
 		this.content.tweetHtml = tweetHtml;
 		this.render(this.content, 'templates/toasters/tweet');
 
@@ -96,10 +96,10 @@ var TweetToaster = Class.create(Toaster, {
 				template: 'templates/tweets/details'
 			});
 			this.controller.get('details-' + this.toasterId).update(tweetHtml);
-			
+
 			Mojo.Event.listen(this.controller.get('rt-' + this.toasterId), Mojo.Event.tap, this.rtTapped.bind(this));
 		}.bind(this));
-		
+
 		// Emojify - added by DC
 		//this.tweet.text = emojify(this.tweet.text,22);
 		//Mojo.Log.info(this.tweet.text);
@@ -110,7 +110,7 @@ var TweetToaster = Class.create(Toaster, {
 		//});
 		//this.controller.get('details-' + this.toasterId).update(tweetHtml);
 
-		
+
 		var cookie = new Mojo.Model.Cookie("RilUser");
 	try {
 		this.rilUser = cookie.get();
@@ -494,7 +494,7 @@ transport.responseText);
 		});
 	},
 	copyUrl: function() {
-		this.controller.stageController.setClipboard(this.twitterLink,true); 
+		this.controller.stageController.setClipboard(this.twitterLink,true);
 				banner('Copied tweet URL to clipboard.');
 	},
 	//Sends the current tweet via email and adds the tag "Sent via Project Macaw for webOS"

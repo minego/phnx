@@ -19,7 +19,6 @@ function LocalStorage() {
 		refreshOnSubmit: false,
 		refreshFlushAtLaunch: false,
 		enterToSubmit: false,
-		sendAnalytics: true,
 		delReceivedDM: false,
 		hideAvatar: false,
 		hideTweetBorder: true,

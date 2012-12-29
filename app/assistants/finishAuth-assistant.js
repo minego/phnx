@@ -12,7 +12,7 @@ FinishAuthAssistant.prototype = {
 		this.controller.setupWidget(Mojo.Menu.appMenu, {omitDefaultItems: true}, {visible: true, items: global.menuItems});
 		this.userCookie = new Mojo.Model.Cookie('phoenixFirstRun');
 		this.themeCookie = new Mojo.Model.Cookie('phnxTheme');
-		
+
 		//load the selected theme
 		if (typeof(this.themeCookie.get()) !== "undefined"){
 			this.controller.document.getElementsByTagName("body")[0].addClassName(this.themeCookie.get().className);
@@ -62,7 +62,7 @@ FinishAuthAssistant.prototype = {
 		global.accounts.push(this.user);
 		this.controller.stageController.Toasters = new ToasterChain();
 	},
-	nextTapped: function(event) {		
+	nextTapped: function(event) {
 		// TODO: Create stage for this user, close this stage
 		var account = new Account();
 		account.all(this.createStage.bind(this));
@@ -73,25 +73,25 @@ FinishAuthAssistant.prototype = {
 			name: stageName,
 			lightweight: true
 		};
-		
+
 		var launchArgs = {
 			user: this.user,
 			users: accounts
 		};
-		
+
 		var pushMainScene = function(stageController) {
 			global.stageActions(stageController);
 			stageController.pushScene('launch', launchArgs);
 		};
-		
+
 		var app = Mojo.Controller.getAppController();
 		var userStage = app.getStageProxy(stageName);
-		
+
 		if (userStage) {
 			userStage.activate();
 		}
 		else {
-			app.createStageWithCallback(args, pushMainScene, "card");	
+			app.createStageWithCallback(args, pushMainScene, "card");
 		}
 		setTimeout(function(){
 			app.closeStage(global.authStage);
@@ -108,7 +108,7 @@ FinishAuthAssistant.prototype = {
 	listen: function(event) {
 		this.controller.listen('next-button', Mojo.Event.tap, this.nextTapped.bind(this));
 		this.controller.listen('rmxdave', Mojo.Event.tap, this.followTapped.bind(this));
-		this.controller.listen('ProjectMacaw', Mojo.Event.tap, this.followTapped.bind(this));		
+		this.controller.listen('ProjectMacaw', Mojo.Event.tap, this.followTapped.bind(this));
 	},
 	cleanup: function(event) {
 		this.controller.stopListening('next-button', Mojo.Event.tap, this.nextTapped);

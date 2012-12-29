@@ -24,7 +24,6 @@ function PreferencesAssistant(section) {
 			]}
 		);
 	}
-	advanced.push({key: 'sendAnalytics', type: 'toggle', label: 'Send <strong>anonymous</strong> statistics to the developer to help improve phnx'});
 	advanced.push({key: 'delReceivedDM', type: 'toggle', label: 'Allow deletion of received DMs'});
 
 	this.sections = {
