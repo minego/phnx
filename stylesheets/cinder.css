@@ -1,0 +1,16 @@
+/* This is a dark theme, and inherits from ash.css */
+body.default {
+	background: url('../images/low/backgrounds/red.png');
+	background-size: cover;
+}
+
+body.default.large-device {
+	background: url('../images/low/backgrounds/red.png');
+	background-size: cover;
+}
+
+.status-row,
+.user-row {
+	background: url(../images/low/tweet-border-light.png) center bottom repeat-x;
+}
+

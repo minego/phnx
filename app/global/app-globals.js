@@ -331,7 +331,10 @@ var global = {
 	},
 	setTheme: function(newTheme, oldTheme, stageController) {
 		var inherit = {
-			'black':	[ 'ash' ]
+			'black':		[ 'ash' ],
+			'cinder':		[ 'ash' ],
+			'awakening':	[ 'ash' ],
+			'cleanse':		[ 'ash' ]
 		};
 
 		Mojo.Log.info('theme changed to ' + newTheme);

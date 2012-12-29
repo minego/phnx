@@ -51,7 +51,10 @@ function PreferencesAssistant(section) {
 					{label: 'Ash', value: 'ash'},
 					{label: 'Pure', value: 'pure'},
 					{label: 'Sunnyvale', value: 'sunnyvale'},
-					{label: 'Black', value: 'black'}
+					{label: 'Black', value: 'black'},
+					{label: 'Cinder', value: 'cinder'},
+					{label: 'Awakening', value: 'awakening'},
+					{label: 'Cleanse', value: 'cleanse'}
 				]},
 				{key: 'barlayout', type: 'select', label: 'Layout', items: [
 					{label: 'Tabs above Toolbar', value: 'swapped'},
