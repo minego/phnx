@@ -34,12 +34,9 @@ StatusAssistant.prototype = {
 
 		if (this.opts.type === 'search') {
 			this.initSearch();
-		}
-		else if (this.opts.type === 'list' || this.opts.type === 'retweets') {
+		} else if (this.opts.type === 'list' || this.opts.type === 'retweets') {
 			this.initList();
 		}
-
-		this.controller.get('shim').setStyle({'height': screenHeight + 'px'});
 
 		this.controller.listen('shim', Mojo.Event.tap, this.shimTapped.bind(this));
 		this.controller.listen('refresh', Mojo.Event.tap, this.refreshTapped.bind(this));
@@ -49,8 +46,7 @@ StatusAssistant.prototype = {
 		if (!this.opts.newCard) {
 			this.controller.listen('new-card', Mojo.Event.tap, this.newCardTapped.bind(this));
 			this.controller.listen('back-button', Mojo.Event.tap, this.backTapped.bind(this));
-		}
-		else {
+		} else {
 			this.controller.get('new-card').setStyle({'display':'none'});
 			this.controller.get('back-button').setStyle({'display':'none'});
 		}
@@ -99,12 +95,10 @@ StatusAssistant.prototype = {
 			}
 		}
 
-		//block added by DC
-		var prefs = new LocalStorage();
 		var templates = {
-				"search": "search",
-				"list": "item",
-				"retweets": "item"
+			"search": "search",
+			"list": "item",
+			"retweets": "item"
 		};
 
 		this.itemsModel.items = items;
@@ -235,6 +229,7 @@ StatusAssistant.prototype = {
 		this.toasters.nuke();
 	},
 	newCardTapped: function(event) {
+Mojo.Log.info('newCardTapped');
 		var stageName = global.statusStage + global.stageId++;
 
 		var appController = Mojo.Controller.getAppController();
@@ -252,6 +247,7 @@ StatusAssistant.prototype = {
 		this.controller.stageController.popScene();
 	},
 	backTapped: function(event) {
+Mojo.Log.info('backTapped');
 		if (this.toasters.items.length > 0) {
 			this.toasters.back();
 		} else {
@@ -259,15 +255,14 @@ StatusAssistant.prototype = {
 		}
 	},
 	refreshTapped: function(event) {
+Mojo.Log.info('refreshTapped');
 		if (this.opts.type === 'search') {
 			this.refreshSearch();
-		}
-		else {
+		} else {
 			var args = {'since_id': this.itemsModel.items[0].id_str};
 			if (this.opts.type === 'list') {
 				this.loadList(args, this.gotItems.bind(this));
-			}
-			else if (this.opts.type === 'retweets') {
+			} else if (this.opts.type === 'retweets') {
 				this.loadRTs(args, this.gotItems.bind(this));
 			}
 		}
@@ -320,5 +315,28 @@ StatusAssistant.prototype = {
 			this.controller.stopListening('new-card', Mojo.Event.tap, this.newCardTapped.bind(this));
 			this.controller.stopListening('back-button', Mojo.Event.tap, this.backTapped.bind(this));
 		}
+	},
+	activate: function(event) {
+		var body = this.controller.stageController.document.getElementsByTagName("body")[0];
+		var prefs = new LocalStorage();
+
+		global.setShowThumbs(body,	prefs.read('showThumbs'));
+		global.setShowEmoji(body,	prefs.read('showEmoji'));
+		global.setFontSize(body,	prefs.read('fontSize'));
+
+		global.setLayout(body,
+			prefs.read('barlayout'),
+			prefs.read('hideToolbar'),
+			prefs.read('hideTabs')
+		);
+
+		global.setHide(body,
+			prefs.read('hideAvatar'),
+			prefs.read('hideUsername'),
+			prefs.read('hideScreenname'),
+			prefs.read('hideTime'),
+			prefs.read('hideVia'),
+			prefs.read('hideTweetBorder')
+		);
 	}
 };

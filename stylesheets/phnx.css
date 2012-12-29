@@ -201,6 +201,14 @@ body.no-gesture {  /* touchpad/emulator */
 	position: fixed;
 	right: 62px;
 }
+.header-icon.largeonly {
+	display: none;
+}
+.large-device .header-icon.largeonly {
+	display: block;
+}
+
+
 .header-title {
 	background: url('../images/low/nav-icon-border.png') left bottom no-repeat, url('../images/low/nav-icon-border.png') right bottom no-repeat;
 	position: fixed;
