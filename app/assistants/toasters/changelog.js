@@ -1,10 +1,10 @@
 var ChangelogToaster = Class.create(Toaster, {
 	items: [
 		{ version: '1.3.4' },
+		{ item: 'Added padlock item to users who have protected accounts' },
 		{ item: 'Display 2 full columns instead of 2 and a half in portrait view on the TouchPad' },
 
 		{ version: '1.3.3' },
-		{ item: 'Added padlock item to users who have protected accounts' },
 		{ item: 'Replaced most remaining phnx branching with Project Macaw branding' },
 		{ item: 'Toasters are no longer transparent' },
 		{ item: 'Fixed issues with loading tweet details after a search' },
