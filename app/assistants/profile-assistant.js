@@ -95,7 +95,7 @@ ProfileAssistant.prototype = {
 		if (!this.user.url) {
 			this.controller.get('url').hide();
 		}
-
+		
 		this.controller.setupWidget('list-history',{itemTemplate: "templates/tweets/item",listTemplate: "templates/list", renderLimit: this.renderLimit}, this.historyModel);
 		this.controller.setupWidget('list-favorites',{itemTemplate: "templates/tweets/item",listTemplate: "templates/list", renderLimit: this.renderLimit}, this.favoritesModel);
 		this.controller.setupWidget('list-mentions',{itemTemplate: "templates/tweets/search",listTemplate: "templates/list", renderLimit: this.renderLimit}, this.mentionsModel);

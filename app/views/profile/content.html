@@ -11,7 +11,10 @@
 			<div id="profile-avatar" style="background-image: url(https://api.twitter.com/1/users/profile_image/#{-screen_name}.json?size=bigger)"></div>
 		</div>
 		<div class="profile-title-wrapper">
-			<div class="profile-name">#{-name}</div>
+			<div class="profile-name">
+				#{-name}
+				<img class="locked #{-protected}" src="images/low/icons/locked.png" alt="..." width="12" height="12"/>
+			</div>
 			<div class="profile-username">@#{-screen_name}</div>
 		</div>
 	</div>

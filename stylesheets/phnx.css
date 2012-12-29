@@ -570,6 +570,12 @@ body.no-gesture {  /* touchpad/emulator */
 .tweet-favstar.show {
 	display: inline-block;
 }
+.locked {
+	display: none;
+}
+.locked.true{
+	display: inline;
+}
 .tweet-has-emoji{
 	display: none;
 	float: right;
