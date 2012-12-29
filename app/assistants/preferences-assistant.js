@@ -219,17 +219,9 @@ PreferencesAssistant.prototype = {
 		this.controller.stageController.popScene();
 	},
 	themeChanged: function(event) {
-		var newTheme = event.value;
-		Mojo.Log.info('theme changed to ' + newTheme);
-
-		// Remove the old theme
-		var oldTheme = this.prefs.read('theme');
-		this.controller.stageController.unloadStylesheet('stylesheets/' + oldTheme + '.css');
-
-		// Apply the new theme
-		this.controller.stageController.loadStylesheet('stylesheets/' + newTheme + '.css');
+		global.setTheme(event.value, this.prefs.read('theme'),
+			this.controller.stageController);
 	},
-	//block added by DC
 /*
 	tabOrderChanged: function(event) {
 		var body = this.controller.stageController.document.getElementsByTagName("body")[0];
@@ -237,7 +229,6 @@ PreferencesAssistant.prototype = {
 		banner("Please re-start to re-order panels");
 	},
 */
-	//end block DC
 	cleanup: function() {
 		var prefs = this.prefs;
 

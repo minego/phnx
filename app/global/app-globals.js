@@ -319,7 +319,7 @@ var global = {
 		}	else if(showThumbsStatus === 'detailsThumbs'){
 			Element.addClassName(body, 'detailsThumbs');
 		}
-	}, // added by DC
+	},
 	setShowEmoji: function(body, showEmojiStatus) {
 		Element.removeClassName(body, 'showEmoji');
 		Element.removeClassName(body, 'detailsEmoji');
@@ -328,7 +328,29 @@ var global = {
 		} else if(showEmojiStatus === 'detailsEmoji'){
 			Element.addClassName(body, 'detailsEmoji');
 		}
-	} // added by DC
+	},
+	setTheme: function(newTheme, oldTheme, stageController) {
+		var inherit = {
+			'black':	[ 'ash' ]
+		};
+
+		Mojo.Log.info('theme changed to ' + newTheme);
+
+		/* Remove the old theme */
+		if (oldTheme) {
+			stageController.unloadStylesheet('stylesheets/' + oldTheme + '.css');
+		}
+
+		/* Some themes inherit from others */
+		try {
+			for (var i = 0, base; base = inherit[newTheme][i]; i++) {
+				stageController.loadStylesheet('stylesheets/' + base + '.css');
+			}
+		} catch (e) {};
+
+		/* Apply the new theme */
+		stageController.loadStylesheet('stylesheets/' + newTheme + '.css');
+	}
 };
 
 /* This is an auto-incremented number for toaster IDs */

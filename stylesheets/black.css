@@ -1,114 +1,14 @@
+/* This is a dark theme, and inherits from ash.css */
 body.default {
 	background: black;
-	background-size: 100%;
 }
 
 body.default.large-device {
 	background: black;
-	background-size: auto;
 }
 
-.header-title {
-	color: #94989c;
-}
-
-#header {
-	background: url('../images/low/themes/ash/header-bar.png') left -25px repeat-x;
-}
-#nav-bar-scroller {
-	background: url(../images/low/themes/ash/nav-bar.png) left bottom repeat-x;
-}
-
-.layout-swapped #header {
-	background: url('../images/low/themes/ash/nav-bar.png') left 5px repeat-x;
-}
-.layout-swapped #nav-bar-scroller {
-	background: url(../images/low/themes/ash/header-bar.png) left 3px repeat-x;
-}
-
-
-
-#indicator {
-	background: url(../images/low/themes/ash/indicator.png) center center no-repeat;
-}
-
-.layout-swapped #indicator {
-	background: url(../images/low/themes/ash/indicator-down.png) center center no-repeat;
-}
-
-.status-row, .user-row{
-	color: #d2d2d2;
+.status-row,
+.user-row {
 	background: url(../images/low/tweet-border-light.png) center bottom repeat-x;
 }
-.status-row a{
-	color: #bbb;
-}
-.tweet-footer,
-.tweet-username,
-.tweet-screenname {
-	color: #777;
-}
-.rt-button {
-	color: #d2d2d2;
-}
-.panel-list-title {
-	color: #d2d2d2;
-}
-.search-list-item {
-	color: #d2d2d2;
-}
-.top-tweet {
-	color: #f8f9b5;
-}
-#success-scene{
-	color: #fff;
-}
-.toaster-title{
-	color: #d2d2d2;
-	background: url('../images/low/title-bg.png') left bottom repeat-x;
-}
-/* Toasters */
-.toaster {
-	background: url('../images/low/themes/ash/toaster-bg.png') left top repeat-x;
-	color: #d2d2d2;
-}
-.toaster.compose {
-	background: url('../images/low/themes/ash/compose-bg.png') left top repeat-x;
-}
-.toaster-controls {
-	background: url('../images/low/toaster-controls.png') left top repeat-x;
-}
-.dm-title {
-	color: #d2d2d2;
-}
-.compose-txt {
-	-webkit-border-image: url('../images/low/textarea-border.png') 12 stretch;
-}
-.compose-txt textarea{
-	color: #fff;
-}
-.compose-txt .counter {
-	color: #4d5154;
-}
-.compose-opts {
-/*	background: url('../images/low/compose-opts-bg.png') left top repeat-x;*/
-}
 
-.scene-title {
-	color: #d2d2d2;
-}
-.section-header span {
-	color: #d2d2d2;
-}
-.section-large-header span {
-	color: #d2d2d2;
-}
-.pref-row-wrapper .title {
-	color: #d2d2d2;
-}
-.profile-title-wrapper {
-	color: #d2d2d2;
-}
-#verified span{
-	color: #d2d2d2;
-}

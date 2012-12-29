@@ -10,10 +10,10 @@ function LaunchAssistant(args) {
 
 LaunchAssistant.prototype = {
 	setup: function() {
-		
+
 		this.controller.setupWidget(Mojo.Menu.appMenu, {omitDefaultItems: true}, {visible: true, items: global.menuItems});
 		// this.controller.stageController.Toasters = new ToasterChain();
-		
+
 		if (this.hasUser) {
 			this.controller.stageController.user = this.args.user;
 			this.controller.stageController.users = this.args.users;
@@ -28,7 +28,7 @@ LaunchAssistant.prototype = {
 					'name': 'main',
 					transition: Mojo.Transition.crossFade,
 					disableSceneScroller: true
-				}, opts); 
+				}, opts);
 			}.bind(this), 500);
 		}
 		else {
@@ -39,20 +39,18 @@ LaunchAssistant.prototype = {
 		setTimeout(function(){
 			// short delay for visual effect
 			this.controller.get('add-button').setStyle({'opacity': '1'});
-		}.bind(this), 800); 
+		}.bind(this), 800);
 	},
 	buttonTapped: function(event) {
 		this.controller.stageController.swapScene('oauth');
 	},
 	activate: function(event) {
-		//load the current theme
 		var prefs = new LocalStorage();
-		var theme = prefs.read('theme');
-		this.controller.stageController.loadStylesheet('stylesheets/' + theme +'.css');
-		
+		global.setTheme(prefs.read('theme'), null, this.controller.stageController);
+
 		this.controller.listen(this.controller.get("add-button"), Mojo.Event.tap, this.buttonTapped.bind(this));
 	},
 	deactivate: function(event) {
-		this.controller.stopListening(this.controller.get("add-button"), Mojo.Event.tap, this.buttonTapped);		
+		this.controller.stopListening(this.controller.get("add-button"), Mojo.Event.tap, this.buttonTapped);
 	}
 };
