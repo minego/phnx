@@ -1,6 +1,7 @@
 var ChangelogToaster = Class.create(Toaster, {
 	items: [
 		{ version: '1.3.3' },
+		{ item: 'Replaced most remaining phnx branching with Project Macaw branding' },
 		{ item: 'Toasters are no longer transparent' },
 		{ item: 'Fixed issues with loading tweet details after a search' },
 		{ item: 'Reorganized the app menu' },
