@@ -78,8 +78,7 @@ MainAssistant.prototype = {
 				d = new Date(tweet.created_at);
 				tweet.time_str = d.toRelativeTime(1500);
 			}
-		}
-		else {
+		} else {
 			homeItems = [];
 			mentionsItems = [];
 			messagesItems = [];
@@ -425,14 +424,13 @@ MainAssistant.prototype = {
 		var timelineLists = this.controller.select('.timeline-list');
 
 		var screenWidth = this.controller.window.innerWidth;
-		var panelWidth = 320;
 		var scrollmode;
 
 		/*
 			Do not snap on the TouchPad because the snap behavior doesn't behave
 			well there.
 		*/
-		if (screenWidth <= panelWidth) {
+		if (screenWidth <= this.panelWidth) {
 			scrollmode = 'horizontal-snap';
 		} else {
 			scrollmode = 'horizontal';
@@ -562,10 +560,9 @@ MainAssistant.prototype = {
 			//Block added by DC
 			else if (event.command === 'cmdRefreshFlush') {
 				var screenWidth = this.controller.window.innerWidth;
-				var panelWidth = 320;
 				if (Ajax.activeRequestCount === 0) {
 					//Need to refresh all on Touchpad - DC
-					if (screenWidth <= panelWidth) {
+					if (screenWidth <= this.panelWidth) {
 						this.refreshPanelFlush(this.panels[this.timeline]);
 					}
 					else{
@@ -629,28 +626,35 @@ MainAssistant.prototype = {
 		if (this.controller.window && this.controller) {
 			var screenHeight = this.controller.window.innerHeight;
 			var screenWidth = this.controller.window.innerWidth;
-			var panelWidth = 320;
 			var height = screenHeight - 0; //subtract the header
-			// var height = screenHeight; //subtract the header
 			var i;
+
+			this.panelWidth = 320;
+
 			//grab each panel element. There should be as many of these as there are in this.panels
 
-			if (screenWidth > panelWidth) {
+			if (screenWidth > this.panelWidth) {
+				if (screenHeight > screenWidth) {
+					// There are only 2 panels in portrait
+					this.panelWidth += 43;
+				}
+
 				// On large devices there are 21px of padding and 1px border
-				panelWidth += 22;
+				this.panelWidth += 22;
 			} else {
 				// Account for the border, 1px
-				panelWidth += 1;
+				this.panelWidth += 1;
 			}
+			// console.log(this.panelWidth);
 
 			var panelElements = this.controller.select('.panel');
 			var totalWidth = 0; //the width of the main container
 			for (i=0; i < panelElements.length; i++) {
 				var panel = panelElements[i];
 				panel.setStyle({
-					"width": panelWidth + "px"
+					"width": this.panelWidth + "px"
 				});
-				totalWidth += panelWidth;
+				totalWidth += this.panelWidth;
 
 				//each scroller needs a max height. otherwise they don't scroll
 				this.controller.get(this.panels[i].id + "-scroller").setStyle({"max-height": height + "px"});
@@ -735,7 +739,6 @@ MainAssistant.prototype = {
 	sideScrollerChanged: function(event) {
 		var panel = this.panels[event.value];
 		var screenWidth = this.controller.window.innerWidth;
-		var panelWidth = 320;
 
 		//hide the beacon and new content indicator on the old panel
 		var oldPanel = this.panels[this.timeline];
@@ -748,8 +751,8 @@ MainAssistant.prototype = {
 		}
 
 		// Need to change index for timeline below if changing order of panels - DC
-		if (panel.id === "search" || screenWidth > panelWidth) {
-		//if (event.value === 4 || screenWidth > panelWidth) {
+		if (panel.id === "search" || screenWidth > this.panelWidth) {
+		//if (event.value === 4 || screenWidth > this.panelWidth) {
 			// enable the search box
 			this.controller.get('txtSearch').disabled = false;
 			if (this.searchLoaded === false) {
@@ -775,9 +778,8 @@ MainAssistant.prototype = {
 	sideScrollChanged: function(event) {
 		// Update the position of the bottom bar
 		var screenWidth = this.controller.window.innerWidth;
-		var panelWidth = 320;
 
-		if (screenWidth > panelWidth) {
+		if (screenWidth > this.panelWidth) {
 			this.controller.get('nav-bar').style.marginLeft =
 				(-this.controller.get('sideScroller').scrollLeft) + 'px';
 

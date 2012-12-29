@@ -237,6 +237,12 @@ body.no-gesture {  /* touchpad/emulator */
 	width: 341px !important;
 }
 
+@media only screen and (orientation:portrait){
+	.large-device .panel {
+		width: 384px !important;
+	}
+}
+
 .tweets-list {
 	padding-bottom: 60px;
 }
@@ -255,7 +261,12 @@ body.no-gesture {  /* touchpad/emulator */
 }
 
 .large-device .ptr-text {
-	width: 341px !important;
+	width: 341px;
+}
+@media only screen and (orientation:portrait) {
+	.large-device .ptr-text {
+		width: 384px;
+	}
 }
 
 .ptr-text-showing {
@@ -351,6 +362,11 @@ body.no-gesture {  /* touchpad/emulator */
 
 	float: left;
 }
+@media only screen and (orientation:portrait){
+	.large-device .nav-icon {
+		width: 324px;
+	}
+}
 
 .nav-icon p {
 	display: none;
@@ -364,6 +380,12 @@ body.no-gesture {  /* touchpad/emulator */
 	color: #94989c;
 	font-size: 18px;
 	margin-top: -2px;
+}
+
+@media only screen and (orientation:portrait){
+	.large-device .nav-icon p {
+		width: 299px;
+	}
 }
 
 #nav-home {
@@ -606,6 +628,18 @@ body.no-gesture {  /* touchpad/emulator */
 .showAvatar .content-wrapper {
 	width: 236px;
 }
+
+@media only screen and (orientation:portrait){
+	.content-wrapper {
+		width: 343px;
+	}
+
+	.showAvatar .content-wrapper {
+		width: 279px;
+	}
+}
+
+
 
 .inline-thumb{
 	display: none;
@@ -1083,7 +1117,7 @@ span.link{
 	display: block;
 	text-align: center;
 	//top: 90px;
-	
+
 	//position: static;
 }
 .medium-device #profile-header .close-button-wrapper,
@@ -1186,7 +1220,12 @@ span.link{
 }
 
 .large-device .profile-icon-wrapper {
-	width: 1700px;
+	width: 1705px;
+}
+@media only screen and (orientation:portrait){
+	.large-device .profile-icon-wrapper {
+		width: 1920px;
+	}
 }
 
 .large-device .profile-icon-wrapper {
@@ -1210,6 +1249,11 @@ span.link{
 	margin-left: 20px;
 
 	float: left;
+}
+@media only screen and (orientation:portrait){
+	.large-device .profile-icon {
+		width: 313px;
+	}
 }
 .profile-icon p {
 	display: none;
