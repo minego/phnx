@@ -27,103 +27,103 @@ function PreferencesAssistant(section) {
 	advanced.push({key: 'delReceivedDM', type: 'toggle', label: 'Allow deletion of received DMs'});
 
 	this.sections = {
-			'General Settings': [
-				// end block
-				{key: 'browserSelection', type: 'select', label: 'Browser', items: [
-					{label: 'In-App Browser', value: 'inAppBrowser'},
-					{label: 'Stock Browser', value: 'stockBrowser'},
-					{label: 'Ask', value: 'ask' }
-				]},
-				{key: 'cardIcons', type: 'select', label: 'Card icons', items: [
-					{label: 'Automatic', value: 'auto'},
-					{label: 'Always Show', value: 'always'},
-					{label: 'Never Show', value: 'never'}
-				]},
-				{key: 'refreshOnMaximize', type: 'toggle', label: 'Auto Refresh'},
-				{key: 'refreshOnSubmit', type: 'toggle', label: 'Refresh after post'},
-				{key: 'refreshFlushAtLaunch', type: 'toggle', label: 'Refresh & flush at launch'},
-				{key: 'enterToSubmit', type: 'toggle', label: 'Enter to submit'},
-				{key: 'autoCorrect', type: 'toggle', label: 'Auto Correct'}
-			],
-			'Appearance': [
-				{key: 'theme', type: 'select', label: 'Theme', items: [
-					{label: 'Rebirth', value: 'rebirth'},
-					{label: 'Ash', value: 'ash'},
-					{label: 'Pure', value: 'pure'},
-					{label: 'Sunnyvale', value: 'sunnyvale'},
-					{label: 'Black', value: 'black'},
-					{label: 'Cinder', value: 'cinder'},
-					{label: 'Awakening', value: 'awakening'},
-					{label: 'Cleanse', value: 'cleanse'}
-				]},
-				{key: 'barlayout', type: 'select', label: 'Layout', items: [
-					{label: 'Tabs above Toolbar', value: 'swapped'},
-					{label: 'Toolbar above Tabs', value: 'original'}
-				]},
-				{key: 'hideTabs', type: 'toggle', label: 'Hide Tabs'},
-				{key: 'hideToolbar', type: 'toggle', label: 'Hide Toolbar'},
+		'General Settings': [
+			// end block
+			{key: 'browserSelection', type: 'select', label: 'Browser', items: [
+				{label: 'In-App Browser', value: 'inAppBrowser'},
+				{label: 'Stock Browser', value: 'stockBrowser'},
+				{label: 'Ask', value: 'ask' }
+			]},
+			{key: 'cardIcons', type: 'select', label: 'Card icons', items: [
+				{label: 'Automatic', value: 'auto'},
+				{label: 'Always Show', value: 'always'},
+				{label: 'Never Show', value: 'never'}
+			]},
+			{key: 'refreshOnMaximize', type: 'toggle', label: 'Auto Refresh'},
+			{key: 'refreshOnSubmit', type: 'toggle', label: 'Refresh after post'},
+			{key: 'refreshFlushAtLaunch', type: 'toggle', label: 'Refresh & flush at launch'},
+			{key: 'enterToSubmit', type: 'toggle', label: 'Enter to submit'},
+			{key: 'autoCorrect', type: 'toggle', label: 'Auto Correct'}
+		],
+		'Appearance': [
+			{key: 'theme', type: 'select', label: 'Theme', items: [
+				{label: 'Rebirth', value: 'rebirth'},
+				{label: 'Ash', value: 'ash'},
+				{label: 'Pure', value: 'pure'},
+				{label: 'Sunnyvale', value: 'sunnyvale'},
+				{label: 'Black', value: 'black'},
+				{label: 'Cinder', value: 'cinder'},
+				{label: 'Awakening', value: 'awakening'},
+				{label: 'Cleanse', value: 'cleanse'}
+			]},
+			{key: 'barlayout', type: 'select', label: 'Layout', items: [
+				{label: 'Tabs above Toolbar', value: 'swapped'},
+				{label: 'Toolbar above Tabs', value: 'original'}
+			]},
+			{key: 'hideTabs', type: 'toggle', label: 'Hide Tabs'},
+			{key: 'hideToolbar', type: 'toggle', label: 'Hide Toolbar'},
 
-				// block inserted by DC
+			// block inserted by DC
 /*
-				{key: 'taborder', type: 'select', label: 'TabOrder', items: [
-					{label: 'Home,@,DM,L,S', value: 'hmdls'},
-					{label: 'Home,@,DM,S,L', value: 'hmdsl'},
-					{label: 'Home,@,S,DM,L', value: 'hmsdl'},
-					{label: 'Home,@,S,L,DM', value: 'hmsld'},
-					{label: 'Home,@,L,DM,S', value: 'hmlds'},
-					{label: 'Home,@,L,S,DM', value: 'hmlsd'}
-				]},
+			{key: 'taborder', type: 'select', label: 'TabOrder', items: [
+				{label: 'Home,@,DM,L,S', value: 'hmdls'},
+				{label: 'Home,@,DM,S,L', value: 'hmdsl'},
+				{label: 'Home,@,S,DM,L', value: 'hmsdl'},
+				{label: 'Home,@,S,L,DM', value: 'hmsld'},
+				{label: 'Home,@,L,DM,S', value: 'hmlds'},
+				{label: 'Home,@,L,S,DM', value: 'hmlsd'}
+			]},
 */
 
-				{key: 'fontSize', type: 'select', label: 'Font Size', items: [
-					{label: 'Tiny',		value: 'tiny'},
-					{label: 'Small',	value: 'small'},
-					{label: 'Medium',	value: 'medium'},
-					{label: 'Large',	value: 'large'},
-					{label: 'Huge',		value: 'huge'}
-				]},
+			{key: 'fontSize', type: 'select', label: 'Font Size', items: [
+				{label: 'Tiny',		value: 'tiny'},
+				{label: 'Small',	value: 'small'},
+				{label: 'Medium',	value: 'medium'},
+				{label: 'Large',	value: 'large'},
+				{label: 'Huge',		value: 'huge'}
+			]},
 
-				{key: 'showThumbs', type: 'select', label: 'Thumbnails', items: [
-					{label: 'Never Show', value: 'noThumbs'},
-					{label: 'Details Only', value: 'detailsThumbs'},
-					{label: 'Always Show', value: 'showThumbs'}
-				]},
-				{key: 'showEmoji', type: 'select', label: 'emoji', items: [
-					{label: 'Never Show', value: 'noEmoji'},
-					{label: 'Details Only', value: 'detailsEmoji'},
-					{label: 'Always Show', value: 'showEmoji'}
-				]},
+			{key: 'showThumbs', type: 'select', label: 'Thumbnails', items: [
+				{label: 'Never Show', value: 'noThumbs'},
+				{label: 'Details Only', value: 'detailsThumbs'},
+				{label: 'Always Show', value: 'showThumbs'}
+			]},
+			{key: 'showEmoji', type: 'select', label: 'emoji', items: [
+				{label: 'Never Show', value: 'noEmoji'},
+				{label: 'Details Only', value: 'detailsEmoji'},
+				{label: 'Always Show', value: 'showEmoji'}
+			]},
 
-				{key: 'hideAvatar',		type: 'toggle', label: 'Hide Avatars'},
-				{key: 'hideUsername',	type: 'toggle', label: 'Hide Name'},
-				{key: 'hideScreenname',	type: 'toggle', label: 'Hide Username'},
-				{key: 'hideTime',		type: 'toggle', label: 'Hide Time'},
-				{key: 'hideVia',		type: 'toggle', label: 'Hide Client Name'},
-				{key: 'hideTweetBorder',		type: 'toggle', label: 'Hide Border between Tweets'}
-			],
-			'Notifications': [
-				{key: 'notifications', type: 'toggle', label: 'Notifications'},
-				{key: 'notificationInterval', type: 'select', label: 'Check Every', items:[
-					{label: '5 min', value: '00:05'},
-					{label: '15 min', value: '00:15'},
-					{label: '30 min', value: '00:30'},
-					{label: '1 hour', value: '01:00'},
-					{label: '2 hours', value: '02:00'},
-					{label: '6 hours', value: '06:00'},
-					{label: '12 hours', value: '12:00'}
-				]},
-				{key: 'notificationSound', type: 'select', label: 'Alert', items: [
-					{label: 'Sound', value: 'notifications'},
-					{label: 'Vibrate', value: 'vibrate'},
-					{label: 'Mute', value: 'none' }
-				]},
-				{key: 'notificationBlink', type: 'toggle', label: 'Blink'},
-				{key: 'notificationHome', type: 'toggle', label: 'Home Timeline'},
-				{key: 'notificationMentions', type: 'toggle', label: 'Mentions'},
-				{key: 'notificationMessages', type: 'toggle', label: 'Messages'},
-				{key: 'notificationShieldMessages', type: 'toggle', label: 'Shield Messages'}
-			],
-			'Advanced Settings': advanced
+			{key: 'hideAvatar',		type: 'toggle', label: 'Hide Avatars'},
+			{key: 'hideUsername',	type: 'toggle', label: 'Hide Name'},
+			{key: 'hideScreenname',	type: 'toggle', label: 'Hide Username'},
+			{key: 'hideTime',		type: 'toggle', label: 'Hide Time'},
+			{key: 'hideVia',		type: 'toggle', label: 'Hide Client Name'},
+			{key: 'hideTweetBorder',		type: 'toggle', label: 'Hide Border between Tweets'}
+		],
+		'Notifications': [
+			{key: 'notifications', type: 'toggle', label: 'Notifications'},
+			{key: 'notificationInterval', type: 'select', label: 'Check Every', items:[
+				{label: '5 min', value: '00:05'},
+				{label: '15 min', value: '00:15'},
+				{label: '30 min', value: '00:30'},
+				{label: '1 hour', value: '01:00'},
+				{label: '2 hours', value: '02:00'},
+				{label: '6 hours', value: '06:00'},
+				{label: '12 hours', value: '12:00'}
+			]},
+			{key: 'notificationSound', type: 'select', label: 'Alert', items: [
+				{label: 'Sound', value: 'notifications'},
+				{label: 'Vibrate', value: 'vibrate'},
+				{label: 'Mute', value: 'none' }
+			]},
+			{key: 'notificationBlink', type: 'toggle', label: 'Blink'},
+			{key: 'notificationHome', type: 'toggle', label: 'Home Timeline'},
+			{key: 'notificationMentions', type: 'toggle', label: 'Mentions'},
+			{key: 'notificationMessages', type: 'toggle', label: 'Messages'},
+			{key: 'notificationShieldMessages', type: 'toggle', label: 'Shield Messages'}
+		],
+		'Advanced Settings': advanced
 	};
 
 	if (global.accounts.length > 1) {
@@ -148,7 +148,11 @@ PreferencesAssistant.prototype = {
 		for (var sectionId in this.sections) {
 			var sectionItems = this.sections[sectionId];
 
-			if (this.section && this.section != sectionId) {
+			if (!this.section) {
+				this.section = sectionId;
+			}
+
+			if (this.section != sectionId) {
 				continue;
 			}
 
@@ -195,9 +199,31 @@ PreferencesAssistant.prototype = {
 				}
 			}
 
+			var sectionItems = [];
+			for (var id in this.sections) {
+				sectionItems.push({ label: id, value: id });
+			}
+
+			html = Mojo.View.render({
+				object: {
+					key: 'sectionlist',
+					items: sectionItems
+				},
+				template: 'preferences/sectiontitle'
+			});
+
+			this.controller.setupWidget('select-sectionlist',
+				this.widgets['attr_sectionlist'] = {
+					choices: sectionItems
+				},
+				this.widgets['model_sectionlist'] = {
+					value: sectionId
+				}
+			);
+
 			// set up section html
 			var secObj = {
-				title: sectionId,
+				title: html,
 				items: widgetHtml
 			};
 
@@ -205,6 +231,8 @@ PreferencesAssistant.prototype = {
 				object: secObj,
 				template: 'preferences/section'
 			});
+
+			break;
 		}
 
 		this.controller.get('sections').update(pageHtml);
@@ -217,6 +245,8 @@ PreferencesAssistant.prototype = {
 			this.controller.listen(this.controller.get('select-theme'), Mojo.Event.propertyChange, this.themeChanged.bind(this));
 			// this.controller.listen(this.controller.get('select-taborder'), Mojo.Event.propertyChange, this.tabOrderChanged.bind(this));
 		}
+
+		this.controller.listen(this.controller.get('select-sectionlist'), Mojo.Event.propertyChange, this.sectionChanged.bind(this));
 	},
 	closeTapped: function() {
 		this.controller.stageController.popScene();
@@ -225,6 +255,11 @@ PreferencesAssistant.prototype = {
 		global.setTheme(event.value, this.prefs.read('theme'),
 			this.controller.stageController);
 	},
+
+	sectionChanged: function(event) {
+		this.controller.stageController.swapScene('preferences', event.value);
+	},
+
 /*
 	tabOrderChanged: function(event) {
 		var body = this.controller.stageController.document.getElementsByTagName("body")[0];
@@ -276,6 +311,7 @@ PreferencesAssistant.prototype = {
 
 		if (!this.section || this.section == "Appearance") {
 			this.controller.stopListening(this.controller.get('select-theme'), Mojo.Event.propertyChange, this.themeChanged);
+			this.controller.stopListening(this.controller.get('select-sectionlist'), Mojo.Event.propertyChange, this.sectionChanged);
 			// this.controller.stopListening(this.controller.get('select-taborder'), Mojo.Event.propertyChange, this.tabOrderChanged);
 		}
 	}
