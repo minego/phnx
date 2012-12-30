@@ -1,5 +1,5 @@
 all:
-	@palm-package --use-v1-format .
+	@palm-package --use-v1-format --exclude=originals .
 
 patrick: 
 	@palm-package --use-v1-format .
