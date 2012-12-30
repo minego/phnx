@@ -381,6 +381,10 @@ body.no-gesture {  /* touchpad/emulator */
 				url('../images/low/nav-icon-border.png')	left 2px	no-repeat;
 }
 
+#nav-endcap {
+	background: url('../images/low/nav-icon-border.png')	left 2px	no-repeat;
+}
+
 .beacon {
 	display: block;
 	position: relative;

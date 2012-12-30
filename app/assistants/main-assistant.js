@@ -33,11 +33,17 @@ MainAssistant.prototype = {
 		if (Mojo.Environment.DeviceInfo.modelNameAscii == "Pixi" ||
 			Mojo.Environment.DeviceInfo.modelNameAscii == "Veer") {
 			this.controller.document.body.addClassName("small-device");
+
+			this.smalldevice = true;
 		} else if (Mojo.Environment.DeviceInfo.modelNameAscii == "TouchPad" ||
 			Mojo.Environment.DeviceInfo.screenWidth > 500) {
 			this.controller.document.body.addClassName("large-device");
+
+			this.largedevice = true;
 		} else {
 			this.controller.document.body.addClassName("medium-device");
+
+			this.mediumdevice = true;
 		}
 
 		if (!Mojo.Environment.DeviceInfo.coreNaviButton) {
@@ -145,6 +151,13 @@ MainAssistant.prototype = {
 			hide.appendChild(bar.lastChild);
 		}
 
+		/* Adjust the position of the tabs if there are less than the full 6 */
+		if (this.tabs.length < 6 && !this.largedevice) {
+			bar.setStyle({
+				marginLeft: parseInt((6 - this.tabs.length) * (53 / 2)) + 'px'
+			});
+		}
+
 		for (var i = 0, tab; tab = this.tabs[i]; i++) {
 			var panel = null;
 
@@ -241,6 +254,9 @@ MainAssistant.prototype = {
 
 				this.panels.push(panel);
 			}
+
+			/* Always include the end cap */
+			bar.appendChild(this.controller.get('nav-endcap'));
 		}
 
 		this.timeline = 0; //index position of the timeline, default to first one
@@ -1532,6 +1548,7 @@ MainAssistant.prototype = {
 	},
 	moveIndicator: function(panelId) {
 		var i		= 0;
+		var l		= 0;
 		var panel	= null;
 
 		if (panelId) {
@@ -1542,8 +1559,14 @@ MainAssistant.prototype = {
 			}
 		}
 
+		l = 20;
+		l += (i * 53);
+
+		/* If we have less than 6 icons account for the offset */
+		l += parseInt((6 - this.tabs.length) * (53 / 2));
+
 		this.controller.get('indicator').setStyle({
-			left:	(20 + (i * 53)) + 'px'
+			left:	l + 'px'
 		});
 	},
 	navButtonTapped: function(event) {

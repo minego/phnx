@@ -24,8 +24,10 @@ var ManageTabsToaster = Class.create(Toaster, {
 		}, this.model);
 	},
 	tabDelete: function(event) {
-		this.model.items.splice(event.index, 1);
-		this.saveItems();
+		if (this.model.items.length > 1) {
+			this.model.items.splice(event.index, 1);
+			this.saveItems();
+		}
 	},
 	tabMove: function(event) {
 		var items = this.model.items.splice(event.fromIndex, 1);
