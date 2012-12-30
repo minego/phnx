@@ -66,12 +66,12 @@ function PreferencesAssistant(section) {
 			// block inserted by DC
 /*
 			{key: 'taborder', type: 'select', label: 'TabOrder', items: [
-				{label: 'Home,@,DM,L,S', value: 'hmdls'},
-				{label: 'Home,@,DM,S,L', value: 'hmdsl'},
-				{label: 'Home,@,S,DM,L', value: 'hmsdl'},
-				{label: 'Home,@,S,L,DM', value: 'hmsld'},
-				{label: 'Home,@,L,DM,S', value: 'hmlds'},
-				{label: 'Home,@,L,S,DM', value: 'hmlsd'}
+				{label: 'Home,@,F,DM,L,S', value: 'hmfdls'},
+				{label: 'Home,@,F,DM,S,L', value: 'hmfdsl'},
+				{label: 'Home,@,F,S,DM,L', value: 'hmfsdl'},
+				{label: 'Home,@,F,S,L,DM', value: 'hmfsld'},
+				{label: 'Home,@,F,L,DM,S', value: 'hmflds'},
+				{label: 'Home,@,F,L,S,DM', value: 'hmflsd'}
 			]},
 */
 
