@@ -1244,9 +1244,6 @@ span.link{
 .large-device #profile-menubar{
 	top: 169px;
 }
-.small-device #profile-menubar{
-	top: 149px;
-}
 #verified {
 	text-align: center;
 	display: none;

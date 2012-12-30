@@ -1,5 +1,8 @@
 var ChangelogToaster = Class.create(Toaster, {
 	items: [
+		{ version: '1.3.5' },
+		{ item: 'Corrected styling issues in the profile page' },
+
 		{ version: '1.3.4' },
 		{ item: 'Added a favorites panel (and did some work to prepare for customizing panel layouts)' },
 		{ item: 'Added padlock item to users who have protected accounts' },
