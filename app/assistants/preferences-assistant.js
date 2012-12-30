@@ -63,15 +63,14 @@ function PreferencesAssistant(section) {
 			{key: 'hideTabs', type: 'toggle', label: 'Hide Tabs'},
 			{key: 'hideToolbar', type: 'toggle', label: 'Hide Toolbar'},
 
-			// block inserted by DC
 /*
 			{key: 'taborder', type: 'select', label: 'TabOrder', items: [
-				{label: 'Home,@,DM,L,S', value: 'hmdls'},
-				{label: 'Home,@,DM,S,L', value: 'hmdsl'},
-				{label: 'Home,@,S,DM,L', value: 'hmsdl'},
-				{label: 'Home,@,S,L,DM', value: 'hmsld'},
-				{label: 'Home,@,L,DM,S', value: 'hmlds'},
-				{label: 'Home,@,L,S,DM', value: 'hmlsd'}
+				{label: 'Home,@,F,DM,L,S', value: 'h,m,f,d,l,s'},
+				{label: 'Home,@,F,DM,S,L', value: 'h,m,f,d,s,l'},
+				{label: 'Home,@,F,S,DM,L', value: 'h,m,f,s,d,l'},
+				{label: 'Home,@,F,S,L,DM', value: 'h,m,f,s,l,d'},
+				{label: 'Home,@,F,L,DM,S', value: 'h,m,f,l,d,s'},
+				{label: 'Home,@,F,L,S,DM', value: 'h,m,f,l,s,d'}
 			]},
 */
 
@@ -243,7 +242,6 @@ PreferencesAssistant.prototype = {
 
 		if (!this.section || this.section == "Appearance") {
 			this.controller.listen(this.controller.get('select-theme'), Mojo.Event.propertyChange, this.themeChanged.bind(this));
-			// this.controller.listen(this.controller.get('select-taborder'), Mojo.Event.propertyChange, this.tabOrderChanged.bind(this));
 		}
 
 		this.controller.listen(this.controller.get('select-sectionlist'), Mojo.Event.propertyChange, this.sectionChanged.bind(this));
@@ -261,13 +259,6 @@ PreferencesAssistant.prototype = {
 		this.controller.stageController.swapScene('preferences', event.value);
 	},
 
-/*
-	tabOrderChanged: function(event) {
-		var body = this.controller.stageController.document.getElementsByTagName("body")[0];
-		global.setTabOrder(body, event.value);
-		banner("Please re-start to re-order panels");
-	},
-*/
 	cleanup: function() {
 		var prefs = this.prefs;
 
@@ -313,7 +304,6 @@ PreferencesAssistant.prototype = {
 		if (!this.section || this.section == "Appearance") {
 			this.controller.stopListening(this.controller.get('select-theme'), Mojo.Event.propertyChange, this.themeChanged);
 			this.controller.stopListening(this.controller.get('select-sectionlist'), Mojo.Event.propertyChange, this.sectionChanged);
-			// this.controller.stopListening(this.controller.get('select-taborder'), Mojo.Event.propertyChange, this.tabOrderChanged);
 		}
 	}
 };

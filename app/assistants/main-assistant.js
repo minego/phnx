@@ -105,7 +105,6 @@ MainAssistant.prototype = {
 			TODO: make panels truly dynamic
 		**/
 
-		// block added by DC to allow for easier panel order adjustment
 		var prefs = new LocalStorage();
 		var tmp;
 
@@ -130,103 +129,108 @@ MainAssistant.prototype = {
 			}
 		}
 
-		// TODO	We aren't ready for a completely dynamic tab order yet..
-		// var tabOrder = prefs.read('taborder') || 'hmfdls';
-		var tabOrder = 'hmfdls';
+		/* Set the panel order based on the user's preferred tab order */
+		this.panels			= [];
+		this.panelLabels	= [];
+		// this.tabOrder		= prefs.read('taborder') || 'h,m,f,d,l,s';
+		this.tabOrder		= 'h,m,f,d,l,s';
+		this.tabs			= this.tabOrder.split(',');
+		var bar				= this.controller.get('nav-bar');
+		var hide			= this.controller.get('nav-bar-hidden');
 
-		this.panelLabels = [];
-		for (var i = 0, c; c = tabOrder.charAt(i); i++) {
-			switch (c.toLowerCase()) {
-				case "h":
-					this.panelLabels.push("home");
-					break;
-
-				case "m":
-					this.panelLabels.push("mentions");
-					break;
-
-				case "f":
-					this.panelLabels.push("favorites");
-					break;
-
-				case "d":
-					this.panelLabels.push("messages");
-					break;
-
-				case "l":
-					this.panelLabels.push("lists");
-					break;
-
-				case "s":
-					this.panelLabels.push("search");
-					break;
-			}
+		/*
+			Move all of the tab icons to a hidden div. Any that are being used
+			will be moved back.
+		*/
+		while (bar.lastChild) {
+			hide.appendChild(bar.lastChild);
 		}
 
-		this.panels = [];
-		for (var i = 0, l; l = this.panelLabels[i]; i++) {
+		for (var i = 0, tab; tab = this.tabs[i]; i++) {
 			var panel = null;
 
-			switch (l) {
-				case "home":
+			switch (tab.toLowerCase().charAt(0)) {
+				case "h":
 					panel = {
+						id:			"home",
 						type:		"timeline",
 						resource:	"home",
 						refresh:	true,
 						update:		true,
-						model:		{ items: homeItems }
+						model:		{ items: homeItems },
+						icon:		"nav-home"
 					};
 					break;
-				case "mentions":
+
+				case "m":
 					panel = {
+						id:			"mentions",
 						type:		"timeline",
 						resource:	"mentions",
 						refresh:	true,
 						update:		true,
-						model:		{ items: mentionsItems }
+						model:		{ items: mentionsItems },
+						icon:		"nav-mentions"
 					};
 					break;
-				case "favorites":
+
+				case "f":
 					panel = {
+						id:			"favorites",
 						type:		"timeline",
 						resource:	"userFavorites",
 						refresh:	true,
 						update:		true,
-						model:		{ items: favoriteItems }
+						model:		{ items: favoriteItems },
+						icon:		"nav-favorites"
 					};
 					break;
-				case "lists":
+
+				case "d":
 					panel = {
-						type:		"lists",
-						refresh:	false,
-						update:		false
-					};
-					break;
-				case "search":
-					panel = {
-						type:		"search",
-						refresh:	false,
-						update:		false
-					};
-					break;
-				case "messages":
-					panel = {
+						id:			"messages",
 						type:		"timeline",
 						resource:	"messages",
 						refresh:	true,
 						update:		true,
-						model:		{ items: messagesItems }
+						model:		{ items: messagesItems },
+						icon:		"nav-messages"
+					};
+					break;
+
+				case "l":
+					panel = {
+						id:			"lists",
+						type:		"lists",
+						refresh:	false,
+						update:		false,
+						icon:		"nav-lists"
+					};
+					break;
+
+				case "s":
+					panel = {
+						id:			"search",
+						type:		"search",
+						refresh:	false,
+						update:		false,
+						icon:		"nav-search"
 					};
 					break;
 			}
 
+
 			if (panel) {
-				if (!panel.id) {
-					panel.id = l;
+				if (!panel.title) {
+					panel.title = panel.id;
 				}
 
-				if (!panel.title) {
-					panel.title = l;
+				if (panel.title) {
+					this.panelLabels.push(panel.title);
+				}
+
+				if (panel.icon) {
+					bar.appendChild(this.controller.get(panel.icon));
 				}
 
 				panel.index		= this.panels.length;
@@ -1726,25 +1730,24 @@ MainAssistant.prototype = {
 
 				// keycodes for punctuation and symbols are not normal
 				// so only ascii chars are passed to the compose toaster for now...
-				var text = Mojo.Char.isValidWrittenChar(e.keyCode);
-				// Need to change index for timeline below if changing order of panels - DC
-				var panel = this.panels[this.timeline];
-				if (panel.id !== "search" && this.controller.get('txtSearch').value.length === 0) {
-				//if (this.timeline !== 4 && this.controller.get('txtSearch').value.length === 0) {
+				var text	= Mojo.Char.isValidWrittenChar(e.keyCode);
+				var panel	= this.panels[this.timeline];
+				var search	= this.controller.get('txtSearch');
+
+				if (panel.id !== "search") {
 					this.toggleCompose({
 						'text': text
 					});
-				}
-				else {
+				} else if (search) {
 					// type to search on the search panel
 					if (e.keyCode !== 13) {
-						if (this.controller.get('txtSearch').value.length === 0) {
-							this.controller.get('txtSearch').value = text;
+						if (search.value.length === 0) {
+							search.value = text;
 						}
 
-						var len = this.controller.get('txtSearch').value.length;
-						this.controller.get('txtSearch').setSelectionRange(len,len); //focus the cursor at the end
-						this.controller.get('txtSearch').focus();
+						var len = search.value.length;
+						search.setSelectionRange(len,len); //focus the cursor at the end
+						search.focus();
 					}
 				}
 			}
@@ -1827,19 +1830,19 @@ MainAssistant.prototype = {
 			prefs.read('hideTweetBorder')
 		);
 
-		// var tabOrder = prefs.read('taborder') || 'hmfdls';
-		var tabOrder = 'hmfdls';
+		// var tabOrder = prefs.read('taborder');
+		var tabOrder		= 'h,m,f,d,l,s';
 
-		try {
-			global.setTabOrder(body, tabOrder);
-		} catch (e) {
+		if (this.tabOrder && tabOrder && tabOrder !== this.tabOrder) {
 			/*
-				Calling this moves around elements that may not have been
-				rendered yet. If it fails, just try again a bit later.
+				The tab order has changed. Relaunch this scene to force it to
+				render again with the new tab order.
 			*/
-			setTimeout(function() {
-				global.setTabOrder(body, tabOrder);
-			}, 1000);
+			this.controller.stageController.swapScene({
+				name: "main",
+				transition: Mojo.Transition.crossFade,
+				disableSceneScroller: true
+			}, this.opts);
 		}
 	},
 	deactivate: function(event) {
