@@ -187,85 +187,37 @@ var global = {
 			Element.addClassName(body, 'layout-no-top');
 		}
 	},
-	//block added by DC
-	setTabOrder: function(body, tabOrder) {
-		var tabOrders = ['hmdls', 'hmdsl', 'hmsdl', 'hmsld', 'hmlds', 'hmlsd'];
 
-		switch (tabOrder) {
-			case "hmdls":
-				//var node=global.doc.getElementById("nav-home");
-				global.doc.getElementById("nav-bar").appendChild(global.doc.getElementById("nav-home"));
-				//node=global.doc.getElementById("nav-mentions");
-				global.doc.getElementById("nav-bar").appendChild(global.doc.getElementById("nav-mentions"));
-				//node=global.doc.getElementById("nav-messages");
-				global.doc.getElementById("nav-bar").appendChild(global.doc.getElementById("nav-messages"));
-				//node=global.doc.getElementById("nav-lists");
-				global.doc.getElementById("nav-bar").appendChild(global.doc.getElementById("nav-lists"));
-				//node=global.doc.getElementById("nav-search");
-				global.doc.getElementById("nav-bar").appendChild(global.doc.getElementById("nav-search"));
-				break;
-			case "hmdsl":
-				//var node=global.doc.getElementById("nav-home");
-				global.doc.getElementById("nav-bar").appendChild(global.doc.getElementById("nav-home"));
-				//node=global.doc.getElementById("nav-mentions");
-				global.doc.getElementById("nav-bar").appendChild(global.doc.getElementById("nav-mentions"));
-				//node=global.doc.getElementById("nav-messages");
-				global.doc.getElementById("nav-bar").appendChild(global.doc.getElementById("nav-messages"));
-				//node=global.doc.getElementById("nav-search");
-				global.doc.getElementById("nav-bar").appendChild(global.doc.getElementById("nav-search"));
-				//node=global.doc.getElementById("nav-lists");
-				global.doc.getElementById("nav-bar").appendChild(global.doc.getElementById("nav-lists"));
-				break;
-			case "hmsdl":
-				//var node=global.doc.getElementById("nav-home");
-				global.doc.getElementById("nav-bar").appendChild(global.doc.getElementById("nav-home"));
-				//node=global.doc.getElementById("nav-mentions");
-				global.doc.getElementById("nav-bar").appendChild(global.doc.getElementById("nav-mentions"));
-				//node=global.doc.getElementById("nav-search");
-				global.doc.getElementById("nav-bar").appendChild(global.doc.getElementById("nav-search"));
-				//node=global.doc.getElementById("nav-messages");
-				global.doc.getElementById("nav-bar").appendChild(global.doc.getElementById("nav-messages"));
-				//node=global.doc.getElementById("nav-lists");
-				global.doc.getElementById("nav-bar").appendChild(global.doc.getElementById("nav-lists"));
-				break;
-			case "hmsld":
-				//var node=global.doc.getElementById("nav-home");
-				global.doc.getElementById("nav-bar").appendChild(global.doc.getElementById("nav-home"));
-				//node=global.doc.getElementById("nav-mentions");
-				global.doc.getElementById("nav-bar").appendChild(global.doc.getElementById("nav-mentions"));
-				//node=global.doc.getElementById("nav-search");
-				global.doc.getElementById("nav-bar").appendChild(global.doc.getElementById("nav-search"));
-				//node=global.doc.getElementById("nav-lists");
-				global.doc.getElementById("nav-bar").appendChild(global.doc.getElementById("nav-lists"));
-				//node=global.doc.getElementById("nav-messages");
-				global.doc.getElementById("nav-bar").appendChild(global.doc.getElementById("nav-messages"));
-				break;
-			case "hmlds":
-				//var node=global.doc.getElementById("nav-home");
-				global.doc.getElementById("nav-bar").appendChild(global.doc.getElementById("nav-home"));
-				//node=global.doc.getElementById("nav-mentions");
-				global.doc.getElementById("nav-bar").appendChild(global.doc.getElementById("nav-mentions"));
-				//node=global.doc.getElementById("nav-lists");
-				global.doc.getElementById("nav-bar").appendChild(global.doc.getElementById("nav-lists"));
-				//node=global.doc.getElementById("nav-messages");
-				global.doc.getElementById("nav-bar").appendChild(global.doc.getElementById("nav-messages"));
-				//node=global.doc.getElementById("nav-search");
-				global.doc.getElementById("nav-bar").appendChild(global.doc.getElementById("nav-search"));
-				break;
-			case "hmlsd":
-				//var node=global.doc.getElementById("nav-home");
-				global.doc.getElementById("nav-bar").appendChild(global.doc.getElementById("nav-home"));
-				//node=global.doc.getElementById("nav-mentions");
-				global.doc.getElementById("nav-bar").appendChild(global.doc.getElementById("nav-mentions"));
-				//node=global.doc.getElementById("nav-lists");
-				global.doc.getElementById("nav-bar").appendChild(global.doc.getElementById("nav-lists"));
-				//node=global.doc.getElementById("nav-search");
-				global.doc.getElementById("nav-bar").appendChild(global.doc.getElementById("nav-search"));
-				//node=global.doc.getElementById("nav-messages");
-				global.doc.getElementById("nav-bar").appendChild(global.doc.getElementById("nav-messages"));
-				break;
+	setTabOrder: function(body, tabOrder) {
+		var bar = global.doc.getElementById("nav-bar");
+
+		for (var i = 0, c; c = tabOrder.charAt(i); i++) {
+			switch (c.toLowerCase()) {
+				case "h":
+					bar.appendChild(global.doc.getElementById("nav-home"));
+					break;
+
+				case "m":
+					bar.appendChild(global.doc.getElementById("nav-mentions"));
+					break;
+
+				case "f":
+					bar.appendChild(global.doc.getElementById("nav-favorites"));
+					break;
+
+				case "d":
+					bar.appendChild(global.doc.getElementById("nav-messages"));
+					break;
+
+				case "l":
+					bar.appendChild(global.doc.getElementById("nav-lists"));
+					break;
+
+				case "s":
+					bar.appendChild(global.doc.getElementById("nav-search"));
+					break;
+			}
 		}
-		//banner("Please re-start to re-order panels");
 	},
 	setFontSize: function(body, font) {
 		var fonts = ['tiny','small', 'medium', 'large','huge'];

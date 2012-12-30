@@ -305,7 +305,7 @@ body.no-gesture {  /* touchpad/emulator */
 
 .nav-icon {
 	display: block;
-	width: 64px;
+	width: 53px;
 	height: 51px;
 	padding: 0;
 	margin: 0;
@@ -354,19 +354,31 @@ body.no-gesture {  /* touchpad/emulator */
 }
 
 #nav-home {
-	background: url('../images/low/icons/tweets.png') 24px center no-repeat;
-}
-#nav-messages {
-	background: url('../images/low/icons/messages.png') 20px center no-repeat, url('../images/low/nav-icon-border.png') left 2px no-repeat;
+	background: url('../images/low/icons/tweets.png')		18px center	no-repeat,
+				url('../images/low/nav-icon-border.png')	left 2px	no-repeat;
 }
 #nav-mentions {
-	background: url('../images/low/icons/mentions.png') 22px center no-repeat, url('../images/low/nav-icon-border.png') left 2px no-repeat;
+	background: url('../images/low/icons/mentions.png')		19px center	no-repeat,
+				url('../images/low/nav-icon-border.png')	left 2px	no-repeat;
+}
+#nav-messages {
+	background: url('../images/low/icons/messages.png')		19px center	no-repeat,
+				url('../images/low/nav-icon-border.png')	left 2px	no-repeat;
+}
+#nav-favorites {
+	background: url('../images/low/icons/favorite.png')		19px center	no-repeat,
+				url('../images/low/nav-icon-border.png')	left 2px	no-repeat;
+
+	/* The favorite icon is larger since it is used in other places */
+	background-size: 16px, auto auto;
 }
 #nav-lists {
-	background: url('../images/low/icons/lists.png') 20px center no-repeat, url('../images/low/nav-icon-border.png') left 2px no-repeat;
+	background: url('../images/low/icons/lists.png')		19px center	no-repeat,
+				url('../images/low/nav-icon-border.png')	left 2px	no-repeat;
 }
 #nav-search {
-	background: url('../images/low/icons/search.png') 19px center no-repeat, url('../images/low/nav-icon-border.png') left 2px no-repeat;
+	background: url('../images/low/icons/search.png')		20px center	no-repeat,
+				url('../images/low/nav-icon-border.png')	left 2px	no-repeat;
 }
 
 .beacon {
@@ -416,22 +428,6 @@ body.no-gesture {  /* touchpad/emulator */
 	display: none;
 }
 
-#indicator.first {
-	left: 26px;
-}
-#indicator.second {
-	left: 89px;
-}
-#indicator.third {
-	left: 153px;
-}
-#indicator.fourth {
-	left: 217px;
-}
-#indicator.fifth {
-	left: 281px;
-}
-
 .large-device #indicator {
 	display: none !important;
 }
@@ -466,7 +462,7 @@ body.no-gesture {  /* touchpad/emulator */
 	padding: 0;
 }
 
-#tweets-list, #mentions-list, #messages-list, #lists-list, #search_list{
+#tweets-list, #mentions-list, #favorites-list, #messages-list, #lists-list, #search_list{
 	padding-top: 0px;
 	z-index: 10;
 }

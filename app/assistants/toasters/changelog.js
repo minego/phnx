@@ -1,6 +1,7 @@
 var ChangelogToaster = Class.create(Toaster, {
 	items: [
 		{ version: '1.3.4' },
+		{ item: 'Added a favorites panel (and did some work to prepare for customizing panel layouts)' },
 		{ item: 'Added padlock item to users who have protected accounts' },
 		{ item: 'Display 2 full columns instead of 2 and a half in portrait view on the TouchPad' },
 

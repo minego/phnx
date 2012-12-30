@@ -4,6 +4,7 @@ var Account = Class.create({
 		this.data = {
 			home: [],
 			mentions: [],
+			favorites: [],
 			messages: []
 		};
 	},
