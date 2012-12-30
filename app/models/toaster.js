@@ -30,7 +30,7 @@ var Toaster = {
 	},
 	hide: function() {
 		this.animateHide();
-		// this.cleanup(); // kill those evil listeners!
+		this.cleanup(); // kill those evil listeners!
 	},
 	animateShow: function() {
 		// CSS Animation method

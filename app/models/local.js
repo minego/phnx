@@ -12,7 +12,7 @@ function LocalStorage() {
 		enterToSend: false,
 		fontSize: 'small',
 		barlayout: 'swapped',
-		taborder: 'hmdls',
+		taborder: 'h,m,f,d,l,s',
 		theme: 'pure',
 		api: 'https://api.twitter.com',
 		defaultAccount: '0',
@@ -57,6 +57,13 @@ LocalStorage.prototype = {
 					this.data[key] = 'never';
 				}
 			}
+
+/*
+			if (key == 'taborder') {
+				// Temporarily disabling tab order setting
+				return(this.defaults[key]);
+			}
+*/
 
 			return this.data[key];
 		}

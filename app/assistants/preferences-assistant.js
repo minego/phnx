@@ -63,17 +63,6 @@ function PreferencesAssistant(section) {
 			{key: 'hideTabs', type: 'toggle', label: 'Hide Tabs'},
 			{key: 'hideToolbar', type: 'toggle', label: 'Hide Toolbar'},
 
-/*
-			{key: 'taborder', type: 'select', label: 'TabOrder', items: [
-				{label: 'Home,@,F,DM,L,S', value: 'h,m,f,d,l,s'},
-				{label: 'Home,@,F,DM,S,L', value: 'h,m,f,d,s,l'},
-				{label: 'Home,@,F,S,DM,L', value: 'h,m,f,s,d,l'},
-				{label: 'Home,@,F,S,L,DM', value: 'h,m,f,s,l,d'},
-				{label: 'Home,@,F,L,DM,S', value: 'h,m,f,l,d,s'},
-				{label: 'Home,@,F,L,S,DM', value: 'h,m,f,l,s,d'}
-			]},
-*/
-
 			{key: 'fontSize', type: 'select', label: 'Font Size', items: [
 				{label: 'Tiny',		value: 'tiny'},
 				{label: 'Small',	value: 'small'},

@@ -132,8 +132,7 @@ MainAssistant.prototype = {
 		/* Set the panel order based on the user's preferred tab order */
 		this.panels			= [];
 		this.panelLabels	= [];
-		// this.tabOrder		= prefs.read('taborder') || 'h,m,f,d,l,s';
-		this.tabOrder		= 'h,m,f,d,l,s';
+		this.tabOrder		= prefs.read('taborder');
 		this.tabs			= this.tabOrder.split(',');
 		var bar				= this.controller.get('nav-bar');
 		var hide			= this.controller.get('nav-bar-hidden');
@@ -218,7 +217,6 @@ MainAssistant.prototype = {
 					};
 					break;
 			}
-
 
 			if (panel) {
 				if (!panel.title) {
@@ -329,6 +327,10 @@ MainAssistant.prototype = {
 					{
 						label: 'Advanced Settings',
 						command: 'cmdPreferencesAdvanced'
+					},
+					{
+						label: 'Change Tab Order',
+						command: 'cmdManageTabs'
 					},
 					{
 						label: 'Manage Filters',
@@ -643,6 +645,9 @@ MainAssistant.prototype = {
 			else if (event.command === 'cmdAddFilter') {
 				this.toasters.add(new AddFilterToaster(this));
 			}
+			else if (event.command === 'cmdManageTabs') {
+				this.toasters.add(new ManageTabsToaster(this));
+			}
 			else if (event.command === 'cmdManageFilters') {
 				this.toasters.add(new ManageFiltersToaster(this));
 			}
@@ -686,7 +691,7 @@ MainAssistant.prototype = {
 		prefs.write('fontSize', font);
 	},
 	setScrollerSizes: function() {
-		if (this.controller.window && this.controller) {
+		if (this.controller && this.controller.window) {
 			var screenHeight = this.controller.window.innerHeight;
 			var screenWidth = this.controller.window.innerWidth;
 			var height = screenHeight - 0; //subtract the header
@@ -993,6 +998,10 @@ MainAssistant.prototype = {
 		this.scrollTo(panel.index);
 	},
 	getUserAvatar: function() {
+		if (!this.controller) {
+			return;
+		}
+
 		var Twitter = new TwitterAPI(this.user, this.controller.stageController);
 		Twitter.getUser(this.user.username, function(r) {
 			var img = r.responseJSON.profile_image_url.replace('_normal', '_bigger');
@@ -1694,6 +1703,12 @@ MainAssistant.prototype = {
 
 		this.controller.listen(this.controller.window, 'resize', this.windowResized.bind(this));
 
+		/*
+			Add the appropriate listeners.
+
+			This loop is setup to allow for errors because some of these targets
+			will not exist depending on which tabs are configured.
+		*/
 		var listen = [
 			[ 'sideScroller',			Mojo.Event.propertyChange,	this.sideScrollerChanged],
 			[ 'sideScroller',			'scroll',					this.sideScrollChanged	],
@@ -1717,7 +1732,11 @@ MainAssistant.prototype = {
 		];
 		for (var i = 0, l; l = listen[i]; i++) {
 			try {
-				this.controller.listen(this.controller.get(l[0]), l[1], l[2].bind(this));
+				var target;
+
+				if ((target = this.controller.get(l[0]))) {
+					this.controller.listen(target, l[1], l[2].bind(this));
+				}
 			} catch (e) {
 				console.log('Failed to start event listener #: ' + (i + 1));
 			}
@@ -1797,15 +1816,15 @@ MainAssistant.prototype = {
 		];
 		for (var i = 0, l; l = listen[i]; i++) {
 			try {
-				this.controller.stopListening(this.controller.get(l[0]), l[1], l[2]);
+				var target;
+
+				if ((target = this.controller.get(l[0]))) {
+					this.controller.stopListening(target, l[1], l[2]);
+				}
 			} catch (e) {
 				console.log('Failed to stop event listener #: ' + (i + 1));
 			}
 		}
-
-
-
-
 	},
 	activate: function(event) {
 		var body = this.controller.stageController.document.getElementsByTagName("body")[0];
@@ -1830,8 +1849,7 @@ MainAssistant.prototype = {
 			prefs.read('hideTweetBorder')
 		);
 
-		// var tabOrder = prefs.read('taborder');
-		var tabOrder		= 'h,m,f,d,l,s';
+		var tabOrder = prefs.read('taborder');
 
 		if (this.tabOrder && tabOrder && tabOrder !== this.tabOrder) {
 			/*
