@@ -171,7 +171,13 @@ var TweetToaster = Class.create(Toaster, {
 
 		if (this.tweet.entities && this.tweet.entities.user_mentions.length > 0) {
 			// Reply all
-			statusTxt = '@' + this.tweet.user.screen_name + ' ';
+			var me = getUser().id;
+
+			if (this.tweet.user.id_str !== me) {
+				statusTxt = '@' + this.tweet.user.screen_name + ' ';
+			} else {
+				statusTxt = '';
+			}
 			var selectionStart = statusTxt.length;
 			var selectionLength = 0;
 			var currentUser = getUser();
