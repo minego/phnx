@@ -189,7 +189,16 @@ var global = {
 	},
 
 	setTabOrder: function(body, tabOrder) {
-		var bar = global.doc.getElementById("nav-bar");
+		var bar		= global.doc.getElementById("nav-bar");
+		var hide	= global.doc.getElementById("nav-bar-hidden");
+
+		/*
+			Move all children to the hidden div so that any that aren't being
+			used will not be included.
+		*/
+		while (bar.lastChild) {
+			hide.appendChild(bar.lastChild);
+		}
 
 		for (var i = 0, c; c = tabOrder.charAt(i); i++) {
 			switch (c.toLowerCase()) {

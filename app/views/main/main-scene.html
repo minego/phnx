@@ -22,12 +22,17 @@
 <div id="image-preview" align="center">
 	<img id="preview" src="" />
 </div>
-<div id="nav-bar-scroller" class="ignore">
-	<div id="nav-bar" class="ignore">
-		<div id="indicator" style="left: -100px;">
-			<!-- This arrow slides around to show which section is active -->
-		</div>
 
+<div id="nav-bar-scroller" class="ignore">
+	<div id="indicator" style="left: -100px;">
+		<!-- This arrow slides around to show which section is active -->
+	</div>
+
+	<div id="nav-bar-hidden" style="display: none;">
+		<!-- Unused nav-icon's will end up here -->
+	</div>
+
+	<div id="nav-bar" class="ignore">
 		<div id="nav-home" class="nav-icon">
 			<p>Timeline</p>
 			<div id="home-beacon" class="beacon"></div>
@@ -43,7 +48,6 @@
 			<div id="favorites-beacon" class="beacon"></div>
 		</div>
 
-		<!-- Add/Remove comment here, and add on nav-messages below for change of messages panel location-->
 		<div id="nav-messages" class="nav-icon">
 			<p>Messages</p>
 			<div id="messages-beacon" class="beacon"></div>
@@ -58,11 +62,5 @@
 			<p>Search</p>
 			<div id="search-beacon" class="beacon"></div>
 		</div>
-
-		<!-- Add/Remove comment here, and add on nav-messages above for change of messages panel location-->
-		<!--div id="nav-messages" class="nav-icon">
-			<p>Messages</p>
-			<div id="messages-beacon" class="beacon"></div>
-		</div-->
 	</div>
 </div>

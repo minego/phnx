@@ -818,11 +818,14 @@ MainAssistant.prototype = {
 				this.searchLoaded = true;
 				this.loadSearch();
 			}
-		}
-		else {
-			this.controller.get('txtSearch').value = '';
-			this.controller.get('txtSearch').blur();
-			this.controller.get('txtSearch').disabled = true;
+		} else {
+			var search = this.controller.get('txtSearch');
+
+			if (search) {
+				search.value = '';
+				search.blur();
+				search.disabled = true;
+			}
 		}
 
 		//update the index
@@ -1532,7 +1535,6 @@ MainAssistant.prototype = {
 	},
 	navButtonTapped: function(event) {
 		var screenWidth = this.controller.window.innerWidth;
-		var panelWidth = 320;
 		var src = event.srcElement;
 
 		while (src && (!src.id || 0 != src.id.indexOf('nav-'))) {
@@ -1541,18 +1543,18 @@ MainAssistant.prototype = {
 
 		var id = src.id;
 		var panelId = id.substr(id.indexOf('-') + 1);
-
 		var panelIndex;
-		//get the index of the panel for the nav item
-		for (i=0; i < this.panels.length; i++) {
-			if (this.panels[i].id === panelId) {
+
+		// Get the index of the panel for the nav item
+		for (var i = 0, p; p = this.panels[i]; i++) {
+			if (p.id === panelId) {
 				panelIndex = i;
 			}
 		}
 
-		//if it's the current panel, scroll to the top
-		//otherwise, scroll to that panel
-		if (this.timeline === panelIndex || screenWidth > panelWidth) {
+		// If it's the current panel, scroll to the top otherwise, scroll to
+		// that panel
+		if (this.timeline === panelIndex || screenWidth > this.panelWidth) {
 			var scroller = this.controller.get(panelId + '-scroller');
 
 			if (scroller) {
@@ -1565,7 +1567,7 @@ MainAssistant.prototype = {
 					scroller.mojo.scrollTo(0, 0,true);
 				}
 			}
-		}else{
+		} else {
 			this.scrollTo(panelIndex);
 		}
 	},
@@ -1686,27 +1688,36 @@ MainAssistant.prototype = {
 			this.controller.listen(this.controller.get(panel.id + '-scroller'), Mojo.Event.dragEnd, this.scrollStopped.bind(panel));
 		}
 
-		this.controller.listen(this.controller.get('sideScroller'), Mojo.Event.propertyChange, this.sideScrollerChanged.bind(this));
-		this.controller.listen(this.controller.get('sideScroller'), 'scroll', this.sideScrollChanged.bind(this));
-		this.controller.listen(this.controller.get('rt-others'), Mojo.Event.tap, this.rtTapped.bind(this));
-		this.controller.listen(this.controller.get('rt-yours'), Mojo.Event.tap, this.rtTapped.bind(this));
-		this.controller.listen(this.controller.get('rt-ofyou'), Mojo.Event.tap, this.rtTapped.bind(this));
-		this.controller.listen(this.controller.get('refresh'), Mojo.Event.tap, this.refreshTapped.bind(this));
-		this.controller.listen(this.controller.get('new-tweet'), Mojo.Event.tap, this.newTweet.bind(this));
-		this.controller.listen(this.controller.get('header-title'), Mojo.Event.tap, this.headerTapped.bind(this));
-		this.controller.listen(this.controller.get('shim'), Mojo.Event.tap, this.shimTapped.bind(this));
 		this.controller.listen(this.controller.window, 'resize', this.windowResized.bind(this));
-		this.controller.listen(this.controller.get('nav-home'), Mojo.Event.tap, this.navButtonTapped.bind(this));
-		this.controller.listen(this.controller.get('nav-mentions'), Mojo.Event.tap, this.navButtonTapped.bind(this));
-		this.controller.listen(this.controller.get('nav-favorites'), Mojo.Event.tap, this.navButtonTapped.bind(this));
-		this.controller.listen(this.controller.get('nav-messages'), Mojo.Event.tap, this.navButtonTapped.bind(this));
-		this.controller.listen(this.controller.get('nav-lists'), Mojo.Event.tap, this.navButtonTapped.bind(this));
-		this.controller.listen(this.controller.get('nav-search'), Mojo.Event.tap, this.navButtonTapped.bind(this));
-		this.controller.listen(this.controller.get('your-lists-list'), Mojo.Event.listTap, this.listTapped.bind(this));
-		this.controller.listen(this.controller.get('lists-you-follow-list'), Mojo.Event.listTap, this.listTapped.bind(this));
-		this.controller.listen(this.controller.get('saved-searches-list'), Mojo.Event.listTap, this.searchListTapped.bind(this));
-		this.controller.listen(this.controller.get('trending-topics-list'), Mojo.Event.listTap, this.searchListTapped.bind(this));
 
+		var listen = [
+			[ 'sideScroller',			Mojo.Event.propertyChange,	this.sideScrollerChanged],
+			[ 'sideScroller',			'scroll',					this.sideScrollChanged	],
+			[ 'rt-others',				Mojo.Event.tap,				this.rtTapped			],
+			[ 'rt-yours',				Mojo.Event.tap,				this.rtTapped			],
+			[ 'rt-ofyou',				Mojo.Event.tap,				this.rtTapped			],
+			[ 'refresh',				Mojo.Event.tap,				this.refreshTapped		],
+			[ 'new-tweet',				Mojo.Event.tap,				this.newTweet			],
+			[ 'header-title',			Mojo.Event.tap,				this.headerTapped		],
+			[ 'shim',					Mojo.Event.tap,				this.shimTapped			],
+			[ 'nav-home',				Mojo.Event.tap,				this.navButtonTapped	],
+			[ 'nav-mentions',			Mojo.Event.tap,				this.navButtonTapped	],
+			[ 'nav-favorites',			Mojo.Event.tap,				this.navButtonTapped	],
+			[ 'nav-messages',			Mojo.Event.tap,				this.navButtonTapped	],
+			[ 'nav-lists',				Mojo.Event.tap,				this.navButtonTapped	],
+			[ 'nav-search',				Mojo.Event.tap,				this.navButtonTapped	],
+			[ 'your-lists-list',		Mojo.Event.listTap,			this.listTapped			],
+			[ 'lists-you-follow-list',	Mojo.Event.listTap,			this.listTapped			],
+			[ 'saved-searches-list',	Mojo.Event.listTap,			this.searchListTapped	],
+			[ 'trending-topics-list',	Mojo.Event.listTap,			this.searchListTapped	]
+		];
+		for (var i = 0, l; l = listen[i]; i++) {
+			try {
+				this.controller.listen(this.controller.get(l[0]), l[1], l[2].bind(this));
+			} catch (e) {
+				console.log('Failed to start event listener #: ' + (i + 1));
+			}
+		}
 
 		this.controller.get(this.controller.document).observe("keyup", function(e) {
 			// banner(e.keyCode + ' is the key');
@@ -1738,12 +1749,17 @@ MainAssistant.prototype = {
 				}
 			}
 		}.bind(this));
-		this.controller.get('txtSearch').observe('keydown', function(e) {
-			if (e.keyCode === 13 && this.controller.get('txtSearch').value.length > 0) {
-				this.search(this.controller.get('txtSearch').value);
-				e.stop();
-			}
-		}.bind(this));
+
+		var search;
+
+		if ((search = this.controller.get('txtSearch'))) {
+			search.observe('keydown', function(e) {
+				if (e.keyCode === 13 && this.controller.get('txtSearch').value.length > 0) {
+					this.search(this.controller.get('txtSearch').value);
+					e.stop();
+				}
+			}.bind(this));
+		}
 	},
 	stopListening: function() {
 		for (var j=0; j < this.panels.length; j++) {
@@ -1753,26 +1769,40 @@ MainAssistant.prototype = {
 			this.controller.stopListening(this.controller.get(panel.id + '-scroller'), Mojo.Event.dragEnd, this.scrollStopped);
 		}
 
-		this.controller.stopListening(this.controller.get('sideScroller'), Mojo.Event.propertyChange, this.sideScrollerChanged);
-		this.controller.stopListening(this.controller.get('sideScroller'), 'scroll', this.sideScrollChanged);
-		this.controller.stopListening(this.controller.get('rt-others'), Mojo.Event.tap, this.rtTapped);
-		this.controller.stopListening(this.controller.get('rt-yours'), Mojo.Event.tap, this.rtTapped);
-		this.controller.stopListening(this.controller.get('rt-ofyou'), Mojo.Event.tap, this.rtTapped);
-		this.controller.stopListening(this.controller.get('refresh'), Mojo.Event.tap, this.refreshTapped);
-		this.controller.stopListening(this.controller.get('new-tweet'), Mojo.Event.tap, this.newTweet);
-		this.controller.stopListening(this.controller.get('header-title'), Mojo.Event.tap, this.headerTapped);
-		this.controller.stopListening(this.controller.get('shim'), Mojo.Event.tap, this.shimTapped);
 		this.controller.stopListening(this.controller.window, 'resize', this.windowResized);
-		this.controller.stopListening(this.controller.get('nav-home'), Mojo.Event.tap, this.navButtonTapped);
-		this.controller.stopListening(this.controller.get('nav-mentions'), Mojo.Event.tap, this.navButtonTapped);
-		this.controller.stopListening(this.controller.get('nav-favorites'), Mojo.Event.tap, this.navButtonTapped);
-		this.controller.stopListening(this.controller.get('nav-messages'), Mojo.Event.tap, this.navButtonTapped);
-		this.controller.stopListening(this.controller.get('nav-lists'), Mojo.Event.tap, this.navButtonTapped);
-		this.controller.stopListening(this.controller.get('nav-search'), Mojo.Event.tap, this.navButtonTapped);
-		this.controller.stopListening(this.controller.get('your-lists-list'), Mojo.Event.listTap, this.listTapped);
-		this.controller.stopListening(this.controller.get('lists-you-follow-list'), Mojo.Event.listTap, this.listTapped);
-		this.controller.stopListening(this.controller.get('saved-searches-list'), Mojo.Event.listTap, this.searchListTapped);
-		this.controller.stopListening(this.controller.get('trending-topics-list'), Mojo.Event.listTap, this.searchListTapped);
+
+		var listen = [
+			[ 'sideScroller',			Mojo.Event.propertyChange,	this.sideScrollerChanged],
+			[ 'sideScroller',			'scroll',					this.sideScrollChanged	],
+			[ 'rt-others',				Mojo.Event.tap,				this.rtTapped			],
+			[ 'rt-yours',				Mojo.Event.tap,				this.rtTapped			],
+			[ 'rt-ofyou',				Mojo.Event.tap,				this.rtTapped			],
+			[ 'refresh',				Mojo.Event.tap,				this.refreshTapped		],
+			[ 'new-tweet',				Mojo.Event.tap,				this.newTweet			],
+			[ 'header-title',			Mojo.Event.tap,				this.headerTapped		],
+			[ 'shim',					Mojo.Event.tap,				this.shimTapped			],
+			[ 'nav-home',				Mojo.Event.tap,				this.navButtonTapped	],
+			[ 'nav-mentions',			Mojo.Event.tap,				this.navButtonTapped	],
+			[ 'nav-favorites',			Mojo.Event.tap,				this.navButtonTapped	],
+			[ 'nav-messages',			Mojo.Event.tap,				this.navButtonTapped	],
+			[ 'nav-lists',				Mojo.Event.tap,				this.navButtonTapped	],
+			[ 'nav-search',				Mojo.Event.tap,				this.navButtonTapped	],
+			[ 'your-lists-list',		Mojo.Event.listTap,			this.listTapped			],
+			[ 'lists-you-follow-list',	Mojo.Event.listTap,			this.listTapped			],
+			[ 'saved-searches-list',	Mojo.Event.listTap,			this.searchListTapped	],
+			[ 'trending-topics-list',	Mojo.Event.listTap,			this.searchListTapped	]
+		];
+		for (var i = 0, l; l = listen[i]; i++) {
+			try {
+				this.controller.stopListening(this.controller.get(l[0]), l[1], l[2]);
+			} catch (e) {
+				console.log('Failed to stop event listener #: ' + (i + 1));
+			}
+		}
+
+
+
+
 	},
 	activate: function(event) {
 		var body = this.controller.stageController.document.getElementsByTagName("body")[0];
