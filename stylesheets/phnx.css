@@ -1150,8 +1150,8 @@ span.link{
 	background: url(../images/low/profile-opts-tapped.png) center center no-repeat;
 }
 .profile-icon-wrapper {
-	padding: 8px 10px 5px 0px;
-	margin-top: 0px;
+	padding: 8px 0px 5px 0px;
+	margin: 0px;
 	text-align: center;
 	height: 30px;
 }
@@ -1176,7 +1176,8 @@ span.link{
 	opacity: .7;
 	-webkit-transition: all .2s;
 	overflow: hidden;
-	padding-right: 20px;
+	padding-right: 0px;
+	padding-left: 20px;
 }
 
 .large-device .profile-icon {
@@ -1207,28 +1208,28 @@ span.link{
 	opacity: 1;
 }
 .profile-icon.history {
-	background: url(../images/low/icons/profile-history.png) left center no-repeat;
+	background: url(../images/low/icons/profile-history.png)			center center no-repeat;
 }
 .profile-icon.history.active {
-	background: url(../images/low/icons/profile-history-tapped.png) left center no-repeat;
+	background: url(../images/low/icons/profile-history-tapped.png)		center center no-repeat;
 }
 .profile-icon.mentions {
-	background: url(../images/low/icons/profile-mentions.png) center left no-repeat;
+	background: url(../images/low/icons/profile-mentions.png)			center center no-repeat;
 }
 .profile-icon.mentions.active {
-	background: url(../images/low/icons/profile-mentions-tapped.png) left center no-repeat;
+	background: url(../images/low/icons/profile-mentions-tapped.png)	center center no-repeat;
 }
 .profile-icon.favorites {
-	background: url(../images/low/icons/profile-favorite.png) center left no-repeat;
+	background: url(../images/low/icons/profile-favorite.png)			center center no-repeat;
 }
 .profile-icon.favorites.active {
-	background: url(../images/low/icons/profile-favorite-tapped.png) left center no-repeat;
+	background: url(../images/low/icons/profile-favorite-tapped.png)	center center no-repeat;
 }
 .profile-icon.info {
-	background: url(../images/low/icons/profile-info.png) left center no-repeat;
+	background: url(../images/low/icons/profile-info.png)				center center no-repeat;
 }
 .profile-icon.info.active {
-	background: url(../images/low/icons/profile-info-tapped.png) left center no-repeat;
+	background: url(../images/low/icons/profile-info-tapped.png)		center center no-repeat;
 }
 #profile-menubar {
 	clear: both;
@@ -1242,6 +1243,9 @@ span.link{
 }
 .large-device #profile-menubar{
 	top: 169px;
+}
+.small-device #profile-menubar{
+	top: 149px;
 }
 #verified {
 	text-align: center;
