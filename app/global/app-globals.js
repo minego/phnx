@@ -188,46 +188,6 @@ var global = {
 		}
 	},
 
-	setTabOrder: function(body, tabOrder) {
-		var bar		= global.doc.getElementById("nav-bar");
-		var hide	= global.doc.getElementById("nav-bar-hidden");
-
-		/*
-			Move all children to the hidden div so that any that aren't being
-			used will not be included.
-		*/
-		while (bar.lastChild) {
-			hide.appendChild(bar.lastChild);
-		}
-
-		for (var i = 0, c; c = tabOrder.charAt(i); i++) {
-			switch (c.toLowerCase()) {
-				case "h":
-					bar.appendChild(global.doc.getElementById("nav-home"));
-					break;
-
-				case "m":
-					bar.appendChild(global.doc.getElementById("nav-mentions"));
-					break;
-
-				case "f":
-					bar.appendChild(global.doc.getElementById("nav-favorites"));
-					break;
-
-				case "d":
-					bar.appendChild(global.doc.getElementById("nav-messages"));
-					break;
-
-				case "l":
-					bar.appendChild(global.doc.getElementById("nav-lists"));
-					break;
-
-				case "s":
-					bar.appendChild(global.doc.getElementById("nav-search"));
-					break;
-			}
-		}
-	},
 	setFontSize: function(body, font) {
 		var fonts = ['tiny','small', 'medium', 'large','huge'];
 		for (var i=0; i < fonts.length; i++) {
