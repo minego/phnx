@@ -1,4 +1,5 @@
-// TODO: Remove the assistant parameter from many of these functions
+// TODO: Remove the assistant parameter from these functions
+// TODO: Remove the panel parameter from these functions. Use closures instead.
 // TODO: Allow custom API (for Chinese users)
 var TwitterAPI = function(user, stageController) {
 
@@ -13,8 +14,7 @@ var TwitterAPI = function(user, stageController) {
 
 	if (stageController) {
 		this.stage = stageController;
-	}
-	else {
+	} else {
 		this.stage = false;
 	}
 
@@ -200,7 +200,6 @@ TwitterAPI.prototype = {
 		}.bind(this));
 	},
 	sign: function(httpMethod, url, callback, args, meta) {
-
 		var currentUser;
 		var silent = false; // if true, errors are not reported on the screen.
 
@@ -235,6 +234,7 @@ TwitterAPI.prototype = {
 			params += key + '=' + encodeURIComponent(args[key]);
 			message.parameters.push([key, args[key]]);
 		}
+		console.log(httpMethod + ' ' + url + '?' + params);
 
 		OAuth.completeRequest(message, {
 			consumerKey: this.key,

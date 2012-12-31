@@ -220,6 +220,38 @@ MainAssistant.prototype = {
 						icon:		"nav-search"
 					};
 					break;
+
+// The following are examples of how to setup a list (more work to be done though)
+/*
+				case "l":
+					panel = {
+						title:		"webOS",
+						id:			"userlist",
+						type:		"timeline",
+						resource:	"listStatuses",
+						refresh:	true,
+						update:		true,
+						icon:		"nav-lists",
+						slug:		"webOS",
+						owner:		"_minego"
+					};
+					break;
+
+				case "s":
+					panel = {
+						title:		"geeks",
+						id:			"userlist",
+						type:		"timeline",
+						resource:	"listStatuses",
+						refresh:	true,
+						update:		true,
+						icon:		"nav-lists",
+						slug:		"geeks",
+						owner:		"_minego"
+					};
+					break;
+*/
+
 			}
 
 			if (panel) {
@@ -601,8 +633,7 @@ MainAssistant.prototype = {
 				}
 				event.stop();
 			}
-		}
-		else if (event.type === Mojo.Event.forward) {
+		} else if (event.type === Mojo.Event.forward) {
 			var prefs = new LocalStorage();
 			var onSwipe = prefs.read('forwardSwipe');
 			if (Ajax.activeRequestCount === 0) {
@@ -613,8 +644,7 @@ MainAssistant.prototype = {
 					this.refreshAll();
 				}
 			}
-		}
-		else if (typeof(event.command) !== 'undefined') {
+		} else if (typeof(event.command) !== 'undefined') {
 			if (event.command.indexOf('font-') > -1) {
 				this.changeFont(event.command);
 			}
@@ -915,6 +945,10 @@ MainAssistant.prototype = {
 
 		if (panel.refresh) {
 			setTimeout(function() {
+				if (!panel.model.items) {
+					panel.model.items = [];
+				}
+
 				if (panel.model.items.length > 0) {
 					// grab the second tweet for gap detection
 					var tweet = panel.model.items[1];
@@ -1051,13 +1085,24 @@ MainAssistant.prototype = {
 			args.max_id = maxId;
 		}
 		var Twitter = new TwitterAPI(this.user);
-		Twitter.timeline(panel, this.gotItems.bind(this), args, this);
+
+		var gotItemsCB = function(response, meta) {
+			this.gotItems(response, panel);
+		}.bind(this);
+
+		if (!panel.slug) {
+			Twitter.timeline(panel, gotItemsCB, args, this);
+		} else {
+			args['slug'] = panel.slug;
+			args['owner_screen_name'] = panel.owner;
+
+			Twitter.listStatuses(args, gotItemsCB);
+		}
 	},
-	gotItems: function(response, meta) {
+	gotItems: function(response, panel) {
 		// one-size-fits-all function to handle timeline updates
 		// Does lots of looping to update relative times. Needs optimization
 
-		var panel = meta.panel;
 		var model = panel.model;
 		var scroller = "scroller-" + panel.index;
 		var more = "more-" + panel.index;
@@ -1289,7 +1334,7 @@ MainAssistant.prototype = {
 					return((new Date(b.created_at)) - (new Date(a.created_at)));
 				});
 
-				this.gotItems({ responseJSON: joined }, m2);
+				this.gotItems({ responseJSON: joined }, panel);
 			}.bind(this), args, this, 'sentMessages');
 		}.bind(this), args, this);
 	},

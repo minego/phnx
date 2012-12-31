@@ -61,8 +61,7 @@ StatusAssistant.prototype = {
 		if (opts.items) {
 			// Items are already loaded, don't do a search
 			this.setupList(opts.items);
-		}
-		else {
+		} else {
 			// Search twitter for the items
 			var Twitter = new TwitterAPI(opts.user, this.controller.stageController);
 			Twitter.search(opts.query, function(r){
@@ -218,8 +217,7 @@ StatusAssistant.prototype = {
 				this.toasters.back();
 				event.stop();
 			}
-		}
-		else if (event.type === Mojo.Event.forward) {
+		} else if (event.type === Mojo.Event.forward) {
 			if (!this.loading) {
 				this.refreshTapped();
 			}
@@ -229,7 +227,6 @@ StatusAssistant.prototype = {
 		this.toasters.nuke();
 	},
 	newCardTapped: function(event) {
-Mojo.Log.info('newCardTapped');
 		var stageName = global.statusStage + global.stageId++;
 
 		var appController = Mojo.Controller.getAppController();
@@ -247,7 +244,6 @@ Mojo.Log.info('newCardTapped');
 		this.controller.stageController.popScene();
 	},
 	backTapped: function(event) {
-Mojo.Log.info('backTapped');
 		if (this.toasters.items.length > 0) {
 			this.toasters.back();
 		} else {
@@ -255,7 +251,6 @@ Mojo.Log.info('backTapped');
 		}
 	},
 	refreshTapped: function(event) {
-Mojo.Log.info('refreshTapped');
 		if (this.opts.type === 'search') {
 			this.refreshSearch();
 		} else {
@@ -326,7 +321,7 @@ Mojo.Log.info('refreshTapped');
 
 		global.setLayout(body,
 			prefs.read('barlayout'),
-			prefs.read('hideToolbar'),
+			false, // prefs.read('hideToolbar'),
 			prefs.read('hideTabs')
 		);
 
