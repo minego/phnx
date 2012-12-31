@@ -101,9 +101,8 @@ MainAssistant.prototype = {
 
 		/**
 			this.panels:
-				@id is used for html elements (and some misc stuff)
-				@index is used rarely
-				@position is used in panel templates
+				@id is used for identifying specific features of some columns
+				@index is used for html elements
 				@resource is used by the resource helper to figure out endpoint urls
 				@refresh tells if this panel should be refreshed globally
 				@update tells if this panel should be updated globally
@@ -232,14 +231,13 @@ MainAssistant.prototype = {
 					this.panelLabels.push(panel.title);
 				}
 
-				panel.index		= this.panels.length;
-				panel.position	= this.panels.length + 1;
-
 				if (!panel.model) {
 					panel.model = {};
 				}
-				panel.model.id		= panel.id;
+
+				panel.index			= this.panels.length;
 				panel.model.index	= panel.index;
+				panel.model.id		= panel.id;
 
 				this.panels.push(panel);
 
