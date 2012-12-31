@@ -141,15 +141,7 @@ MainAssistant.prototype = {
 		this.tabOrder		= prefs.read('taborder');
 		this.tabs			= this.tabOrder.split(',');
 		var bar				= this.controller.get('nav-bar');
-		var hide			= this.controller.get('nav-bar-hidden');
-
-		/*
-			Move all of the tab icons to a hidden div. Any that are being used
-			will be moved back.
-		*/
-		while (bar.lastChild) {
-			hide.appendChild(bar.lastChild);
-		}
+		var barhtml			= [];
 
 		/* Adjust the position of the tabs if there are less than the full 6 */
 		if (this.tabs.length < 6 && !this.largedevice) {
@@ -240,24 +232,35 @@ MainAssistant.prototype = {
 					this.panelLabels.push(panel.title);
 				}
 
-				if (panel.icon) {
-					bar.appendChild(this.controller.get(panel.icon));
-				}
-
 				panel.index		= this.panels.length;
 				panel.position	= this.panels.length + 1;
 
 				if (!panel.model) {
 					panel.model = {};
 				}
-				panel.model.id = panel.id;
+				panel.model.id		= panel.id;
+				panel.model.index	= panel.index;
 
 				this.panels.push(panel);
-			}
 
-			/* Always include the end cap */
-			bar.appendChild(this.controller.get('nav-endcap'));
+				if (this.panels.length <= 6 || this.largedevice) {
+					barhtml.push('<div id="nav-' + panel.index + '"');
+					barhtml.push('	class="nav-icon ' + panel.icon + '">');
+
+					if (this.largedevice) {
+						barhtml.push('<p>' + panel.title + '</p>');
+					}
+
+					barhtml.push('<div id="beacon-' + panel.index + '" class="beacon"></div>');
+					barhtml.push('</div>');
+				}
+			}
 		}
+
+		/* Always include the end cap */
+		barhtml.push('<div class="nav-icon nav-endcap"></div>');
+
+		bar.update(barhtml.join('\n'));
 
 		this.timeline = 0; //index position of the timeline, default to first one
 
@@ -390,9 +393,14 @@ MainAssistant.prototype = {
 
 			this.controller.get('scrollItems').update(panelHtml);
 
-			this.controller.setupWidget(panel.id + "-scroller",{mode: 'vertical'},{});
+			this.controller.setupWidget("scroller-" + j, {mode: 'vertical'},{});
 			if (panel.type === "timeline") {
-				this.controller.setupWidget('list-' + panel.id,{itemTemplate: "templates/tweets/item",listTemplate: "templates/list", renderLimit: this.renderLimit}, panel.model);
+				this.controller.setupWidget('list-' + panel.index, {
+					itemTemplate:	"templates/tweets/item",
+					listTemplate:	"templates/list",
+					renderLimit:	this.renderLimit
+				}, panel.model);
+
 				showThumbs = prefs.read('showThumbs'); // added by DC
 				showEmoji = prefs.read('showEmoji'); // added by DC
 
@@ -540,7 +548,7 @@ MainAssistant.prototype = {
 			this.controller.listen(btn, Mojo.Event.tap, this.moreButtonTapped.bind(this));
 		}
 
-		this.moveIndicator(null);
+		this.moveIndicator(0);
 
 		this.addListeners();
 		setTimeout(function(){
@@ -741,7 +749,7 @@ MainAssistant.prototype = {
 				totalWidth += this.panelWidth;
 
 				//each scroller needs a max height. otherwise they don't scroll
-				this.controller.get(this.panels[i].id + "-scroller").setStyle({"max-height": height + "px"});
+				this.controller.get("scroller-" + i).setStyle({"max-height": height + "px"});
 			}
 
 			//set the container width
@@ -762,10 +770,10 @@ MainAssistant.prototype = {
 	*/
 	scrollStarted: function(event) {
 		var		panel		= this;
-		var		scroller	= panel.assistant.controller.get(panel.id + '-scroller');
+		var		scroller	= panel.assistant.controller.get('scroller-' + panel.index);
 		var		pos;
 
-		panel.assistant.controller.get(panel.id + "-ptr-text").removeClassName('ptr-text-showing');
+		panel.assistant.controller.get("ptr-text-" + panel.index).removeClassName('ptr-text-showing');
 
 		/* Show the "release to refresh" text, after a delay */
 		if (panel.refresh) {
@@ -779,7 +787,7 @@ MainAssistant.prototype = {
 			panel.timeout = setTimeout(function() {
 				if ((pos = scroller.mojo.getScrollPosition()) && pos.top >= 1) {
 					panel.ptr = true;
-					panel.assistant.controller.get(panel.id + "-ptr-text").addClassName('ptr-text-showing');
+					panel.assistant.controller.get("ptr-text-" + panel.index).addClassName('ptr-text-showing');
 				}
 			}.bind(panel), 500);
 		}
@@ -795,7 +803,7 @@ MainAssistant.prototype = {
 	*/
 	scrollStopped: function(event) {
 		var		panel		= this;
-		var		scroller	= panel.assistant.controller.get(panel.id + '-scroller');
+		var		scroller	= panel.assistant.controller.get('scroller-' + panel.index);
 		var		pos;
 
 		clearTimeout(panel.timeout);
@@ -810,7 +818,7 @@ MainAssistant.prototype = {
 		panel.ptr = false;
 
 		/* Hide the "release to refresh" text */
-		panel.assistant.controller.get(panel.id + "-ptr-text").removeClassName('ptr-text-showing');
+		panel.assistant.controller.get("ptr-text-" + panel.index).removeClassName('ptr-text-showing');
 
 		if ((pos = scroller.mojo.getScrollPosition())) {
 			if (pos.top > 10 && Ajax.activeRequestCount === 0) {
@@ -827,11 +835,7 @@ MainAssistant.prototype = {
 		//hide the beacon and new content indicator on the old panel
 		var oldPanel = this.panels[this.timeline];
 		if (oldPanel && oldPanel.refresh) {
-			// newTweets = this.controller.select('#panel-' + oldPanel.id + ' .new-tweet');
-			// for (var i=0; i < newTweets.length; i++) {
-			//	this.controller.get(newTweets[i]).removeClassName('new-tweet');
-			// }
-			this.controller.get(oldPanel.id + '-beacon').removeClassName('show');
+			this.controller.get('beacon-' + oldPanel.index).removeClassName('show');
 		}
 
 		// Need to change index for timeline below if changing order of panels - DC
@@ -858,7 +862,7 @@ MainAssistant.prototype = {
 		// Move the indicator arrow
 
 		if (panel) {
-			this.moveIndicator(panel.id);
+			this.moveIndicator(panel.index);
 		}
 	},
 
@@ -1076,8 +1080,8 @@ MainAssistant.prototype = {
 
 		var panel = meta.panel;
 		var model = panel.model;
-		var scroller = panel.id + "-scroller";
-		var more = "more-" + panel.id;
+		var scroller = "scroller-" + panel.index;
+		var more = "more-" + panel.index;
 		var tweets = response.responseJSON;
 		var xCount = tweets.length;
 		var th = new TweetHelper();
@@ -1097,10 +1101,10 @@ MainAssistant.prototype = {
 
 		if (tweets.length > 1) {
 			if (!this.loadingMore) {
-				this.controller.get(panel.id + '-beacon').addClassName('show');
+				this.controller.get('beacon-' + panel.index).addClassName('show');
 			}
 		} else {
-			this.controller.get(panel.id + '-beacon').removeClassName('show');
+			this.controller.get('beacon-' + panel.index).removeClassName('show');
 		}
 
 		var scrollId = 0; // this is the INDEX (not ID, sorry) of the new tweet to scroll to
@@ -1202,10 +1206,9 @@ MainAssistant.prototype = {
 							model.items[k-1].cssClass = 'new-tweet';
 							model.myLastId = undefined;
 
-							this.controller.get(panel.id + '-beacon').addClassName('show');
-						}
-						else{
-							this.controller.get(panel.id + '-beacon').removeClassName('show');
+							this.controller.get('beacon-' + panel.index).addClassName('show');
+						} else {
+							this.controller.get('beacon-' + panel.index).removeClassName('show');
 						}
 						scrollId = k; // set the index of the new tweet to auto-scroll to
 						break; //no need to keep on iterating if we've found our match
@@ -1251,7 +1254,7 @@ MainAssistant.prototype = {
 
 		this.controller.modelChanged(panel.model);
 		if (scrollId !== 0) {
-			this.controller.get('list-' + panel.id).mojo.revealItem(scrollId, true);
+			this.controller.get('list-' + panel.index).mojo.revealItem(scrollId, true);
 		}
 		if (model.items.length === 0 || (this.loadingMore && tweets.length === 0)) {
 			this.controller.get(more).hide();
@@ -1370,37 +1373,10 @@ MainAssistant.prototype = {
 		}
 	},
 	moreButtonTapped: function(event) {
-		//update the index
-		//Block added by DC to fix LoadMore bug on TP
-		var i;
+		var id		= event.srcElement.id;
+		var index	= id.substr(id.indexOf('-') + 1);
 
-		for (i=0; i<5; i++){
-			switch (this.panelLabels[i]) {
-				case "home":
-					if(event.srcElement.id == "more-home") {
-						this.timeline = i;
-					}
-					break;
-				case "mentions":
-					if(event.srcElement.id == "more-mentions") {
-						this.timeline = i;
-					}
-					break;
-				case "favorites":
-					if(event.srcElement.id == "more-favorites") {
-						this.timeline = i;
-					}
-					break;
-				case "messages":
-					if(event.srcElement.id == "more-messages") {
-						this.timeline = i;
-					}
-					break;
-				default:
-					break;
-			}
-		}//end block DC
-
+		this.timeline = index;
 		this.loadMore(this.timeline);
 	},
 	windowResized: function(event) {
@@ -1546,21 +1522,12 @@ MainAssistant.prototype = {
 			return this.addCommas(count);
 		}
 	},
-	moveIndicator: function(panelId) {
-		var i		= 0;
-		var l		= 0;
-		var panel	= null;
-
-		if (panelId) {
-			for (i = 0; panel = this.panels[i]; i++) {
-				if (panel.id === panelId) {
-					break;
-				}
-			}
-		}
+	moveIndicator: function(index) {
+		var panel	= this.panels[index];
+		var l;
 
 		l = 20;
-		l += (i * 53);
+		l += (index * 53);
 
 		/* If we have less than 6 icons account for the offset */
 		l += parseInt((6 - this.tabs.length) * (53 / 2));
@@ -1577,21 +1544,13 @@ MainAssistant.prototype = {
 			src = src.parentNode;
 		}
 
-		var id = src.id;
-		var panelId = id.substr(id.indexOf('-') + 1);
-		var panelIndex;
-
-		// Get the index of the panel for the nav item
-		for (var i = 0, p; p = this.panels[i]; i++) {
-			if (p.id === panelId) {
-				panelIndex = i;
-			}
-		}
+		var id			= src.id.substr(src.id.indexOf('-') + 1);
+		var panelIndex	= parseInt(id);
 
 		// If it's the current panel, scroll to the top otherwise, scroll to
 		// that panel
 		if (this.timeline === panelIndex || screenWidth > this.panelWidth) {
-			var scroller = this.controller.get(panelId + '-scroller');
+			var scroller = this.controller.get('scroller-' + panelIndex);
 
 			if (scroller) {
 				var position = scroller.mojo.getScrollPosition();
@@ -1715,15 +1674,6 @@ MainAssistant.prototype = {
 		}
 	},
 	addListeners: function(event) {
-		for (var j=0; j < this.panels.length; j++) {
-			var panel = this.panels[j];
-
-			panel.assistant = this;
-
-			this.controller.listen(this.controller.get(panel.id + '-scroller'), Mojo.Event.dragStart, this.scrollStarted.bind(panel));
-			this.controller.listen(this.controller.get(panel.id + '-scroller'), Mojo.Event.dragEnd, this.scrollStopped.bind(panel));
-		}
-
 		this.controller.listen(this.controller.window, 'resize', this.windowResized.bind(this));
 
 		/*
@@ -1732,7 +1682,7 @@ MainAssistant.prototype = {
 			This loop is setup to allow for errors because some of these targets
 			will not exist depending on which tabs are configured.
 		*/
-		var listen = [
+		this.listeners = [
 			[ 'sideScroller',			Mojo.Event.propertyChange,	this.sideScrollerChanged],
 			[ 'sideScroller',			'scroll',					this.sideScrollChanged	],
 			[ 'rt-others',				Mojo.Event.tap,				this.rtTapped			],
@@ -1742,18 +1692,25 @@ MainAssistant.prototype = {
 			[ 'new-tweet',				Mojo.Event.tap,				this.newTweet			],
 			[ 'header-title',			Mojo.Event.tap,				this.headerTapped		],
 			[ 'shim',					Mojo.Event.tap,				this.shimTapped			],
-			[ 'nav-home',				Mojo.Event.tap,				this.navButtonTapped	],
-			[ 'nav-mentions',			Mojo.Event.tap,				this.navButtonTapped	],
-			[ 'nav-favorites',			Mojo.Event.tap,				this.navButtonTapped	],
-			[ 'nav-messages',			Mojo.Event.tap,				this.navButtonTapped	],
-			[ 'nav-lists',				Mojo.Event.tap,				this.navButtonTapped	],
-			[ 'nav-search',				Mojo.Event.tap,				this.navButtonTapped	],
 			[ 'your-lists-list',		Mojo.Event.listTap,			this.listTapped			],
 			[ 'lists-you-follow-list',	Mojo.Event.listTap,			this.listTapped			],
 			[ 'saved-searches-list',	Mojo.Event.listTap,			this.searchListTapped	],
 			[ 'trending-topics-list',	Mojo.Event.listTap,			this.searchListTapped	]
 		];
-		for (var i = 0, l; l = listen[i]; i++) {
+
+		/* Include a listener for each nav icon that was generated */
+		for (var i = 0, panel; panel = this.panels[i]; i++) {
+			if (this.largedevice || i < 6) {
+				this.listeners.push([ 'nav-' + i,
+										Mojo.Event.tap,				this.navButtonTapped	]);
+			}
+
+			panel.assistant = this;
+			this.controller.listen(this.controller.get('scroller-' + i), Mojo.Event.dragStart, this.scrollStarted.bind(panel));
+			this.controller.listen(this.controller.get('scroller-' + i), Mojo.Event.dragEnd, this.scrollStopped.bind(panel));
+		}
+
+		for (var i = 0, l; l = this.listeners[i]; i++) {
 			try {
 				var target;
 
@@ -1808,36 +1765,13 @@ MainAssistant.prototype = {
 	},
 	stopListening: function() {
 		for (var j=0; j < this.panels.length; j++) {
-			var panel = this.panels[j];
-
-			this.controller.stopListening(this.controller.get(panel.id + '-scroller'), Mojo.Event.dragStart, this.scrollStarted);
-			this.controller.stopListening(this.controller.get(panel.id + '-scroller'), Mojo.Event.dragEnd, this.scrollStopped);
+			this.controller.stopListening(this.controller.get('scroller-' + j), Mojo.Event.dragStart, this.scrollStarted);
+			this.controller.stopListening(this.controller.get('scroller-' + j), Mojo.Event.dragEnd, this.scrollStopped);
 		}
 
 		this.controller.stopListening(this.controller.window, 'resize', this.windowResized);
 
-		var listen = [
-			[ 'sideScroller',			Mojo.Event.propertyChange,	this.sideScrollerChanged],
-			[ 'sideScroller',			'scroll',					this.sideScrollChanged	],
-			[ 'rt-others',				Mojo.Event.tap,				this.rtTapped			],
-			[ 'rt-yours',				Mojo.Event.tap,				this.rtTapped			],
-			[ 'rt-ofyou',				Mojo.Event.tap,				this.rtTapped			],
-			[ 'refresh',				Mojo.Event.tap,				this.refreshTapped		],
-			[ 'new-tweet',				Mojo.Event.tap,				this.newTweet			],
-			[ 'header-title',			Mojo.Event.tap,				this.headerTapped		],
-			[ 'shim',					Mojo.Event.tap,				this.shimTapped			],
-			[ 'nav-home',				Mojo.Event.tap,				this.navButtonTapped	],
-			[ 'nav-mentions',			Mojo.Event.tap,				this.navButtonTapped	],
-			[ 'nav-favorites',			Mojo.Event.tap,				this.navButtonTapped	],
-			[ 'nav-messages',			Mojo.Event.tap,				this.navButtonTapped	],
-			[ 'nav-lists',				Mojo.Event.tap,				this.navButtonTapped	],
-			[ 'nav-search',				Mojo.Event.tap,				this.navButtonTapped	],
-			[ 'your-lists-list',		Mojo.Event.listTap,			this.listTapped			],
-			[ 'lists-you-follow-list',	Mojo.Event.listTap,			this.listTapped			],
-			[ 'saved-searches-list',	Mojo.Event.listTap,			this.searchListTapped	],
-			[ 'trending-topics-list',	Mojo.Event.listTap,			this.searchListTapped	]
-		];
-		for (var i = 0, l; l = listen[i]; i++) {
+		for (var i = 0, l; l = this.listeners[i]; i++) {
 			try {
 				var target;
 

@@ -353,36 +353,37 @@ body.no-gesture {  /* touchpad/emulator */
 	}
 }
 
-#nav-home {
+.nav-home {
 	background: url('../images/low/icons/tweets.png')		18px center	no-repeat,
 				url('../images/low/nav-icon-border.png')	left 2px	no-repeat;
 }
-#nav-mentions {
+.nav-mentions {
 	background: url('../images/low/icons/mentions.png')		19px center	no-repeat,
 				url('../images/low/nav-icon-border.png')	left 2px	no-repeat;
 }
-#nav-messages {
+.nav-messages {
 	background: url('../images/low/icons/messages.png')		19px center	no-repeat,
 				url('../images/low/nav-icon-border.png')	left 2px	no-repeat;
 }
-#nav-favorites {
+.nav-favorites {
 	background: url('../images/low/icons/favorite.png')		19px center	no-repeat,
 				url('../images/low/nav-icon-border.png')	left 2px	no-repeat;
 
 	/* The favorite icon is larger since it is used in other places */
 	background-size: 16px, auto auto;
 }
-#nav-lists {
+.nav-lists {
 	background: url('../images/low/icons/lists.png')		19px center	no-repeat,
 				url('../images/low/nav-icon-border.png')	left 2px	no-repeat;
 }
-#nav-search {
+.nav-search {
 	background: url('../images/low/icons/search.png')		20px center	no-repeat,
 				url('../images/low/nav-icon-border.png')	left 2px	no-repeat;
 }
 
-#nav-endcap {
+.nav-endcap {
 	background: url('../images/low/nav-icon-border.png')	left 2px	no-repeat;
+	width:		2px;
 }
 
 .beacon {
