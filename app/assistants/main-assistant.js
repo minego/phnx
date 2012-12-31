@@ -617,10 +617,7 @@ MainAssistant.prototype = {
 			}
 		}
 		else if (typeof(event.command) !== 'undefined') {
-			if (event.command.indexOf('theme-') > -1) {
-				this.switchTheme(event.command);
-			}
-			else if (event.command.indexOf('font-') > -1) {
+			if (event.command.indexOf('font-') > -1) {
 				this.changeFont(event.command);
 			}
 			else if (event.command.indexOf('account-') > -1) {
@@ -685,22 +682,6 @@ MainAssistant.prototype = {
 				this.controller.stageController.pushScene("ril-login");
 			}
 		}
-	},
-	switchTheme: function(command) {
-		// var theme = command.substr(command.indexOf('-') + 1);
-		// var classes = this.controller.select('body')[0].classNames();
-		// var i;
-		// for (i=0; i < classes.length; i++) {
-		//	this.controller.select('body')[0].removeClassName(classes[i]);
-		// }
-		//
-		// this.controller.select('body')[0].addClassName(theme);
-		//
-		// //add cookie to save theme
-		// var themeCookie = new Mojo.Model.Cookie('phnxTheme');
-		// themeCookie.put({
-		//	className: theme
-		// });
 	},
 	changeFont: function(cmdFont) {
 		var font = cmdFont.substr(cmdFont.indexOf('-') + 1);
@@ -1669,6 +1650,7 @@ MainAssistant.prototype = {
 	},
 	stageActivate: function(event) {
 		var prefs = new LocalStorage();
+
 		if (prefs.read('refreshOnMaximize')) {
 			this.refreshAll();
 		}
@@ -1807,6 +1789,8 @@ MainAssistant.prototype = {
 		);
 
 		var tabOrder = prefs.read('taborder');
+console.log("old order: " + this.tabOrder);
+console.log("new order: " + tabOrder);
 
 		if (this.tabOrder && tabOrder && tabOrder !== this.tabOrder) {
 			/*

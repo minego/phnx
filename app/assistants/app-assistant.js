@@ -157,8 +157,7 @@ AppAssistant.prototype = {
 		var userStage = this.controller.getStageProxy(stageName);
 		if (!userStage) {
 			this.controller.createStageWithCallback(args, pushMainScene, "card");
-		}
-		else {
+		} else {
 			userStage.activate();
 		}
 	},

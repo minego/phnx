@@ -108,12 +108,6 @@ var global = {
 		// Amount of active requests
 		stageController.requests = 0;
 
-		// stageController.handleCommand = function(event) {
-		// 	if (event.command === 'cmdPreferences') {
-		// 		stageController.pushScene('preferences');
-		// 	}
-		// };
-
 		var activate = function(event) {
 			Mojo.Log.info('activate scene');
 
@@ -129,13 +123,13 @@ var global = {
 			if (prefs.read('refreshOnMaximize')) {
 				stageController.delegateToSceneAssistant('refreshAll');
 			}
+			stageController.delegateToSceneAssistant('activate');
 
 			// save a reference to the stage's document
 			global.doc = stageController.document;
 			Mojo.Log.info('stage doc set');
 			// Hide the account shim if it is shown
 			stageController.document.getElementById('account-shim').className = 'ignore';
-
 		};
 
 		var deactivate = function(event) {
