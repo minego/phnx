@@ -12,7 +12,6 @@ function LocalStorage() {
 		enterToSend: false,
 		fontSize: 'small',
 		barlayout: 'swapped',
-		taborder: 'h,m,f,d,l,s',
 		theme: 'pure',
 		api: 'https://api.twitter.com',
 		defaultAccount: '0',
@@ -31,54 +30,82 @@ function LocalStorage() {
 		refreshOnMaximize: false,
 		autoCorrect: true,
 		filters: [],
-		version: null
+		version: null,
+
+// TODO	taborder is going away, being replaced by tabs (as json)
+		taborder: 'h,m,f,d,l,s',
+		tabs: [
+			{ "type": "h" },
+			{ "type": "m" },
+			{ "type": "f" },
+			{ "type": "d" },
+			{ "type": "l" },
+			{ "type": "s" }
+		]
+	};
+
+	/*
+		These preferences should be read with a user ID and are specific to a
+		account.
+	*/
+	this.peraccount = {
+		tabs: true
 	};
 
 	this.cookie = new Mojo.Model.Cookie('phnxStore');
 
 	if (typeof(this.cookie.get()) !== 'undefined') {
 		this.data = this.cookie.get();
-	}
-	else {
+	} else {
 		this.data = this.defaults;
 	}
 }
 
 LocalStorage.prototype = {
-	read: function(key) {
-		if (typeof(this.data[key]) !== 'undefined') {
-			// Attempt to read the key from the cookie
+	read: function(key, accountid) {
+		/* Attempt to read the key from the cookie */
+		var value = this.data[key];
 
+		if (typeof(value) !== 'undefined') {
 			if (key == 'cardIcons') {
-				// Update old settings. This used to be a bool
-				if (this.data[key] === true) {
-					this.data[key] = 'auto';
-				} else if (this.data[key] === false) {
-					this.data[key] = 'never';
+				/* Update old settings. This used to be a bool */
+				if (value === true) {
+					value = 'auto';
+				} else if (value === false) {
+					value = 'never';
 				}
 			}
 
-/*
-			if (key == 'taborder') {
-				// Temporarily disabling tab order setting
-				return(this.defaults[key]);
+			if (this.peraccount[key]) {
+				/* If there is a value for this user then return it */
+				if (typeof(value[accountid.toString()]) !== 'undefined') {
+					return(value[accountid.toString()]);
+				}
+			} else {
+				return(value);
 			}
-*/
+		}
 
-			return this.data[key];
-		}
-		else if (typeof(this.defaults[key]) != 'undefined') {
-			// Check the defaults if it doesn't exist
-			return this.defaults[key];
-		}
-		else {
-			// Return null if it doesn't exist.
+		if (typeof(this.defaults[key]) != 'undefined') {
+			return(this.defaults[key]);
+		} else {
+			/* Return null if it doesn't exist. */
 			Mojo.Log.error('Key ' + key + ' doesn\'t exist.');
-			return null;
+			return(null);
 		}
 	},
-	write: function(key, value) {
-		this.data[key] = value;
+
+	write: function(key, value, accountid) {
+		if (this.peraccount[key]) {
+			if (!this.data[key]) {
+				this.data[key] = {};
+			}
+
+			this.data[key][accountid.toString()] = value;
+		} else {
+			this.data[key] = value;
+		}
+
 		this.cookie.put(this.data);
 		Mojo.Log.info('Saved ' + key + ': ' + value);
 	}

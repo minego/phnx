@@ -11,8 +11,6 @@ function MainAssistant(opts) {
 	this.favStatusChanged = false; // added by DC
 	this.loading = false;
 
-	this.panelLabels = [ "home", "mentions", "favorites", "messages", "lists", "search"];
-
 	this.savedSearchesLoaded = false;
 	this.searchLoaded = false;
 	this.switcher = false;
@@ -53,8 +51,10 @@ MainAssistant.prototype = {
 		// Start the background notifications timer
 		global.setTimer();
 
-		this.user = this.controller.stageController.user;
-		this.users = this.controller.stageController.users;
+		this.user	= this.controller.stageController.user;
+		this.users	= this.controller.stageController.users || [ this.user ];
+		var prefs	= new LocalStorage();
+		var tmp;
 
 		// These nouns are used in the "X New {Noun}" message
 		this.nouns = {
@@ -63,55 +63,6 @@ MainAssistant.prototype = {
 			'messages':		'Direct Message',
 			'favorites':	'Favorite'
 		};
-
-		var i;
-		var homeItems		= this.user.home		|| [];
-		var mentionsItems	= this.user.mentions	|| [];
-		var favoriteItems	= this.user.favorites	|| [];
-		var messagesItems	= this.user.messages	|| [];
-
-		// A very sloppy and inelegant way to update the times of these tweets.
-		// TODO: Fix this abomination
-		var th = new TweetHelper();
-		var tweet, d;
-
-		for (i=0; i < homeItems.length; i++) {
-			tweet = homeItems[i];
-			d = new Date(tweet.created_at);
-			tweet.time_str = d.toRelativeTime(1500);
-		}
-
-		for (i=0; i < mentionsItems.length; i++) {
-			tweet = mentionsItems[i];
-			d = new Date(tweet.created_at);
-			tweet.time_str = d.toRelativeTime(1500);
-		}
-
-		for (i=0; i < favoriteItems.length; i++) {
-			tweet = favoriteItems[i];
-			d = new Date(tweet.created_at);
-			tweet.time_str = d.toRelativeTime(1500);
-		}
-
-		for (i=0; i < messagesItems.length; i++) {
-			tweet = messagesItems[i];
-			d = new Date(tweet.created_at);
-			tweet.time_str = d.toRelativeTime(1500);
-		}
-
-		/**
-			this.panels:
-				@id is used for identifying specific features of some columns
-				@index is used for html elements
-				@resource is used by the resource helper to figure out endpoint urls
-				@refresh tells if this panel should be refreshed globally
-				@update tells if this panel should be updated globally
-
-			TODO: make panels truly dynamic
-		**/
-
-		var prefs = new LocalStorage();
-		var tmp;
 
 		/* Update old settings */
 		if ((tmp = prefs.read('barlayout'))) {
@@ -137,22 +88,38 @@ MainAssistant.prototype = {
 		/* Set the panel order based on the user's preferred tab order */
 		this.panels			= [];
 		this.panelLabels	= [];
-		this.tabOrder		= prefs.read('taborder');
-		this.tabs			= this.tabOrder.split(',');
+		this.tabs			= prefs.read('tabs', this.user.id);
 		var bar				= this.controller.get('nav-bar');
 		var barhtml			= [];
+		var th				= new TweetHelper();
 
-		/* Adjust the position of the tabs if there are less than the full 6 */
+		/*
+			On a phone the tabs are sized such that it can fit 6. If there are
+			less then the bar needs to be centered.
+		*/
 		if (this.tabs.length < 6 && !this.largedevice) {
 			bar.setStyle({
 				marginLeft: parseInt((6 - this.tabs.length) * (53 / 2)) + 'px'
 			});
 		}
 
+		/**
+			this.panels:
+				@id is used for identifying specific features of some columns
+				@index is used for html elements
+				@resource is used by the resource helper to figure out endpoint urls
+				@refresh tells if this panel should be refreshed globally
+				@update tells if this panel should be updated globally
+		**/
 		for (var i = 0, tab; tab = this.tabs[i]; i++) {
-			var panel = null;
+			var panel	= null;
+			var user	= this.getAccount(tab.account);
 
-			switch (tab.toLowerCase().charAt(0)) {
+			if (!user) {
+				continue;
+			}
+
+			switch (tab.type.toLowerCase().charAt(0)) {
 				case "h":
 					panel = {
 						id:			"home",
@@ -160,7 +127,6 @@ MainAssistant.prototype = {
 						resource:	"home",
 						refresh:	true,
 						update:		true,
-						model:		{ items: homeItems },
 						icon:		"nav-home"
 					};
 					break;
@@ -172,7 +138,6 @@ MainAssistant.prototype = {
 						resource:	"mentions",
 						refresh:	true,
 						update:		true,
-						model:		{ items: mentionsItems },
 						icon:		"nav-mentions"
 					};
 					break;
@@ -184,7 +149,6 @@ MainAssistant.prototype = {
 						resource:	"userFavorites",
 						refresh:	true,
 						update:		true,
-						model:		{ items: favoriteItems },
 						icon:		"nav-favorites"
 					};
 					break;
@@ -196,19 +160,34 @@ MainAssistant.prototype = {
 						resource:	"messages",
 						refresh:	true,
 						update:		true,
-						model:		{ items: messagesItems },
 						icon:		"nav-messages"
 					};
 					break;
 
 				case "l":
-					panel = {
-						id:			"lists",
-						type:		"lists",
-						refresh:	false,
-						update:		false,
-						icon:		"nav-lists"
-					};
+					if (tab.slug && tab.owner) {
+						var id = 'list:' + tab.owner + '/' + tab.slug;
+
+						/* A specific list */
+						panel = {
+							title:		tab.slug,
+							id:			id,
+							type:		"timeline",
+							resource:	"listStatuses",
+							refresh:	true,
+							update:		true,
+							icon:		"nav-lists"
+						};
+					} else {
+						/* Show the lists that the user has and/or follows */
+						panel = {
+							id:			"lists",
+							type:		"lists",
+							refresh:	false,
+							update:		false,
+							icon:		"nav-lists"
+						};
+					}
 					break;
 
 				case "s":
@@ -220,41 +199,22 @@ MainAssistant.prototype = {
 						icon:		"nav-search"
 					};
 					break;
-
-// The following are examples of how to setup a list (more work to be done though)
-/*
-				case "l":
-					panel = {
-						title:		"webOS",
-						id:			"userlist",
-						type:		"timeline",
-						resource:	"listStatuses",
-						refresh:	true,
-						update:		true,
-						icon:		"nav-lists",
-						slug:		"webOS",
-						owner:		"_minego"
-					};
-					break;
-
-				case "s":
-					panel = {
-						title:		"geeks",
-						id:			"userlist",
-						type:		"timeline",
-						resource:	"listStatuses",
-						refresh:	true,
-						update:		true,
-						icon:		"nav-lists",
-						slug:		"geeks",
-						owner:		"_minego"
-					};
-					break;
-*/
-
 			}
 
 			if (panel) {
+				/* Load any cached items */
+				panel.model = {
+					items: user[panel.id] || []
+				};
+
+				/* Update the timestamps */
+				for (var x = 0, tweet; tweet = panel.model.items[x]; x++) {
+					var d = new Date(tweet.created_at);
+					tweet.time_str = d.toRelativeTime(1500);
+				}
+
+				panel.tab = tab;
+
 				if (!panel.title) {
 					panel.title = panel.id;
 				}
@@ -263,13 +223,8 @@ MainAssistant.prototype = {
 					this.panelLabels.push(panel.title);
 				}
 
-				if (!panel.model) {
-					panel.model = {};
-				}
-
 				panel.index			= this.panels.length;
 				panel.model.index	= panel.index;
-				panel.model.id		= panel.id;
 
 				this.panels.push(panel);
 
@@ -311,8 +266,7 @@ MainAssistant.prototype = {
 					command: 'account-' + this.users[i].id
 				});
 			}
-		}
-		else {
+		} else {
 			var me = {
 				label: '@' + this.user.username,
 				command: 'account-' + this.user.id
@@ -566,13 +520,13 @@ MainAssistant.prototype = {
 			}
 		);
 
-		//listen to the lists
+		// listen to the lists
 		for (i=0; i < timelineLists.length; i++) {
 			var el = timelineLists[i];
 			this.controller.listen(el, Mojo.Event.listTap, this.tweetTapped.bind(this));
 		}
 
-		//listen to the load more buttons
+		// listen to the load more buttons
 		for (i=0; i < loadMoreBtns.length; i++) {
 			var btn = loadMoreBtns[i];
 			this.controller.listen(btn, Mojo.Event.tap, this.moreButtonTapped.bind(this));
@@ -581,7 +535,7 @@ MainAssistant.prototype = {
 		this.moveIndicator(0);
 
 		this.addListeners();
-		setTimeout(function(){
+		setTimeout(function() {
 			var prefs = new LocalStorage();
 
 			if (prefs.read('refreshFlushAtLaunch') == false) {
@@ -594,8 +548,17 @@ MainAssistant.prototype = {
 				}
 			}
 
+			// TODO	Either make these work for each account or don't let you
+			//		add that column for alternate accounts...
+			//
+			//		Same goes for search. It probably doesn't make much sense
+			//		to do search from different accounts anyway.
+			//
+			//		Also it doesn't make sense to load the lists and get RTs if
+			//		that panel isn't configured...
 			this.loadLists();
 			this.getRetweeted();
+
 			// get the avatar for the minimized card
 			this.getUserAvatar();
 
@@ -618,17 +581,14 @@ MainAssistant.prototype = {
 			if (this.toasters.items.length > 0) {
 				if (this.imagePreview) {
 					this.toasters.items[this.toasters.items.length - 1].closePreview();
-				}
-				//block added by DC
-				else if (this.favStatusChanged) {
+				} else if (this.favStatusChanged) {
 					if (refresh) {
 						this.refresh();
 					}
 					this.favStatusChanged = false;
 
 					this.toasters.back();
-				}//end block
-				else {
+				} else {
 					this.toasters.back();
 				}
 				event.stop();
@@ -639,23 +599,19 @@ MainAssistant.prototype = {
 			if (Ajax.activeRequestCount === 0) {
 				if (onSwipe === 'current') {
 					this.refresh();
-				}
-				else if (onSwipe === 'all') {
+				} else if (onSwipe === 'all') {
 					this.refreshAll();
 				}
 			}
 		} else if (typeof(event.command) !== 'undefined') {
 			if (event.command.indexOf('font-') > -1) {
 				this.changeFont(event.command);
-			}
-			else if (event.command.indexOf('account-') > -1) {
+			} else if (event.command.indexOf('account-') > -1) {
 				var userId = event.command.substr(event.command.indexOf('-') + 1);
 				this.openAccount(userId);
-			}
-			else if (event.command === 'cmdNewAccount') {
+			} else if (event.command === 'cmdNewAccount') {
 				this.newAccountTapped();
-			}
-			else if (event.command === 'cmdMyProfile') {
+			} else if (event.command === 'cmdMyProfile') {
 				// this.showProfile(this.user.username, true);
 				var Twitter = new TwitterAPI(this.user);
 				Twitter.getUser(this.user.username, function(response){
@@ -664,16 +620,13 @@ MainAssistant.prototype = {
 						disableSceneScroller: true
 					}, response.responseJSON);
 				}.bind(this));
-			}
-			else if (event.command === 'cmdNewTweet') {
+			} else if (event.command === 'cmdNewTweet') {
 				this.newTweet();
-			}
-			else if (event.command === 'cmdRefresh') {
+			} else if (event.command === 'cmdRefresh') {
 				if (Ajax.activeRequestCount === 0) {
 					this.refreshAll();
 				}
-			}
-			else if (event.command === 'cmdRefreshFlush') {
+			} else if (event.command === 'cmdRefreshFlush') {
 				var screenWidth = this.controller.window.innerWidth;
 				if (Ajax.activeRequestCount === 0) {
 					//Need to refresh all on Touchpad - DC
@@ -687,26 +640,19 @@ MainAssistant.prototype = {
 						}
 					}
 				}
-			}
-			else if (event.command === 'cmdFindUser') {
+			} else if (event.command === 'cmdFindUser') {
 				this.toasters.add(new LookupToaster(this));
-			}
-			else if (event.command === 'cmdAddFilter') {
+			} else if (event.command === 'cmdAddFilter') {
 				this.toasters.add(new AddFilterToaster(this));
-			}
-			else if (event.command === 'cmdManageTabs') {
+			} else if (event.command === 'cmdManageTabs') {
 				this.toasters.add(new ManageTabsToaster(this));
-			}
-			else if (event.command === 'cmdManageFilters') {
+			} else if (event.command === 'cmdManageFilters') {
 				this.toasters.add(new ManageFiltersToaster(this));
-			}
-			else if (event.command === 'cmdChangelog') {
+			} else if (event.command === 'cmdChangelog') {
 				this.toasters.add(new ChangelogToaster(this));
-			}
-			else if (event.command === 'cmdRemoveAccount') {
+			} else if (event.command === 'cmdRemoveAccount') {
 				this.logout();
-			}
-			else if (event.command === 'cmdLoginRil') {
+			} else if (event.command === 'cmdLoginRil') {
 				this.controller.stageController.pushScene("ril-login");
 			}
 		}
@@ -780,9 +726,12 @@ MainAssistant.prototype = {
 	scrollStarted: function(event) {
 		var		panel		= this;
 		var		scroller	= panel.assistant.controller.get('scroller-' + panel.index);
+		var		ptr			= panel.assistant.controller.get('ptr-text-' + panel.index);
 		var		pos;
 
-		panel.assistant.controller.get("ptr-text-" + panel.index).removeClassName('ptr-text-showing');
+		if (ptr) {
+			ptr.removeClassName('ptr-text-showing');
+		}
 
 		/* Show the "release to refresh" text, after a delay */
 		if (panel.refresh) {
@@ -796,7 +745,10 @@ MainAssistant.prototype = {
 			panel.timeout = setTimeout(function() {
 				if ((pos = scroller.mojo.getScrollPosition()) && pos.top >= 1) {
 					panel.ptr = true;
-					panel.assistant.controller.get("ptr-text-" + panel.index).addClassName('ptr-text-showing');
+
+					if (ptr) {
+						ptr.addClassName('ptr-text-showing');
+					}
 				}
 			}.bind(panel), 500);
 		}
@@ -895,6 +847,7 @@ MainAssistant.prototype = {
 	loadSearch: function() {
 		// Loads saved searches and trending topics
 		var Twitter = new TwitterAPI(this.user);
+
 		Twitter.trends(function(response){
 			var resp = response.responseJSON;
 			var trends = resp[0].trends;
@@ -928,10 +881,19 @@ MainAssistant.prototype = {
 		}
 	},
 	refreshFollowing: function() {
-		var Twitter = new TwitterAPI(this.user);
-		Twitter.getFriends(this.user.id, function(r) {
-			global.following = r;
-		}.bind(this));
+		global.following = [];
+
+		for (var i = 0, u; u = this.users[i]; i++) {
+			var Twitter = new TwitterAPI(user);
+
+			Twitter.getFriends(this.user.id, function(r) {
+				var		f;
+
+				while ((f = r.shift())) {
+					global.following.push(f);
+				}
+			});
+		}
 	},
 	refresh: function() {
 		this.refreshPanel(this.panels[this.timeline]);
@@ -940,10 +902,11 @@ MainAssistant.prototype = {
 		this.refreshPanel(this.getPanel(id));
 	},
 	refreshPanel: function(panel) {
-		this.loadingMore = false;
-		var lastId = undefined;
-
 		if (panel.refresh) {
+			var lastId = undefined;
+
+			this.loadingMore = false;
+
 			setTimeout(function() {
 				if (!panel.model.items) {
 					panel.model.items = [];
@@ -956,18 +919,13 @@ MainAssistant.prototype = {
 					if (tweet) {
 						if (tweet.is_rt) {
 							lastId = tweet.original_id;
-						}
-						else{
+						} else {
 							lastId = tweet.id_str;
 						}
 					}
 				}
 
-				if (panel.id === 'messages') {
-					this.getDMs(panel, lastId);
-				} else {
-					this.getTweets(panel, lastId);
-				}
+				this.getTweets(panel, lastId);
 			}.bind(this), 200);
 		} else if (panel.id === 'search') {
 			this.loadSearch();
@@ -984,8 +942,7 @@ MainAssistant.prototype = {
 				if (tweet) {
 					if (tweet.is_rt) {
 						panel.model.myLastId = tweet.original_id;
-					}
-					else{
+					} else {
 						panel.model.myLastId = tweet.id_str;
 					}
 				}
@@ -1003,8 +960,7 @@ MainAssistant.prototype = {
 				if (tweet) {
 					if (tweet.is_rt) {
 						lastId = tweet.original_id;
-					}
-					else{
+					} else {
 						lastId = tweet.id_str;
 					}
 				}
@@ -1014,13 +970,8 @@ MainAssistant.prototype = {
 //			panel.model.items.length = 0;
 
 
-			if (panel.id === 'messages') {
-				this.getDMs(panel, lastId);
-			} else {
-				this.getTweets(panel, lastId);
-			}
-		}
-		else if (panel.id === 'search') {
+			this.getTweets(panel, lastId);
+		} else if (panel.id === 'search') {
 			this.loadSearch();
 		}
 	},
@@ -1064,242 +1015,13 @@ MainAssistant.prototype = {
             var maxId = model.items[model.items.length - 1].id_str;
             var panel = this.panels[this.timeline];
 
-            if (panel.id === 'messages') {
-                this.getDMs(panel, undefined, maxId);
-            } else {
-                this.getTweets(panel, undefined, maxId);
-            }
+			this.getTweets(panel, undefined, maxId);
         }
 	},
-	getTweets: function(panel, lastId, maxId) {
-		var args = {
-			'count':			this.count,
-			'include_entities':	'true',
-			'include_rts':		'1'
-		};
 
-		if (lastId) {
-			args.since_id = lastId;
-		}
-		if (maxId) {
-			args.max_id = maxId;
-		}
-		var Twitter = new TwitterAPI(this.user);
-
-		var gotItemsCB = function(response, meta) {
-			this.gotItems(response, panel);
-		}.bind(this);
-
-		if (!panel.slug) {
-			Twitter.timeline(panel, gotItemsCB, args, this);
-		} else {
-			args['slug'] = panel.slug;
-			args['owner_screen_name'] = panel.owner;
-
-			Twitter.listStatuses(args, gotItemsCB);
-		}
-	},
-	gotItems: function(response, panel) {
-		// one-size-fits-all function to handle timeline updates
-		// Does lots of looping to update relative times. Needs optimization
-
-		var model = panel.model;
-		var scroller = "scroller-" + panel.index;
-		var more = "more-" + panel.index;
-		var tweets = response.responseJSON;
-		var xCount = tweets.length;
-		var th = new TweetHelper();
-		var favSym = "★"; //added by DC
-		var i;
-
-		var filters = (new LocalStorage()).read('filters');
-		// filters = [ 'foo', 'bar' ];
-
-		for (i = 0; i < tweets.length; i++) {
-			if (tweets[i].dm || !th.filter(tweets[i], filters)) {
-				tweets[i] = th.process(tweets[i]);
-			} else {
-				tweets.splice(i, 1);
-			}
-		}
-
-		if (tweets.length > 1) {
-			if (!this.loadingMore) {
-				this.controller.get('beacon-' + panel.index).addClassName('show');
-			}
-		} else {
-			this.controller.get('beacon-' + panel.index).removeClassName('show');
-		}
-
-		var scrollId = 0; // this is the INDEX (not ID, sorry) of the new tweet to scroll to
-		var fullLoad = 0; // added by DC. Used to flag when full 1:1 tweet pull is used
-
-		if (model.items.length > 0 && this.loadingMore) {
-			//loading "more" items (not refreshing), so append to bottom
-
-			for (i = 1; i < tweets.length; i++) {
-				//start the loop at i = 1 so tweets aren't duplicated
-				model.items.splice((model.items.length - 1) + i, 0, tweets[i]);
-			}
-
-		}
-		else if (model.items.length > 0 && !this.loadingMore) {
-			// a typical refresh is being performed here (append to top)
-			var k;
-
-			// loop through old tweets
-			for (k=0; k < model.items.length; k++) {
-				// remove the tweet divider
-				if (model.items[k].cssClass === 'new-tweet'){
-					model.items[k].cssClass = "old-tweet";
-				}
-			}
-
-			var hasGap, loopCount;
-			var tweetCount = tweets.length;
-			if (tweets[tweets.length - 1].id_str === model.items[0].id_str) {
-				// There is no gap if the first tweet is included here
-				// Adjust loopCount to exclude this duplicate tweet from being included
-				hasGap = false;
-				loopCount = tweets.length - 2;
-				tweetCount--;
-			}
-			else {
-				hasGap = true;
-				loopCount = tweets.length - 1;
-				panel.gapStart = tweets[tweets.length - 1].id_str;
-				panel.gapEnd = model.items[0].id_str;
-			}
-
-			hasGap = false; // ignore gap detection in this release
-
-			var j;
-			for (j = loopCount; j >= 0; j--) {
-				//doing a backwards (upwards?) loop to get the items in the right order
-
-				if (j === loopCount) {
-					tweets[j].cssClass = 'new-tweet';
-
-					// TODO: Make this message tappable to load gaps
-					var msg = tweetCount + ' New ' + this.nouns[panel.id];
-					if (tweetCount > 1) {
-						msg += 's'; //pluralize
-					}
-
-					if (hasGap) {
-						msg += '<br /><span>Tap to load missing tweets</span>';
-					}
-
-					tweets[j].dividerMessage = msg;
-				}
-				model.items.splice(0,0,tweets[j]);
-			}
-
-			scrollId = tweetCount; // set the index of the new tweet to auto-scroll to
-		}
-		else{
-			// the timeline was empty so do a 1:1 mirror of the tweets response
-			model.items = tweets;
-			fullLoad = 1;
-		}
-		// Write a few (10) of the latest tweets to the user's cache (async)
-		this.user[panel.id] = model.items.slice(0,10);
-		var account = new Account();
-		account.load(this.user);
-		account.save();
-
-		// Save the recent ids for notification checks
-		if (tweets.length > 0 && !this.loadingMore) {
-			var store = new LocalStorage();
-			store.write(this.user.id + '_' + panel.id, tweets[0].id_str);
-		}
-
-		//Block added by DC - allows new tweet marker to work after refresh and flush
-		if (panel.update) {
-			if(model.myLastId) {
-				for(k=0; k < model.items.length; k++){
-					//if(model.items[k].id_str === model.myLastId){
-					if(model.items[k].id_str === model.myLastId){
-						if(k > 0) {
-							// TODO: Make this message tappable to load gaps
-							var msg = k + ' New ' + this.nouns[panel.id];
-							if (k > 1) {
-								msg += 's'; //pluralize
-							}
-							model.items[k-1].dividerMessage = msg;
-							model.items[k-1].cssClass = 'new-tweet';
-							model.myLastId = undefined;
-
-							this.controller.get('beacon-' + panel.index).addClassName('show');
-						} else {
-							this.controller.get('beacon-' + panel.index).removeClassName('show');
-						}
-						scrollId = k; // set the index of the new tweet to auto-scroll to
-						break; //no need to keep on iterating if we've found our match
-					}
-				}
-				model.myLastId = undefined;
-			}
-		}
-
-		if(fullLoad === 1) {
-			if(scrollId < 10) {
-				model.items = tweets.slice(0,10);
-			}
-			else{
-				model.items = tweets.slice(0,scrollId+1);
-			}
-		}	//end block
-
-		if (panel.update) {
-			for (i = 0; i < model.items.length; i++) {
-				var tweet = model.items[i];
-
-				tweet.time_str = this.timeSince(tweet.created_at);
-				// block below added by DC
-				if(tweet.favorited) {
-					if (!tweet.favSet){
-						//tweet.user.name = favSym + tweet.user.name;
-						tweet.favSet = true;
-						//tweet.favstar = favSym;
-					}
-					tweet.fav_class = 'show';
-				}
-				else {
-					//if(tweet.favSet){
-						//tweet.user.name = tweet.user.name.replace(favSym,"");
-						tweet.favSet = false;
-						tweet.fav_class = 'hide';
-						//tweet.favstar = "";
-					//}
-				}//end block
-			}
-		}
-
-		this.controller.modelChanged(panel.model);
-		if (scrollId !== 0) {
-			this.controller.get('list-' + panel.index).mojo.revealItem(scrollId, true);
-		}
-		if (model.items.length === 0 || (this.loadingMore && tweets.length === 0)) {
-			this.controller.get(more).hide();
-		}
-		this.loading = false;
-	},
-	getDMs: function(panel, lastId, maxId) {
-		var args = {
-			'count': this.count,
-			'include_entities': 'true'
-		};
-
-		if (lastId) {
-			args.since_id = lastId;
-		}
-		if (maxId) {
-			args.max_id = maxId;
-		}
-		var Twitter = new TwitterAPI(this.user);
+	getDMs: function(Twitter, args, panel) {
 		var prefs = new LocalStorage(); //added by DC
-		var dmTo = "←"; //"◄←"; //"☞"; //"To:"; 
+		var dmTo = "←"; //"◄←"; //"☞"; //"To:";
 		var dmFrom = "→"; //"►→"; //"☜"; "From:";
 
 		Twitter.timeline(panel, function(r1, m1) {
@@ -1321,7 +1043,9 @@ MainAssistant.prototype = {
 
 					//tweet.user.name = tweet.user.name + dmTo;  // added by DC
 					tweet.dir = dmTo;
-					// Use unicode above instead of bitmap below.  This way it scales with the font selection
+					// Use unicode above instead of bitmap below.  This way it
+					// scales with the font selection
+
 					//tweet.direction_arrow_img = "images/low/arrow_right.png";
 					tweet.user.profile_image_url	= img;
 					tweet.user.id_str				= id;
@@ -1338,14 +1062,270 @@ MainAssistant.prototype = {
 			}.bind(this), args, this, 'sentMessages');
 		}.bind(this), args, this);
 	},
+
+	getAccount: function(id) {
+		if (!id) {
+			return(this.user);
+		}
+
+		if (this.users) {
+			for (var i = 0, u; u = this.users[i]; i++) {
+				if (u.id == id) {
+					return(u);
+				}
+			}
+		}
+
+		return(null);
+	},
+
+	getTweets: function(panel, lastId, maxId) {
+		var Twitter;
+		var user	= this.getAccount(panel.tab.account);
+		var args	= {
+			'count':			this.count,
+			'include_entities':	'true'
+		};
+
+		if (!user) {
+			console.log('Invalid account: ' + panel.tab.account);
+			return;
+		}
+		Twitter = new TwitterAPI(user);
+
+		if (lastId) {
+			args.since_id = lastId;
+		}
+
+		if (maxId) {
+			args.max_id = maxId;
+		}
+
+		if (panel.resource === 'messages') {
+			/*
+				Loading DMs requires 2 requests in order to get both sent and
+				recieved messages.
+			*/
+			this.getDMs(Twitter, args, panel);
+			return;
+		}
+
+		args['include_rts'] = '1';
+
+		var gotItemsCB = function(response, meta) {
+			this.gotItems(response, panel);
+		}.bind(this);
+
+		// TODO	Allow a search results panel
+		if (!panel.tab.slug) {
+			/* Normal timeline */
+			Twitter.timeline(panel, gotItemsCB, args, this);
+		} else {
+			/* List */
+			args['slug'] = panel.tab.slug;
+			args['owner_screen_name'] = panel.tab.owner;
+
+			Twitter.listStatuses(args, gotItemsCB);
+		}
+	},
+
+	gotItems: function(response, panel) {
+		// one-size-fits-all function to handle timeline updates
+		// Does lots of looping to update relative times. Needs optimization
+
+		var model		= panel.model;
+		var scroller	= "scroller-" + panel.index;
+		var more		= "more-" + panel.index;
+		var tweets		= response.responseJSON;
+		var xCount		= tweets.length;
+		var th			= new TweetHelper();
+		var favSym		= "★"; //added by DC
+		var filters		= (new LocalStorage()).read('filters');
+
+		for (var i = 0, tweet; tweet = tweets[i]; i++) {
+			if (tweet.dm || !th.filter(tweet, filters)) {
+				tweets[i] = th.process(tweet);
+			} else {
+				tweets.splice(i, 1);
+			}
+		}
+
+		if (tweets.length > 1) {
+			if (!this.loadingMore) {
+				this.controller.get('beacon-' + panel.index).addClassName('show');
+			}
+		} else {
+			this.controller.get('beacon-' + panel.index).removeClassName('show');
+		}
+
+		var scrollId = 0; // this is the INDEX (not ID, sorry) of the new tweet to scroll to
+		var fullLoad = 0; // added by DC. Used to flag when full 1:1 tweet pull is used
+
+		if (model.items.length > 0 && this.loadingMore) {
+			// loading "more" items (not refreshing), so append to bottom
+			// start the loop at i = 1 so tweets aren't duplicated
+			for (var i = 1, tweet; tweet = tweets[i]; i++) {
+				model.items.splice((model.items.length - 1) + i, 0, tweet);
+			}
+		} else if (model.items.length > 0 && !this.loadingMore) {
+			// a typical refresh is being performed here (append to top)
+			var k;
+
+			// loop through old tweets
+			for (k=0; k < model.items.length; k++) {
+				// remove the tweet divider
+				if (model.items[k].cssClass === 'new-tweet'){
+					model.items[k].cssClass = "old-tweet";
+				}
+			}
+
+			var hasGap, loopCount;
+			var tweetCount = tweets.length;
+			if (tweets[tweets.length - 1].id_str === model.items[0].id_str) {
+				// There is no gap if the first tweet is included here
+				// Adjust loopCount to exclude this duplicate tweet from being included
+				hasGap = false;
+				loopCount = tweets.length - 2;
+				tweetCount--;
+			} else {
+				hasGap = true;
+				loopCount = tweets.length - 1;
+				panel.gapStart = tweets[tweets.length - 1].id_str;
+				panel.gapEnd = model.items[0].id_str;
+			}
+
+			hasGap = false; // ignore gap detection in this release
+
+			var j;
+			for (j = loopCount; j >= 0; j--) {
+				//doing a backwards (upwards?) loop to get the items in the right order
+
+				if (j === loopCount) {
+					tweets[j].cssClass = 'new-tweet';
+
+					// TODO: Make this message tappable to load gaps
+					var msg = tweetCount + ' New ' + (this.nouns[panel.id] || "Tweet");
+
+					if (tweetCount > 1) {
+						msg += 's'; //pluralize
+					}
+
+					if (hasGap) {
+						msg += '<br /><span>Tap to load missing tweets</span>';
+					}
+
+					tweets[j].dividerMessage = msg;
+				}
+				model.items.splice(0,0,tweets[j]);
+			}
+
+			scrollId = tweetCount; // set the index of the new tweet to auto-scroll to
+		} else {
+			// the timeline was empty so do a 1:1 mirror of the tweets response
+			model.items = tweets;
+			fullLoad = 1;
+		}
+
+		// Write a few (10) of the latest tweets to the user's cache (async)
+		var user = this.getAccount(panel.tab.account);
+
+		user[panel.id] = model.items.slice(0, 10);
+
+		var account = new Account();
+		account.load(user);
+		account.save();
+
+		// Save the recent ids for notification checks
+		if (tweets.length > 0 && !this.loadingMore) {
+			var store = new LocalStorage();
+
+			store.write(user.id + '_' + panel.id, tweets[0].id_str);
+		}
+
+		//Block added by DC - allows new tweet marker to work after refresh and flush
+		if (panel.update) {
+			if(model.myLastId) {
+				for(k=0; k < model.items.length; k++){
+					if(model.items[k].id_str === model.myLastId) {
+						if(k > 0) {
+							// TODO: Make this message tappable to load gaps
+							var msg = tweetCount + ' New ' + (this.nouns[panel.id] || "Tweet");
+
+							if (k > 1) {
+								msg += 's'; //pluralize
+							}
+							model.items[k-1].dividerMessage = msg;
+							model.items[k-1].cssClass = 'new-tweet';
+							model.myLastId = undefined;
+
+							this.controller.get('beacon-' + panel.index).addClassName('show');
+						} else {
+							this.controller.get('beacon-' + panel.index).removeClassName('show');
+						}
+						scrollId = k; // set the index of the new tweet to auto-scroll to
+						break; //no need to keep on iterating if we've found our match
+					}
+				}
+				model.myLastId = undefined;
+			}
+		}
+
+		if (fullLoad === 1) {
+			if (scrollId < 10) {
+				model.items = tweets.slice(0,10);
+			} else {
+				model.items = tweets.slice(0,scrollId+1);
+			}
+		}	//end block
+
+		if (panel.update) {
+			for (i = 0; i < model.items.length; i++) {
+				var tweet = model.items[i];
+
+				tweet.time_str = this.timeSince(tweet.created_at);
+				// block below added by DC
+				if(tweet.favorited) {
+					if (!tweet.favSet){
+						//tweet.user.name = favSym + tweet.user.name;
+						tweet.favSet = true;
+						//tweet.favstar = favSym;
+					}
+					tweet.fav_class = 'show';
+				} else {
+					//if(tweet.favSet){
+						//tweet.user.name = tweet.user.name.replace(favSym,"");
+						tweet.favSet = false;
+						tweet.fav_class = 'hide';
+						//tweet.favstar = "";
+					//}
+				}//end block
+			}
+		}
+
+		this.controller.modelChanged(panel.model);
+		if (scrollId !== 0) {
+			this.controller.get('list-' + panel.index).mojo.revealItem(scrollId, true);
+		}
+		if (model.items.length === 0 || (this.loadingMore && tweets.length === 0)) {
+			this.controller.get(more).hide();
+		}
+		this.loading = false;
+	},
 	fillGap: function(panel) {
-		var args = {
+		var user	= this.getAccount(panel.tab.account);
+		var args	= {
 			count: this.count,
 			include_entities: 'true',
 			max_id: panel.gapStart,
 			since_id: panel.gapEnd
 		};
-		var Twitter = new TwitterAPI(this.user);
+		var Twitter;
+
+		if (!user) {
+			return;
+		}
+
+		Twitter = new TwitterAPI(user);
 		Twitter.timeline(panel, this.gotGap.bind(this), args, this);
 	},
 	gotGap: function(response, meta) {
@@ -1358,6 +1338,7 @@ MainAssistant.prototype = {
 	},
 	loadLists: function() {
 		var Twitter = new TwitterAPI(this.user);
+
 		Twitter.userLists({'user_id':this.user.id}, function(response){
 			var lists = response.responseJSON.lists;
 			if (lists.length > 0) {
@@ -1424,10 +1405,10 @@ MainAssistant.prototype = {
 
 		var app = Mojo.Controller.getAppController();
 		var authStage = app.getStageProxy(global.authStage);
+
 		if (authStage) {
 			authStage.activate();
-		}
-		else {
+		} else {
 			setTimeout(function() {
 				app.createStageWithCallback(args, pushMainScene, "card");
 			}, 200);
@@ -1463,8 +1444,7 @@ MainAssistant.prototype = {
 
 			if (userStage) {
 				userStage.activate();
-			}
-			else {
+			} else {
 				app.createStageWithCallback(args, pushMainScene, "card");
 			}
 
@@ -1483,8 +1463,7 @@ MainAssistant.prototype = {
 				// change the default account to the next one in line
 				prefs.write('defaultAccount', r[0].id);
 				this.openAccount(r[0].id);
-			}
-			else {
+			} else {
 				prefs.write('defaultAccount', '0');
 				this.newAccountTapped();
 
@@ -1504,8 +1483,7 @@ MainAssistant.prototype = {
 				Mojo.Log.info('gaptastic!');
 				var panel = this.getPanel(this.panels[this.timeline]);
 				this.fillGap(panel);
-			}
-			else {
+			} else {
 				this.toasters.add(new TweetToaster(event.item, this));
 			}
 		}
@@ -1534,14 +1512,12 @@ MainAssistant.prototype = {
 				//count is in the millions
 				newCount = parseInt(milForm, 10);
 				return newCount + 'm';
-			}
-			else if (thouForm >= 1) {
+			} else if (thouForm >= 1) {
 				//count is in the thousands
 				newCount = parseInt(thouForm, 10);
 				return newCount + 'k';
 			}
-		}
-		else {
+		} else {
 			//format the count with commas
 			return this.addCommas(count);
 		}
@@ -1554,7 +1530,9 @@ MainAssistant.prototype = {
 		l += (index * 53);
 
 		/* If we have less than 6 icons account for the offset */
-		l += parseInt((6 - this.tabs.length) * (53 / 2));
+		if (this.panels.length < 6) {
+			l += parseInt((6 - this.panels.length) * (53 / 2));
+		}
 
 		this.controller.get('indicator').setStyle({
 			left:	l + 'px'
@@ -1637,26 +1615,22 @@ MainAssistant.prototype = {
 					opts.name = 'RTs by Others';
 					opts.items = response.responseJSON;
 					this.controller.stageController.pushScene('status', opts);
-				}
-				else {
+				} else {
 					banner('Twitter did not find anything');
 				}
 			}.bind(this));
-		}
-		else if (id === 'rt-yours') {
+		} else if (id === 'rt-yours') {
 			// These were loaded when the app started so no need to get them again!
 			opts.name = 'RTs by You';
 			opts.items = this.user.retweetedItems;
 			this.controller.stageController.pushScene('status', opts);
-		}
-		else if (id === 'rt-ofyou') {
+		} else if (id === 'rt-ofyou') {
 			Twitter.retweetsOfMe(function(response) {
 				if (response.responseJSON.length > 0) {
 					opts.name = 'RTs of You';
 					opts.items = response.responseJSON;
 					this.controller.stageController.pushScene('status', opts);
-				}
-				else {
+				} else {
 					banner('Twitter did not find anything');
 				}
 			}.bind(this));
@@ -1831,20 +1805,24 @@ MainAssistant.prototype = {
 			prefs.read('hideTweetBorder')
 		);
 
-		var tabOrder = prefs.read('taborder');
-console.log("old order: " + this.tabOrder);
-console.log("new order: " + tabOrder);
+		if (this.tabs) {
+			var tabs	= prefs.read('tabs', this.user.id);
+			var a		= Object.toJSON(tabs		).toLowerCase();
+			var b		= Object.toJSON(this.tabs	).toLowerCase();
 
-		if (this.tabOrder && tabOrder && tabOrder !== this.tabOrder) {
-			/*
-				The tab order has changed. Relaunch this scene to force it to
-				render again with the new tab order.
-			*/
-			this.controller.stageController.swapScene({
-				name: "main",
-				transition: Mojo.Transition.crossFade,
-				disableSceneScroller: true
-			}, this.opts);
+			if (a !== b) {
+				/*
+					The tab order has changed. Relaunch this scene to force it
+					to render again with the new tab order.
+
+					This is much easier then trying to cleanup and re-render.
+				*/
+				this.controller.stageController.swapScene({
+					name: "main",
+					transition: Mojo.Transition.crossFade,
+					disableSceneScroller: true
+				}, this.opts);
+			}
 		}
 	},
 	deactivate: function(event) {

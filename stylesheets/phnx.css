@@ -453,7 +453,9 @@ body.no-gesture {  /* touchpad/emulator */
 	background: transparent;
 	padding: 0;
 }
-#txtSearch, .searchbox {
+
+#txtSearch,
+.searchbox {
 	font-size: 15px;
 	color: #d2d2d2;
 	text-align: left;
@@ -466,6 +468,29 @@ body.no-gesture {  /* touchpad/emulator */
 	margin: 0;
 	padding: 0;
 }
+
+/* Add tab stuff */
+.addtab .title {
+	font-size: 18px;
+}
+
+.addtab .search-box {
+	width: 50%;
+	float: right;
+
+	margin-top: 10px;
+	background: transparent;
+	padding: 0;
+}
+
+.addtab .searchbox {
+	width: 150px;
+}
+
+.addtab .pref-row-wrapper {
+	clear: both;
+}
+
 
 #tweets-list, #mentions-list, #favorites-list, #messages-list, #lists-list, #search_list{
 	padding-top: 0px;
@@ -1320,9 +1345,6 @@ span.link{
 }
 .toaster.show {
 	bottom: 0px;
-}
-.toaster.compose {
-	opacity: 1;
 }
 .toaster-wrapper {
 	padding: 15px 10px;

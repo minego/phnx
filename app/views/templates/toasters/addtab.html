@@ -1,0 +1,57 @@
+<div id="toaster-#{-toasterId}" class="toaster addtab">
+	<div class="toaster-title">
+		Add Tab
+	</div>
+
+	<div class="toaster-wrapper">
+		<div class="palm-row pref-row" id="accountwrapper-#{-toasterId}">
+			<div class="palm-row-wrapper pref-row-wrapper">
+				<div x-mojo-element="ListSelector" id="select-account-#{-toasterId}"></div>
+			</div>
+		</div>
+
+		<div class="palm-row pref-row">
+			<div class="palm-row-wrapper pref-row-wrapper">
+				<div x-mojo-element="ListSelector" id="select-type-#{-toasterId}"></div>
+			</div>
+
+			<div id="listwrapper-#{-toasterId}" style="display: none;">
+				<div class="palm-row-wrapper pref-row-wrapper">
+					<span class="title">
+						OWNER
+					</span>
+					<div class="search-box">
+						<textarea id="owner-#{-toasterId}" class="searchbox" rows="1">#{owner}</textarea>
+					</div>
+				</div>
+				<br/>
+
+				<div class="palm-row-wrapper pref-row-wrapper">
+					<span class="title">
+						LIST
+					</span>
+					<div class="search-box">
+						<textarea id="slug-#{-toasterId}" class="searchbox" rows="1"></textarea>
+					</div>
+				</div>
+				<br/>
+			</div>
+
+			<div id="searchwrapper-#{-toasterId}" style="display: none;">
+				<div class="palm-row-wrapper pref-row-wrapper">
+					<span class="title">
+						SEARCH TERM
+					</span>
+					<div class="search-box">
+						<textarea id="search-#{-toasterId}" class="searchbox" rows="1"></textarea>
+					</div>
+				</div>
+				<br/>
+			</div>
+		</div>
+	</div>
+	<div class="toaster-controls" align="center">
+		<div id="save-#{-toasterId}" class="compose-submit" x-mojo-tap-highlight="immediate">Save</div>
+		<div id="back-#{-toasterId}" class="compose-cancel" x-mojo-tap-highlight="immediate">Cancel</div>
+	</div>
+</div>

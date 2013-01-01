@@ -26,6 +26,7 @@
     {"source": "app/assistants/toasters/search.js"},
     {"source": "app/assistants/toasters/lookup.js"},
     {"source": "app/assistants/toasters/addfilter.js"},
+    {"source": "app/assistants/toasters/addtab.js"},
     {"source": "app/assistants/toasters/confirm.js"},
     {"source": "lib/Ajax.js"},
     {"source": "lib/Date.js"},

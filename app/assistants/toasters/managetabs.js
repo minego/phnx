@@ -1,15 +1,18 @@
 var ManageTabsToaster = Class.create(Toaster, {
 	initialize: function(assistant) {
-		this.id = toasterIndex++;
-		this.nodeId = 'toaster-' + this.id;
-		this.visible = false;
-		this.shim = true;
+		this.id			= toasterIndex++;
+		this.nodeId		= 'toaster-' + this.id;
+		this.visible	= false;
+		this.shim		= true;
 
-		this.assistant = assistant;
-		this.controller = getController();
-		this.user = this.controller.stageController.user;
+		this.assistant	= assistant;
+		this.controller	= getController();
+		this.user		= this.controller.stageController.user;
+		this.users		= this.controller.stageController.users;
 
-		this.model = { items: this.getItems()  };
+		this.model		= { items: this.getItems() };
+
+		this.reshow		= this.reshow.bind(this);
 
 		this.render({'toasterId':this.id}, 'templates/toasters/managetabs');
 
@@ -24,77 +27,37 @@ var ManageTabsToaster = Class.create(Toaster, {
 		}, this.model);
 	},
 	tabDelete: function(event) {
-		if (this.model.items.length > 1) {
-			this.model.items.splice(event.index, 1);
-			this.saveItems();
-		}
+		var tabs	= (new LocalStorage()).read('tabs', this.user.id);
+
+		tabs.splice(event.index, 1);
+
+		(new LocalStorage()).write('tabs', tabs, this.user.id);
+		this.changed = true;
 	},
 	tabMove: function(event) {
-		var items = this.model.items.splice(event.fromIndex, 1);
+		var tabs	= (new LocalStorage()).read('tabs', this.user.id);
+		var tmp;
 
-		this.model.items.splice(event.toIndex, 0, items[0]);
-		this.saveItems();
+		tmp = tabs.splice(event.fromIndex, 1);
+		tabs.splice(event.toIndex, 0, tmp[0]);
+
+		(new LocalStorage()).write('tabs', tabs, this.user.id);
+		this.changed = true;
 	},
 	backTapped: function(event) {
 		this.assistant.toasters.back();
 	},
 	addTapped: function(event) {
-		this.saveItems();
-
-		var possible	= 'h,m,f,d,l,s'.split(',');
-		var menuitems	= [];
-
-		for (var i = 0, p; p = possible[i]; i++) {
-			for (var x = 0, item; item = this.model.items[x]; x++) {
-				if (p === item.value) {
-					break;
-				}
-			}
-
-			if (item) {
-				continue;
-			}
-
-			menuitems.push({
-				label:		this.getLabel(p),
-				command:	p
-			});
-		}
-
-		if (menuitems.length > 0) {
-			this.controller.popupSubmenu({
-				onChoose: function(command) {
-					var list = get('convo-list-' + this.id);
-
-					if (!this.getLabel(command)) {
-						return;
-					}
-
-					list.mojo.noticeRemovedItems(0, this.model.items.length);
-
-					this.model.items = this.getItems();
-					this.model.items.push({
-						text:	this.getLabel(command),
-						value:	command
-					});
-
-					list.mojo.noticeAddedItems(0, this.model.items);
-
-					this.saveItems();
-				}.bind(this),
-
-				placeNear: this.controller.get('add-' + this.id),
-				items: menuitems
-			});
-		}
+		this.assistant.toasters.add(new AddTabToaster(this.assistant));
+		this.changed = true;
 	},
 
-	getLabel: function(value) {
-		if (!value) {
+	getLabel: function(tab) {
+		if (!tab || !tab.type) {
 			return(null);
 		}
 
-		switch (value.toLowerCase().charAt(0)) {
+		switch (tab.type.toLowerCase().charAt(0)) {
 			case "h":
 				return("home");
 
@@ -108,9 +71,17 @@ var ManageTabsToaster = Class.create(Toaster, {
 				return("messages");
 
 			case "l":
+				if (tab.owner && tab.slug) {
+					return("list: " + tab.owner + '/' + tab.slug);
+				}
+
 				return("lists");
 
 			case "s":
+				if (tab.search) {
+					return("search: " + tab.search);
+				}
+
 				return("search");
 
 			default:
@@ -118,15 +89,40 @@ var ManageTabsToaster = Class.create(Toaster, {
 		}
 	},
 
+	getAccount: function(tab) {
+		if (!tab || !tab.account || -1 == tab.account) {
+			return(null);
+		}
+
+		if (tab.account == this.user.id) {
+			return(null);
+		}
+
+		if (this.users) {
+			for (var i = 0, a; a = this.users[i]; i++) {
+				if (a.id == tab.account) {
+					return('@' + a.username);
+				}
+			}
+		}
+
+		return('unknown account');
+	},
+
 	getItems: function() {
-		var prefs		= new LocalStorage();
-		var tabOrder	= prefs.read('taborder');
-		var tabs		= tabOrder.split(',');
-		var items		= [];
+		var tabs	= (new LocalStorage()).read('tabs', this.user.id);
+		var items	= [];
 
 		for (var i = 0, tab; tab = tabs[i]; i++) {
+			var text	= this.getLabel(tab);
+			var account	= this.getAccount(tab);
+
+			if (account) {
+				text += ' (' + account + ')';
+			}
+
 			items.push({
-				text:	this.getLabel(tab),
+				text:	text,
 				value:	tab
 			});
 		}
@@ -134,33 +130,10 @@ var ManageTabsToaster = Class.create(Toaster, {
 		return(items);
 	},
 
-	saveItems: function() {
-		var tabs = [];
-
-		for (var i = 0, item; item = this.model.items[i]; i++) {
-			if (item.deleted) {
-				continue;
-			}
-
-			tabs.push(item.value);
-		}
-
-		var prefs		= new LocalStorage();
-		var oldvalue	= prefs.read('taborder');
-		var newvalue	= tabs.join(',');
-
-		if (oldvalue !== newvalue) {
-			console.log('Saving tab order: ' + newvalue);
-
-			prefs.write('taborder', newvalue);
-			this.changed = true;
-		}
-
-		if (this.model.items.length == 6) {
-			this.controller.get('add-'  + this.id).setStyle({'opacity': '.4'});
-		} else {
-			this.controller.get('add-'  + this.id).setStyle({'opacity': '1'});
-		}
+	reshow: function() {
+		get('convo-list-' + this.id).mojo.noticeRemovedItems(0, this.model.items.length);
+		this.model.items = this.getItems();
+		get('convo-list-' + this.id).mojo.noticeAddedItems(0, this.model.items);
 	},
 
 	setup: function() {
@@ -174,12 +147,8 @@ var ManageTabsToaster = Class.create(Toaster, {
 
 		Mojo.Event.listen(this.controller.get('back-' + this.id), Mojo.Event.tap, this.backTapped.bind(this));
 		Mojo.Event.listen(this.controller.get('add-'  + this.id), Mojo.Event.tap, this.addTapped.bind(this));
-
-		this.saveItems();
 	},
 	cleanup: function() {
-		this.saveItems();
-
 		this.controller.stopListening(get('convo-list-' + this.id), Mojo.Event.listDelete, this.tabDelete);
 		this.controller.stopListening(get('convo-list-' + this.id), Mojo.Event.listReorder, this.tabMove);
 		Mojo.Event.stopListening(this.controller.get('back-' + this.id), Mojo.Event.tap, this.backTapped);
