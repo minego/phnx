@@ -91,14 +91,11 @@ var ComposeToaster = Class.create(Toaster, {
 			return;
 		}
 
-		var info	= this.splitPrep(txt);
+		var msgs	= this.split(txt);
 
-		var avail	= this.availableChars - info.needed;
-		var used	= info.length;
-		var tweets	= parseInt(used / avail) + 1;
-		var count	= avail - (used % avail);
-
-		get('count-' + this.id).update(count + 'x' + tweets);
+		get('count-' + this.id).update(
+			(this.availableChars - 1 - msgs[msgs.length - 1].length) +
+			'x' + msgs.length);
 	},
 	autoComplete: function() {
 		var bar		= get(this.completebar);
@@ -304,6 +301,66 @@ var ComposeToaster = Class.create(Toaster, {
 		});
 	},
 
+	split: function(txt, info) {
+		var messages = [];
+
+		if (!info) {
+			info = this.splitPrep(txt);
+		}
+
+		while (info.words.length) {
+			/*
+				Include 1 extra character when counting the length since the
+				check below will assume a space.
+			*/
+			var left	= this.availableChars - info.needed + 1;
+			var msg		= [];
+
+			while (info.words.length && left > 0) {
+				if (0 == info.words[0].indexOf('@') ||
+					0 == info.words[0].indexOf('.@')
+				) {
+					/*
+						This is a mention, so it's length is already
+						accounted for.
+					*/
+					msg.push(info.words.shift());
+				} else if (info.words[0].length < left) {
+					left -= (info.words[0].length + 1);
+					msg.push(info.words.shift());
+				} else {
+					break;
+				}
+			}
+
+			var add = [];
+			for (var i = 0, word; word = info.mentions[i]; i++) {
+				if (-1 == msg.indexOf(word)) {
+					add.push(word);
+				}
+			}
+
+			if (add.length) {
+				msg.push(' // ' + add.join(' '));
+			}
+
+			messages.push(msg.join(' '));
+		}
+
+		/* Add a prefix to each message: "x of y: " */
+		var totext = '';
+
+		if (info.to.length) {
+			totext = info.to.join(' ') + ' ';
+		}
+
+		for (var i = 0; messages[i]; i++) {
+			messages[i] = totext + (i + 1) + ' of ' + messages.length + ': ' + messages[i];
+		}
+
+		return(messages);
+	},
+
 	submitTweet: function(event) {
 		var txt = get(this.textarea).value;
 		var Twitter = new TwitterAPI(this.user);
@@ -334,6 +391,14 @@ var ComposeToaster = Class.create(Toaster, {
 			}.bind(this);
 		}
 
+		/*
+			sendfunc = function dummyCB(txt, cb) {
+				console.log("tweet: " + txt);
+
+				cb();
+			}.bind(this);
+		*/
+
 		if (this.uploading) {
 			ex('An upload is in progress.');
 		} else if (this.sending) {
@@ -362,56 +427,7 @@ var ComposeToaster = Class.create(Toaster, {
 						this.easterEggs(txt);
 					}
 
-					while (info.words.length) {
-						/*
-							Include 1 extra character when counting the length
-							since the check below will assume a space.
-						*/
-						var left	= this.availableChars - info.needed + 1;
-						var msg		= [];
-
-						while (info.words.length && left > 0) {
-							if (0 == info.words[0].indexOf('@') ||
-								0 == info.words[0].indexOf('.@')
-							) {
-								/*
-									This is a mention, so it's length is already
-									accounted for.
-								*/
-								msg.push(info.words.shift());
-							} else if (info.words[0].length < left) {
-								left -= (info.words[0].length + 1);
-								msg.push(info.words.shift());
-							} else {
-								break;
-							}
-						}
-
-						var add = [];
-						for (var i = 0, word; word = info.mentions[i]; i++) {
-							if (-1 == msg.indexOf(word)) {
-								add.push(word);
-							}
-						}
-
-						if (add.length) {
-							msg.push(' // ' + add.join(' '));
-						}
-
-						messages.push(msg.join(' '));
-					}
-
-					/* Add a prefix to each message: "x of y: " */
-					var totext = '';
-
-					if (info.to.length) {
-						totext = info.to.join(' ') + ' ';
-					}
-
-					for (var i = 0; messages[i]; i++) {
-						messages[i] = totext + (i + 1) + ' of ' + messages.length + ': ' + messages[i];
-					}
-
+					messages = split(txt, info);
 					var sendnext = function(response) {
 						var msg = messages.shift();
 
@@ -617,7 +633,7 @@ var ComposeToaster = Class.create(Toaster, {
 				this.updateCounter();
 			}
 		}.bind(this);
-        
+
 		this.controller.stageController.pushScene("emoji-dialog", callback);
 	},
 	cancelTapped: function(event) {
