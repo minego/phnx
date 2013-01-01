@@ -195,14 +195,15 @@ var TweetToaster = Class.create(Toaster, {
 			statusTxt = '@' + this.tweet.user.screen_name + ' ';
 		}
 		args.text = statusTxt;
-		this.assistant.toasters.add(new ComposeToaster(args, this.assistant));
+
+		OpenComposeToaster(this.assistant.toasters, args, this.assistant);
 	},
 	createMessage: function() {
 		var args = {
 			user: this.tweet.user,
 			dm: true
 		};
-		this.assistant.toasters.add(new ComposeToaster(args, this.assistant));
+		OpenComposeToaster(this.assistant.toasters, args, this.assistant);
 	},
 	createRetweet: function() {
 		var th = new TweetHelper();
@@ -394,17 +395,17 @@ var TweetToaster = Class.create(Toaster, {
 		}
 	},
 	mention: function() {
-		var opts = {
+		var args = {
 			text: '@' + this.tweet.user.screen_name + ' '
 		};
-		this.assistant.toasters.add(new ComposeToaster(opts, this.assistant));
+		OpenComposeToaster(this.assistant.toasters, args, this.assistant);
 	},
 	message: function() {
 		var args = {
 			user: this.tweet.user,
 			dm: true
 		};
-		this.assistant.toasters.add(new ComposeToaster(args, this.assistant));
+		OpenComposeToaster(this.assistant.toasters, args, this.assistant);
 	},
 	block: function() {
 		var opts = {

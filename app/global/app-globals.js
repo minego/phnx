@@ -1,22 +1,25 @@
 var global = {
-	toasterIndex: 0,
-	mainStage: 'phnxMain-',
-	dashboardStage: 'phnxDashboard',
-	authStage: 'phnxAuth',
-	statusStage: 'phnxStatus-',
-	userStage: 'phnxUser-',
-	stageId: 0,
-	stageFocused: false,
-	accounts: [],
-	stages: [],
-	following: [],
-	multiCard: false,
-	doc: document,
+	toasterIndex:		0,
+	mainStage:			'phnxMain-',
+	dashboardStage:		'phnxDashboard',
+	authStage:			'phnxAuth',
+	statusStage:		'phnxStatus-',
+	userStage:			'phnxUser-',
+	stageId:			0,
+	stageFocused:		false,
+	accounts:			[],
+	stages:				[],
+	following:			[],
+	multiCard:			false,
+	doc:				document,
+	composeStageCount:	0,
+
 	fontSizes: [
-		{label: 'Small', command: 'font-small'},
-		{label: 'Medium', command: 'font-medium'},
-		{label: 'Large', command: 'font-large'}
+		{ label: 'Small',	command: 'font-small'	},
+		{ label: 'Medium',	command: 'font-medium'	},
+		{ label: 'Large',	command: 'font-large'	}
 	],
+
 	menuItems: [
 		Mojo.Menu.editItem,
 		{
@@ -47,6 +50,7 @@ var global = {
 		// Create a system alarm to check for notifications
 		var prefs = new LocalStorage();
 		var appId = Mojo.appInfo.id;
+
 		if (prefs.read('notifications')) {
 			var timeout = new Mojo.Service.Request("palm://com.palm.power/timeout", {
 				method: "set",
@@ -111,6 +115,10 @@ var global = {
 		var activate = function(event) {
 			Mojo.Log.info('activate scene');
 
+			// save a reference to the stage's document
+			global.doc = stageController.document;
+			Mojo.Log.info('stage doc set');
+
 			// Close the notification stage right away
 			var app = stageController.getAppController();
 			var dashStage = app.getStageProxy(global.dashboardStage);
@@ -125,9 +133,6 @@ var global = {
 			}
 			stageController.delegateToSceneAssistant('activate');
 
-			// save a reference to the stage's document
-			global.doc = stageController.document;
-			Mojo.Log.info('stage doc set');
 			// Hide the account shim if it is shown
 			stageController.document.getElementById('account-shim').className = 'ignore';
 		};
@@ -158,6 +163,14 @@ var global = {
 		// Add stage listeners
 		Mojo.Event.listen(stageController.document, Mojo.Event.stageActivate, activate);
 		Mojo.Event.listen(stageController.document, Mojo.Event.stageDeactivate, deactivate);
+	},
+	getComposeStageName: function()
+	{
+		/*
+			Return a unique name for each compose page so that there can be
+			multiple compose cards open at once.
+		*/
+		return('phnxCompose' + (++this.composeStageCount));
 	},
 	setLayout: function(body, layout, hideToolbar, hideTabs) {
 		var layouts = ['swapped', 'original', 'no-toolbar', 'no-nav', 'none', 'no-top'];
@@ -305,10 +318,10 @@ function g(userId, elementId) {
 	var app = Mojo.Controller.getAppController();
 	var stage = app.getStageProxy(stageName);
 	var element;
+
 	if (stage) {
 		element = stage.document.getElementById(elementId);
-	}
-	else {
+	} else {
 		element = document.getElementById(elementId);
 	}
 

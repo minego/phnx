@@ -1367,10 +1367,9 @@ MainAssistant.prototype = {
 		if (this.toasters.items.length === 0) {
 			this.toggleCompose({});
 		}
-		//this.controller.stageController.pushScene("compose-tweet");
 	},
 	toggleCompose: function(opts) {
-		this.toasters.add(new ComposeToaster(opts, this));
+		OpenComposeToaster(this.toasters, opts, this);
 	},
 	refreshTapped: function(event) {
 		if (Ajax.activeRequestCount === 0) {
@@ -1481,6 +1480,8 @@ MainAssistant.prototype = {
 			if (event.originalEvent.srcElement.id === 'gap') {
 				// Load the gap if it's gappy
 				Mojo.Log.info('gaptastic!');
+
+				// TODO	This is not a good way to find the panel...
 				var panel = this.getPanel(this.panels[this.timeline]);
 				this.fillGap(panel);
 			} else {

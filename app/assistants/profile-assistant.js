@@ -95,7 +95,7 @@ ProfileAssistant.prototype = {
 		if (!this.user.url) {
 			this.controller.get('url').hide();
 		}
-		
+
 		this.controller.setupWidget('list-history',{itemTemplate: "templates/tweets/item",listTemplate: "templates/list", renderLimit: this.renderLimit}, this.historyModel);
 		this.controller.setupWidget('list-favorites',{itemTemplate: "templates/tweets/item",listTemplate: "templates/list", renderLimit: this.renderLimit}, this.favoritesModel);
 		this.controller.setupWidget('list-mentions',{itemTemplate: "templates/tweets/search",listTemplate: "templates/list", renderLimit: this.renderLimit}, this.mentionsModel);
@@ -458,17 +458,18 @@ ProfileAssistant.prototype = {
 		this.toasters.add(new ConfirmToaster(opts, this));
 	},
 	mention: function() {
-		var opts = {
+		var args = {
 			text: '@' + this.user.screen_name + ' '
 		};
-		this.toasters.add(new ComposeToaster(opts, this));
+
+		OpenComposeToaster(this.toasters, args, this);
 	},
 	message: function() {
 		var args = {
 			user: this.user,
 			dm: true
 		};
-		this.toasters.add(new ComposeToaster(args, this));
+		OpenComposeToaster(this.toasters, args, this);
 	},
 	hideTweet: function() {
 		for (var i=0; i < this.assistant.panels.length; i++) {
@@ -536,20 +537,6 @@ ProfileAssistant.prototype = {
 		this.controller.stageController.popScene();
 	},
 	activate: function(event) {
-		// this.controller.get(this.controller.document).observe("keyup", function(e) {
-		//	// banner(e.keyCode + ' is the key');
-		//	if (e.keyCode !== 27 && e.keyCode !== 57575 && this.toasters.items.length === 0) {
-		//		// type to tweet, ignore the back gesture
-		//
-		//		// keycodes for punctuation and symbols are not normal
-		//		// so only ascii chars are passed to the compose toaster for now...
-		//		var text = Mojo.Char.isValidWrittenChar(e.keyCode);
-		//		this.toasters.add(new ComposeToaster({text:'@' + this.user.screen_name + ' ' + text}, this));
-		//		// this.toggleCompose({
-		//		//	'text': text
-		//		// });
-		//	}
-		// }.bind(this));
 	},
 	avatarTapped: function(event) {
 		var img = this.user.profile_image_url.replace('_normal', '');

@@ -10,6 +10,7 @@ function LocalStorage() {
 		notificationMessages: true,
 		notificationShieldMessages: false,
 		enterToSend: false,
+		composeCard: false,
 		fontSize: 'small',
 		barlayout: 'swapped',
 		theme: 'pure',
@@ -32,8 +33,6 @@ function LocalStorage() {
 		filters: [],
 		version: null,
 
-// TODO	taborder is going away, being replaced by tabs (as json)
-		taborder: 'h,m,f,d,l,s',
 		tabs: [
 			{ "type": "h" },
 			{ "type": "m" },

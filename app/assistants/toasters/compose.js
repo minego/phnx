@@ -1,3 +1,39 @@
+/*
+	This function should be used to open the compose toaster. It will open the
+	toaster or a new compose card depending on the user's preference.
+*/
+var OpenComposeToaster = function OpenComposeToaster(toasters, args, assistant)
+{
+	var prefs = new LocalStorage();
+
+// TODO	Add a button to the compose toaster to reopen the current compose in
+//		a card.
+
+	if (!prefs.read('composeCard')) {
+		toasters.add(new ComposeToaster(args, assistant));
+	} else {
+		setTimeout(function() {
+			var app		= Mojo.Controller.getAppController();
+			var name	= global.getComposeStageName();
+
+			app.createStageWithCallback({
+					name:			name,
+					lightweight:	true
+				}, function(stageController) {
+					global.stageActions(stageController);
+
+					stageController.pushScene('compose', {
+						stageName:		name,
+						user:			assistant.user,
+						users:			assistant.users,
+
+						toasterOpts:	args
+					});
+				}, "card");
+		}, 200);
+	}
+};
+
 var ComposeToaster = Class.create(Toaster, {
 	initialize: function(opts, assistant) {
 		if (!assistant) {

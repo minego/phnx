@@ -2,6 +2,7 @@ var ChangelogToaster = Class.create(Toaster, {
 	items: [
 		{ version: '1.3.6' },
 		{ item: 'Allow customizing the tab order, and allow removing unwanted tabs' },
+		{ item: 'Allow composing in a new card' },
 
 		{ version: '1.3.5' },
 		{ item: 'Corrected styling issues in the profile page' },

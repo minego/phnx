@@ -8,18 +8,15 @@ window.ToasterChain = function() {
 ToasterChain.prototype = {
 	add: function(toaster) {
 		// Add a toaster to the stack
-
 		if (this.items.length > 0) {
 			// hide the currently visible toaster
 			this.items[this.items.length - 1].hide();
-		}
-		else {
+		} else {
 			// hide the navbar
 			try {
 				get('nav-bar').setStyle({'bottom':'-100px'});
 				get('footer').hide();
-			}
-			catch (e){}
+			} catch (e) { }
 		}
 
 		// store and show the new toaster
@@ -32,6 +29,7 @@ ToasterChain.prototype = {
 		// Remove the topmost toaster and show the one "behind" it
 		if (this.items.length > 0) {
 			var toaster = this.items.pop();
+
 			if (toaster.cleanup) {
 				toaster.cleanup();
 			}
@@ -50,26 +48,25 @@ ToasterChain.prototype = {
 				// Otherwise show the navbar
 				get('shim').removeClassName('show');
 				get('shim').addClassName('ignore');
-				setTimeout(function(){
-					get('nav-bar').setStyle({'bottom':'0px'});
 
+				setTimeout(function(){
 					try {
+						get('nav-bar').setStyle({'bottom':'0px'});
 						get('footer').show();
-					}
-					catch (e){}
+					} catch (e) { }
 				}, 300);
 			}
 		}
 	},
 	backX: function(x) {
 		// Go back X amount of times
-		for (var i=0; i < x; i++) {
+		for (var i = 0; i < x; i++) {
 			this.back();
 		}
 	},
 	nuke: function() {
 		// Hide and destroy all toasters
-		for (var i=0; i < this.items.length; i++) {
+		for (var i = 0; i < this.items.length; i++) {
 			var toaster = this.items.pop();
 			toaster.destroy();
 		}
@@ -77,16 +74,13 @@ ToasterChain.prototype = {
 
 		get('shim').removeClassName('show');
 		get('shim').addClassName('ignore');
+
 		setTimeout(function(){
 			try {
 				get('nav-bar').setStyle({'bottom':'0px'});
 				get('footer').show();
-			}
-			catch (e){}
-
+			} catch (e) { }
 		}, 300);
 	}
 };
 
-// global variable
-// var Toasters = new ToasterChain();

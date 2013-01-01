@@ -25,8 +25,12 @@ var RetweetToaster = Class.create(Toaster, {
 	},
 	editTapped: function(event) {
 		// Show compose toaster
-		var rtText = 'RT @' + this.tweet.user.screen_name + ': ' + this.tweet.stripped;
-		this.assistant.toasters.add(new ComposeToaster({'text': rtText,'rt':true}, this.assistant));
+		var args = {
+			text:	'RT @' + this.tweet.user.screen_name + ': ' + this.tweet.stripped,
+			rt:		true
+		};
+
+		OpenComposeToaster(this.assistant.toasters, args, this.assistant);
 	},
 	cancelTapped: function(event) {
 		this.assistant.toasters.back();

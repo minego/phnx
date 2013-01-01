@@ -2,36 +2,37 @@ function LaunchAssistant(args) {
 	if (args.user) {
 		this.hasUser = true;
 		this.args = args;
-	}
-	else {
+	} else {
 		this.hasUser = false;
 	}
 }
 
 LaunchAssistant.prototype = {
 	setup: function() {
-
 		this.controller.setupWidget(Mojo.Menu.appMenu, {omitDefaultItems: true}, {visible: true, items: global.menuItems});
 		// this.controller.stageController.Toasters = new ToasterChain();
 
 		if (this.hasUser) {
-			this.controller.stageController.user = this.args.user;
-			this.controller.stageController.users = this.args.users;
-			global.accounts = this.args.users;
-			setTimeout(function(){
+			this.controller.stageController.user	= this.args.user;
+			this.controller.stageController.users	= this.args.users || [ this.args.user ];
+
+			global.accounts							= this.args.users;
+
+			setTimeout(function() {
 				var opts = {};
+
 				if (this.hasUser && this.args.autoScroll) {
 					opts.autoScroll = true;
 					opts.panel = this.args.panel;
 				}
+
 				this.controller.stageController.swapScene({
 					'name': 'main',
 					transition: Mojo.Transition.crossFade,
 					disableSceneScroller: true
 				}, opts);
 			}.bind(this), 500);
-		}
-		else {
+		} else {
 			this.showAddButton();
 		}
 	},

@@ -1,4 +1,4 @@
-function AppAssistant(opts){
+function AppAssistant(opts) {
 	this.toasters = new ToasterChain();
 }
 
@@ -10,26 +10,23 @@ AppAssistant.prototype = {
 		if (params.action === 'checkNotifications') {
 			var prefs = new LocalStorage();
 			var stageFocused = false; // temporaray
+
 			if (prefs.read('notifications') && !stageFocused) {
 				// Only background check notifications when enabled
 				// and when there are no stages present
 				this.checkNotifications();
-			}
-			else if (prefs.read('notifications') && stageFocused) {
+			} else if (prefs.read('notifications') && stageFocused) {
 				global.setTimer(); // reset the timer anyway
 			}
-		}
-		else if (params.dockMode) {
+		} else if (params.dockMode) {
 			this.launchMain();
 			// This is exhibition mode
-		}
-		// code for x-launch-params still work-in-progress
-		else if(params.composeTweet) {
+		} else if (params.composeTweet) {
+			// code for x-launch-params still work-in-progress
 			Mojo.Log.info("Called Launch Param correctly");
         	params.action = 'prepPost';
 			params.msg = params.composeTweet;
-        }
-		else {
+        } else {
 			Mojo.Log.info('params: ' + params);
 			// Launch the app normally, load the default user if it exists.
 			this.launchMain();
@@ -121,8 +118,7 @@ AppAssistant.prototype = {
 					this.launchNew();
 				}
 			}.bind(this));
-		}
-		else {
+		} else {
 			// This is the very first time the app is being launched,
 			// so just init the Lawnchair store
 

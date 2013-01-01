@@ -93,8 +93,8 @@
         "source": "app/assistants/help-assistant.js"
     },
     {
-        "scenes": "compose-tweet",
-        "source": "app/assistants/compose-tweet-assistant.js"
+        "scenes": "compose",
+        "source": "app/assistants/compose-assistant.js"
     },
     {
         "scenes": "emoji-dialog",

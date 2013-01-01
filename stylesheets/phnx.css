@@ -801,7 +801,7 @@ margin:auto;
 
 
 
-.toaster .tweet-text{
+.toaster .tweet-text {
 	max-width: none;
 	width: 100%;
 }
@@ -1044,7 +1044,7 @@ span.link{
 	-webkit-transform: rotate(-6deg) scale(1.0);
 	opacity: 1;
 }
-.toaster-title{
+.toaster-title {
 	color: #d2d2d2;
 	font-size: 16px;
 	text-align: center;
@@ -1450,7 +1450,7 @@ span.link{
 	padding: 0;
 	margin: 0;
 }
-.compose-txt textarea{
+.compose-txt textarea {
 	-webkit-border-image: none;
 	background-image: none;
 	background-color: transparent;
@@ -1466,6 +1466,12 @@ span.link{
 	top: -3px;
 	right: 45px;
 }
+
+.compose-card .compose-txt,
+.compose-card .compose-txt textarea {
+	height: 220px;
+}
+
 .compose-txt .counter {
 	position: absolute;
 	right: 13px;

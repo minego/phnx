@@ -43,7 +43,8 @@ function PreferencesAssistant(section) {
 			{key: 'refreshOnSubmit', type: 'toggle', label: 'Refresh after post'},
 			{key: 'refreshFlushAtLaunch', type: 'toggle', label: 'Refresh & flush at launch'},
 			{key: 'enterToSubmit', type: 'toggle', label: 'Enter to submit'},
-			{key: 'autoCorrect', type: 'toggle', label: 'Auto Correct'}
+			{key: 'autoCorrect', type: 'toggle', label: 'Auto Correct'},
+			{key: 'composeCard', type: 'toggle', label: 'Compose in new Card'}
 		],
 		'Appearance': [
 			{key: 'theme', type: 'select', label: 'Theme', items: [
