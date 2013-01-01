@@ -884,7 +884,7 @@ MainAssistant.prototype = {
 		global.following = [];
 
 		for (var i = 0, u; u = this.users[i]; i++) {
-			var Twitter = new TwitterAPI(user);
+			var Twitter = new TwitterAPI(u);
 
 			Twitter.getFriends(this.user.id, function(r) {
 				var		f;
