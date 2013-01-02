@@ -1,64 +1,64 @@
 var TweetToaster = Class.create(Toaster, {
 	initialize: function(tweet, assistant) {
-		this.toasterId = toasterIndex++;
-		this.nodeId = 'toaster-' + this.toasterId;
-		this.visible = false;
-		this.shim = true;
-		// We save the scene's assistant here
-		this.assistant = assistant;
-		this.controller = getController();
-		this.user = this.controller.stageController.user;
-		this.tweet = tweet;
-		this.tweet.toasterId = this.toasterId;
-		//this.tweet.favstar = "★";
+		this.toasterId			= toasterIndex++;
+		this.nodeId				= 'toaster-' + this.toasterId;
+		this.visible			= false;
+		this.shim				= true;
+		this.assistant			= assistant;
+		this.controller			= getController();
+		this.tweet				= tweet;
+		this.tweet.toasterId	= this.toasterId;
+		this.user				= this.controller.stageController.user;
+		this.users				= this.controller.stageController.users || [ this.user ];
+
+		/* The tweet may be from a panel for another account */
+		if (typeof(tweet.owner) !== 'undefined') {
+			for (var i = 0, u; u = this.users[i]; i++) {
+				if (u.id == tweet.owner) {
+					this.user = u;
+				}
+			}
+		}
+
 		if (this.tweet.favorited > 0) {
 			this.tweet.fav_class = 'show';
-		}
-		else {
+		} else {
 			this.tweet.fav_class = 'hide';
 		}
 
 		if (this.tweet.retweet_count > 0) {
 			this.tweet.rt_class = 'show';
-		}
-		else {
+		} else {
 			this.tweet.rt_class = 'hide';
 		}
 
 		var favStatusChanged = false; //added by DC
 
+		var th					= new TweetHelper();
+		var Twitter				= new TwitterAPI(this.user);
 
-		var th = new TweetHelper();
-		var Twitter = new TwitterAPI(this.user);
-		this.twitterId = this.tweet.id_str;
-		this.twitterUsername = this.tweet.user.screen_name;
-		this.twitterLink = "https://twitter.com/#!" +
-		this.twitterUsername + "/" + "status/" + this.twitterId;
-		this.twitterLinkIp = "https://twitter.com/" +
-		this.twitterUsername + "/" + "status/" + this.twitterId;
-		this.twitterIpStatusName = this.twitterUsername + "'s status";
-		//this.event = event.target;
-		//var username;
-		//if (event.id === 'link') {
-		//	var url = event.innerText
-		//}
-		// Process the tweet again for updates or whatever
-		// this.tweet = th.process(this.tweet);
-
-		this.content = {toasterId: this.toasterId};
+		this.twitterId			= this.tweet.id_str;
+		this.twitterUsername	= this.tweet.user.screen_name;
+		this.twitterLink		= "https://twitter.com/#!" +
+									this.twitterUsername + "/" +
+									"status/" + this.twitterId;
+		this.twitterLinkIp		= "https://twitter.com/" +
+									this.twitterUsername + "/" +
+									"status/" + this.twitterId;
+		this.twitterIpStatusName= this.twitterUsername + "'s status";
+		this.content			= {toasterId: this.toasterId};
 
 		var tweetHtml = Mojo.View.render({
 			object: this.tweet,
 			template: 'templates/tweets/details'
 		});
 
-
 		this.content.tweetHtml = tweetHtml;
 		this.render(this.content, 'templates/toasters/tweet');
 
 		// Stuff to do after the element is added to the DOM
-		var currentUser = getUser();
-		var me = currentUser.id;
+		var me = this.user.id;
+
 		if (this.tweet.user.id_str === me) {
 			if (!this.tweet.dm) {
 				this.controller.get(this.nodeId).addClassName('mine');
@@ -166,12 +166,13 @@ var TweetToaster = Class.create(Toaster, {
 		var statusText;
 
 		var args = {
+			from: this.user,
 			'reply_id': this.tweet.id_str
 		};
 
 		if (this.tweet.entities && this.tweet.entities.user_mentions.length > 0) {
 			// Reply all
-			var me = getUser().id;
+			var me = this.user.id;
 
 			if (this.tweet.user.id_str !== me) {
 				statusTxt = '@' + this.tweet.user.screen_name + ' ';
@@ -180,9 +181,8 @@ var TweetToaster = Class.create(Toaster, {
 			}
 			var selectionStart = statusTxt.length;
 			var selectionLength = 0;
-			var currentUser = getUser();
 			for (var i=0; i < this.tweet.entities.user_mentions.length; i++) {
-				if (this.tweet.entities.user_mentions[i].screen_name !== currentUser.username) {
+				if (this.tweet.entities.user_mentions[i].screen_name !== this.user.username) {
 					statusTxt += '@' + this.tweet.entities.user_mentions[i].screen_name + ' ';
 					selectionLength += this.tweet.entities.user_mentions[i].screen_name.length + 2;
 				}
@@ -190,8 +190,7 @@ var TweetToaster = Class.create(Toaster, {
 
 			args.selectStart = selectionStart;
 			args.selectEnd = selectionStart + selectionLength;
-		}
-		else {
+		} else {
 			statusTxt = '@' + this.tweet.user.screen_name + ' ';
 		}
 		args.text = statusTxt;
@@ -200,6 +199,7 @@ var TweetToaster = Class.create(Toaster, {
 	},
 	createMessage: function() {
 		var args = {
+			from: this.user,
 			user: this.tweet.user,
 			dm: true
 		};
@@ -396,12 +396,14 @@ var TweetToaster = Class.create(Toaster, {
 	},
 	mention: function() {
 		var args = {
+			from: this.user,
 			text: '@' + this.tweet.user.screen_name + ' '
 		};
 		OpenComposeToaster(this.assistant.toasters, args, this.assistant);
 	},
 	message: function() {
 		var args = {
+			from: this.user,
 			user: this.tweet.user,
 			dm: true
 		};

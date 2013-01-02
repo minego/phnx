@@ -1469,7 +1469,7 @@ span.link{
 
 .compose-card .compose-txt,
 .compose-card .compose-txt textarea {
-	height: 220px;
+	height: 200px;
 }
 
 .compose-txt .counter {
@@ -1496,27 +1496,39 @@ span.link{
 	text-align: center;
 }
 .compose-button {
-	display: inline-block;
-	height: 40px;
-	width: 40px;
-	opacity: .85;
-}
-.compose-button.photo {
-	background: url('../images/low/icons/camera.png') center center no-repeat;
-}
-.compose-button.link {
-	background: url('../images/low/icons/link.png') center center no-repeat;
-}
-.compose-button.geotag {
-	background: url('../images/low/icons/geotag.png') center center no-repeat;
-}
-.compose-button.geotag.active {
-	background: url('../images/low/icons/geotag-active.png') center center no-repeat;
+	display:	inline-block;
+	height:		40px;
+	width:		40px;
+	opacity:	.85;
 }
 
+.compose-button.photo {
+	background: url('../images/low/icons/camera.png')			center center no-repeat;
+}
+.compose-button.link {
+	background: url('../images/low/icons/link.png')				center center no-repeat;
+}
+.compose-button.geotag {
+	background: url('../images/low/icons/geotag.png')			center center no-repeat;
+}
+.compose-button.geotag.active {
+	background: url('../images/low/icons/geotag-active.png')	center center no-repeat;
+}
 .compose-button.emoji {
-		top: -1px;
-    background: url('../images/low/icons/emoticon.png') center center no-repeat;
+	top: -1px;
+    background: url('../images/low/icons/emoticon.png')			center center no-repeat;
+}
+.compose-button.newcard {
+	background: url('../images/low/icons/new-card.png')			center center no-repeat;
+	float: right;
+}
+.compose-button.spacer {
+	float: left;
+}
+
+.compose-card .compose-button.newcard,
+.compose-card .compose-button.spacer {
+	display: none;
 }
 
 .compose-submit {

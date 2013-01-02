@@ -2,14 +2,19 @@
 	This function should be used to open the compose toaster. It will open the
 	toaster or a new compose card depending on the user's preference.
 */
-var OpenComposeToaster = function OpenComposeToaster(toasters, args, assistant)
+var OpenComposeToaster = function OpenComposeToaster(toasters, args, assistant, override)
 {
-	var prefs = new LocalStorage();
+	var newcard	= false;
 
-// TODO	Add a button to the compose toaster to reopen the current compose in
-//		a card.
+	if (typeof(override) !== 'undefined') {
+		newcard = override;
+	} else {
+		var prefs = new LocalStorage();
 
-	if (!prefs.read('composeCard')) {
+		newcard = prefs.read('composeCard');
+	}
+
+	if (!newcard && toasters) {
 		toasters.add(new ComposeToaster(args, assistant));
 	} else {
 		setTimeout(function() {
@@ -40,27 +45,28 @@ var ComposeToaster = Class.create(Toaster, {
 			return;
 		}
 
-		this.id = toasterIndex++;
-		this.nodeId = 'toaster-' + this.id;
-		this.textarea = 'txtCompose-' + this.id;
-		this.completebar = 'complete-bar-' + this.id;
-		this.assistant = assistant;
-		this.controller = assistant.controller;
-		this.user = this.controller.stageController.user;
-		this.shim = false; //hide the shim when this toaster is toasty
-		this.dm = false;
-		this.reply = false;
-		this.reply_id = '';
-		this.geo = false;
-		this.lat = 0;
-		this.lng = 0;
-		this.to = {};
-		this.rt = false;
-		this.availableChars = 140;
-		this.count = 140;
-		this.images = []; //any images to be uploaded
-		this.uploading = false;
-		this.sending = false;
+		this.opts			= opts;
+		this.id				= toasterIndex++;
+		this.nodeId			= 'toaster-' + this.id;
+		this.textarea		= 'txtCompose-' + this.id;
+		this.completebar	= 'complete-bar-' + this.id;
+		this.assistant		= assistant;
+		this.controller		= assistant.controller;
+		this.user			= opts.from || this.controller.stageController.user;
+		this.shim			= false; //hide the shim when this toaster is toasty
+		this.dm				= false;
+		this.reply			= false;
+		this.reply_id		= '';
+		this.geo			= false;
+		this.lat			= 0;
+		this.lng			= 0;
+		this.to				= {};
+		this.rt				= false;
+		this.availableChars	= 140;
+		this.count			= 140;
+		this.images			= []; //any images to be uploaded
+		this.uploading		= false;
+		this.sending		= false;
 
 		var toasterObj = {
 			toasterId: this.id
@@ -82,10 +88,10 @@ var ComposeToaster = Class.create(Toaster, {
 			var txt;
 			if (opts.text === '0') {
 				txt = '@';
-			}
-			else {
+			} else {
 				txt = opts.text;
 			}
+
 			get(this.textarea).value = txt;
 			this.updateCounter();
 		}
@@ -594,12 +600,11 @@ var ComposeToaster = Class.create(Toaster, {
 		this.uploading = true;
 		get('submit-' + this.id).setStyle({'opacity': '.4'});
 		get('loading').addClassName('show');
-		var currentUser = getUser();
 		var args = [
 			{"key":"consumerKey","data": Config.key},
 			{"key":"consumerSecret","data": Config.secret},
-			{"key":"token","data": currentUser.token},
-			{"key":"secret","data": currentUser.secret}
+			{"key":"token","data": this.user.token},
+			{"key":"secret","data": this.user.secret}
 		];
 		this.controller.serviceRequest('palm://com.palm.downloadmanager/', {
 			method: 'upload',
@@ -672,6 +677,12 @@ var ComposeToaster = Class.create(Toaster, {
 
 		this.controller.stageController.pushScene("emoji-dialog", callback);
 	},
+	newCardTapped: function(event) {
+		this.opts.text = get(this.textarea).value;
+
+		OpenComposeToaster(null, this.opts, this, true);
+		this.assistant.toasters.back();
+	},
 	cancelTapped: function(event) {
 		this.assistant.toasters.back();
 	},
@@ -737,6 +748,7 @@ var ComposeToaster = Class.create(Toaster, {
 		Mojo.Event.listen(get('geotag-' + this.id), Mojo.Event.tap, this.geotagTapped.bind(this));
 		Mojo.Event.listen(get('link-' + this.id), Mojo.Event.tap, this.linkTapped.bind(this));
 		Mojo.Event.listen(get('emoji-' + this.id), Mojo.Event.tap, this.emojiTapped.bind(this));
+		Mojo.Event.listen(get('newcard-' + this.id), Mojo.Event.tap, this.newCardTapped.bind(this));
 		Mojo.Event.listen(get('cancel-' + this.id), Mojo.Event.tap, this.cancelTapped.bind(this));
 		Mojo.Event.listen(get('complete-bar-' + this.id), Mojo.Event.tap, this.addUser.bind(this));
 	},
@@ -763,6 +775,7 @@ var ComposeToaster = Class.create(Toaster, {
 		Mojo.Event.stopListening(get('geotag-' + this.id), Mojo.Event.tap, this.geotagTapped);
 		Mojo.Event.stopListening(get('link-' + this.id), Mojo.Event.tap, this.linkTapped);
 		Mojo.Event.stopListening(get('emoji-' + this.id), Mojo.Event.tap, this.emojiTapped);
+		Mojo.Event.stopListening(get('newcard-' + this.id), Mojo.Event.tap, this.newCardTapped);
 		Mojo.Event.stopListening(get('cancel-' + this.id), Mojo.Event.tap, this.cancelTapped);
 		Mojo.Event.stopListening(get('complete-bar-' + this.id), Mojo.Event.tap, this.addUser);
 	}

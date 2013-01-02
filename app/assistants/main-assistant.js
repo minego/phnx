@@ -523,6 +523,7 @@ MainAssistant.prototype = {
 		// listen to the lists
 		for (i=0; i < timelineLists.length; i++) {
 			var el = timelineLists[i];
+
 			this.controller.listen(el, Mojo.Event.listTap, this.tweetTapped.bind(this));
 		}
 
@@ -890,7 +891,18 @@ MainAssistant.prototype = {
 				var		f;
 
 				while ((f = r.shift())) {
-					global.following.push(f);
+					for (var u, i = 0; (u = global.following[i]); i++) {
+						if (u.screen_name.toLowerCase() ===
+							f.screen_name.toLowerCase()
+						) {
+							f = null;
+							break;
+						}
+					}
+
+					if (f) {
+						global.following.push(f);
+					}
 				}
 			});
 		}
@@ -1141,8 +1153,12 @@ MainAssistant.prototype = {
 		var th			= new TweetHelper();
 		var favSym		= "★"; //added by DC
 		var filters		= (new LocalStorage()).read('filters');
+		var user		= this.getAccount(panel.tab.account);
 
 		for (var i = 0, tweet; tweet = tweets[i]; i++) {
+			/* Store a reference to the account that loaded this tweet */
+			tweet.owner = user.id;
+
 			if (tweet.dm || !th.filter(tweet, filters)) {
 				tweets[i] = th.process(tweet);
 			} else {
@@ -1227,8 +1243,6 @@ MainAssistant.prototype = {
 		}
 
 		// Write a few (10) of the latest tweets to the user's cache (async)
-		var user = this.getAccount(panel.tab.account);
-
 		user[panel.id] = model.items.slice(0, 10);
 
 		var account = new Account();
