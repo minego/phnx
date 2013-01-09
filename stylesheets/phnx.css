@@ -1338,6 +1338,12 @@ span.link{
 	padding: 0px 12px;
 }
 
+.profile-created{
+    text-align: center;
+    color: 
+	font-size: 14px;
+}
+
 /* Toasters */
 .toaster {
 	display: block;
