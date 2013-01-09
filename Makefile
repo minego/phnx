@@ -8,6 +8,13 @@ patrick:
 	@palm-launch net.minego.phnx
 	@palm-log -f net.minego.phnx
 
+initrepo:
+	@git remote add upstream git://github.com/minego/phnx.git
+
+update:
+	@git fetch upstream
+	@git merge upstream/master
+
 install: all
 	@palm-install *.ipk
 
