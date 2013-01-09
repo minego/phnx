@@ -1,19 +1,30 @@
 <div id="tweet-{-id_str}" x-mojo-tap-highlight='immediate' class="status-row">
 	<div class="palm-row-wrapper row-wrapper">
 		<table width="100%" border="0">
-		    <tr>
-		        <td valign="top" width="40">
-		        	<div class="tweet-avatar" style="background-image: url(#{-user.profile_image_url});"></div>
-		        </td>
-		        <td>
-		        	<div class="content-wrapper">
+			<tr>
+				<!--td valign="top" width="40"-->
+				<td valign="top" class="convo-item">
+					<div class="tweet-avatar" style="background-image: url(#{-user.profile_image_url});"></div>
+				</td>
+				<td>
+					<div class="content-wrapper">
 						<div class='tweet-username'>#{-user.name}</div>
-						<div class='tweet-screenname'>@#{-user.screen_name}</div>
+						<div class='tweet-screenname'>@#{-user.screen_name}
+							<img class="locked #{-user.protected}" src="images/low/icons/locked_darker.png" alt="..." width="12" height="12"/>
+						</div>
 						<div class='tweet-text'>#{-text}</div>
+						<div id="thumb-wrapper">
+							<div class="timeline #{-thumb_class}">
+								<div class="inline-thumb">
+									<img src=#{-thumbnail} alt="..."/>
+									<img class="inline-thumb2 #{-thumb2_class}" src=#{-thumbnail2} alt="..."/>
+								</div>
+							</div>
+						</div>
 						<div class='tweet-footer'>#{-time_str} via #{-source} #{-footer}</div>
 					</div>
-		        </td>
-		    </tr>
+				</td>
+			</tr>
 		</table>
 	</div>
 </div>

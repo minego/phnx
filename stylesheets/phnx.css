@@ -686,6 +686,7 @@ margin:auto;
 //  display:block;
 	-webkit-border-radius: 4px;
 }
+
 .tweet-avatar{
 	display: none;
 	height: 48px;
@@ -1069,6 +1070,13 @@ span.link{
 .convo-list{
 	padding-bottom: 20px 15px;
 }
+.convo-item{
+	width: 0px;
+}
+.showAvatar .convo-item{
+	width: 40px;
+}
+
 /*#measure {
 	position: fixed;
 	top: 0;

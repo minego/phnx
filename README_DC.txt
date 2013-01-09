@@ -48,3 +48,4 @@ Updated pure.css and sunnyvale.css so that "verified" text is easier to read.
 Updated profile-banner to fill full panel width.
 Updated local.js, preferences-assistant.js, app-assistant.js and dashboard-assistant.js to give pref option to toggle blink notifications 
 Updated content.html, item.html, details.html and user-item.html to display lock icon if account is protected.
+Updated convo-item.html to show lock and thumbnails, and updated phnx.css to make convo list full panel width if hideAvatars is enabled.

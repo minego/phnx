@@ -1263,7 +1263,7 @@ MainAssistant.prototype = {
 					if(model.items[k].id_str === model.myLastId) {
 						if(k > 0) {
 							// TODO: Make this message tappable to load gaps
-							var msg = tweetCount + ' New ' + (this.nouns[panel.id] || "Tweet");
+							var msg = k + ' New ' + (this.nouns[panel.id] || "Tweet");
 
 							if (k > 1) {
 								msg += 's'; //pluralize

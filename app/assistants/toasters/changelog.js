@@ -1,6 +1,8 @@
 var ChangelogToaster = Class.create(Toaster, {
 	items: [
 		{ version: '1.3.6' },
+		{ item: 'Convo list fits panel width if hideAvatars is enabled' },
+		{ item: 'Show padlock and thumbnails in conversation toaster' },
 		{ item: 'Allow customizing the tab order, and allow removing unwanted tabs' },
 		{ item: 'Allow composing in a new card' },
 
