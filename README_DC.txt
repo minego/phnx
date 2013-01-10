@@ -49,3 +49,6 @@ Updated profile-banner to fill full panel width.
 Updated local.js, preferences-assistant.js, app-assistant.js and dashboard-assistant.js to give pref option to toggle blink notifications 
 Updated content.html, item.html, details.html and user-item.html to display lock icon if account is protected.
 Updated convo-item.html to show lock and thumbnails, and updated phnx.css to make convo list full panel width if hideAvatars is enabled.
+Modified phnx.css, pure.css and sunnyvale.css so color of "user since" in profile is more readable.
+Updated link checking for youtube addresses similar to "youtube.com/#/watch".
+Updated phnx.css so that url's are displayed in their entirety in details mode on touchpad. 

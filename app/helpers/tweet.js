@@ -84,7 +84,7 @@ TweetHelper.prototype = {
 						}
 						//tweet.dividerMessage = tweet.thumbnail;
 						tweet.thumb_class = 'show';
-					} else if (links[i].expanded_url.indexOf('youtube.com/watch') > -1){
+					} else if ((links[i].expanded_url.indexOf('youtube.com/watch') > -1) || (links[i].expanded_url.indexOf('youtube.com/#/watch') > -1)){
 						var img = links[i].expanded_url.substr(links[i].expanded_url.indexOf("v=", 8)+2);
 						if(img.indexOf('&',0) > -1) {
 							img = img.slice(0,img.indexOf('&',0));

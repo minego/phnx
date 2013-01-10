@@ -778,6 +778,7 @@ margin:auto;
 
 .tweet-text{
 	clear: both;
+	word-wrap:break-word;
 }
 
 .small-device .tweet-text-no-avatar,
@@ -859,6 +860,14 @@ span.link{
 	overflow: hidden;
 	white-space: nowrap;
 	display: inline-block;
+}
+
+.large-device .details #link {
+	max-width: 100%;
+	overflow: visible;
+	webkit-line-break: normal;
+	white-space: normal;
+	word-break: break-all;
 }
 
 .panel-list-wrapper {
@@ -1339,8 +1348,8 @@ span.link{
 }
 
 .profile-created{
-    text-align: center;
-    color: 
+	text-align: center; 
+	color: #94989c;
 	font-size: 14px;
 }
 
