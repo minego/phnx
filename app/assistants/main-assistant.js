@@ -481,14 +481,14 @@ MainAssistant.prototype = {
 		this.savedSearchesModel = {items: []};
 		this.trendingTopicsModel = {items: []};
 
-		this.controller.setupWidget('trending-topics-list',{itemTemplate: "templates/search-list-item",listTemplate: "templates/list", renderLimit: 10}, this.trendingTopicsModel);
-		this.controller.setupWidget('saved-searches-list',{itemTemplate: "templates/search-list-item",listTemplate: "templates/list", renderLimit: 30}, this.savedSearchesModel);
+		this.controller.setupWidget('trending-topics-list',{itemTemplate: "templates/search-list-item",listTemplate: "templates/list-noptr", renderLimit: 10}, this.trendingTopicsModel);
+		this.controller.setupWidget('saved-searches-list',{itemTemplate: "templates/search-list-item",listTemplate: "templates/list-noptr", renderLimit: 30}, this.savedSearchesModel);
 
 		this.listsModel = {items: []};
 		this.listsYouFollowModel = {items: []};
 
-		this.controller.setupWidget('your-lists-list',{itemTemplate: "templates/list-item",listTemplate: "templates/list", renderLimit: 30}, this.listsModel);
-		this.controller.setupWidget('lists-you-follow-list',{itemTemplate: "templates/list-follows",listTemplate: "templates/list", renderLimit: 30}, this.listsYouFollowModel);
+		this.controller.setupWidget('your-lists-list',{itemTemplate: "templates/list-item",listTemplate: "templates/list-noptr", renderLimit: 30}, this.listsModel);
+		this.controller.setupWidget('lists-you-follow-list',{itemTemplate: "templates/list-follows",listTemplate: "templates/list-noptr", renderLimit: 30}, this.listsYouFollowModel);
 
 		this.setScrollerSizes();
 
@@ -1747,7 +1747,7 @@ MainAssistant.prototype = {
 				var panel	= this.panels[this.timeline];
 				var search	= this.controller.get('txtSearch');
 
-				if (panel.id !== "search") {
+				if (panel.id !== "search" && this.controller.get('txtSearch').value.length === 0) {
 					this.toggleCompose({
 						'text': text
 					});

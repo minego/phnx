@@ -1,6 +1,7 @@
 var ChangelogToaster = Class.create(Toaster, {
 	items: [
 		{ version: '1.3.6' },
+		{ item: 'Fixed search field' },
 		{ item: 'URLs are shown in there entirety in details mode on touchpad' },
 		{ item: '"User since..." added to profile page' },
 		{ item: 'Convo list fits panel width if hideAvatars is enabled' },
