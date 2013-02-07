@@ -77,6 +77,7 @@ function PreferencesAssistant(section) {
 				{label: 'Details Only', value: 'detailsThumbs'},
 				{label: 'Always Show', value: 'showThumbs'}
 			]},
+			{key: 'hideSearchTimelineThumbs',		type: 'toggle', label: 'Hide Search Timeline Thumbnails'},
 			{key: 'showEmoji', type: 'select', label: 'emoji', items: [
 				{label: 'Never Show', value: 'noEmoji'},
 				{label: 'Details Only', value: 'detailsEmoji'},
@@ -282,7 +283,8 @@ PreferencesAssistant.prototype = {
 			prefs.read('hideScreenname'),
 			prefs.read('hideTime'),
 			prefs.read('hideVia'),
-			prefs.read('hideTweetBorder')
+			prefs.read('hideTweetBorder'),
+			prefs.read('hideSearchTimelineThumbs')
 		);
 
 		// Start the background notifications timer

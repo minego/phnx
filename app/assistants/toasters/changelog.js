@@ -1,6 +1,9 @@
 var ChangelogToaster = Class.create(Toaster, {
 	items: [
 		{ version: '1.3.6' },
+		{ item: 'Option to toggle inline thumbs from showing in search timelines.  Helps to hide "unexpected" images popping up' },
+		{ item: 'Inline thumbs and emoji are now shown in search lists' },
+		{ item: '.jpg, .jpeg, .png & .gif images directly mentioned in tweets are shown as thumbnails' },
 		{ item: 'Fixed search field' },
 		{ item: 'URLs are shown in there entirety in details mode on touchpad' },
 		{ item: '"User since..." added to profile page' },
@@ -145,7 +148,7 @@ var ChangelogToaster = Class.create(Toaster, {
 			itemTemplate:		"templates/changelog-item",
 			listTemplate:		"templates/list",
 			// Below added by DC as changeLog display was maxing out
-			renderLimit: 100
+			renderLimit: 200
 		}, this);
 	},
 	backTapped: function(event) {

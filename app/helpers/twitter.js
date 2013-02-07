@@ -131,7 +131,7 @@ TwitterAPI.prototype = {
 	search: function(query, callback) {
 		// Query can be either a string or an object literal with named parameters in it
 		var url = 'https://search.twitter.com/search.json';
-		var args = {"result_type":"mixed","rpp":"150"};
+		var args = {"result_type":"mixed","rpp":"150","include_entities":"1"}; //DC Added include_entities for inline thumbs
 
 		if (typeof(query) === 'string') {
 			args.q = query;

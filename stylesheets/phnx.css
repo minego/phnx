@@ -652,6 +652,11 @@ body.no-gesture {  /* touchpad/emulator */
 	display: block;
 	//margin: 10px auto;
 }
+
+.showThumbs .searchTimeline.show .inline-thumb{
+	display: block;
+	//margin: 10px auto;
+}
 .detailsThumbs .details .inline-thumb.show{
 	display: block;
 	//margin: 10px auto;
@@ -659,6 +664,9 @@ body.no-gesture {  /* touchpad/emulator */
 .showThumbs .details .inline-thumb.show{
 	display: block;
 	//margin: 10px auto;
+}
+.hideSearchTimelineThumbs .searchTimeline.show .inline-thumb{
+	display: none;
 }
 
 .large-device .inline-thumb-large{

@@ -202,7 +202,7 @@ var global = {
 		}
 		Element.addClassName(body, 'font-' + font);
 	},
-	setHide: function(body, hideAvatar, hideUsername, hideScreenname, hideTime, hideVia, hideTweetBorder) {
+	setHide: function(body, hideAvatar, hideUsername, hideScreenname, hideTime, hideVia, hideTweetBorder, hideSearchTimelineThumbs) {
 		if (hideAvatar) {
 			Element.removeClassName(body, 'showAvatar');
 		} else {
@@ -237,6 +237,12 @@ var global = {
 			Element.addClassName(body, 'hideTweetBorder');
 		} else {
 			Element.removeClassName(body, 'hideTweetBorder');
+		}
+		
+		if(hideSearchTimelineThumbs) {
+			Element.addClassName(body, 'hideSearchTimelineThumbs');
+		} else {
+			Element.removeClassName(body, 'hideSearchTimelineThumbs');
 		}
 	},
 	setShowThumbs: function(body, showThumbsStatus) {

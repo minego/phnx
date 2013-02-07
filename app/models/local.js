@@ -22,6 +22,7 @@ function LocalStorage() {
 		delReceivedDM: false,
 		hideAvatar: false,
 		hideTweetBorder: true,
+		hideSearchTimelineThumbs: true,
 		showThumbs: 'showThumbs',
 		showEmoji: 'showEmoji',
 		limitToLocale: false,

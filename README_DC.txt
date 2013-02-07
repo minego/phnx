@@ -53,3 +53,7 @@ Modified phnx.css, pure.css and sunnyvale.css so color of "user since" in profil
 Updated link checking for youtube addresses similar to "youtube.com/#/watch".
 Updated phnx.css so that url's are displayed in their entirety in details mode on touchpad.
 Added list-noptr.html for search an lists panels, and modified main-assistant.js to stop toaster popup on entering search text. 
+Modified tweet.js to show inline thumbs of direct referenced .jpg, .jpeg, .gif and .png files.
+Modified twitter.js, tweet.js, search.html and seach-no-avatar.html for inline thumbs and emoji on search.  Also, search.html and search-no-avatar.html are now unicode.
+Modified preferences-assistant.js, app-globals.js, local.js, status-assistant.js, main-assistant.js and phnx.css to give a toggle (may add to dropdown if I can think of a nice way of doing it), to hide thumbnails in search timeline but show everywhere else.  Implemented option as some quite "unexpected" images came up while doing searches ;)
+Modified changelog.js to up the renderlimit of the list scroller

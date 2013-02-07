@@ -331,7 +331,8 @@ StatusAssistant.prototype = {
 			prefs.read('hideScreenname'),
 			prefs.read('hideTime'),
 			prefs.read('hideVia'),
-			prefs.read('hideTweetBorder')
+			prefs.read('hideTweetBorder'),
+			prefs.read('hideSearchTimelineThumbs') 
 		);
 	}
 };
