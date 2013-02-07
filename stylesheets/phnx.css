@@ -556,7 +556,7 @@ body.no-gesture {  /* touchpad/emulator */
 	display: none;
 	float: right;
 	font-weight: bold;
-	color: #bb0;
+	color: #e44;
 }
 .tweet-favstar.show {
 	display: inline-block;

@@ -1,6 +1,7 @@
 var ChangelogToaster = Class.create(Toaster, {
 	items: [
 		{ version: '1.3.6' },
+		{ item: 'Changed favourite flag from "★" to "♥" to keep things consistant' }, 
 		{ item: 'Option to toggle inline thumbs from showing in search timelines.  Helps to hide "unexpected" images popping up' },
 		{ item: 'Inline thumbs and emoji are now shown in search lists' },
 		{ item: '.jpg, .jpeg, .png & .gif images directly mentioned in tweets are shown as thumbnails' },

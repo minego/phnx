@@ -1151,7 +1151,7 @@ MainAssistant.prototype = {
 		var tweets		= response.responseJSON;
 		var xCount		= tweets.length;
 		var th			= new TweetHelper();
-		var favSym		= "★"; //added by DC
+		var favSym		= "♥"; //"★"; //added by DC
 		var filters		= (new LocalStorage()).read('filters');
 		var user		= this.getAccount(panel.tab.account);
 
