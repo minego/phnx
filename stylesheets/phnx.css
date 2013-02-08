@@ -618,6 +618,25 @@ body.no-gesture {  /* touchpad/emulator */
 	width: 236px;
 }
 
+.search-content-wrapper {
+	display: inline-block;
+	float: left;
+	width: 300px;
+}
+
+.showAvatar .search-content-wrapper {
+	width: 236px;
+}
+
+.large-device .search-content-wrapper {
+	width: 1004px;
+}
+
+.large-device.showAvatar .search-content-wrapper {
+	width: 940px;
+}
+
+
 @media only screen and (orientation:portrait) {
 	.large-device .content-wrapper {
 		width: 343px;
@@ -625,6 +644,14 @@ body.no-gesture {  /* touchpad/emulator */
 
 	.large-device.showAvatar .content-wrapper {
 		width: 279px;
+	}
+
+	.large-device .search-content-wrapper {
+		width: 748px;
+	}
+
+	.large-device.showAvatar .search-content-wrapper {
+		width: 684px;
 	}
 }
 

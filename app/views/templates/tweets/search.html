@@ -1,7 +1,7 @@
 <div id="tweet-{-id_str}" x-mojo-tap-highlight='immediate' class="status-row #{-cssClass}">
 	<div class="palm-row-wrapper row-wrapper">
 		<div class="tweet-avatar" style="background-image: url(#{profile_image_url});"></div>
-		<div class="content-wrapper">
+		<div class="search-content-wrapper">
 			<div class='tweet-username'>#{-from_user_name}</div>
 			<div class='tweet-screenname'>@#{-from_user}</div>
 			<div class='tweet-text'>#{-text}</div>
@@ -16,6 +16,7 @@
 			<div class='tweet-footer'>
 				<span class="top-tweet">#{-toptweet}</span>
 				<span class="tweet-time">#{-time_str}</span>
+				<span class='tweet-via'>#{-via} #{-source}</span>
 				<div class='tweet-has-emoji #{-emoji_class}'>☺</div>
 			</div>
 		</div>

@@ -58,3 +58,6 @@ Modified twitter.js, tweet.js, search.html and seach-no-avatar.html for inline t
 Modified preferences-assistant.js, app-globals.js, local.js, status-assistant.js, main-assistant.js and phnx.css to give a toggle (may add to dropdown if I can think of a nice way of doing it), to hide thumbnails in search timeline but show everywhere else.  Implemented option as some quite "unexpected" images came up while doing searches ;)
 Modified changelog.js to up the renderlimit of the list scroller
 Modified main-assistant.js, item.html and details.html to change favstar from star to heart symbol.
+Modified search.html to show 'via' source.
+Modified search.js and removed search-no-avatar.html as its no longer needed.
+Added item-one-column.html and modified status-assistant.js, search.html and phnx.css for full device width lists, retweet lists and searches.

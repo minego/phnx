@@ -1,6 +1,8 @@
 var ChangelogToaster = Class.create(Toaster, {
 	items: [
 		{ version: '1.3.6' },
+		{ item: 'List/Retweet/Search timelines are now full width on TP' }, 
+		{ item: 'Added "via" source in search timeline' },
 		{ item: 'Changed favourite flag from "★" to "♥" to keep things consistant' }, 
 		{ item: 'Option to toggle inline thumbs from showing in search timelines.  Helps to hide "unexpected" images popping up' },
 		{ item: 'Inline thumbs and emoji are now shown in search lists' },

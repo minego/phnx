@@ -96,8 +96,8 @@ StatusAssistant.prototype = {
 
 		var templates = {
 			"search": "search",
-			"list": "item",
-			"retweets": "item"
+			"list": "item-one-column",
+			"retweets": "item-one-column"
 		};
 
 		this.itemsModel.items = items;
