@@ -68,6 +68,22 @@ var ComposeToaster = Class.create(Toaster, {
 		this.uploading		= false;
 		this.sending		= false;
 
+		/*
+			If enabled composing will not actuall send. This is used to allow
+			debugging of compose behaviors such as splits, auto complete, etc.
+
+			This will also shorten the allowed characters to 30 in order to help
+			with testing splits.
+		*/
+		this.debug			= false;
+
+		if (this.debug) {
+			console.log("WARNING: Debug is enabled, you can't actually send a tweet");
+
+			this.availableChars	= 30;
+			this.count			= 30;
+		}
+
 		var toasterObj = {
 			toasterId: this.id
 		};
@@ -404,8 +420,8 @@ var ComposeToaster = Class.create(Toaster, {
 	},
 
 	submitTweet: function(event) {
-		var txt = get(this.textarea).value;
-		var Twitter = new TwitterAPI(this.user);
+		var txt		= get(this.textarea).value;
+		var Twitter	= new TwitterAPI(this.user);
 		var args;
 
 		var sendfunc;
@@ -433,13 +449,19 @@ var ComposeToaster = Class.create(Toaster, {
 			}.bind(this);
 		}
 
-		/*
+		if (this.debug) {
+			/*
+				Disable actual sending, just print the messages that would have
+				been sent.
+
+				Toggle the 'this.debug' var to turn this on.
+			*/
 			sendfunc = function dummyCB(txt, cb) {
 				console.log("tweet: " + txt);
 
 				cb();
 			}.bind(this);
-		*/
+		}
 
 		if (this.uploading) {
 			ex('An upload is in progress.');
@@ -469,7 +491,7 @@ var ComposeToaster = Class.create(Toaster, {
 						this.easterEggs(txt);
 					}
 
-					messages = split(txt, info);
+					messages = this.split(txt, info);
 					var sendnext = function(response) {
 						var msg = messages.shift();
 
