@@ -45,7 +45,7 @@ var TwitterAPI = function(user, stageController) {
 		statusRetweets:		'statuses/retweets',
 		retweetsOfMe:		'statuses/retweets_of_me',
 		block:				'blocks/create',
-		report:				'report_spam',
+		report:				'users/report_spam',
 		friendshipExists:	'friendships/exists',
 		followers:			'followers/ids',
 		friends:			'friends/ids'
