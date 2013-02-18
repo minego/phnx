@@ -46,7 +46,7 @@ var TwitterAPI = function(user, stageController) {
 		retweetsOfMe:		'statuses/retweets_of_me',
 		block:				'blocks/create',
 		report:				'users/report_spam',
-		friendshipExists:	'friendships/exists',
+		friendshipExists:	'friendships/show',
 		followers:			'followers/ids',
 		friends:			'friends/ids'
 	};
@@ -83,8 +83,8 @@ TwitterAPI.prototype = {
 		// args.include_rts = true;
 		this.sign('GET', this.url(this.endpoints.userTimeline), callback, args, {});
 	},
-	getFavorites: function(username, args, callback) {
-		this.sign('GET', this.url(this.endpoints.userFavorites + '/' + username), callback, args, {});
+	getFavorites: function(args, callback) {
+		this.sign('GET', this.url(this.endpoints.userFavorites), callback, args, {});
 	},
 	followUserName: function(username, callback) {
 		this.sign('POST', this.url(this.endpoints.followUser), callback, {'screen_name':username}, {});
@@ -96,7 +96,10 @@ TwitterAPI.prototype = {
 		this.sign('POST', this.url(this.endpoints.unfollowUser), callback, {'user_id':id}, {});
 	},
 	checkFollow: function(userA, userB, callback) {
-		this.sign('GET', this.url(this.endpoints.friendshipExists), callback, {'user_a':userA, 'user_b': userB}, {});
+		this.sign('GET', this.url(this.endpoints.friendshipExists), callback, {
+			source_id:	userA,
+			target_id:	userB
+		}, {});
 	},
 	rateLimit: function() {
 		// Displays a banner about the current rate limit
