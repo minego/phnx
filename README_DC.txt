@@ -62,3 +62,5 @@ Modified search.html to show 'via' source.
 Modified search.js and removed search-no-avatar.html as its no longer needed.
 Added item-one-column.html and modified status-assistant.js, search.html and phnx.css for full device width lists, retweet lists and searches.
 Modified compose.js so emoji are inserted at current cursor position
+Modified phnx.css and lists.html to add .search-list-item.only for retweet panel
+Modified main-assistant.js as new 1.1 api changes the way lists are handled. Shows users lists now, however all lists are shown there.  need to filter somehow.

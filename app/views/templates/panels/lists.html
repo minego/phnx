@@ -1,7 +1,8 @@
 <div class="panel" id="panel-#{-index}">
 	<div id="scroller-#{-index}" x-mojo-element="Scroller">
 		<div class="panel-spacer" id="spacer"></div>
-		<div id="your-lists" class="panel-list-wrapper" style="display: none">
+		<!--div id="your-lists" class="panel-list-wrapper" style="display: none"-->
+		<div id="your-lists" class="panel-list-wrapper">
 			<div class="panel-list-title">Your Lists</div>
 			<div class="panel-list">
 				<div id="your-lists-list" x-mojo-element="List"></div>
@@ -16,7 +17,7 @@
 		<div id="retweets" class="panel-list-wrapper">
 			<div class="panel-list-title">Retweets</div>
 			<div class="panel-list">
-				<div id="rt-ofyou" class="search-list-item last" x-mojo-tap-highlight="immediate">
+				<div id="rt-ofyou" class="search-list-item only" x-mojo-tap-highlight="immediate">
 					Your tweets, retweeted
 				</div>
 			</div>

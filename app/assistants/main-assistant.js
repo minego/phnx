@@ -1353,7 +1353,8 @@ MainAssistant.prototype = {
 		var Twitter = new TwitterAPI(this.user);
 
 		Twitter.userLists({'user_id':this.user.id}, function(response){
-			var lists = response.responseJSON.lists;
+			//var lists = response.responseJSON.lists;
+			var lists = response.responseJSON;
 			if (lists.length > 0) {
 				if (lists.length === 1) {
 					this.controller.get('your-lists').addClassName('single');

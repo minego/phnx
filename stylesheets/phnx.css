@@ -930,6 +930,7 @@ span.link{
 .layout-no-top .panel-spacer {
 	display: none;
 }
+
 .search-list-item.first {
 /*	padding-top: 0px;*/
 	margin-top: -8px;
@@ -948,6 +949,16 @@ span.link{
 	background: url('../images/low/tweet-border-top.png') left top repeat-x;
 	padding-bottom: 8px;
 	margin-bottom: -8px;
+	-webkit-border-bottom-left-radius: 10px;
+	-webkit-border-bottom-right-radius: 10px;
+}
+.search-list-item.only {
+/*	padding-top: 0px;*/
+	background: none;
+	padding-bottom: 8px;
+	margin-bottom: -8px;
+	margin-top: -8px;
+
 	-webkit-border-bottom-left-radius: 10px;
 	-webkit-border-bottom-right-radius: 10px;
 }
