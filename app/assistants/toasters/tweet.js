@@ -283,13 +283,25 @@ var TweetToaster = Class.create(Toaster, {
 			callback: function(){
 				this.assistant.toasters.back();
 
-				Twitter.action(action, this.tweet.id_str, function(response) {
-					banner('No one will ever know...'); //except the people who already saw it!
-					this.assistant.toasters.back();
+				if(action === 'destroyDM'){
+					args = {'id': this.tweet.id_str};
+					//Mojo.Log.info("id: " + this.tweet.id_str);
+					Twitter.destroyDM(args, function(response) {
+						banner('No one will ever know...'); //except the people who already saw it!
+						this.assistant.toasters.back();
 
-					this.hideTweet();
-				}.bind(this), this.assistant);
+						this.hideTweet();
+					}.bind(this), this.assistant);
+				} else {
+					Twitter.action(action, this.tweet.id_str, function(response) {
+						banner('No one will ever know...'); //except the people who already saw it!
+						this.assistant.toasters.back();
+
+						this.hideTweet();
+					}.bind(this), this.assistant);
+				}
 			}.bind(this)
+
 		};
 		this.assistant.toasters.add(new ConfirmToaster(opts, this.assistant));
 	},

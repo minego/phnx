@@ -64,3 +64,4 @@ Added item-one-column.html and modified status-assistant.js, search.html and phn
 Modified compose.js so emoji are inserted at current cursor position
 Modified phnx.css and lists.html to add .search-list-item.only for retweet panel
 Modified main-assistant.js as new 1.1 api changes the way lists are handled. Shows users lists now, however all lists are shown there.  need to filter somehow.
+Updated tweet.js and twitter.js to allow for deleting of DM's with 1.1 api

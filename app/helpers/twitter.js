@@ -115,6 +115,9 @@ TwitterAPI.prototype = {
 	newDM: function(args, callback) {
 		this.sign('POST', this.url(this.endpoints.newDM), callback, args, {});
 	},
+	destroyDM: function(args, callback) {
+		this.sign('POST', this.url(this.endpoints.destroyDM), callback, args, {}); 
+	},
 	userLists: function(args, callback) {
 		this.sign('GET', this.url(this.endpoints.lists), callback, args, {});
 	},
