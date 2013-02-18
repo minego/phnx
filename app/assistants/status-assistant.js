@@ -140,17 +140,8 @@ StatusAssistant.prototype = {
 		}
 
 		var type = this.opts.rtType;
-		if (type === 'rt-others') {
-			Twitter.retweetsToMe(opts, function(r){
-				callback(r.responseJSON);
-			});
-		}
-		else if (type === 'rt-yours') {
-			Twitter.retweetsByMe(opts, function(r){
-				callback(r.responseJSON);
-			});
-		}
-		else if (type === 'rt-ofyou') {
+
+		if (type === 'rt-ofyou') {
 			Twitter.retweetsOfMe(opts, function(r){
 				callback(r.responseJSON);
 			});
@@ -277,8 +268,7 @@ StatusAssistant.prototype = {
 		var args = {'max_id': this.itemsModel.items[this.itemsModel.items.length - 1].id_str};
 		if (this.opts.type === 'list') {
 			this.loadList(args, this.gotMore.bind(this));
-		}
-		else if (this.opts.type === 'retweets') {
+		} else if (this.opts.type === 'retweets') {
 			this.loadRTs(args, this.gotMore.bind(this));
 		}
 	},

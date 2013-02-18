@@ -558,7 +558,6 @@ MainAssistant.prototype = {
 			//		Also it doesn't make sense to load the lists and get RTs if
 			//		that panel isn't configured...
 			this.loadLists();
-			this.getRetweeted();
 
 			// get the avatar for the minimized card
 			this.getUserAvatar();
@@ -1650,25 +1649,6 @@ MainAssistant.prototype = {
 				}
 			}.bind(this));
 		}
-	},
-	getRetweeted: function() {
-		// We load the tweets the user has retweeted in order to be able to undo the Retweets
-		setTimeout(function(){
-			this.user.retweeted = [];
-			this.user.retweetedItems = [];
-			var Twitter = new TwitterAPI(this.user);
-			Twitter.retweetsByMe(function(response) {
-				if (response.responseJSON.length > 0) {
-					var items = response.responseJSON;
-					this.user.retweetedItems = items;
-
-					for (var i=0; i < items.length; i++) {
-						var rtId = items[i].retweeted_status.id_str;
-						this.user.retweeted.push(rtId);
-					}
-				}
-			}.bind(this));
-		}.bind(this), 2000);
 	},
 	headerTapped: function(event) {
 		// Show the user's profile

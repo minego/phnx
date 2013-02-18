@@ -1,16 +1,15 @@
 // TODO: Remove the assistant parameter from these functions
 // TODO: Remove the panel parameter from these functions. Use closures instead.
 // TODO: Allow custom API (for Chinese users)
-var TwitterAPI = function(user, stageController) {
 
-	this.apibase = 'https://api.twitter.com';
-	this.version = '1'; // will probably have to change a lot more than just this number once v2 hits
-	this.key = Config.key;
-	this.secret = Config.secret;
-	this.user = user;
-	this.token = user.token;
-	this.tokenSecret = user.secret;
-	this.format = 'json'; // why would it be anything else?
+var TwitterAPI = function(user, stageController) {
+	this.apibase		= 'https://api.twitter.com';
+	this.version		= '1.1';
+	this.key			= Config.key;
+	this.secret			= Config.secret;
+	this.user			= user;
+	this.token			= user.token;
+	this.tokenSecret	= user.secret;
 
 	if (stageController) {
 		this.stage = stageController;
@@ -19,47 +18,44 @@ var TwitterAPI = function(user, stageController) {
 	}
 
 	this.endpoints = {
-		home: 'statuses/home_timeline',
-		mentions: 'statuses/mentions',
-		messages: 'direct_messages',
-		sentMessages: 'direct_messages/sent',
-		favorite: 'favorites/create',
-		unfavorite: 'favorites/destroy',
-		retweet: 'statuses/retweet',
-		destroy: 'statuses/destroy',
-		destroyDM: 'direct_messages/destroy',
-		statusShow: 'statuses/show',
-		statusUpdate: 'statuses/update',
-		showUser: 'users/show',
-		lookupUsers: 'users/lookup',
-		userTimeline: 'statuses/user_timeline',
-		userFavorites: 'favorites',
-		followUser: 'friendships/create',
-		unfollowUser: 'friendships/destroy',
-		rateLimit: 'account/rate_limit_status',
-		trends: 'trends/1',
-		savedSearches: 'saved_searches',
-		newDM: 'direct_messages/new',
-		lists: 'lists',
-		listSubscriptions: 'lists/subscriptions',
-		listStatuses: 'lists/statuses',
-		statusRetweets: 'statuses/retweets',
-		retweetsToMe: 'statuses/retweeted_to_me',
-		retweetsByMe: 'statuses/retweeted_by_me',
-		retweetsOfMe: 'statuses/retweets_of_me',
-		block: 'blocks/create',
-		report: 'report_spam',
-		friendshipExists: 'friendships/exists',
-		followers: 'followers/ids',
-		friends: 'friends/ids'
+		home:				'statuses/home_timeline',
+		mentions:			'statuses/mentions_timeline',
+		messages:			'direct_messages',
+		sentMessages:		'direct_messages/sent',
+		favorite:			'favorites/create',
+		unfavorite:			'favorites/destroy',
+		retweet:			'statuses/retweet',
+		destroy:			'statuses/destroy',
+		destroyDM:			'direct_messages/destroy',
+		statusShow:			'statuses/show',
+		statusUpdate:		'statuses/update',
+		showUser:			'users/show',
+		lookupUsers:		'users/lookup',
+		userTimeline:		'statuses/user_timeline',
+		userFavorites:		'favorites/list',
+		followUser:			'friendships/create',
+		unfollowUser:		'friendships/destroy',
+		rateLimit:			'account/rate_limit_status',
+		trends:				'trends/place',
+		savedSearches:		'saved_searches/list',
+		newDM:				'direct_messages/new',
+		lists:				'lists/list',
+		listSubscriptions:	'lists/subscriptions',
+		listStatuses:		'lists/statuses',
+		statusRetweets:		'statuses/retweets',
+		retweetsOfMe:		'statuses/retweets_of_me',
+		block:				'blocks/create',
+		report:				'report_spam',
+		friendshipExists:	'friendships/exists',
+		followers:			'followers/ids',
+		friends:			'friends/ids'
 	};
-
 };
 
 TwitterAPI.prototype = {
 	url: function(endpoint) {
 		// Build an API URL from all of the parts we store.
-		return this.apibase + '/' + this.version + '/' + endpoint + '.' + this.format;
+		return this.apibase + '/' + this.version + '/' + endpoint + '.json';
 	},
 	timeline: function(panel, callback, args, assistant, resource) {
 		this.sign('GET', this.url(this.endpoints[resource || panel.resource]), callback, args, {'panel': panel, 'assistant': assistant});
@@ -111,7 +107,7 @@ TwitterAPI.prototype = {
 		}, {}, {});
 	},
 	trends: function(callback) {
-		this.sign('GET', this.url(this.endpoints.trends), callback, {}, {});
+		this.sign('GET', this.url(this.endpoints.trends), callback, { id: 1 }, {});
 	},
 	getSavedSearches: function(callback) {
 		this.sign('GET', this.url(this.endpoints.savedSearches), callback, {}, {});
@@ -156,12 +152,6 @@ TwitterAPI.prototype = {
 		};
 		this.sign('GET', this.url(this.endpoints.statusRetweets + '/' + id), callback, args, {});
 	},
-	retweetsToMe: function(callback) {
-		this.sign('GET', this.url(this.endpoints.retweetsToMe), callback, {"count": 100}, {});
-	},
-	retweetsByMe: function(callback) {
-		this.sign('GET', this.url(this.endpoints.retweetsByMe), callback, {"count": 100}, {});
-	},
 	retweetsOfMe: function(callback) {
 		this.sign('GET', this.url(this.endpoints.retweetsOfMe), callback, {"count": 100}, {});
 	},
@@ -200,7 +190,6 @@ TwitterAPI.prototype = {
 		}.bind(this));
 	},
 	sign: function(httpMethod, url, callback, args, meta) {
-		var currentUser;
 		var silent = false; // if true, errors are not reported on the screen.
 
 		if (meta.user) {
@@ -211,61 +200,54 @@ TwitterAPI.prototype = {
 			silent = true;
 		}
 
-		//args is an object literal of URL parameters to be included
-		//meta is an object literal with data that needs to be passed through to the callback
-
-		var i; //to make JSLint shut up.
+		// args is an object literal of URL parameters to be included
+		// meta is an object literal with data that needs to be passed through to the callback
 
 		var message = {
-			method: httpMethod,
-			action: url,
-			parameters: []
+			method:		httpMethod,
+			action:		url,
+			parameters:	args
 		};
 
-		//when using OAuth, parameters must be included in the request body
-		//and in the base signature of the Auth Header
-
-		var params = '';
-
-		for (var key in args) {
-			if (params !== '') {
-				params += '&';
-			}
-			params += key + '=' + encodeURIComponent(args[key]);
-			message.parameters.push([key, args[key]]);
-		}
-		console.log(httpMethod + ' ' + url + '?' + params);
+		console.log(httpMethod + ' ' + url + '?' + Object.toJSON(args));
 
 		OAuth.completeRequest(message, {
-			consumerKey: this.key,
-			consumerSecret: this.secret,
-			token: this.token,
-			tokenSecret: this.tokenSecret
+			consumerKey:		this.key,
+			consumerSecret:		this.secret,
+			token:				this.token,
+			tokenSecret:		this.tokenSecret
 		});
 
-		var authHeader = OAuth.getAuthorizationHeader(this.apibase, message.parameters);
-
 		var opts = {
-			method: httpMethod,
-			encoding: 'UTF-8',
+			method:				httpMethod,
+			encoding:			'UTF-8',
+			success:			callback,
+			silent:				silent,
+
 			requestHeaders: {
-				Authorization: authHeader,
-				Accept: 'application/json'
-			},
-			parameters: params,
-			success: callback,
-			silent: silent
+				Authorization:	OAuth.getAuthorizationHeader(this.apibase, message.parameters),
+				Accept:			'application/json'
+			}
 		};
 
 		if (meta) {
 			opts.meta = meta;
 		}
 
-		this.request(url, opts);
+		switch (httpMethod.toUpperCase()) {
+			default:
+			case 'GET':
+				this.request(OAuth.addToURL(url, args), opts);
+				break;
 
+			case 'POST':
+				opts.postBody = OAuth.formEncode(args);
+				this.request(url, opts);
+				break;
+		}
 	},
 	plain: function(httpMethod, url, args, callback, silent) {
-		// Send a plain HTTP request. No OAuth signing.
+		/* Send a plain HTTP request. No OAuth signing. */
 
 		if (typeof(silent) === 'undefined') {
 			silent = false;
@@ -279,71 +261,74 @@ TwitterAPI.prototype = {
 			}
 			params += encodeURIComponent(key) + '=' + encodeURIComponent(args[key]);
 		}
-		params = params.replace('%08',''); // remove the hidden backspace character (messes up searches sometimes)
+
+		/* Remove the hidden backspace character (messes up searches sometimes) */
+		params = params.replace('%08','');
 
 		this.request(url, {
-			method: httpMethod,
-			encoding: 'UTF-8',
-			parameters: params,
-			success: callback,
-			silent: silent
+			method:		httpMethod,
+			encoding:	'UTF-8',
+			parameters:	params,
+			success:	callback,
+			silent:		silent
 		});
 	},
 	request: function(url, opts) {
-		// A wrapper for the PrototypeJS request object
-		// Allows for connection checking and timeouts
-		var user = this.user;
-		var stage = this.stage;
+		/*
+			A wrapper for the PrototypeJS request object, which allows for
+			connection checking and timeouts.
+		*/
+		var user		= this.user;
+		var stage		= this.stage;
+
 		if (!opts.silent || opts.silent === false) {
 			this.toggleLoading(true);
 		}
 
 		var connectionResponse = function(r) {
-			var conn = r.isInternetConnectionAvailable;
-			// var conn = false; // for testing with no internet connection
-			if (conn) {
-				opts.onSuccess = function(response) {
-					if (Ajax.activeRequestCount <= 1) {
-						this.toggleLoading(false);
-					}
-
-					if (!opts.meta) {
-						opts.success(response);
-					}
-					else {
-						opts.success(response, opts.meta);
-					}
-				}.bind(this);
-
-				opts.onFailure = function(transport) {
-					if (Ajax.activeRequestCount <= 1 && opts.silent !== true) {
-						this.toggleLoading(false);
-					}
-					if (opts.silent !== true) {
-						Mojo.Log.info('HTTP Failure ' + transport.status);
-						if (transport.status === 500 || transport.status === 502 || transport.status === 503) {
-							global.fail();
-						}
-						else if (transport.status === 401) {
-							// do nothing, this is a weird 401 error.
-						}
-						else {
-							global.ex(transport.status + ': ' + transport.responseJSON.error);
-						}
-					}
-				}.bind(this);
-				var req = new Ajax.Request(url, opts);
-			}
-			else {
+			if (!r.isInternetConnectionAvailable) {
 				this.toggleLoading(false);
-				// ex('No internet connection.');
+				return;
 			}
-		};
+
+			opts.onSuccess = function(response) {
+				if (Ajax.activeRequestCount <= 1) {
+					this.toggleLoading(false);
+				}
+
+				if (!opts.meta) {
+					opts.success(response);
+				} else {
+					opts.success(response, opts.meta);
+				}
+			}.bind(this);
+
+			opts.onFailure = function(transport) {
+				if (Ajax.activeRequestCount <= 1 && opts.silent !== true) {
+					this.toggleLoading(false);
+				}
+
+				if (opts.silent !== true) {
+					Mojo.Log.info('HTTP Failure ' + transport.status);
+
+					if (transport.status >= 500 && transport.status <= 599) {
+						/* 5xx is a server failure */
+						global.fail();
+					} else {
+						for (var i = 0, err; err = transport.responseJSON.errors[i]; i++) {
+							global.ex(transport.status + ': ' + err.message);
+						}
+					}
+				}
+			}.bind(this);
+
+			new Ajax.Request(url, opts);
+		}.bind(this);
 
 		var service = new Mojo.Service.Request('palm://com.palm.connectionmanager', {
-			method: 'getStatus',
-			onSuccess: connectionResponse.bind(this),
-			onFailure: connectionResponse.bind(this)
+			method:		'getStatus',
+			onSuccess:	connectionResponse,
+			onFailure:	connectionResponse
 		});
 	},
 	toggleLoading: function(show) {
