@@ -687,11 +687,25 @@ var ComposeToaster = Class.create(Toaster, {
 	emojiTapped: function(event) {
 		var callback = function(result) {
 			if (result && result.selectedEmoji != null) {
-				var text = this.controller.get(this.textarea).value;
+				var txtArea = this.controller.get(this.textarea);
+				var emojiChars;
+
 				if(result.selectedEmoji2){
-					this.controller.get(this.textarea).value = text + convertUnicodeCodePointsToString(['0x' + result.selectedEmoji]) + convertUnicodeCodePointsToString(['0x' + result.selectedEmoji2]);
+					emojiChars = convertUnicodeCodePointsToString(['0x' + result.selectedEmoji]) + convertUnicodeCodePointsToString(['0x' + result.selectedEmoji2]);
 				} else{
-					this.controller.get(this.textarea).value = text + convertUnicodeCodePointsToString(['0x' + result.selectedEmoji]);
+					emojiChars = convertUnicodeCodePointsToString(['0x' + result.selectedEmoji]);
+				}
+								
+				if (txtArea.selectionStart || txtArea.selectionStart == '0') {
+					var startPos = txtArea.selectionStart;
+					var endPos = txtArea.selectionEnd;
+					var scrollTop = txtArea.scrollTop;
+					txtArea.value = txtArea.value.substring(0, startPos) + emojiChars + txtArea.value.substring(endPos, txtArea.value.length);
+					txtArea.focus();
+					txtArea.selectionStart = startPos + emojiChars.length;
+					txtArea.selectionEnd = startPos + emojiChars.length;
+				} else {
+					txtArea.value += emojiChars;
 				}
 				this.updateCounter();
 			}

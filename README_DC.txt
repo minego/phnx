@@ -61,3 +61,4 @@ Modified main-assistant.js, item.html and details.html to change favstar from st
 Modified search.html to show 'via' source.
 Modified search.js and removed search-no-avatar.html as its no longer needed.
 Added item-one-column.html and modified status-assistant.js, search.html and phnx.css for full device width lists, retweet lists and searches.
+Modified compose.js so emoji are inserted at current cursor position
