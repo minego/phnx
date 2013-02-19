@@ -1,0 +1,1 @@
+To allow Save/Restore to backup Project Macaw, copy the file in this folder to /var/svc/org.webosinternals.saverestore and make sure it has 755 permissions (ie, rwxr-xr-x)
