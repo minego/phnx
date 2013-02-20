@@ -1728,7 +1728,7 @@ MainAssistant.prototype = {
 				var panel	= this.panels[this.timeline];
 				var search	= this.controller.get('txtSearch');
 
-				if (panel.id !== "search" && this.controller.get('txtSearch').value.length === 0) {
+				if (panel.id !== "search" && (!search || search.value.length === 0)) {
 					this.toggleCompose({
 						'text': text
 					});
