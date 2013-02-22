@@ -444,7 +444,8 @@ body.no-gesture {  /* touchpad/emulator */
 	padding: 0px;
 	border-width: 9px;
 	-webkit-border-image: url(../images/low/search-box.png) 9 stretch;
-	margin: 50px 0px 0px 0px;
+	//margin: 50px 0px 0px 0px;
+	margin: 16px 0px 0px 0px;
 	background: transparent url(../images/low/search-icon.png) 2px center no-repeat;
 	padding: 0 0 0 24px;
 }
