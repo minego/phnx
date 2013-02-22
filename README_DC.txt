@@ -66,3 +66,4 @@ Modified phnx.css and lists.html to add .search-list-item.only for retweet panel
 Modified main-assistant.js as new 1.1 api changes the way lists are handled. Shows users lists now, however all lists are shown there.  need to filter somehow.
 Updated tweet.js and twitter.js to allow for deleting of DM's with 1.1 api
 Added save/restore script to saverestore folder (see README inside that folder for instructions)
+Modified status-scene.html so that first item of search/lists etc doesn't appear under header 

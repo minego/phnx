@@ -2,6 +2,7 @@ var ChangelogToaster = Class.create(Toaster, {
 	items: [
 		// TODO	Change 1.3.9 to 1.4.0 when released. 1.3.9 is a test build...
 		{ version: '1.3.9' },
+		{ item: 'First item in lists, searches, retweets no longer hides under header' }, 
 		{ item: 'Flag emoji now work again' },
 		{ item: 'Emoji are now inserted at current cursor position' },
 		{ item: 'Updated to the twitter 1.1 API (the 1.0 API is being turned off in March 2013)' },
