@@ -68,6 +68,9 @@ TwitterAPI.prototype = {
 	action: function(key, id, callback, assistant) {
 		this.sign('POST', this.url(this.endpoints[key] + '/' + id), callback, {'id': id}, {'assistant': assistant});
 	},
+	favorite: function(key, id, callback, assistant) {
+		this.sign('POST', this.url(this.endpoints[key]), callback, {'id': id}, {'assistant': assistant});
+	},
 	getStatus: function(id, callback, assistant) {
 		this.sign('GET', this.url(this.endpoints.statusShow + '/' + id), callback, {'include_entities': 'true'}, {'assistant': assistant});
 	},
