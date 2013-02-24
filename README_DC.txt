@@ -67,4 +67,5 @@ Modified main-assistant.js as new 1.1 api changes the way lists are handled. Sho
 Updated tweet.js and twitter.js to allow for deleting of DM's with 1.1 api
 Added save/restore script to saverestore folder (see README inside that folder for instructions)
 Modified status-scene.html so that first item of search/lists etc doesn't appear under header
-Modified search.html and phnx.css so that search/trending topics panel obeys top layout properly 
+Modified search.html and phnx.css so that search/trending topics panel obeys top layout properly
+Modified twitter.js and profile-assistant.js to prepare for extra profile stuff.  Attempting to set profile image but no luck yet so commented out in profile-assistant.js 

@@ -48,7 +48,8 @@ var TwitterAPI = function(user, stageController) {
 		report:				'users/report_spam',
 		friendshipExists:	'friendships/show',
 		followers:			'followers/ids',
-		friends:			'friends/ids'
+		friends:			'friends/ids',
+		updateProfileImage:	'account/update_profile_image'
 	};
 };
 
@@ -172,6 +173,10 @@ TwitterAPI.prototype = {
 	},
 	getFriends: function(userId, callback) {
 		this.sign('GET', this.url(this.endpoints.friends), this.gotIds.bind(this), {'user_id': userId, 'cursor': '-1'}, {callback: callback});
+	},
+	// Testing code for profile image upload - not ready - DC
+	updateProfileImage: function(args, callback) {
+		this.sign('POST', this.url(this.endpoints.updateProfileImage), callback, args, {});
 	},
 	gotIds: function(response, meta) {
 		var start	= meta.start || 0;

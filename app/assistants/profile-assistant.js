@@ -10,35 +10,43 @@ ProfileAssistant.prototype = {
 		this.controller.setupWidget(Mojo.Menu.appMenu, {omitDefaultItems: true}, {visible: true, items: global.menuItems});
 		this.menuItems = [];
 
-		if (this.user.following) {
-			this.menuItems.push({
-				label: 'Unfollow',
-				command: 'cmdUnfollow'
-			});
+		this.account = this.controller.stageController.user;
+		if (this.user.id_str === this.account.id) {
+			// Testing code for profile image upload - not ready - DC
+			//this.menuItems.push({
+			//	label: 'Update Profile Image',
+			//	command: 'cmdUpdateProfileImage'
+			//});
 		} else {
+			if (this.user.following) {
+				this.menuItems.push({
+					label: 'Unfollow',
+					command: 'cmdUnfollow'
+				});
+			} else {
+				this.menuItems.push({
+					label: 'Follow',
+					command: 'cmdFollow'
+				});
+			}	
+
 			this.menuItems.push({
-				label: 'Follow',
-				command: 'cmdFollow'
+				label: 'Public Mention',
+				command: 'cmdMention'
+			});
+			this.menuItems.push({
+				label: 'Send Direct Message',
+				command: 'cmdMessage'
+			});
+			this.menuItems.push({
+				label: 'Block',
+				command: 'cmdBlock'
+			});
+			this.menuItems.push({
+				label: 'Report Spam',
+				command: 'cmdSpam'
 			});
 		}
-
-		this.menuItems.push({
-			label: 'Public Mention',
-			command: 'cmdMention'
-		});
-		this.menuItems.push({
-			label: 'Send Direct Message',
-			command: 'cmdMessage'
-		});
-		this.menuItems.push({
-			label: 'Block',
-			command: 'cmdBlock'
-		});
-		this.menuItems.push({
-			label: 'Report Spam',
-			command: 'cmdSpam'
-		});
-
 		if (!this.user.newCard) {
 			this.menuItems.push({
 				label: 'Open In New Card',
@@ -74,7 +82,7 @@ ProfileAssistant.prototype = {
 
 		}
 
-		this.account = this.controller.stageController.user;
+		//this.account = this.controller.stageController.user;
 
         var created = new Date(this.user.created_at);
         this.user.created_at = created.toDateString();
@@ -155,9 +163,9 @@ ProfileAssistant.prototype = {
 		this.closeTapped = this.closeTapped.bind(this);
 		this.controller.listen(this.controller.get("close-button"), Mojo.Event.tap, this.closeTapped);
 
-		if (this.user.id_str === this.account.id) {
-			this.controller.get('options').setStyle({'display':'none'});
-		}
+		//if (this.user.id_str === this.account.id) {
+		//	this.controller.get('options').setStyle({'display':'none'});
+		//}
 
 		// Holy eager loading, Batman!
 		// Timeout so the scene can be fully set up before requests are made
@@ -446,7 +454,22 @@ ProfileAssistant.prototype = {
 			case 'cmdNewCard':
 				this.newCard();
 				break;
+			// Testing code for profile image upload - not ready - DC
+			case 'cmdUpdateProfileImage':
+				this.updateProfImage();
+				break;
 		}
+	},
+	// Testing code for profile image upload - not ready - DC
+	updateProfImage: function() {
+		var Twitter = new TwitterAPI(this.account);
+		var args = {
+			image: '../images/emoji-E04A.png'
+			
+		};
+		Twitter.updateProfileImage(args, function(response){
+			
+		}.bind(this));
 	},
 	follow: function() {
 		var Twitter = new TwitterAPI(this.account);
