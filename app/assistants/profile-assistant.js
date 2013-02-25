@@ -164,8 +164,9 @@ ProfileAssistant.prototype = {
 		this.controller.listen(this.controller.get("close-button"), Mojo.Event.tap, this.closeTapped);
 
 		//if (this.user.id_str === this.account.id) {
-		//	this.controller.get('options').setStyle({'display':'none'});
-		//}
+		if (this.menuItems.length === 0){
+			this.controller.get('options').setStyle({'display':'none'});
+		}
 
 		// Holy eager loading, Batman!
 		// Timeout so the scene can be fully set up before requests are made
