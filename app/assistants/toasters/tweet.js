@@ -463,12 +463,14 @@ var TweetToaster = Class.create(Toaster, {
 		var id = this.tweet.id_str;
 		var request = new
 		Mojo.Service.Request("palm://com.palm.applicationManager", {
-		    method:      'send',
+//		    method:      'send',
+				method: 'open',
 		    parameters:  {
-		    id: 'com.datajog.webos',
-		    params: { data: this.twitterLink}
-    }
-});
+		    	id: 'com.datajog.webos',
+					//params: { data: this.twitterLink}
+		    	params: { action: 'send', data: this.twitterLink }
+    		}
+		});
 		banner('Sent URL to DataJog');
 	},
 	addToInstapaper: function() {

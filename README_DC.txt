@@ -71,3 +71,4 @@ Modified search.html and phnx.css so that search/trending topics panel obeys top
 Modified twitter.js and profile-assistant.js to prepare for extra profile stuff.  Attempting to set profile image but no luck yet so commented out in profile-assistant.js 
 Updated tweet.js and twitter.js to allow favoriting with 1.1 api
 Modified profile-assistant.js so if users profile is opened in a new card, no option button is shown if there are 0 options.
+Updated tweet.js so sending to DataJog works again.
