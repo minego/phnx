@@ -334,7 +334,7 @@ ProfileAssistant.prototype = {
 		if (this.controller.window && this.controller) {
 			var screenHeight = this.controller.window.innerHeight;
 			var screenWidth = this.controller.window.innerWidth;
-			var height = screenHeight - 204;//194;//217//135; //subtract the top stuff
+			var height = screenHeight - 200; //204;//194;//217//135; //subtract the top stuff
 			var panelWidth = 320;
 			// var height = screenHeight; //subtract the header
 			var i;

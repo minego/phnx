@@ -73,3 +73,4 @@ Updated tweet.js and twitter.js to allow favoriting with 1.1 api
 Modified profile-assistant.js so if users profile is opened in a new card, no option button is shown if there are 0 options.
 Updated tweet.js so sending to DataJog works again.  Also allows sending of selected link.
 Modified tweet.js so reference to PaperMache is now Instapaper (as PaperMache is not actually used to share link).
+Modified profile-assistant.js to adjust the height very slightly to make full height.
