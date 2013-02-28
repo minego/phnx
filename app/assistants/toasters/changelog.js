@@ -2,7 +2,7 @@ var ChangelogToaster = Class.create(Toaster, {
 	items: [
 		// TODO	Change 1.3.9 to 1.4.0 when released. 1.3.9 is a test build...
 		{ version: '1.3.9' },
-		{ item: '"Send URL via DataJob" fixed' }, 
+		{ item: '"Send URL via DataJog" fixed and "Send link via DataJog"' }, 
 		{ item: 'Search/Trending panel now obeys top layout' },
 		{ item: 'First item in lists, searches, retweets no longer hides under header' }, 
 		{ item: 'Flag emoji now work again' },

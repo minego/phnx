@@ -383,11 +383,14 @@ var TweetToaster = Class.create(Toaster, {
 			case 'cmdCopyLinkUrl':
 				this.copyLinkUrl(this.url);
 				break;
-			case 'cmdAddLinkPaperMache':
+			case 'cmdAddLinkInstapaper':
 				this.addLinkToInstapaper(this.url);
 				break;
 			case 'cmdAddLinkReadOnTouchPro':
 				this.addLinkReadOnTouchPro(this.url);
+				break;
+			case 'cmdSendLinkDataJog':
+				this.sendLinkDataJog(this.url);
 				break;
 			case 'cmdEmailLink':
 				this.emailLink(this.url);
@@ -591,6 +594,18 @@ transport.responseText);
 		}});
 
 		banner('Added URL to ReadOnTouch PRO');
+	},
+
+	sendLinkDataJog: function(url) {
+		var request = new
+		Mojo.Service.Request("palm://com.palm.applicationManager", {
+				method: 'open',
+		    parameters:  {
+		    	id: 'com.datajog.webos',
+		    	params: { action: 'send', data: url }
+    		}
+		});
+		banner('Sent link URL to DataJog');
 	},
 
 	emailLink: function(url) {
@@ -950,6 +965,10 @@ transport.responseText);
 					{
 						label:		$L('Add to ReadOnTouch PRO'),
 						command:	'cmdAddLinkReadOnTouchPro'
+					},
+					{
+						label:		$L('Send link via DataJog'),
+						command:	'cmdSendLinkDataJog'
 					},
 					{
 						label:		$L('Email Link'),
