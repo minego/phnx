@@ -388,9 +388,13 @@ TweetHelper.prototype = {
 		// Finds out if you retweeted this tweet
 		var r = false;
 
-		for (var i=0; i < user.retweeted.length; i++) {
-			if (user.retweeted[i] === tweet.id_str) {
-				r = true;
+		if (user.retweeted === undefined) {
+			user.retweeted = [];
+		} else {
+			for (var i=0; i < user.retweeted.length; i++) {
+				if (user.retweeted[i] === tweet.id_str) {
+					r = true;
+				}
 			}
 		}
 
