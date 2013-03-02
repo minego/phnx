@@ -603,66 +603,70 @@ var ComposeToaster = Class.create(Toaster, {
 	},
 	photoTapped: function(event) {
 		var params = {
-			defaultKind: 'image',
-			kinds: ['image'],
+			defaultKind:		'image',
+			kinds:				['image'],
+
 			onSelect: function(file){
 				var path = file.fullPath;
+
 				this.upload(path);
 			}.bind(this)
 		};
 
 		Mojo.FilePicker.pickFile(params, this.controller.stageController);
 	},
-	addImage: function(path) {
-		this.images.push(path);
-		this.availableChars -= 25; // the twitpic url is 25 characters long
-		this.updateCounter();
-	},
 	upload: function(path) {
 		this.uploading = true;
 		get('submit-' + this.id).setStyle({'opacity': '.4'});
 		get('loading').addClassName('show');
+
 		var args = [
-			{"key":"consumerKey","data": Config.key},
-			{"key":"consumerSecret","data": Config.secret},
-			{"key":"token","data": this.user.token},
-			{"key":"secret","data": this.user.secret}
+			{ key:"key",				data: Config.twitpicKey	},
+			{ key:"consumer_token",		data: Config.key		},
+			{ key:"consumer_secret",	data: Config.secret		},
+			{ key:"oauth_token",		data: this.user.token	},
+			{ key:"oauth_secret",		data: this.user.secret	},
+
+			{ key:"message",			data: ""				}
 		];
+
 		this.controller.serviceRequest('palm://com.palm.downloadmanager/', {
-			method: 'upload',
+			method:				'upload',
 			parameters: {
-				'url': 'http://photos.phnxapp.com/upload',
-				'fileLabel': 'photo',
-				'fileName': path,
-				'postParameters': args,
-				'subscribe': true
+				url:			'http://api.twitpic.com/1/upload.json',
+				fileLabel:		'media',
+				fileName:		path,
+				postParameters:	args,
+				subscribe:		true
 			},
-			onSuccess: this.uploadSuccess.bind(this),
+
+			onSuccess: function(response) {
+				var ta = get(this.textarea);
+
+				if (response.completed) {
+					var result = Mojo.parseJSON(response.responseString);
+
+					this.uploading = false;
+					get('submit-' + this.id).setStyle({'opacity': '1'});
+					get('loading').removeClassName('show');
+
+					if (ta.value.length > 0) {
+						ta.value = ta.value + ' ';
+					}
+
+					ta.value = ta.value + result.url;
+					this.updateCounter();
+				}
+			}.bind(this),
+
 			onFailure: function() {
 				this.uploading = false;
+
 				get('submit-' + this.id).setStyle({'opacity': '1'});
 				get('loading').removeClassName('loading');
 				ex('Error uploading image.');
 			}
 		});
-	},
-	uploadPhotos: function() {
-		for (var i=0; i < this.images.length; i++) {
-			var img = this.images[i];
-			this.upload(img);
-		}
-	},
-	uploadSuccess: function(response) {
-		if (response.completed) {
-			this.uploading = false;
-			get('submit-' + this.id).setStyle({'opacity': '1'});
-			get('loading').removeClassName('show');
-			if (get(this.textarea).value.length > 0) {
-				get(this.textarea).value = get(this.textarea).value + ' ';
-			}
-			get(this.textarea).value = get(this.textarea).value + response.responseString;
-			this.updateCounter();
-		}
 	},
 	linkTapped: function(event) {
 		var txt = this.controller.get(this.textarea).value;
@@ -695,7 +699,7 @@ var ComposeToaster = Class.create(Toaster, {
 				} else{
 					emojiChars = convertUnicodeCodePointsToString(['0x' + result.selectedEmoji]);
 				}
-								
+
 				if (txtArea.selectionStart || txtArea.selectionStart == '0') {
 					var startPos = txtArea.selectionStart;
 					var endPos = txtArea.selectionEnd;

@@ -2,7 +2,7 @@
 	"title":				"Project Macaw",
 	"vendor":				"Project Macaw",
 	"id":					"net.minego.phnx",
-	"version":				"1.4.0",
+	"version":				"1.4.1",
 	"type":					"web",
 	"main":					"index.html",
 	"icon":					"macaw.png",
@@ -14,7 +14,7 @@
 	"dockMode":				true,
 	"noWindow":				true,
 	"universalSearch": {
-		"action":  { 
+		"action":  {
 			"displayName":	"Project Macaw",
 			"url":			"net.minego.phnx",
 			"launchParam":	{ "action": "prepPost", "msg":"#{searchTerms}" }

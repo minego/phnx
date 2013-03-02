@@ -1,5 +1,8 @@
 var ChangelogToaster = Class.create(Toaster, {
 	items: [
+		{ version: '1.4.1' },
+		{ item: 'Changed image upload service to twitpic' },
+
 		{ version: '1.4.0' },
 		{ item: 'Updated to the twitter 1.1 API' },
 		{ item: '"Send URL via DataJog" fixed and "Send link via DataJog"' },
