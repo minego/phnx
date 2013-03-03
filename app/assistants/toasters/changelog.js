@@ -1,5 +1,8 @@
 var ChangelogToaster = Class.create(Toaster, {
 	items: [
+		{ version: '1.4.2' },
+		{ item: 'Prelimary save/delete searches'},
+		
 		{ version: '1.4.1' },
 		{ item: 'Changed image upload service to twitpic' },
 

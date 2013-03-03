@@ -19,6 +19,8 @@ function MainAssistant(opts) {
 	this.count = 300; //how many tweets to load each request
 	this.renderLimit = 1000; //umm...this scares me. used in list widgets to prevent flickering...
 	this.toasters = new ToasterChain();
+	this.savedSearchesModel = {items: []};
+
 }
 
 MainAssistant.prototype = {
@@ -478,7 +480,7 @@ MainAssistant.prototype = {
 		}
 
 		// Set up Lists and Search widgets
-		this.savedSearchesModel = {items: []};
+		//this.savedSearchesModel = {items: []};
 		this.trendingTopicsModel = {items: []};
 
 		this.controller.setupWidget('trending-topics-list',{itemTemplate: "templates/search-list-item",listTemplate: "templates/list-noptr", renderLimit: 10}, this.trendingTopicsModel);
@@ -1610,7 +1612,8 @@ MainAssistant.prototype = {
 				type: 'search',
 				query: query,
 				items: response.responseJSON.results,
-				user: this.user
+				user: this.user,
+				savedSearchesModel: this.savedSearchesModel // Added by DC
 			};
 			this.controller.stageController.pushScene('status', opts);
 		}.bind(this));

@@ -74,3 +74,4 @@ Modified profile-assistant.js so if users profile is opened in a new card, no op
 Updated tweet.js so sending to DataJog works again.  Also allows sending of selected link.
 Modified tweet.js so reference to PaperMache is now Instapaper (as PaperMache is not actually used to share link).
 Modified profile-assistant.js to adjust the height very slightly to make full height.
+Modiofied twitter.js, main-assistant.js, status-assistant.js and status-scene.html to support saving/deleting searches

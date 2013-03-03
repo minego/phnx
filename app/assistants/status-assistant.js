@@ -3,10 +3,13 @@ function StatusAssistant(opts) {
 	this.toasters = new ToasterChain();
 	this.itemsModel = {items: []};
 	this.loading = false;
+	this.query_id = 0;
+	this.matchFound = 0;
 }
 
 StatusAssistant.prototype = {
 	setup: function() {
+		
 		this.controller.setupWidget(Mojo.Menu.appMenu, {omitDefaultItems: true}, {visible: true, items: global.menuItems});
 		if (this.opts.newCard) {
 			Mojo.Log.info('this is a new card');
@@ -34,7 +37,7 @@ StatusAssistant.prototype = {
 
 		if (this.opts.type === 'search') {
 			this.initSearch();
-		} else if (this.opts.type === 'list' || this.opts.type === 'retweets') {
+		} else if (this.opts.type === 'list' || this.opts.type === 'retweets') {		
 			this.initList();
 		}
 
@@ -42,6 +45,27 @@ StatusAssistant.prototype = {
 		this.controller.listen('refresh', Mojo.Event.tap, this.refreshTapped.bind(this));
 		this.controller.listen('footer', Mojo.Event.tap, this.footerTapped.bind(this));
 		this.controller.listen('more', Mojo.Event.tap, this.moreTapped.bind(this));
+
+		var Twitter = new TwitterAPI(this.opts.user, this.controller.stageController);
+		
+		if(this.opts.type === 'search') {
+			for (var i=0; i<this.opts.savedSearchesModel.items.length; i++) {			
+				if(this.opts.savedSearchesModel.items[i].name == this.opts.query) {
+					this.matchFound = 1;
+					this.query_id = this.opts.savedSearchesModel.items[i].id;
+				} 
+			}
+			if(this.matchFound === 0) {
+				this.controller.listen('save-search', Mojo.Event.tap, this.saveSearchTapped.bind(this));
+				this.controller.get('delete-search').setStyle({'display':'none'});
+			} else {
+				this.controller.listen('delete-search', Mojo.Event.tap, this.deleteSearchTapped.bind(this));
+				this.controller.get('save-search').setStyle({'display':'none'});
+			}
+		} else {
+			this.controller.get('save-search').setStyle({'display':'none'});
+			this.controller.get('delete-search').setStyle({'display':'none'});
+		}
 
 		if (!this.opts.newCard) {
 			this.controller.listen('new-card', Mojo.Event.tap, this.newCardTapped.bind(this));
@@ -217,6 +241,67 @@ StatusAssistant.prototype = {
 	shimTapped: function(event) {
 		this.toasters.nuke();
 	},
+	saveSearchTapped: function(event) {
+		//Mojo.Log.info('SaveSearch tapped');
+		var Twitter = new TwitterAPI(this.opts.user, this.controller.stageController);
+
+		Twitter.saveSearch(this.opts.query, function(response){
+		}.bind(this));
+
+		//need to have error checking in here to make sure search was actually saved.
+
+		//banner('Saving search ' + this.opts.query.substr(0,16) + ' : ' + this.query_id );
+		banner('Saving search ' + this.opts.query.substr(0,16));
+		this.matchFound = 1;
+		this.controller.stopListening('save-search', Mojo.Event.tap, this.saveSearchTapped);
+		this.controller.get('save-search').setStyle({'display':'none'});
+		this.controller.listen('delete-search', Mojo.Event.tap, this.deleteSearchTapped.bind(this));
+		this.controller.get('delete-search').setStyle({'display':'inline'});
+	},
+	deleteSearchTapped: function(event) {
+		//Mojo.Log.error('DeleteSearch tapped');
+		var Twitter = new TwitterAPI(this.opts.user, this.controller.stageController);
+		//Mojo.Log.error('delete QueryId:' + this.query_id);
+
+		Twitter.getSavedSearches(function(response){
+			var savedSearches = response.responseJSON;
+			//Mojo.Log.error('savedSearches length: ' + savedSearches.length);
+			//Mojo.Log.error('this.opts.savedSearchesModesl.items length: ' + this.opts.savedSearchesModel.items.length);
+			//Mojo.Log.error('getting saved searches');
+			for (var i=0; i<savedSearches.length; i++) {
+				//Mojo.Log.error(i + ' : 1Delete QueryId:' + this.query_id);			
+				if(savedSearches[i].name == this.opts.query) {
+					this.query_id = savedSearches[i].id;
+					//Mojo.Log.error('Delete name:' + this.opts.savedSeachesModel.items[i].name);
+				} 
+				//Mojo.Log.error('2Delete QueryId:' + this.query_id);
+			}
+		}.bind(this));
+
+		//need to have error checking in here to make sure search was actually saved.
+		//Mojo.Log.error('3Delete QueryId:' + this.query_id);
+		if(this.matchFound === 1) {
+			//setTimeout(this.executeDeleteSearch(),5000);
+			setTimeout(this.executeDeleteSearch(),5000);
+			this.matchFound = 0;
+		}		
+
+		this.controller.stopListening('delete-search', Mojo.Event.tap, this.deleteSearchTapped);
+		this.controller.get('delete-search').setStyle({'display':'none'});
+		this.controller.listen('save-search', Mojo.Event.tap, this.saveSearchTapped.bind(this));
+		this.controller.get('save-search').setStyle({'display':'inline'});
+		this.matchFound = 0;
+
+	},
+	executeDeleteSearch: function() {
+		//Mojo.Log.error('Actually deleting QueryId:' + this.query_id);
+		var Twitter = new TwitterAPI(this.opts.user, this.controller.stageController);
+		
+		Twitter.deleteSearch(this.query_id, function(response){
+			//banner('Deleting search ' + this.query_id + ' ' + this.opts.query);
+			banner('Deleting search ' + this.opts.query);
+		}.bind(this));
+	},
 	newCardTapped: function(event) {
 		var stageName = global.statusStage + global.stageId++;
 
@@ -295,6 +380,11 @@ StatusAssistant.prototype = {
 		this.controller.stopListening('footer', Mojo.Event.tap, this.footerTapped);
 		this.controller.stopListening('more', Mojo.Event.tap, this.moreTapped);
 		this.controller.stopListening('list-items', Mojo.Event.listTap, this.tweetTapped);
+
+		if(this.opts.type === 'search') {
+			this.controller.stopListening('save-search', Mojo.Event.tap, this.saveSearchTapped);
+			this.controller.stopListening('delete-search', Mojo.Event.tap, this.deleteSearchTapped);
+		}
 
 		if (!this.opts.newCard) {
 			this.controller.stopListening('new-card', Mojo.Event.tap, this.newCardTapped.bind(this));

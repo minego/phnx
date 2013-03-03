@@ -158,6 +158,10 @@ body.no-gesture {  /* touchpad/emulator */
 	position: fixed;
 	left: 0px;
 }
+.header-icon.left2 {
+	position: fixed;
+	left: 62px;
+}
 .header-icon.right {
 	position: fixed;
 	right: 0px;
@@ -248,6 +252,12 @@ body.no-gesture {  /* touchpad/emulator */
 }
 #new-card{
 	background: url(../images/low/icons/new-card.png) no-repeat center center;
+}
+#save-search{
+	background: url(../images/low/icons/add.png) no-repeat center center;
+}
+#delete-search{
+	background: url(../images/low/icons/remove.png) no-repeat center center;
 }
 #back-button{
 	background: url(../images/low/icons/back.png) no-repeat center center;

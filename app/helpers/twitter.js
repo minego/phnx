@@ -38,6 +38,8 @@ var TwitterAPI = function(user, stageController) {
 		rateLimit:			'account/rate_limit_status',
 		trends:				'trends/place',
 		savedSearches:		'saved_searches/list',
+		saveSearch:			'saved_searches/create',
+		deleteSearch:		'saved_searches/destroy',
 		newDM:				'direct_messages/new',
 		lists:				'lists/list',
 		listSubscriptions:	'lists/subscriptions',
@@ -118,6 +120,12 @@ TwitterAPI.prototype = {
 	},
 	getSavedSearches: function(callback) {
 		this.sign('GET', this.url(this.endpoints.savedSearches), callback, {}, {});
+	},
+	saveSearch: function(query, callback) {
+		this.sign('POST', this.url(this.endpoints.saveSearch), callback, {'query':query}, {});
+	},
+	deleteSearch: function(id, callback) {
+		this.sign('POST', this.url(this.endpoints.deleteSearch + '/' + id), callback, {'id':id}, {});
 	},
 	newDM: function(args, callback) {
 		this.sign('POST', this.url(this.endpoints.newDM), callback, args, {});
