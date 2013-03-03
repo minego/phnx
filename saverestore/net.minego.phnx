@@ -2,6 +2,7 @@
 
 APPID=`basename $0`
 APPNAME="Project Macaw"
+APPNOTE="Luna Restart required after restore."
 
 source `dirname $0`/srf.app.info 
 
