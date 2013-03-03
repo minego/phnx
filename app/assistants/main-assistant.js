@@ -867,6 +867,8 @@ MainAssistant.prototype = {
 				this.controller.modelChanged(this.savedSearchesModel);
 				this.controller.get('saved-searches').show();
 				this.savedSearchesLoaded = true;
+			} else {
+				this.controller.get('saved-searches').hide();
 			}
 		}.bind(this));
 	},
@@ -1616,6 +1618,8 @@ MainAssistant.prototype = {
 				savedSearchesModel: this.savedSearchesModel // Added by DC
 			};
 			this.controller.stageController.pushScene('status', opts);
+			this.controller.modelChanged(this.savedSearchesModel);
+			//this.controller.get('saved-searches').show();
 		}.bind(this));
 	},
 	rtTapped: function(event) {
