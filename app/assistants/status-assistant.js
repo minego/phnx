@@ -46,7 +46,7 @@ StatusAssistant.prototype = {
 		this.controller.listen('footer', Mojo.Event.tap, this.footerTapped.bind(this));
 		this.controller.listen('more', Mojo.Event.tap, this.moreTapped.bind(this));
 
-		var Twitter = new TwitterAPI(this.opts.user, this.controller.stageController);
+		//var Twitter = new TwitterAPI(this.opts.user, this.controller.stageController);
 		
 		if(this.opts.type === 'search') {
 			for (var i=0; i<this.opts.savedSearchesModel.items.length; i++) {			
@@ -57,9 +57,11 @@ StatusAssistant.prototype = {
 			}
 			if(this.matchFound === 0) {
 				this.controller.listen('save-search', Mojo.Event.tap, this.saveSearchTapped.bind(this));
+				this.controller.get('save-search').setStyle({'display':'inline'});
 				this.controller.get('delete-search').setStyle({'display':'none'});
 			} else {
 				this.controller.listen('delete-search', Mojo.Event.tap, this.deleteSearchTapped.bind(this));
+				this.controller.get('delete-search').setStyle({'display':'inline'});
 				this.controller.get('save-search').setStyle({'display':'none'});
 			}
 		} else {

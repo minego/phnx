@@ -160,7 +160,7 @@ body.no-gesture {  /* touchpad/emulator */
 }
 .header-icon.left2 {
 	position: fixed;
-	left: 62px;
+	left: 46px;
 }
 .header-icon.right {
 	position: fixed;
@@ -176,7 +176,12 @@ body.no-gesture {  /* touchpad/emulator */
 .large-device .header-icon.largeonly {
 	display: block;
 }
-
+#save-search {
+	display: none;
+}
+#delete-search {
+	display: none;
+}
 
 .header-title {
 	background: url('../images/low/nav-icon-border.png') left bottom no-repeat, url('../images/low/nav-icon-border.png') right bottom no-repeat;
