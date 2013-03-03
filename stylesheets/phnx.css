@@ -162,6 +162,10 @@ body.no-gesture {  /* touchpad/emulator */
 	position: fixed;
 	left: 46px;
 }
+.large-device .header-icon.left2 {
+	position: fixed;
+	left: 62px;
+}
 .header-icon.right {
 	position: fixed;
 	right: 0px;
