@@ -862,6 +862,8 @@ MainAssistant.prototype = {
 			if (savedSearches.length > 0) {
 				if (savedSearches.length === 1) {
 					this.controller.get('saved-searches').addClassName('single');
+				} else {
+					this.controller.get('saved-searches').removeClassName('single');
 				}
 				this.savedSearchesModel.items = savedSearches;
 				this.controller.modelChanged(this.savedSearchesModel);
