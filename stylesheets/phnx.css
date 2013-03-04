@@ -652,10 +652,17 @@ body.no-gesture {  /* touchpad/emulator */
 	width: 1004px;
 }
 
+.large-device .profileScroller .search-content-wrapper {
+	width: 300px;
+}
+
 .large-device.showAvatar .search-content-wrapper {
 	width: 940px;
 }
 
+.large-device.showAvatar .profileScroller .search-content-wrapper {
+	width: 236px;
+}
 
 @media only screen and (orientation:portrait) {
 	.large-device .content-wrapper {
@@ -670,9 +677,18 @@ body.no-gesture {  /* touchpad/emulator */
 		width: 748px;
 	}
 
+	.large-device .profileScroller .search-content-wrapper {
+		width: 343px;
+	}
+
 	.large-device.showAvatar .search-content-wrapper {
 		width: 684px;
 	}
+
+	.large-device.showAvatar .profileScroller .search-content-wrapper {
+		width: 279px;
+	}
+
 }
 
 .inline-thumb{

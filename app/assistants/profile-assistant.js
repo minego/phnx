@@ -59,6 +59,31 @@ ProfileAssistant.prototype = {
 		this.favoritesModel = {items:[]};
 
 		if (this.user.newCard) {
+			// set css classes based on device
+			console.log(Mojo.Environment.DeviceInfo.modelNameAscii);
+
+			//createEmojiHash();
+
+			if (Mojo.Environment.DeviceInfo.modelNameAscii == "Pixi" ||
+				Mojo.Environment.DeviceInfo.modelNameAscii == "Veer") {
+				this.controller.document.body.addClassName("small-device");
+
+				this.smalldevice = true;
+			} else if (Mojo.Environment.DeviceInfo.modelNameAscii == "TouchPad" ||
+				Mojo.Environment.DeviceInfo.screenWidth > 500) {
+				this.controller.document.body.addClassName("large-device");	
+
+				this.largedevice = true;
+			} else {
+				this.controller.document.body.addClassName("medium-device");
+
+				this.mediumdevice = true;
+			}
+
+			if (!Mojo.Environment.DeviceInfo.coreNaviButton) {
+				this.controller.document.body.addClassName("no-gesture");
+			}
+
 			this.historyModel.items = this.user.history;
 			this.mentionsModel.items = this.user.mentions;
 			this.favoritesModel.items = this.user.favorites;
@@ -71,6 +96,20 @@ ProfileAssistant.prototype = {
 			var body = this.controller.stageController.document.getElementsByTagName("body")[0];
 			var font = prefs.read('fontSize');
 			global.setFontSize(body, font);
+
+			global.setShowThumbs(body,	prefs.read('showThumbs'));
+			global.setShowEmoji(body,	prefs.read('showEmoji'));
+
+			global.setHide(body,
+				prefs.read('hideAvatar'),
+				prefs.read('hideUsername'),
+				prefs.read('hideScreenname'),
+				prefs.read('hideTime'),
+				prefs.read('hideVia'),
+				prefs.read('hideTweetBorder'),
+				prefs.read('hideSearchTimelineThumbs')
+			);
+
 
 			// var img = this.user.profile_image_url.replace('_normal', '_bigger');
 			var img = 'images/low/user-card.png';
