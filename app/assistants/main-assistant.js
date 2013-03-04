@@ -1617,7 +1617,9 @@ MainAssistant.prototype = {
 				query: query,
 				items: response.responseJSON.results,
 				user: this.user,
-				savedSearchesModel: this.savedSearchesModel // Added by DC
+				savedSearchesModel: this.savedSearchesModel, // Added by DC
+				assistant: this,
+				controller: this.controller 
 			};
 			this.controller.stageController.pushScene('status', opts);
 			this.controller.modelChanged(this.savedSearchesModel);
