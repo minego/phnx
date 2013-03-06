@@ -118,13 +118,12 @@ ProfileAssistant.prototype = {
 				template: 'templates/account-card'
 			});
 			this.controller.get('account-shim').update(cardHtml);
-
 		}
 
 		//this.account = this.controller.stageController.user;
 
-        var created = new Date(this.user.created_at);
-        this.user.created_at = created.toDateString();
+		var created = new Date(this.user.created_at);
+		this.user.created_at = created.toDateString();
 
 		var sceneHtml = Mojo.View.render({
 			object: this.user,

@@ -1411,7 +1411,19 @@ span.link{
 .profileScrollerContainer{
 	display: block;
 	width: 1280px !important;
+	//width: 1364px !important;
 }
+.large-device .profileScrollerContainer{
+	display: block;
+	//width: 1280px !important;
+	width: 1364px !important;
+}
+@media only screen and (orientation:portrait){
+	.large-device .profileScrollerContainer {
+		width: 1536px !important;
+	}
+}
+
 .profile-bio{
 	padding: 0px 15px;
 	font-size: 18px;

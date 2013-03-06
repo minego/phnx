@@ -1,5 +1,8 @@
 var ChangelogToaster = Class.create(Toaster, {
 	items: [
+		{ version: '1.4.3' },
+		{ item: 'Bug fixed profile view panel layout for touchpad' },
+		
 		{ version: '1.4.2' },
 		{ item: 'Save/Delete searches'},
 		
