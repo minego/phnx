@@ -78,3 +78,4 @@ Modified twitter.js, main-assistant.js, status-assistant.js and status-scene.htm
 Modified profile-assistant.js so that open in new card obeys prefs.
 Modified phnx.css to help with profile panel width issues.  Still working on favourites.
 Modified phnx.css so landscape and profile both show all panel columns in profile.
+Modified status-assistant.js so tweets are full width on tp for new-card searches and lists

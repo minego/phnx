@@ -14,6 +14,30 @@ StatusAssistant.prototype = {
 		this.controller.setupWidget(Mojo.Menu.appMenu, {omitDefaultItems: true}, {visible: true, items: global.menuItems});
 		if (this.opts.newCard) {
 			Mojo.Log.info('this is a new card');
+			// set css classes based on device
+			console.log(Mojo.Environment.DeviceInfo.modelNameAscii);
+	
+			if (Mojo.Environment.DeviceInfo.modelNameAscii == "Pixi" ||
+				Mojo.Environment.DeviceInfo.modelNameAscii == "Veer") {
+				this.controller.document.body.addClassName("small-device");
+
+				this.smalldevice = true;
+			} else if (Mojo.Environment.DeviceInfo.modelNameAscii == "TouchPad" ||
+				Mojo.Environment.DeviceInfo.screenWidth > 500) {
+				this.controller.document.body.addClassName("large-device");	
+
+				this.largedevice = true;
+			} else {
+				this.controller.document.body.addClassName("medium-device");
+
+				this.mediumdevice = true;
+			}
+
+			if (!Mojo.Environment.DeviceInfo.coreNaviButton) {
+				this.controller.document.body.addClassName("no-gesture");
+			}
+	
+			
 			// Apply theme / font and all that junk
 			var prefs = new LocalStorage();
 			var theme = prefs.read('theme');
@@ -22,6 +46,18 @@ StatusAssistant.prototype = {
 			var body = this.controller.stageController.document.getElementsByTagName("body")[0];
 			var font = prefs.read('fontSize');
 			global.setFontSize(body, font);
+			global.setShowThumbs(body,	prefs.read('showThumbs'));
+			global.setShowEmoji(body,	prefs.read('showEmoji'));
+
+			global.setHide(body,
+				prefs.read('hideAvatar'),
+				prefs.read('hideUsername'),
+				prefs.read('hideScreenname'),
+				prefs.read('hideTime'),
+				prefs.read('hideVia'),
+				prefs.read('hideTweetBorder'),
+				prefs.read('hideSearchTimelineThumbs')
+			);
 
 			var img = 'images/low/' + this.opts.type + '-card.png';
 			var cardHtml = Mojo.View.render({
