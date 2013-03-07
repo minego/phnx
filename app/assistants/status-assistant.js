@@ -106,12 +106,13 @@ StatusAssistant.prototype = {
 			this.controller.get('delete-search').setStyle({'display':'none'});
 		}
 
+		this.controller.listen('back-button', Mojo.Event.tap, this.backTapped.bind(this));
+
 		if (!this.opts.newCard) {
 			this.controller.listen('new-card', Mojo.Event.tap, this.newCardTapped.bind(this));
-			this.controller.listen('back-button', Mojo.Event.tap, this.backTapped.bind(this));
 		} else {
 			this.controller.get('new-card').setStyle({'display':'none'});
-			this.controller.get('back-button').setStyle({'display':'none'});
+			//this.controller.get('back-button').setStyle({'display':'none'});
 		}
 	},
 	initSearch: function() {
@@ -363,6 +364,9 @@ StatusAssistant.prototype = {
 			this.toasters.back();
 		} else {
 			this.controller.stageController.popScene();
+			if (this.opts.newCard) {
+				this.controller.window.close();
+			}
 		}
 	},
 	refreshTapped: function(event) {

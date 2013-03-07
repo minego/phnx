@@ -231,6 +231,9 @@ ProfileAssistant.prototype = {
 	},
 	closeTapped: function() {
 		this.controller.stageController.popScene();
+		if (this.user.newCard) {
+			this.controller.window.close();
+		}
 	},
 	checkFollowing: function() {
 		var Twitter = new TwitterAPI(this.account);
