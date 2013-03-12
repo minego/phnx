@@ -80,3 +80,4 @@ Modified phnx.css to help with profile panel width issues.  Still working on fav
 Modified phnx.css so landscape and profile both show all panel columns in profile.
 Modified status-assistant.js so tweets are full width on tp for new-card searches and lists
 Modified status-assistant.js and profile-assistant.js so that if using a new card, the close button kills the card.
+Modified preferences-assistant.js, dashboard-assistant.js and added pick.html and empty.html to allow for custom notification sounds

@@ -54,12 +54,24 @@ DashboardAssistant.prototype = {
 		//var bannerMessage = '@' + from + ': ' + this.message;
 
 		var notificationSound = prefs.read('notificationSound');
+		var notificationSoundFilePath = prefs.read('notificationSoundFilePath');
+		var notificationSoundClass;
 
+		if(notificationSound === 'notificationsCustom'){
+			notificationSoundClass = 'notifications';
+		} else {
+			notificationSoundClass = notificationSound;
+		}
 		var bannerParams = {
 			messageText: bannerMessage,
-//			soundClass: 'notifications'
-			soundClass: notificationSound
+			soundClass: notificationSoundClass
 		};
+		
+		if(notificationSound === 'notificationsCustom') {
+			bannerParams.soundFile = notificationSoundFilePath;
+		} else {
+			bannerParams.soundFile = "";
+		}
 
 		Mojo.Controller.getAppController().showBanner(bannerParams, {source: "notification"}, 'phnx');
 		if(prefs.read('notificationBlink')){

@@ -1,5 +1,8 @@
 var ChangelogToaster = Class.create(Toaster, {
 	items: [
+		{ version: '1.4.4' },
+		{ item: 'Added ability to use custom notification sounds' },
+		
 		{ version: '1.4.3' },
 		{ item: 'Close button on new cards now closes the card on TP' },
 		{ item: 'Bug fixed new-card views on touchpad to use full width' },

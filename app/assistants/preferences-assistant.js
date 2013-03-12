@@ -103,10 +103,13 @@ function PreferencesAssistant(section) {
 				{label: '12 hours', value: '12:00'}
 			]},
 			{key: 'notificationSound', type: 'select', label: 'Alert', items: [
-				{label: 'Sound', value: 'notifications'},
+				{label: 'System Sound', value: 'notifications'},
+				{label: 'Custom Sound', value: 'notificationsCustom'},
 				{label: 'Vibrate', value: 'vibrate'},
 				{label: 'Mute', value: 'none' }
 			]},
+			{key: 'notificationSoundFilePath', type: 'pick', label: 'Tone'},
+			{key: 'notificationSoundName', type: 'hidden', label: ''},
 			{key: 'notificationBlink', type: 'toggle', label: 'Blink'},
 			{key: 'notificationHome', type: 'toggle', label: 'Home Timeline'},
 			{key: 'notificationMentions', type: 'toggle', label: 'Mentions'},
@@ -186,6 +189,36 @@ PreferencesAssistant.prototype = {
 							value: this.prefs.read(widget.key)
 						}
 					);
+				} else if (widget.type === 'pick') {
+					html = Mojo.View.render({
+						object: widget,
+						template: 'preferences/pick'
+					});
+
+					widgetHtml += html;
+					this.controller.setupWidget('pick-' + widget.key,
+						this.widgets['attr_' + widget.key] = {
+						},
+						this.widgets['model_' + widget.key] = {
+							value: this.prefs.read(widget.key)
+						}
+					);
+				}	else if (widget.type === 'hidden') {
+					//So the auto writing of prefs can still occur but without creating any displayed widgets.
+					//Probably a better way of doing it, but it works for now.
+					html = Mojo.View.render({
+						object: widget,
+						template: 'preferences/empty'
+					});
+
+					widgetHtml += html;
+					this.controller.setupWidget('hidden-' + widget.key,
+						this.widgets['attr_' + widget.key] = {
+						},
+						this.widgets['model_' + widget.key] = {
+							value: this.prefs.read(widget.key)
+						}
+					);
 				}
 			}
 
@@ -225,20 +258,65 @@ PreferencesAssistant.prototype = {
 			break;
 		}
 
+		var prefs = new LocalStorage();
+		
 		this.controller.get('sections').update(pageHtml);
-
+		
+		if (!this.section || this.section == "Notifications") {
+			if (prefs.read('notificationSound') === "notificationsCustom") {
+				this.controller.get('tonePathRow').show();
+			} else {
+				this.controller.get('tonePathRow').hide();
+			}
+			this.controller.get('tonePath').update(prefs.read('notificationSoundName'));
+		}
+		
 		// Manually add listeners after the elements are on the DOM
 		this.closeTapped = this.closeTapped.bind(this);
 		this.controller.listen(this.controller.get("close-button"), Mojo.Event.tap, this.closeTapped);
+
+		this.controller.listen(this.controller.get('select-sectionlist'), Mojo.Event.propertyChange, this.sectionChanged.bind(this));
 
 		if (!this.section || this.section == "Appearance") {
 			this.controller.listen(this.controller.get('select-theme'), Mojo.Event.propertyChange, this.themeChanged.bind(this));
 		}
 
-		this.controller.listen(this.controller.get('select-sectionlist'), Mojo.Event.propertyChange, this.sectionChanged.bind(this));
+		if (!this.section || this.section == "Notifications") {
+			this.controller.listen('select-notificationSound', Mojo.Event.propertyChange, this.soundChanged.bind(this));
+			//this.controller.listen('tonePathRow', Mojo.Event.tap, this.tonePathTapHandler.bindAsEventListener(this));
+			this.controller.listen('tonePathRow', Mojo.Event.tap, this.tonePathTapHandler.bind(this));
+		}
 	},
 	closeTapped: function() {
 		this.controller.stageController.popScene();
+	},
+	tonePathTapHandler: function() {
+		//Mojo.Log.info('Custom sound tapped!');
+		var prefs = new LocalStorage();
+		
+		Mojo.FilePicker.pickFile({
+			onSelect : this.tonePathSelectionHandler.bind(this),
+			kinds : ["ringtone"],
+			defaultKind : "ringtone",
+			actionType : "open",
+			filePath : this.widgets['model_notificationSoundFilePath'].value //prefs.read('notificationSoundFilePath')
+		}, this.controller.stageController);
+	},
+	tonePathSelectionHandler: function(selection) {
+		var prefs = this.prefs;
+		//prefs.write('notificationSoundFilePath', selection.fullPath);
+		//prefs.write('notificationSoundName', selection.name);		
+		this.controller.get('tonePath').update(selection.name);
+		this.widgets['model_notificationSoundFilePath'].value = selection.fullPath;
+		this.widgets['model_notificationSoundName'].value = selection.name;
+	},
+	soundChanged: function(event) {
+		//Mojo.Log.info('event: ' + event.value);
+		if (event.value == "notificationsCustom") {
+			this.controller.get('tonePathRow').show();
+		} else {
+			this.controller.get('tonePathRow').hide();
+		}
 	},
 	themeChanged: function(event) {
 		global.setTheme(event.value, this.prefs.read('theme'),
@@ -263,6 +341,7 @@ PreferencesAssistant.prototype = {
 
 			for (var i=0; i < sectionItems.length; i++) {
 				var item = sectionItems[i];
+				//Mojo.Log.info('prefs: ' + item.key + ' : ' + this.widgets['model_' + item.key].value);
 				prefs.write(item.key, this.widgets['model_' + item.key].value);
 			}
 		}
@@ -296,6 +375,10 @@ PreferencesAssistant.prototype = {
 		if (!this.section || this.section == "Appearance") {
 			this.controller.stopListening(this.controller.get('select-theme'), Mojo.Event.propertyChange, this.themeChanged);
 			this.controller.stopListening(this.controller.get('select-sectionlist'), Mojo.Event.propertyChange, this.sectionChanged);
+		}
+		if(!this.section || this.section == "Notifications") {
+			this.controller.stopListening('select-notificationSound', Mojo.Event.propertyChange, this.soundChanged);
+			this.controller.stopListening('tonePathRow', Mojo.Event.tap, this.tonePathTapHandler);
 		}
 	}
 };
