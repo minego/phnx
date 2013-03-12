@@ -77,6 +77,7 @@ function PreferencesAssistant(section) {
 				{label: 'Details Only', value: 'detailsThumbs'},
 				{label: 'Always Show', value: 'showThumbs'}
 			]},
+			{key: 'fullWidthThumbs', type: 'toggle', label: 'Full Width Thumbnails'},
 			{key: 'hideSearchTimelineThumbs',		type: 'toggle', label: 'Hide Search Timeline Thumbnails'},
 			{key: 'showEmoji', type: 'select', label: 'emoji', items: [
 				{label: 'Never Show', value: 'noEmoji'},
@@ -353,6 +354,7 @@ PreferencesAssistant.prototype = {
 			prefs.read('hideTabs')
 		);
 		global.setShowThumbs(body,	prefs.read('showThumbs'));
+		global.setFullWidthThumbs(body, prefs.read('fullWidthThumbs'));
 		global.setShowEmoji(body,	prefs.read('showEmoji'));
 		global.setFontSize(body,	prefs.read('fontSize'));
 

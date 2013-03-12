@@ -254,6 +254,13 @@ var global = {
 			Element.addClassName(body, 'detailsThumbs');
 		}
 	},
+	setFullWidthThumbs: function(body, fullWidthThumbsStatus) {
+		if(fullWidthThumbsStatus){
+			Element.addClassName(body, 'fullWidthThumbs');
+		} else {
+			Element.removeClassName(body, 'fullWidthThumbs');
+		}
+	},
 	setShowEmoji: function(body, showEmojiStatus) {
 		Element.removeClassName(body, 'showEmoji');
 		Element.removeClassName(body, 'detailsEmoji');

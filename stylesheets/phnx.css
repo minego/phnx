@@ -704,6 +704,12 @@ body.no-gesture {  /* touchpad/emulator */
 	margin-right: auto;
 }
 
+.fullWidthThumbs .inline-thumb {
+	height: auto;
+	width: 100%;
+	background-size: 100% auto;
+}
+
 .inline-thumb2 {
 	display: none;
 }
@@ -734,11 +740,11 @@ body.no-gesture {  /* touchpad/emulator */
 
 .large-device .inline-thumb-large{
 	height: 256px;
-	background-size: auto 256x;
+	background-size: auto 256px;
 }
 .large-device .inline-thumb-large.small{
 	height: 128px;
-	background-size: auto 128x;
+	background-size: auto 128px;
 }
 .inline-thumb-large{
 	height: 128px;
@@ -751,9 +757,9 @@ body.no-gesture {  /* touchpad/emulator */
 
 #thumb-wrapper img
 {
-max-width:100%; 
-max-height:100%;
-margin:auto;
+	max-width:100%; 
+	max-height:100%;
+	margin:auto;
 //  display:block;
 	-webkit-border-radius: 4px;
 }

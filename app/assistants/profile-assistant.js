@@ -98,6 +98,7 @@ ProfileAssistant.prototype = {
 			global.setFontSize(body, font);
 
 			global.setShowThumbs(body,	prefs.read('showThumbs'));
+			global.setFullWidthThumbs(body, prefs.read('fullWidthThumbs'));
 			global.setShowEmoji(body,	prefs.read('showEmoji'));
 
 			global.setHide(body,

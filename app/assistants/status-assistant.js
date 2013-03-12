@@ -47,6 +47,7 @@ StatusAssistant.prototype = {
 			var font = prefs.read('fontSize');
 			global.setFontSize(body, font);
 			global.setShowThumbs(body,	prefs.read('showThumbs'));
+			global.setFullWidthThumbs(body, prefs.read('fullWidthThumbs'));
 			global.setShowEmoji(body,	prefs.read('showEmoji'));
 
 			global.setHide(body,
@@ -451,6 +452,7 @@ StatusAssistant.prototype = {
 		var prefs = new LocalStorage();
 
 		global.setShowThumbs(body,	prefs.read('showThumbs'));
+		global.setFullWidthThumbs(body, prefs.read('fullWidthThumbs'));
 		global.setShowEmoji(body,	prefs.read('showEmoji'));
 		global.setFontSize(body,	prefs.read('fontSize'));
 
