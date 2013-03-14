@@ -82,3 +82,4 @@ Modified status-assistant.js so tweets are full width on tp for new-card searche
 Modified status-assistant.js and profile-assistant.js so that if using a new card, the close button kills the card.
 Modified preferences-assistant.js, dashboard-assistant.js and added pick.html and empty.html to allow for custom notification sounds.
 Modified tweet-highlight.png to make higher and updated phnx.css, preferences-assistant.js, main-assistant.js, profile-assistant.js, status-assistant.js, app-globals.js to allow for full width thumbnails in timelines
+MOdified tweet.js to remove via via via bug on search refreshes as well as preventing double html unescaping of source

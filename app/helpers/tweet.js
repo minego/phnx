@@ -215,9 +215,12 @@ TweetHelper.prototype = {
 	},
 	processSearch: function(tweet) {
 		// search tweets are stupid and in a different format from the rest.
-		tweet.source = tweet.source.unescapeHTML(); // search returns escaped HTML for some reason
+		if(tweet.source.indexOf('&lt') > -1){
+			tweet.source = tweet.source.unescapeHTML(); // search returns escaped HTML for some reason
+		}
 		//disable clickable source links
-		tweet.source = "via " + tweet.source.replace('href="', 'hhref="#');
+		tweet.source = tweet.source.replace('href="', 'hhref="#');
+		tweet.via = "via";
 
 		// Expand some shortened links automatically via the entities payload
 		// thumbnail passing added by DC
