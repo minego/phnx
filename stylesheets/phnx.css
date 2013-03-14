@@ -704,6 +704,7 @@ body.no-gesture {  /* touchpad/emulator */
 	margin-right: auto;
 }
 
+.fullWidthThumbs .searchTimeline .inline-thumb,
 .fullWidthThumbs .timeline .inline-thumb {
 	height: auto;
 	width: 100%;

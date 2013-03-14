@@ -84,3 +84,4 @@ Modified preferences-assistant.js, dashboard-assistant.js and added pick.html an
 Modified tweet-highlight.png to make higher and updated phnx.css, preferences-assistant.js, main-assistant.js, profile-assistant.js, status-assistant.js, app-globals.js to allow for full width thumbnails in timelines
 MOdified tweet.js to remove via via via bug on search refreshes as well as preventing double html unescaping of source
 Modified String.js to obey linebreaks
+MOdified phnx.css so that search timelines obey fullThumbWidth preference
