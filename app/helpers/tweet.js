@@ -215,11 +215,14 @@ TweetHelper.prototype = {
 	},
 	processSearch: function(tweet) {
 		// search tweets are stupid and in a different format from the rest.
-		if(tweet.source.indexOf('&lt') > -1){
+		if(tweet.source.indexOf('&lt') > -1) {
 			tweet.source = tweet.source.unescapeHTML(); // search returns escaped HTML for some reason
 		}
 		//disable clickable source links
+		Mojo.Log.error('tweet.source 1: ' + tweet.source);
 		tweet.source = tweet.source.replace('href="', 'hhref="#');
+		tweet.source = tweet.source.replace('href=&quot;', 'hhref=&quot;#');
+		Mojo.Log.error('tweet.source 2: ' + tweet.source);
 		tweet.via = "via";
 
 		// Expand some shortened links automatically via the entities payload
