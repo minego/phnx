@@ -219,8 +219,8 @@ TweetHelper.prototype = {
 			tweet.source = tweet.source.unescapeHTML(); // search returns escaped HTML for some reason
 		}
 		//disable clickable source links
-		tweet.source = tweet.source.replace('href="', 'hhref="#');
-		tweet.source = tweet.source.replace('href=&quot;', 'hhref=&quot;#');
+		tweet.source = tweet.source.replace(/&quot;/g, '"');
+		tweet.source = tweet.source.replace('href="', 'href="#');
 		tweet.via = "via";
 
 		// Expand some shortened links automatically via the entities payload
