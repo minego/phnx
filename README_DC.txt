@@ -86,3 +86,4 @@ MOdified tweet.js to remove via via via bug on search refreshes as well as preve
 Modified String.js to obey linebreaks
 Modified phnx.css so that search timelines obey fullThumbWidth preference
 Modified config.js with new keys for bit.ly
+Modified both tweet.js to accomodate vine videos. Thumbs don't show up in timeline until refresh - need to fix

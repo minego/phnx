@@ -153,6 +153,17 @@ TweetHelper.prototype = {
 						//tweet.dividerMessage = tweet.mediaUrl;
 						//tweet.cssClass = 'new-tweet';
 						tweet.thumb_class = 'show';
+					} else if (links[i].expanded_url.indexOf('http://vine.co/v/') > -1 || links[i].expanded_url.indexOf('https://vine.co/v/') > -1){
+						this.getVineHTML(links[i].expanded_url,tweet,i);
+						tweet.mediaUrl = tweet.myVideoLink;
+						if(i === 0){
+							tweet.thumbnail = tweet.myStillLink;
+						} else {
+							tweet.thumbnail2 = tweet.myStillLink;
+							tweet.thumb2_class = 'show';
+							tweet.mediaUrl2 = tweet.myVideoLink;
+						}
+						tweet.thumb_class = 'show';
 					}
 				}
 			}
@@ -197,6 +208,46 @@ TweetHelper.prototype = {
 		//Mojo.Log.info(tweet.emojify);
 
 		return tweet;
+	},
+	
+	getVineHTML: function(url, tweet, index, callback) {
+		//Mojo.Log.info('src url: ' + url);
+		var req = new Ajax.Request(url, {
+			method: 'GET',
+			onSuccess: function(response) {
+				if (Ajax.activeRequestCount === 1) {
+					//Element.removeClassName('loading', 'show');
+				}
+				//Mojo.Log.error('vine success: ' + response.responseText);
+				var myNode = document.createElement('div');
+				myNode.innerHTML = response.responseText;
+				var myVideo = myNode.getElementsByTagName("video");
+				var mySource = myNode.getElementsByTagName("source");
+
+				if(index === 0) {
+					tweet.myStillLink = String((myVideo[0].getAttribute("poster")).match(/.*.jpg/));
+					tweet.myVideoLink = String((mySource[0].getAttribute("src")).match(/.*.mp4/));
+					tweet.thumbnail = tweet.myStillLink;
+					tweet.mediaUrl = tweet.myVideoLink;
+					Mojo.Log.info('vine thumb: ' + tweet.myStillLink);
+					Mojo.Log.info('vine video: ' + tweet.myVideoLink);
+				} else {
+					tweet.myStillLink2 = String((myVideo[0].getAttribute("poster")).match(/.*.jpg/));
+					tweet.myVideoLink2 = String((mySource[0].getAttribute("src")).match(/.*.mp4/));
+					tweet.thumbnail2 = tweet.myStillLink2;
+					tweet.mediaUrl2 = tweet.myVideoLink2;
+					Mojo.Log.info('vine thumb2: ' + tweet.myStillLink2);
+					Mojo.Log.info('vine video2: ' + tweet.myVideoLink2);
+				}
+				myNode = NULL; 
+			}.bind(this),
+			onFailure: function(response) {
+				if (Ajax.activeRequestCount === 1) {
+					//Element.removeClassName('loading', 'show');
+				}
+				Mojo.Log.error('vine failure: ' + response.responseText);
+			}
+		});
 	},
 	filter: function(tweet, filters) {
 		if (!filters || !filters.length) {
@@ -345,6 +396,17 @@ TweetHelper.prototype = {
 						}
 						//tweet.dividerMessage = tweet.mediaUrl;
 						//tweet.cssClass = 'new-tweet';
+						tweet.thumb_class = 'show';
+					}	else if (links[i].expanded_url.indexOf('http://vine.co/v/') > -1 || links[i].expanded_url.indexOf('https://vine.co/v/') > -1){
+						this.getVineHTML(links[i].expanded_url,tweet,i);
+						tweet.mediaUrl = tweet.myVideoLink;
+						if(i === 0){
+							tweet.thumbnail = tweet.myStillLink;
+						} else {
+							tweet.thumbnail2 = tweet.myStillLink;
+							tweet.thumb2_class = 'show';
+							tweet.mediaUrl2 = tweet.myVideoLink;
+						}
 						tweet.thumb_class = 'show';
 					}
 				}

@@ -376,7 +376,7 @@ var TweetToaster = Class.create(Toaster, {
 				break;
 			case 'cmdEmail':
 				this.email();
-				break;
+				breack;
 			case 'cmdSms':
 				this.sms();
 				break;
@@ -407,6 +407,10 @@ var TweetToaster = Class.create(Toaster, {
 			case 'cmdOpenInAppBrowser':
 				this.controller.stageController.pushScene('webview', this.url);
 				break;
+			// DC temp test code
+			//case 'cmdGetVineHTML':
+				//this.getVineHTML();
+				//break;
 		}
 	},
 	mention: function() {
@@ -746,7 +750,6 @@ transport.responseText);
 			}.bind(this));
 		}
 	},
-
 	handleLink: function(url) {
 		//looks for images and other neat things in urls
 		var img;
@@ -783,7 +786,17 @@ transport.responseText);
 		} else if (url.indexOf('https://twitter.com/#!/' + this.twitterUsername + '/status/' + this.twitterId) > -1) {
 			this.assistant.toasters.add(new TweetToaster(url, this.assistant));
 			Mojo.Log.error("TweetToaster for https:// called");
-		}	else{
+		}	else if(url.indexOf('https://vines.s3.amazonaws.com/v/') > -1) {
+			this.controller.serviceRequest("palm://com.palm.applicationManager", {
+				method: "launch",
+				parameters: {
+					id: "com.palm.app.videoplayer",
+					params: {
+						target: url
+					}
+				}
+			}); 
+		} else{
 			this.showWebview(url);
 		}
 	},
@@ -934,6 +947,10 @@ transport.responseText);
 			{
 				label:				$L('Hide'),
 				command:			'cmdHide'
+			},
+			{
+				label:				$L('vineHTML'),
+				command:			'cmdGetVineHTML'
 			}
 		];
 
