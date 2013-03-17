@@ -1,6 +1,7 @@
 var ChangelogToaster = Class.create(Toaster, {
 	items: [
 		{ version: '1.4.4' },
+		{ item: 'Updated bit.ly keys so link shortening works again' },
 		{ item: 'Line breaks are now respected on tweets' },
 		{ item: 'Added option to show thumbnails in timeline full image width.  Will not scale above 100% of width of original image'},
 		{ item: 'Added ability to use custom notification sounds' },
