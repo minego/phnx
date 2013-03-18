@@ -10,11 +10,11 @@ var StatusListToaster = Class.create(Toaster, {
 
 		var th = new TweetHelper();
 		for (var i=0; i < items.length; i++) {
-			items[i] = th.process(items[i]);
+			items[i] = th.process(items[i],this.listModel,this.controller);
 		}
 
-		this.listModel = {"items": items};
-
+		//this.listModel = {"items": items};
+		this.listModel.items = items;
 		this.render({'toasterId':this.id, title: this.title}, 'templates/toasters/status-list');
 
 		this.controller.setupWidget('status-scroller-' + this.id, {mode: 'vertical'},{});

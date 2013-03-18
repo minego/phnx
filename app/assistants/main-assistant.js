@@ -1165,7 +1165,7 @@ MainAssistant.prototype = {
 			tweet.owner = user.id;
 
 			if (tweet.dm || !th.filter(tweet, filters)) {
-				tweets[i] = th.process(tweet);
+				tweets[i] = th.process(tweet,panel.model,this.controller);
 			} else {
 				tweets.splice(i, 1);
 			}

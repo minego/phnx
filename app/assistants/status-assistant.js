@@ -152,10 +152,10 @@ StatusAssistant.prototype = {
 		var type = this.opts.type;
 		for (var i=0; i < items.length; i++) {
 			if (type === 'search') {
-				items[i] = th.processSearch(items[i]);
+				items[i] = th.processSearch(items[i],this.itemsModel,this.controller);
 			}
 			else if (type === 'list' || type === 'retweets') {
-				items[i] = th.process(items[i]);
+				items[i] = th.process(items[i],this.itemsModel,this.controller);
 			}
 		}
 
@@ -232,10 +232,10 @@ StatusAssistant.prototype = {
 		for (i=0; i < this.itemsModel.items.length; i++) {
 			var tweet = this.itemsModel.items[i];
 			if (type === 'search') {
-				tweet = th.processSearch(tweet);
+				tweet = th.processSearch(tweet,this.itemsModel,this.controller);
 			}
 			else if (type === 'list'  || type === 'retweets') {
-				tweet = th.process(tweet);
+				tweet = th.process(tweet,this.itemsModel,this.controller);
 			}
 
 			if (tweet.id_str !== newId) {
@@ -412,7 +412,7 @@ StatusAssistant.prototype = {
 		}
 
 		for (i=0; i < model.items.length; i++) {
-			model.items[i] = th.process(model.items[i]);
+			model.items[i] = th.process(model.items[i],model,this.controller);
 		}
 
 		this.controller.modelChanged(model);

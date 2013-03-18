@@ -302,7 +302,7 @@ ProfileAssistant.prototype = {
 			var th = new TweetHelper();
 			for (var i=0; i < response.responseJSON.length; i++) {
 				var tweet = response.responseJSON[i];
-				tweet = th.process(tweet);
+				tweet = th.process(tweet,this.historyModel,this.controller);
 			}
 			if (this.historyModel.items.length === 0) {
 				this.historyModel.items = response.responseJSON;
@@ -328,7 +328,7 @@ ProfileAssistant.prototype = {
 			var items = response.responseJSON.results;
 			var th = new TweetHelper();
 			for (var i=0; i < items.length; i++) {
-				items[i] = th.processSearch(items[i]);
+				items[i] = th.processSearch(items[i],this.mentionsModel,this.controller);
 			}
 			if (this.mentionsModel.items.length === 0) {
 				this.mentionsModel.items = items;
@@ -358,7 +358,7 @@ ProfileAssistant.prototype = {
 			var th = new TweetHelper();
 			for (var i=0; i < response.responseJSON.length; i++) {
 				var tweet = response.responseJSON[i];
-				tweet = th.process(tweet);
+				tweet = th.process(tweet,this.favoritesModel,this.controller);
 			}
 			if (this.favoritesModel.items.length === 0) {
 				this.favoritesModel.items = response.responseJSON;

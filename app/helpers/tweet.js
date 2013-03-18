@@ -1,7 +1,7 @@
 var TweetHelper = function() {};
 
 TweetHelper.prototype = {
-	process: function(tweet) {
+	process: function(tweet,model,controller) {
 		// takes a tweet and does all sorts of stuff to it
 
 		// Save the created_at property for all tweets
@@ -154,14 +154,14 @@ TweetHelper.prototype = {
 						//tweet.cssClass = 'new-tweet';
 						tweet.thumb_class = 'show';
 					} else if (links[i].expanded_url.indexOf('http://vine.co/v/') > -1 || links[i].expanded_url.indexOf('https://vine.co/v/') > -1){
-						this.getVineHTML(links[i].expanded_url,tweet,i);
-						tweet.mediaUrl = tweet.myVideoLink;
+						this.getVineHTML(links[i].expanded_url,tweet,i,model,controller);
+						//tweet.mediaUrl = tweet.myVideoLink;
 						if(i === 0){
-							tweet.thumbnail = tweet.myStillLink;
+							//tweet.thumbnail = tweet.myStillLink;
 						} else {
-							tweet.thumbnail2 = tweet.myStillLink;
+							//tweet.thumbnail2 = tweet.myStillLink;
 							tweet.thumb2_class = 'show';
-							tweet.mediaUrl2 = tweet.myVideoLink;
+							//tweet.mediaUrl2 = tweet.myVideoLink;
 						}
 						tweet.thumb_class = 'show';
 					}
@@ -210,7 +210,7 @@ TweetHelper.prototype = {
 		return tweet;
 	},
 	
-	getVineHTML: function(url, tweet, index, callback) {
+	getVineHTML: function(url, tweet, index, model, controller, elementId, callback) {
 		//Mojo.Log.info('src url: ' + url);
 		var req = new Ajax.Request(url, {
 			method: 'GET',
@@ -239,6 +239,12 @@ TweetHelper.prototype = {
 					Mojo.Log.info('vine thumb2: ' + tweet.myStillLink2);
 					Mojo.Log.info('vine video2: ' + tweet.myVideoLink2);
 				}
+				
+				if(elementId){
+					get(elementId).mojo.noticeUpdatedItems(0, model.items);
+				} else {
+					controller.modelChanged(model);
+				}
 				myNode = NULL; 
 			}.bind(this),
 			onFailure: function(response) {
@@ -264,7 +270,7 @@ TweetHelper.prototype = {
 
 		return(null);
 	},
-	processSearch: function(tweet) {
+	processSearch: function(tweet,model,controller) {
 		// search tweets are stupid and in a different format from the rest.
 		if(tweet.source.indexOf('&lt') > -1) {
 			tweet.source = tweet.source.unescapeHTML(); // search returns escaped HTML for some reason
@@ -398,14 +404,14 @@ TweetHelper.prototype = {
 						//tweet.cssClass = 'new-tweet';
 						tweet.thumb_class = 'show';
 					}	else if (links[i].expanded_url.indexOf('http://vine.co/v/') > -1 || links[i].expanded_url.indexOf('https://vine.co/v/') > -1){
-						this.getVineHTML(links[i].expanded_url,tweet,i);
-						tweet.mediaUrl = tweet.myVideoLink;
+						this.getVineHTML(links[i].expanded_url,tweet,i,model,controller);
+						//tweet.mediaUrl = tweet.myVideoLink;
 						if(i === 0){
-							tweet.thumbnail = tweet.myStillLink;
+							//tweet.thumbnail = tweet.myStillLink;
 						} else {
-							tweet.thumbnail2 = tweet.myStillLink;
+							//tweet.thumbnail2 = tweet.myStillLink;
 							tweet.thumb2_class = 'show';
-							tweet.mediaUrl2 = tweet.myVideoLink;
+							//tweet.mediaUrl2 = tweet.myVideoLink;
 						}
 						tweet.thumb_class = 'show';
 					}
