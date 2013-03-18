@@ -210,7 +210,7 @@ TweetHelper.prototype = {
 		return tweet;
 	},
 	
-	getVineHTML: function(url, tweet, index, model, controller, elementId, callback) {
+	getVineHTML: function(url, tweet, index, model, controller, callback) {
 		//Mojo.Log.info('src url: ' + url);
 		var req = new Ajax.Request(url, {
 			method: 'GET',
@@ -240,11 +240,8 @@ TweetHelper.prototype = {
 					Mojo.Log.info('vine video2: ' + tweet.myVideoLink2);
 				}
 				
-				if(elementId){
-					get(elementId).mojo.noticeUpdatedItems(0, model.items);
-				} else {
-					controller.modelChanged(model);
-				}
+				controller.modelChanged(model);
+
 				myNode = NULL; 
 			}.bind(this),
 			onFailure: function(response) {

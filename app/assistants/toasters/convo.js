@@ -23,7 +23,7 @@ var ConvoToaster = Class.create(Toaster, {
 		Twitter.getStatus(id, function(response, meta) {
 			var tweet = response.responseJSON;
 			var th = new TweetHelper();
-			tweet = th.process(tweet,this.convoModel,this.controller,'convo-list-' + this.id);
+			tweet = th.process(tweet,this.convoModel,this.controller);
 			this.convoModel.items.push(tweet);
 			get('convo-list-' + this.id).mojo.noticeUpdatedItems(0, this.convoModel.items);
 			if (tweet.in_reply_to_status_id_str !== null) {
