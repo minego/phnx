@@ -1302,6 +1302,9 @@ MainAssistant.prototype = {
 				var tweet = model.items[i];
 
 				tweet.time_str = this.timeSince(tweet.created_at);
+				if (tweet.in_reply_to_status_id_str !== null && tweet.in_reply_to_status_id_str) {
+					tweet.convo_class = 'show';
+				}
 				// block below added by DC
 				if(tweet.favorited) {
 					if (!tweet.favSet){

@@ -1,6 +1,7 @@
 var ChangelogToaster = Class.create(Toaster, {
 	items: [
 		{ version: '1.4.4' },
+		{ item: 'Conversation icon shows on tweets in timelines if tweet is part of a convo' },
 		{ item: 'Preliminary support for Vine videos' },
 		{ item: 'Updated bit.ly keys so link shortening works again' },
 		{ item: 'Line breaks are now respected on tweets' },

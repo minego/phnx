@@ -194,6 +194,9 @@ TweetHelper.prototype = {
 		if((new Date() - d) > 86400000){
 			tweet.time_tweeted = d.toDateString(d);
 		}
+		if (tweet.in_reply_to_status_id_str !== null && tweet.in_reply_to_status_id_str) {
+			tweet.convo_class = 'show';
+		}
 
 		//keep the plaintext version for quote-style RTs (so HTML doesn't get tossed in there)
 		tweet.stripped = tweet.text;
@@ -440,6 +443,9 @@ TweetHelper.prototype = {
 		tweet.time_str = d.toRelativeTime(1500);
 		if (tweet.metadata.result_type === 'popular') {
 			tweet.toptweet = 'Top Tweet';
+		}
+		if (tweet.in_reply_to_status_id_str !== null && tweet.in_reply_to_status_id_str) {
+			tweet.convo_class = 'show';
 		}
 		//keep the plaintext version for quote-style RTs (so HTML doesn't get tossed in there)
 		tweet.stripped = tweet.text;

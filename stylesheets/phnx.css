@@ -587,6 +587,17 @@ body.no-gesture {  /* touchpad/emulator */
 .locked.true{
 	display: inline;
 }
+.tweet-convo{
+	float: right;
+	position: relative;
+	margin-right: 2px;
+	bottom: -4px;
+	display: none;
+}
+.tweet-convo.show{
+	display: inline;
+}
+
 .tweet-has-emoji{
 	display: none;
 	float: right;
