@@ -89,3 +89,4 @@ Modified config.js with new keys for bit.ly
 Modified both tweet.js to accomodate vine videos. Thumbs don't show up in timeline until refresh - need to fix
 Modified tweet.js, main-assistant.js, profile-assistant.js, status-assistant.js, convo.js, search.js, status-list.js to support vine videos.
 Modified main-assistant.js, tweet.js, item-one-column.html, item.html, search.html, phnx.css, to show conversation icon on tweets in timeline if part of a convo.
+Commented out some lines in tweet.js as twitpic no longer gives us access to the full image so can't preview it.
