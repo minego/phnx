@@ -249,10 +249,18 @@ StatusAssistant.prototype = {
 	tweetTapped: function(event) {
 		if (this.toasters.items.length === 0) {
 			if (this.opts.type === 'search') {
+				var tmpThumb = event.item.thumbnail;
+				var tmpThumb2 = event.item.thumbnail2;
+				var tmpMediaUrl = event.item.mediaUrl;
+				var tmpMediaUrl2 = event.item.mediaUrl2;
 				var Twitter = new TwitterAPI(this.opts.user, this.controller.stageController);
 				Twitter.getStatus(event.item.id_str, function(response){
 					var th = new TweetHelper();
 					var tweet = th.process(response.responseJSON);
+					tweet.thumbnail = tmpThumb;
+					tweet.mediaUrl = tmpMediaUrl;
+					tweet.thumbnail2 = tmpThumb2;
+					tweet.mediaUrl2 = tmpMediaUrl2;
 					this.toasters.add(new TweetToaster(tweet, this));
 				}.bind(this));
 			} else if (this.opts.type === 'list' || this.opts.type === 'retweets') {

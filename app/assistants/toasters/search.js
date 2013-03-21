@@ -35,10 +35,19 @@ var SearchToaster = Class.create(Toaster, {
 	tweetTapped: function(event) {
 		// load the tweet first so we can get the user object and reply IDs, and other info
 		// (not included in search results)
+		var tmpThumb = event.item.thumbnail;
+		var tmpThumb2 = event.item.thumbnail2;
+		var tmpMediaUrl = event.item.mediaUrl;
+		var tmpMediaUrl2 = event.item.mediaUrl2;
+		Mojo.Log.error('item: ' + event.item.id_str);
 		var Twitter = new TwitterAPI(this.user);
 		Twitter.getStatus(event.item.id_str, function(response){
 			var th = new TweetHelper();
 			var tweet = th.process(response.responseJSON);
+			tweet.thumbnail = tmpThumb;
+			tweet.mediaUrl = tmpMediaUrl;
+			tweet.thumbnail2 = tmpThumb2;
+			tweet.mediaUrl2 = tmpMediaUrl2;
 			this.assistant.toasters.add(new TweetToaster(tweet, this.assistant));
 		}.bind(this));
 	}

@@ -215,13 +215,14 @@ TweetHelper.prototype = {
 	
 	getVineHTML: function(url, tweet, index, model, controller, callback) {
 		//Mojo.Log.info('src url: ' + url);
+		
 		var req = new Ajax.Request(url, {
 			method: 'GET',
 			onSuccess: function(response) {
 				if (Ajax.activeRequestCount === 1) {
-					//Element.removeClassName('loading', 'show');
+					Element.removeClassName('loading', 'show');
 				}
-				//Mojo.Log.error('vine success: ' + response.responseText);
+
 				var myNode = document.createElement('div');
 				myNode.innerHTML = response.responseText;
 				var myVideo = myNode.getElementsByTagName("video");
@@ -242,14 +243,12 @@ TweetHelper.prototype = {
 					Mojo.Log.info('vine thumb2: ' + tweet.myStillLink2);
 					Mojo.Log.info('vine video2: ' + tweet.myVideoLink2);
 				}
-				
 				controller.modelChanged(model);
-
 				myNode = NULL; 
 			}.bind(this),
 			onFailure: function(response) {
 				if (Ajax.activeRequestCount === 1) {
-					//Element.removeClassName('loading', 'show');
+					Element.removeClassName('loading', 'show');
 				}
 				Mojo.Log.error('vine failure: ' + response.responseText);
 			}
