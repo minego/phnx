@@ -1,6 +1,7 @@
 var ChangelogToaster = Class.create(Toaster, {
 	items: [
 		{ version: '1.4.4' },
+		{ item: 'Added "Send to Facebook" and "Send link to Facebook" },
 		{ item: 'Clicking on TwitPic thumb or link now loads webpage as large image is no longer available through this service' },
 		{ item: 'Conversation icon shows on tweets in timelines if tweet is part of a convo' },
 		{ item: 'Preliminary support for Vine videos' },

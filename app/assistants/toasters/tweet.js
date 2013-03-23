@@ -368,6 +368,9 @@ var TweetToaster = Class.create(Toaster, {
 			case 'cmdDataJog':
 				this.dataJog();
 				break;
+			case 'cmdSendToFacebook':
+				this.sendToFacebook();
+				break;
 			case 'cmdInstapaper':
 				this.addToInstapaper();
 				break;
@@ -391,6 +394,9 @@ var TweetToaster = Class.create(Toaster, {
 				break;
 			case 'cmdSendLinkDataJog':
 				this.sendLinkDataJog(this.url);
+				break;
+			case 'cmdSendLinkFacebook':
+				this.sendLinkFacebook(this.url);
 				break;
 			case 'cmdEmailLink':
 				this.emailLink(this.url);
@@ -476,9 +482,34 @@ var TweetToaster = Class.create(Toaster, {
 		    	id: 'com.datajog.webos',
 					//params: { data: this.twitterLink}
 		    	params: { action: 'send', data: this.twitterLink }
-    		}
+    		},
 		});
 		banner('Sent URL to DataJog');
+	},
+	sendToFacebook: function() {
+		var appids = ['com.palm.app.enyo-facebook','com.palm.app.facebook'], index = 0;
+		var textToSend = "Tweet From" + " @" + this.tweet.user.screen_name + ": " + this.tweet.stripped + "\n" + " -- Sent via Project Macaw for webOS";
+		function makeCall() {
+			if (index < appids.length) {
+				Mojo.Log.info('Trying to launch with appid %s', appids[index]);
+				var request = new Mojo.Service.Request("palm://com.palm.applicationManager", {
+					method: 'launch',
+					parameters: {
+						id: appids[index],
+						params: {"type":"status","statusText":textToSend , status:textToSend}
+					},
+					onFailure: function() {
+						Mojo.Log.info('Failed to launch with appid %s', appids[index]);
+						index++; // go to next appid
+						makeCall(); // retry
+					}.bind(this)
+				});
+			} else {
+				Mojo.Log.error('Failed to launch');                   
+			};
+		} 
+		banner('Tweet sent to Facebook');
+		makeCall();
 	},
 	addToInstapaper: function() {
 		var url = "https://www.instapaper.com/api/add";
@@ -612,6 +643,32 @@ transport.responseText);
 		banner('Sent link URL to DataJog');
 	},
 
+	sendLinkFacebook: function(url) {
+		var appids = ['com.palm.app.enyo-facebook','com.palm.app.facebook'], index = 0;
+		var textToSend = url + "\n -- Sent via Project Macaw for webOS";
+		function makeCall() {
+			if (index < appids.length) {
+				Mojo.Log.info('Trying to launch with appid %s', appids[index]);
+				var request = new Mojo.Service.Request("palm://com.palm.applicationManager", {
+					method: 'launch',
+					parameters: {
+						id: appids[index],
+						params: {"type":"status","statusText":textToSend , status:textToSend}
+					},
+					onFailure: function() {
+						Mojo.Log.info('Failed to launch with appid %s', appids[index]);
+						index++; // go to next appid
+						makeCall(); // retry
+					}.bind(this)
+				});
+			} else {
+				Mojo.Log.error('Failed to launch');                   
+			};
+		} 
+		banner('Sent link URL to Facebook');
+		makeCall();
+	},
+	
 	emailLink: function(url) {
 		this.controller.serviceRequest(
 			"palm://com.palm.applicationManager",
@@ -919,7 +976,11 @@ transport.responseText);
 					{
 						label:		$L('Send URL via DataJog'),
 						command:	'cmdDataJog'
-					},
+					},					
+					{
+						label:		$L('Send to Facebook'),
+						command:	'cmdSendToFacebook'
+					},	
 					{
 						label:		$L('Add to Instapaper'),
 						command:	'cmdInstapaper'
@@ -950,10 +1011,6 @@ transport.responseText);
 				label:				$L('Hide'),
 				command:			'cmdHide'
 			},
-			{
-				label:				$L('vineHTML'),
-				command:			'cmdGetVineHTML'
-			}
 		];
 
 		this.linkMenuItems = [
@@ -988,6 +1045,10 @@ transport.responseText);
 					{
 						label:		$L('Send link via DataJog'),
 						command:	'cmdSendLinkDataJog'
+					},
+					{
+						label:		$L('Send link to Facebook'),
+						command:	'cmdSendLinkFacebook'
 					},
 					{
 						label:		$L('Email Link'),
