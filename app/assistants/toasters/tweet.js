@@ -537,7 +537,7 @@ encodeURIComponent(this.ippPass);
 		var url = "https://readitlaterlist.com/v2/send";
 		var params = "new={";
 		params += '"0":{"url":"' + encodeURIComponent(this.twitterLink)
-+ '"}';
++ '", "ref_id":"' + encodeURIComponent(this.tweet.id_str) + '"}';
 		params += "}";
 		params += "&username=" + encodeURIComponent(this.rilUser) +
 "&password=" + encodeURIComponent(this.rilPass) +
@@ -621,14 +621,28 @@ transport.responseText);
 	},
 
 	addLinkReadOnTouchPro: function(url) {
-		var request = new Mojo.Service.Request("palm://com.palm.applicationManager", {
-			method: 'open',
-			parameters: {
-				id: 'com.sven-ziegler.readontouch',
-				params: {action: 'addLink', url: url}
-		}});
-
+		var appids = ['com.sven-ziegler.readontouch','com.sven-ziegler.readontouch-free'], index = 0;
+		function makeCall() {
+			if (index < appids.length) {
+				Mojo.Log.info('Trying to launch with appid %s', appids[index]);
+				var request = new Mojo.Service.Request("palm://com.palm.applicationManager", {
+					method: 'open',
+					parameters: {
+						id: appids[index],
+						params: {action: 'addLink', url: url}
+					},
+					onFailure: function() {
+						Mojo.Log.info('Failed to launch with appid %s', appids[index]);
+						index++; // go to next appid
+						makeCall(); // retry
+					}.bind(this)
+				});
+			} else {
+				Mojo.Log.error('Failed to launch');                   
+			};
+		} 
 		banner('Added URL to ReadOnTouch PRO');
+		makeCall();
 	},
 
 	sendLinkDataJog: function(url) {
@@ -1035,7 +1049,7 @@ transport.responseText);
 						command:	'cmdCopyLinkUrl'
 					},
 					{
-						label:		$L('Add to Paper Mache'),
+						label:		$L('Add to Instapaper'),
 						command:	'cmdAddLinkInstapaper'
 					},
 					{
