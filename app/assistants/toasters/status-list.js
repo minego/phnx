@@ -9,8 +9,10 @@ var StatusListToaster = Class.create(Toaster, {
 		this.title = title;
 
 		var th = new TweetHelper();
+		var prefs = new LocalStorage();
+		var processVine = prefs.read('showVine');
 		for (var i=0; i < items.length; i++) {
-			items[i] = th.process(items[i],this.listModel,this.controller);
+			items[i] = th.process(items[i],this.listModel,this.controller,processVine);
 		}
 
 		//this.listModel = {"items": items};

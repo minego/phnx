@@ -30,6 +30,7 @@ function LocalStorage() {
 		cardIcons: 'auto',
 		browserSelection: 'stockBrowser',
 		forwardSwipe: 'current',
+		showVine: false,
 		refreshOnMaximize: false,
 		autoCorrect: true,
 		filters: [],

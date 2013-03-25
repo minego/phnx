@@ -24,7 +24,9 @@ function PreferencesAssistant(section) {
 			]}
 		);
 	}
-	advanced.push({key: 'delReceivedDM', type: 'toggle', label: 'Allow deletion of received DMs'});
+	advanced.push({key: 'delReceivedDM', type: 'toggle', label: 'Allow deletion of received DMs'},
+				{key: 'showVine', type: 'toggle', label: 'Process Vine links - warning *resource hog*'}
+	);
 
 	this.sections = {
 		'General Settings': [

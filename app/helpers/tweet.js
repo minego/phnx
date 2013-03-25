@@ -1,7 +1,7 @@
 var TweetHelper = function() {};
 
 TweetHelper.prototype = {
-	process: function(tweet,model,controller) {
+	process: function(tweet,model,controller,processVine) {
 		// takes a tweet and does all sorts of stuff to it
 
 		// Save the created_at property for all tweets
@@ -154,16 +154,14 @@ TweetHelper.prototype = {
 						//tweet.cssClass = 'new-tweet';
 						tweet.thumb_class = 'show';
 					} else if (links[i].expanded_url.indexOf('http://vine.co/v/') > -1 || links[i].expanded_url.indexOf('https://vine.co/v/') > -1){
-						this.getVineHTML(links[i].expanded_url,tweet,i,model,controller);
-						//tweet.mediaUrl = tweet.myVideoLink;
-						if(i === 0){
-							//tweet.thumbnail = tweet.myStillLink;
-						} else {
-							//tweet.thumbnail2 = tweet.myStillLink;
-							tweet.thumb2_class = 'show';
-							//tweet.mediaUrl2 = tweet.myVideoLink;
+						Mojo.Log.error('processVine: ' + processVine);
+						if(processVine === true) {
+							this.getVineHTML(links[i].expanded_url,tweet,i,model,controller);
+							if(i > 0){
+								tweet.thumb2_class = 'show';
+							}
+							tweet.thumb_class = 'show';
 						}
-						tweet.thumb_class = 'show';
 					}
 				}
 			}
@@ -222,6 +220,7 @@ TweetHelper.prototype = {
 				if (Ajax.activeRequestCount === 1) {
 					Element.removeClassName('loading', 'show');
 				}
+				//Mojo.Log.error('activeRequest: ' + Ajax.activeRequestCount);
 
 				var myNode = document.createElement('div');
 				myNode.innerHTML = response.responseText;
@@ -250,7 +249,7 @@ TweetHelper.prototype = {
 				if (Ajax.activeRequestCount === 1) {
 					Element.removeClassName('loading', 'show');
 				}
-				Mojo.Log.error('vine failure: ' + response.responseText);
+				Mojo.Log.info('vine failure: ' + response.responseText);
 			}
 		});
 	},
@@ -269,7 +268,7 @@ TweetHelper.prototype = {
 
 		return(null);
 	},
-	processSearch: function(tweet,model,controller) {
+	processSearch: function(tweet,model,controller,processVine) {
 		// search tweets are stupid and in a different format from the rest.
 		if(tweet.source.indexOf('&lt') > -1) {
 			tweet.source = tweet.source.unescapeHTML(); // search returns escaped HTML for some reason
@@ -403,16 +402,13 @@ TweetHelper.prototype = {
 						//tweet.cssClass = 'new-tweet';
 						tweet.thumb_class = 'show';
 					}	else if (links[i].expanded_url.indexOf('http://vine.co/v/') > -1 || links[i].expanded_url.indexOf('https://vine.co/v/') > -1){
-						this.getVineHTML(links[i].expanded_url,tweet,i,model,controller);
-						//tweet.mediaUrl = tweet.myVideoLink;
-						if(i === 0){
-							//tweet.thumbnail = tweet.myStillLink;
-						} else {
-							//tweet.thumbnail2 = tweet.myStillLink;
-							tweet.thumb2_class = 'show';
-							//tweet.mediaUrl2 = tweet.myVideoLink;
+						if(processVine === true) {
+							this.getVineHTML(links[i].expanded_url,tweet,i,model,controller);
+							if(i > 0){
+								tweet.thumb2_class = 'show';
+							}
+							tweet.thumb_class = 'show';
 						}
-						tweet.thumb_class = 'show';
 					}
 				}
 			}

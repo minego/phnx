@@ -300,9 +300,11 @@ ProfileAssistant.prototype = {
 
 		Twitter.getUserTweets(args, function(response){
 			var th = new TweetHelper();
+			var prefs = new LocalStorage();
+			var processVine = prefs.read('showVine');
 			for (var i=0; i < response.responseJSON.length; i++) {
 				var tweet = response.responseJSON[i];
-				tweet = th.process(tweet,this.historyModel,this.controller);
+				tweet = th.process(tweet,this.historyModel,this.controller,processVine);
 			}
 			if (this.historyModel.items.length === 0) {
 				this.historyModel.items = response.responseJSON;
@@ -327,8 +329,10 @@ ProfileAssistant.prototype = {
 		Twitter.search('@' + this.user.screen_name, function(response){
 			var items = response.responseJSON.results;
 			var th = new TweetHelper();
+			var prefs = new LocalStorage();
+			var processVine = prefs.read('showVine');
 			for (var i=0; i < items.length; i++) {
-				items[i] = th.processSearch(items[i],this.mentionsModel,this.controller);
+				items[i] = th.processSearch(items[i],this.mentionsModel,this.controller,processVine);
 			}
 			if (this.mentionsModel.items.length === 0) {
 				this.mentionsModel.items = items;
@@ -356,9 +360,11 @@ ProfileAssistant.prototype = {
 
 		Twitter.getFavorites(args, function(response) {
 			var th = new TweetHelper();
+			var prefs = new LocalStorage();
+			var processVine = prefs.read('showVine');
 			for (var i=0; i < response.responseJSON.length; i++) {
 				var tweet = response.responseJSON[i];
-				tweet = th.process(tweet,this.favoritesModel,this.controller);
+				tweet = th.process(tweet,this.favoritesModel,this.controller,processVine);
 			}
 			if (this.favoritesModel.items.length === 0) {
 				this.favoritesModel.items = response.responseJSON;
@@ -458,9 +464,11 @@ ProfileAssistant.prototype = {
 	},
 	mentionTapped: function(event) {
 		var Twitter = new TwitterAPI(this.account);
+		var prefs = new LocalStorage();
+		var processVine = prefs.read('showVine');
 		Twitter.getStatus(event.item.id_str, function(response){
 			var th = new TweetHelper();
-			var tweet = th.process(response.responseJSON);
+			var tweet = th.process(response.responseJSON,null,null,processVine);
 			this.toasters.add(new TweetToaster(tweet, this));
 		}.bind(this));
 	},
