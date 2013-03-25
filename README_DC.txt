@@ -92,3 +92,4 @@ Modified main-assistant.js, tweet.js, item-one-column.html, item.html, search.ht
 Commented out some lines in tweet.js as twitpic no longer gives us access to the full image so can't preview it.
 Modified tweet.js to give option to send tweet and links to facebook.
 Updated tweet.js to support free and pro versions of ReadOnTouch and added tweet id to send to Read It Later
+Modified main-assistant.js, preferences-assistant.js, profile-assistant.js, status-assistant.js, convo.js, search.js, status-list.js, tweet.js and local.js to obey new preference setting to process vine links

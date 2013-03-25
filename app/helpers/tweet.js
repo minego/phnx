@@ -154,7 +154,6 @@ TweetHelper.prototype = {
 						//tweet.cssClass = 'new-tweet';
 						tweet.thumb_class = 'show';
 					} else if (links[i].expanded_url.indexOf('http://vine.co/v/') > -1 || links[i].expanded_url.indexOf('https://vine.co/v/') > -1){
-						Mojo.Log.error('processVine: ' + processVine);
 						if(processVine === true) {
 							this.getVineHTML(links[i].expanded_url,tweet,i,model,controller);
 							if(i > 0){
