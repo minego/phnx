@@ -40,6 +40,7 @@ var TwitterAPI = function(user, stageController) {
 		savedSearches:		'saved_searches/list',
 		saveSearch:			'saved_searches/create',
 		deleteSearch:		'saved_searches/destroy',
+		searchTweets:		'search/tweets',
 		newDM:				'direct_messages/new',
 		lists:				'lists/list',
 		listSubscriptions:	'lists/subscriptions',
@@ -144,8 +145,7 @@ TwitterAPI.prototype = {
 	},
 	search: function(query, callback) {
 		// Query can be either a string or an object literal with named parameters in it
-		var url = 'https://search.twitter.com/search.json';
-		var args = {"result_type":"mixed","rpp":"150","include_entities":"1"}; //DC Added include_entities for inline thumbs
+		var args = {"result_type":"mixed","count":"100","include_entities":"1"}; //DC Added include_entities for inline thumbs
 
 		if (typeof(query) === 'string') {
 			args.q = query;
@@ -162,7 +162,7 @@ TwitterAPI.prototype = {
 		// 	args.lang = locale;
 		// }
 
-		this.plain('GET', url, args, callback);
+		this.sign('GET', this.url(this.endpoints.searchTweets), callback, args, {});
 	},
 	showRetweets: function(id, callback) {
 		var args = {

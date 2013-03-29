@@ -73,11 +73,7 @@ StatusAssistant.prototype = {
 			this.controller.get('more').hide();
 		}
 
-		if (this.opts.type === 'search') {
-			this.initSearch();
-		} else if (this.opts.type === 'list' || this.opts.type === 'retweets') {		
-			this.initList();
-		}
+		this.initList((this.opts.type === 'search'));
 
 		this.controller.listen('shim', Mojo.Event.tap, this.shimTapped.bind(this));
 		this.controller.listen('refresh', Mojo.Event.tap, this.refreshTapped.bind(this));
@@ -116,51 +112,41 @@ StatusAssistant.prototype = {
 			//this.controller.get('back-button').setStyle({'display':'none'});
 		}
 	},
-	initSearch: function() {
+	initList: function(search) {
 		var opts = this.opts;
 
 		// Set the scene's title
-		var title = opts.query.substr(0,16);
+		var title = "";
+        
+        if (search) {
+            title = opts.query.substr(0,16);
+        } else {
+            title = opts.name.substr(0,16);
+        }
 		this.controller.get('header-title').update(title);
 
 		if (opts.items) {
 			// Items are already loaded, don't do a search
 			this.setupList(opts.items);
-		} else {
-			// Search twitter for the items
+		} else if (search) {
+            // Search twitter for the items
 			var Twitter = new TwitterAPI(opts.user, this.controller.stageController);
 			Twitter.search(opts.query, function(r){
-				var items = r.responseJSON.results;
+				var items = r.responseJSON.statuses; //results;
 				this.setupList(items);
 			}.bind(this));
-		}
-	},
-	initList: function() {
-		var opts = this.opts;
-
-		// Set the scene's title
-		var title = opts.name.substr(0,16);
-		this.controller.get('header-title').update(title);
-
-		if (opts.items) {
-			// Items are already loaded, don't do a search
-			this.setupList(opts.items);
-		}
+        }
 	},
 	setupList: function(items) {
 		var th = new TweetHelper();
 		var type = this.opts.type;
 		var prefs = new LocalStorage();
 		var processVine = prefs.read('showVine');
-		for (var i=0; i < items.length; i++) {
-			if (type === 'search') {
-				items[i] = th.processSearch(items[i],this.itemsModel,this.controller,processVine);
-			}
-			else if (type === 'list' || type === 'retweets') {
-				items[i] = th.process(items[i],this.itemsModel,this.controller,processVine);
-			}
+        
+        for (var i=0; i < items.length; i++) {
+            items[i] = th.process(items[i],this.itemsModel,this.controller,processVine);
 		}
-
+		
 		var templates = {
 			"search": "search",
 			"list": "item-one-column",
@@ -178,8 +164,11 @@ StatusAssistant.prototype = {
 
 		var args = {
 			q: this.opts.query,
-			since_id: this.itemsModel.items[0].id_str
 		};
+
+		if (this.itemsModel.items && this.itemsModel.items[0]) {
+			args.since_id = this.itemsModel.items[0].id_str;
+		}
 
 		Twitter.search(args, function(r){
 			var items = r.responseJSON.results;
