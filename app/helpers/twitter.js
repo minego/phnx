@@ -162,8 +162,6 @@ TwitterAPI.prototype = {
 		// 	args.lang = locale;
 		// }
 
-		Mojo.Log.info("");
-
 		this.sign('GET', this.url(this.endpoints.searchTweets), callback, args, {});
 	},
 	showRetweets: function(id, callback) {
