@@ -13,7 +13,7 @@ var SearchToaster = Class.create(Toaster, {
 		var prefs = new LocalStorage();
 		var processVine = prefs.read('showVine');
 		for (var i=0; i < items.length; i++) {
-			items[i] = th.processSearch(items[i],this.listModel,this.controller,processVine);
+			items[i] = th.process(items[i],this.listModel,this.controller,processVine);
 		}
 
 		//this.listModel = {"items": items};
