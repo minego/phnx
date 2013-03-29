@@ -1620,7 +1620,7 @@ MainAssistant.prototype = {
 			var opts = {
 				type: 'search',
 				query: query,
-				items: response.responseJSON.results,
+				items: response.responseJSON.statuses,
 				user: this.user,
 				savedSearchesModel: this.savedSearchesModel, // Added by DC
 				assistant: this,
