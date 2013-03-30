@@ -368,6 +368,9 @@ var TweetToaster = Class.create(Toaster, {
 			case 'cmdDataJog':
 				this.dataJog();
 				break;
+			case 'cmdNeato':
+				this.neato();
+				break;
 			case 'cmdSendToFacebook':
 				this.sendToFacebook();
 				break;
@@ -395,6 +398,9 @@ var TweetToaster = Class.create(Toaster, {
 			case 'cmdSendLinkDataJog':
 				this.sendLinkDataJog(this.url);
 				break;
+			case 'cmdSendLinkNeato':
+				this.sendLinkNeato(this.url);
+				break;				
 			case 'cmdSendLinkFacebook':
 				this.sendLinkFacebook(this.url);
 				break;
@@ -486,6 +492,22 @@ var TweetToaster = Class.create(Toaster, {
 		});
 		banner('Sent URL to DataJog');
 	},
+	neato: function() {
+		var Twitter = new TwitterAPI(this.user);
+		var id = this.tweet.id_str;
+		var request = new
+		Mojo.Service.Request("palm://com.palm.applicationManager", {
+//		    method:      'send',
+				method: 'open',
+		    parameters:  {
+		    	id: 'com.zhephree.neato',
+					//params: { data: this.twitterLink}
+					params: { send: '{"a":"url","c":"'+this.twitterLink+'"}'} 
+    		},
+		});
+		banner('Sent URL to Neato');
+	},
+
 	sendToFacebook: function() {
 		var appids = ['com.palm.app.enyo-facebook','com.palm.app.facebook'], index = 0;
 		var textToSend = "Tweet From" + " @" + this.tweet.user.screen_name + ": " + this.tweet.stripped + "\n" + " -- Sent via Project Macaw for webOS";
@@ -656,6 +678,19 @@ transport.responseText);
 		});
 		banner('Sent link URL to DataJog');
 	},
+
+	sendLinkNeato: function(url) {
+		var request = new
+		Mojo.Service.Request("palm://com.palm.applicationManager", {
+				method: 'open',
+		    parameters:  {
+		    	id: 'com.zhephree.neato',
+		    	params: { send: '{"a":"url","c":"'+url+'"}'}
+    		}
+		});
+		banner('Sent link URL to Neato!');
+	},
+
 
 	sendLinkFacebook: function(url) {
 		var appids = ['com.palm.app.enyo-facebook','com.palm.app.facebook'], index = 0;
@@ -869,7 +904,22 @@ transport.responseText);
 					}
 				}
 			}); 
-		} else{
+		} 
+/* Potential support for @zhephree's foursquare app
+		else if(url.indexOf('http://4sq.com/') > -1) {
+			this.controller.serviceRequest("palm://com.palm.applicationManager", {
+				method: 'launch',
+					parameters: {
+						id: 'com.foursquare.foursquare',
+						params: {action: 'url', url: url}
+					},
+					onFailure:function(){
+						this.showWebview(url);
+				}.bind(this)
+      })
+		}
+		*/ 
+		else{
 			this.showWebview(url);
 		}
 	},
@@ -991,6 +1041,12 @@ transport.responseText);
 						label:		$L('Send URL via DataJog'),
 						command:	'cmdDataJog'
 					},					
+/* neato! V2.0 doesn't seem to support cross-app launching yet
+					{
+						label:		$L('Send URL via Neato!'),
+						command:	'cmdNeato'
+					},					
+*/
 					{
 						label:		$L('Send to Facebook'),
 						command:	'cmdSendToFacebook'
@@ -1060,6 +1116,12 @@ transport.responseText);
 						label:		$L('Send link via DataJog'),
 						command:	'cmdSendLinkDataJog'
 					},
+/* neato! V2.0 doesn't seem to support cross-app launching yet					
+					{
+						label:		$L('Send link via Neato!'),
+						command:	'cmdSendLinkNeato'
+					},
+*/
 					{
 						label:		$L('Send link to Facebook'),
 						command:	'cmdSendLinkFacebook'

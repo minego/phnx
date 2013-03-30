@@ -93,3 +93,4 @@ Commented out some lines in tweet.js as twitpic no longer gives us access to the
 Modified tweet.js to give option to send tweet and links to facebook.
 Updated tweet.js to support free and pro versions of ReadOnTouch and added tweet id to send to Read It Later
 Modified main-assistant.js, preferences-assistant.js, profile-assistant.js, status-assistant.js, convo.js, search.js, status-list.js, tweet.js and local.js to obey new preference setting to process vine links
+Modified tweet.js to setup support for @zhephree's neato! and foursquare apps.  Not enabled until neato! V2.0 supports cross-app launching and foursquare not enabled as its not resolving the links as expected.
