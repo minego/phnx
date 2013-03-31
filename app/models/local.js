@@ -105,9 +105,11 @@ LocalStorage.prototype = {
 
 	write: function(key, value, accountid) {
 		if (this.peraccount[key]) {
-			if (!this.data[key]) {
+			// Commented out the 'if' statement, as the default value for tabs doesn't account for the userid.  Clearing the array allows it to be set properly 
+			// If there is a better way to check, then please fix away.
+			//if (!this.data[key]) {
 				this.data[key] = {};
-			}
+			//}
 
 			this.data[key][accountid.toString()] = value;
 		} else {
