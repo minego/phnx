@@ -1,6 +1,7 @@
 var ChangelogToaster = Class.create(Toaster, {
 	items: [
 		{ version: '1.4.4' },
+		{ item: 'Change Tab Order should now work for everyone' },
 		{ item: 'Can now send link to free and pro versions of ReadOnTouch' },
 		{ item: 'Added "Send to Facebook" and "Send link to Facebook"' },
 		{ item: 'Clicking on TwitPic thumb or link now loads webpage as large image is no longer available through this service' },
