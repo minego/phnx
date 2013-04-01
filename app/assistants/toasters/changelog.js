@@ -1,6 +1,7 @@
 var ChangelogToaster = Class.create(Toaster, {
 	items: [
 		{ version: '1.4.4' },
+		{ item: '"Fade BG" option to allow for phnx style bg fades on phones' },
 		{ item: 'Change Tab Order should now work for everyone' },
 		{ item: 'Can now send link to free and pro versions of ReadOnTouch' },
 		{ item: 'Added "Send to Facebook" and "Send link to Facebook"' },

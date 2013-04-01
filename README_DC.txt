@@ -95,3 +95,4 @@ Updated tweet.js to support free and pro versions of ReadOnTouch and added tweet
 Modified main-assistant.js, preferences-assistant.js, profile-assistant.js, status-assistant.js, convo.js, search.js, status-list.js, tweet.js and local.js to obey new preference setting to process vine links
 Modified tweet.js to setup support for @zhephree's neato! and foursquare apps.  Not enabled until neato! V2.0 supports cross-app launching and foursquare not enabled as its not resolving the links as expected.
 Modified local.js to allow for custom tab order to work on fresh clean install
+Modified phnx.css, preferences-assistant.js, local.js, app-globals.js, status-assistant.js, profile-assistant.js, main-assistant.js to add option to restore phnx style shim fades in bg for phones (TP remains normal)

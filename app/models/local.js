@@ -32,6 +32,7 @@ function LocalStorage() {
 		hideSearchTimelineThumbs: true,
 		showThumbs: 'showThumbs',
 		showEmoji: 'showEmoji',
+		fadeShim: false,
 		limitToLocale: false,
 		cardIcons: 'auto',
 		browserSelection: 'stockBrowser',

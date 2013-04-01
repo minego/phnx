@@ -86,7 +86,6 @@ function PreferencesAssistant(section) {
 				{label: 'Details Only', value: 'detailsEmoji'},
 				{label: 'Always Show', value: 'showEmoji'}
 			]},
-
 			{key: 'hideAvatar',		type: 'toggle', label: 'Hide Avatars'},
 			{key: 'hideUsername',	type: 'toggle', label: 'Hide Name'},
 			{key: 'hideScreenname',	type: 'toggle', label: 'Hide Username'},
@@ -121,6 +120,12 @@ function PreferencesAssistant(section) {
 		],
 		'Advanced Settings': advanced
 	};
+
+	if (Mojo.Environment.DeviceInfo.modelNameAscii != "TouchPad") {
+		this.sections['Appearance'].push(
+			{key: 'fadeShim', type: 'toggle', label: 'Fade BG'}
+		);
+	}
 
 	if (global.accounts.length > 1) {
 		this.sections['General Settings'].push({
@@ -358,6 +363,7 @@ PreferencesAssistant.prototype = {
 		global.setShowThumbs(body,	prefs.read('showThumbs'));
 		global.setFullWidthThumbs(body, prefs.read('fullWidthThumbs'));
 		global.setShowEmoji(body,	prefs.read('showEmoji'));
+		global.setFadeShim(body, prefs.read('fadeShim'));
 		global.setFontSize(body,	prefs.read('fontSize'));
 
 		global.setHide(body,

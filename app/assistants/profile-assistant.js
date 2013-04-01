@@ -100,7 +100,8 @@ ProfileAssistant.prototype = {
 			global.setShowThumbs(body,	prefs.read('showThumbs'));
 			global.setFullWidthThumbs(body, prefs.read('fullWidthThumbs'));
 			global.setShowEmoji(body,	prefs.read('showEmoji'));
-
+			global.setFadeShim(body, prefs.read('fadeShim'));
+			
 			global.setHide(body,
 				prefs.read('hideAvatar'),
 				prefs.read('hideUsername'),

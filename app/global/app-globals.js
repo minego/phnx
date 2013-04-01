@@ -270,6 +270,13 @@ var global = {
 			Element.addClassName(body, 'detailsEmoji');
 		}
 	},
+	setFadeShim: function(body, fadeShimStatus) {
+		if(fadeShimStatus){
+			Element.addClassName(body, 'fadeShim');
+		} else {
+			Element.removeClassName(body, 'fadeShim');
+		}
+	},
 	setTheme: function(newTheme, oldTheme, stageController) {
 		var inherit = {
 			'black':		[ 'ash' ],

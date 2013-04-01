@@ -1048,6 +1048,20 @@ span.link{
 	-webkit-transition-property: all;
 	-webkit-transition-duration: .4s;
 }
+.fadeShim #shim, .fadeShim #account-shim{
+	background: url(../images/low/shim.png) no-repeat center center;
+	width: 100%;
+	position: fixed;
+	top: 0;
+	left: 0;
+
+	z-index: 200;
+	display: block;
+	opacity: 0;
+	-webkit-transition-property: opacity;
+	-webkit-transition-duration: .4s;
+}
+
 #account-shim {
 	top: 0;
 	left: 0;
