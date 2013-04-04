@@ -1,6 +1,7 @@
 var ChangelogToaster = Class.create(Toaster, {
 	items: [
 		{ version: '1.4.4' },
+		{ item: 'Emoji compose placement should now work on webOS 1.4.5 instead of being placed at head of tweet' },
 		{ item: '"Fade BG" option to allow for phnx style bg fades on phones' },
 		{ item: 'Change Tab Order should now work for everyone' },
 		{ item: 'Can now send link to free and pro versions of ReadOnTouch' },

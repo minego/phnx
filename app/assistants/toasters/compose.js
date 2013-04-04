@@ -689,9 +689,15 @@ var ComposeToaster = Class.create(Toaster, {
 		}
 	},
 	emojiTapped: function(event) {
+		//Moved outside of callback as on webOS 1.4.5 values defaulted to 0 and weren't reading current cursor value
+		var txtArea = this.controller.get(this.textarea);
+		var startPos = txtArea.selectionStart;
+		var endPos = txtArea.selectionEnd;
+		var scrollTop = txtArea.scrollTop;
+
 		var callback = function(result) {
 			if (result && result.selectedEmoji != null) {
-				var txtArea = this.controller.get(this.textarea);
+				//var txtArea = this.controller.get(this.textarea);
 				var emojiChars;
 
 				if(result.selectedEmoji2){
@@ -701,9 +707,10 @@ var ComposeToaster = Class.create(Toaster, {
 				}
 
 				if (txtArea.selectionStart || txtArea.selectionStart == '0') {
-					var startPos = txtArea.selectionStart;
-					var endPos = txtArea.selectionEnd;
-					var scrollTop = txtArea.scrollTop;
+					//var startPos = txtArea.selectionStart;
+					//var endPos = txtArea.selectionEnd;
+					//var scrollTop = txtArea.scrollTop;
+					
 					txtArea.value = txtArea.value.substring(0, startPos) + emojiChars + txtArea.value.substring(endPos, txtArea.value.length);
 					txtArea.focus();
 					txtArea.selectionStart = startPos + emojiChars.length;
