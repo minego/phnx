@@ -149,7 +149,7 @@ ProfileAssistant.prototype = {
 
 		this.controller.setupWidget('list-history',{itemTemplate: "templates/tweets/item",listTemplate: "templates/list", renderLimit: this.renderLimit}, this.historyModel);
 		this.controller.setupWidget('list-favorites',{itemTemplate: "templates/tweets/item",listTemplate: "templates/list", renderLimit: this.renderLimit}, this.favoritesModel);
-		this.controller.setupWidget('list-mentions',{itemTemplate: "templates/tweets/search",listTemplate: "templates/list", renderLimit: this.renderLimit}, this.mentionsModel);
+		this.controller.setupWidget('list-mentions',{itemTemplate: "templates/tweets/item",listTemplate: "templates/list", renderLimit: this.renderLimit}, this.mentionsModel);
 
 		for (var i=0; i < this.panels.length; i++) {
 			this.controller.setupWidget(this.panels[i] + "-scroller",{mode: 'vertical'},{});
@@ -321,19 +321,25 @@ ProfileAssistant.prototype = {
 	},
 	getMentions: function(opts) {
 		var Twitter = new TwitterAPI(this.account);
-		var query = '@' + this.user.screen_name;
+		var args = {
+			"count": 100,
+			"include_entities": true, 
+			"q": '@' + this.user.screen_name
+		};
 
 		for (var key in opts) {
-			query += '&' + encodeURIComponent(key) + '=' + encodeURIComponent(opts[key]);
+			args[key] = opts[key];
 		}
-
-		Twitter.search('@' + this.user.screen_name, function(response){
-			var items = response.responseJSON.results;
+		Twitter.search(args, function(response){
+			var items = response.responseJSON.statuses;
 			var th = new TweetHelper();
 			var prefs = new LocalStorage();
 			var processVine = prefs.read('showVine');
 			for (var i=0; i < items.length; i++) {
-				items[i] = th.processSearch(items[i],this.mentionsModel,this.controller,processVine);
+				items[i] = th.process(items[i],this.mentionsModel,this.controller,processVine);
+				if(items[i].is_rt === true){
+					items.splice(i,1);
+				}
 			}
 			if (this.mentionsModel.items.length === 0) {
 				this.mentionsModel.items = items;

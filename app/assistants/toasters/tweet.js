@@ -100,6 +100,17 @@ var TweetToaster = Class.create(Toaster, {
 			Mojo.Event.listen(this.controller.get('rt-' + this.toasterId), Mojo.Event.tap, this.rtTapped.bind(this));
 		}.bind(this));
 
+		//Retrieve justsayin mp3 link
+		/*var links = tweet.entities.urls;
+		for (var i = links.length - 1; i >= 0; i--){
+			if (links[i].expanded_url !== null) {
+				//Mojo.Log.error('expanded_url : ' + links[i].expanded_url);
+				if (links[i].expanded_url.indexOf('http://www.justsayinapp.com/post/') > -1 ){
+					this.getJustSayinHTML(links[i].expanded_url,this.tweet);
+				}
+			}
+		}*/
+
 		// Emojify - added by DC
 		//this.tweet.text = emojify(this.tweet.text,22);
 		//Mojo.Log.info(this.tweet.text);
@@ -424,6 +435,47 @@ var TweetToaster = Class.create(Toaster, {
 				//this.getVineHTML();
 				//break;
 		}
+	},
+	getJustSayinHTML: function(url, tweet, callback) {
+		var req = new Ajax.Request(url, {
+			method: 'GET',
+				onSuccess: function(response) {
+				if (Ajax.activeRequestCount === 1) {
+					Element.removeClassName('loading', 'show');
+				}
+
+				var myNode = document.createElement('div');
+				//myNode.innerHTML = response.responseText;
+				myNode = response.responseText;
+				var metaValues = myNode.getElementsByTagName("meta");
+				var myAudio;
+
+				for(var i=0; i<metaValues.length;i++){
+					if (metaValues[i].content.indexOf('audio.mp3') > -1 ){
+						myAudio = metaValues[i].content;
+					}
+				}
+				//if(index === 0) {
+					tweet.myAudioLink = myAudio;
+					tweet.mediaUrl = tweet.myAudioLink;
+					//Mojo.Log.info('justsayin mp3: ' + tweet.myAudioLink);
+
+				//} else {
+				//	tweet.myAudioLink2 = String((myAudio[0].getAttribute("poster")).match(/.*.mp3/));
+				//	tweet.mediaUrl2 = tweet.myAudioLink2;
+				//	Mojo.Log.info('justsayinmp3: ' + tweet.myAudioLink2);
+				//}
+				//controller.modelChanged(model);
+
+				myNode = NULL; 
+			}.bind(this),
+			onFailure: function(response) {
+				if (Ajax.activeRequestCount === 1) {
+					Element.removeClassName('loading', 'show');
+				}
+				//Mojo.Log.info('justsayin failure: ' + response.responseText);
+			}
+		});
 	},
 	mention: function() {
 		var args = {
