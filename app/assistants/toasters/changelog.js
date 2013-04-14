@@ -3,7 +3,7 @@ var ChangelogToaster = Class.create(Toaster, {
 		{ version: '1.4.5' },
 		{ item: 'Profile Mentions now no longer display retweets' },
 		{ item: 'Mentions work in profile panel again' },
-		//{ item: 'Prelim suppport for "justsayin" audio' },
+		{ item: 'Suppport for "justsayin" audio' },
 		
 		{ version: '1.4.4' },
 		{ item: 'Emoji compose placement should now work on webOS 1.4.5 instead of being placed at head of tweet' },

@@ -99,3 +99,4 @@ Modified phnx.css, preferences-assistant.js, local.js, app-globals.js, status-as
 Modified compose.js so emoji position was correct on webos 1.4.5
 Modified profile-assistant.js so mentions work again
 Modified profile-assistant.js to hide retweets in mentions
+Modified tweet.js to allow playing of "justsayin" mp3's

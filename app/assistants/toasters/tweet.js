@@ -101,15 +101,14 @@ var TweetToaster = Class.create(Toaster, {
 		}.bind(this));
 
 		//Retrieve justsayin mp3 link
-		/*var links = tweet.entities.urls;
+		var links = tweet.entities.urls;
 		for (var i = links.length - 1; i >= 0; i--){
 			if (links[i].expanded_url !== null) {
-				//Mojo.Log.error('expanded_url : ' + links[i].expanded_url);
 				if (links[i].expanded_url.indexOf('http://www.justsayinapp.com/post/') > -1 ){
 					this.getJustSayinHTML(links[i].expanded_url,this.tweet);
 				}
 			}
-		}*/
+		}
 
 		// Emojify - added by DC
 		//this.tweet.text = emojify(this.tweet.text,22);
@@ -445,20 +444,25 @@ var TweetToaster = Class.create(Toaster, {
 				}
 
 				var myNode = document.createElement('div');
-				//myNode.innerHTML = response.responseText;
-				myNode = response.responseText;
-				var metaValues = myNode.getElementsByTagName("meta");
+				var doc = document.implementation.createHTMLDocument('');
+				doc.open();
+				myHtml = response.responseText;
+				doc.write(myHtml);
+				doc.close();
+				var metaValues = doc.getElementsByTagName("meta");
 				var myAudio;
-
-				for(var i=0; i<metaValues.length;i++){
-					if (metaValues[i].content.indexOf('audio.mp3') > -1 ){
+				for(var i=0; i<metaValues.length; i++){
+					if(metaValues[i].content.indexOf('audio.mp3') > -1){
 						myAudio = metaValues[i].content;
+						//Mojo.Log.info('myAudio: ' + myAudio);						
 					}
 				}
 				//if(index === 0) {
-					tweet.myAudioLink = myAudio;
-					tweet.mediaUrl = tweet.myAudioLink;
-					//Mojo.Log.info('justsayin mp3: ' + tweet.myAudioLink);
+					if(myAudio) {
+						tweet.myAudioLink = myAudio;
+						tweet.mediaUrl = tweet.myAudioLink;
+						Mojo.Log.info('justsayin mp3: ' + tweet.myAudioLink);
+					}
 
 				//} else {
 				//	tweet.myAudioLink2 = String((myAudio[0].getAttribute("poster")).match(/.*.mp3/));
@@ -468,6 +472,7 @@ var TweetToaster = Class.create(Toaster, {
 				//controller.modelChanged(model);
 
 				myNode = NULL; 
+				doc = NULL;
 			}.bind(this),
 			onFailure: function(response) {
 				if (Ajax.activeRequestCount === 1) {
@@ -821,14 +826,15 @@ transport.responseText);
 
 		if (e.id === 'link') {
 			var url = e.innerText;
+			var mediaUrl = this.tweet.mediaUrl;
 			var prefs = new LocalStorage();
 
 			if (held || prefs.read('browserSelection') === 'ask') {
 				this.showOptsUrl(url);
 			} else {
-				this.handleLink(url);
+				this.handleLink(url,mediaUrl);
 			}
-		}	if (e.id === 'thumb') {
+		}	else if (e.id === 'thumb') {
 			var url = this.tweet.mediaUrl;
 			var prefs = new LocalStorage();
 
@@ -837,7 +843,7 @@ transport.responseText);
 			} else {
 				this.handleLink(url);
 			}
-		}	if (e.id === 'thumb2') {
+		}	else if (e.id === 'thumb2') {
 			var url = this.tweet.mediaUrl2;
 			var prefs = new LocalStorage();
 
@@ -899,6 +905,7 @@ transport.responseText);
 			// Have to load the user to get following details, etc, that aren't always returned with the tweet
 			username = this.tweet.user.screen_name;
 			Twitter.getUser(username, function(response) {
+			var url = this.tweet.mediaUrl;
 				this.controller.stageController.pushScene({name:'profile', disableSceneScroller: true}, response.responseJSON);
 			}.bind(this));
 		} else if (e.id === 'user') {
@@ -906,9 +913,9 @@ transport.responseText);
 			Twitter.getUser(username, function(response) {
 				this.controller.stageController.pushScene({name:'profile', disableSceneScroller: true}, response.responseJSON);
 			}.bind(this));
-		}
+		} 
 	},
-	handleLink: function(url) {
+	handleLink: function(url,mediaUrl) {
 		//looks for images and other neat things in urls
 		var img;
 
@@ -955,8 +962,22 @@ transport.responseText);
 						target: url
 					}
 				}
-			}); 
+			});
+		} else if((url.indexOf('http://www.justsayinapp.com/post/') > -1) && mediaUrl) {
+			if(mediaUrl.indexOf('audio.mp3') > -1 ) {
+				Mojo.Log.info('Streaming ' + mediaUrl);
+				this.controller.serviceRequest("palm://com.palm.applicationManager", {
+					method: "launch",
+					parameters: {
+						id: "com.palm.app.streamingmusicplayer",
+						params: {
+							target: mediaUrl
+						}
+					}
+				});
+			}
 		} 
+		 
 /* Potential support for @zhephree's foursquare app
 		else if(url.indexOf('http://4sq.com/') > -1) {
 			this.controller.serviceRequest("palm://com.palm.applicationManager", {
