@@ -392,7 +392,7 @@ var TweetToaster = Class.create(Toaster, {
 				break;
 			case 'cmdEmail':
 				this.email();
-				breack;
+				break;
 			case 'cmdSms':
 				this.sms();
 				break;
