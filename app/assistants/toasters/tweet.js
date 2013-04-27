@@ -100,12 +100,15 @@ var TweetToaster = Class.create(Toaster, {
 			Mojo.Event.listen(this.controller.get('rt-' + this.toasterId), Mojo.Event.tap, this.rtTapped.bind(this));
 		}.bind(this));
 
-		//Retrieve justsayin mp3 link
+		//Retrieve justsayin and audioboo mp3 links
 		var links = tweet.entities.urls;
 		for (var i = links.length - 1; i >= 0; i--){
 			if (links[i].expanded_url !== null) {
 				if (links[i].expanded_url.indexOf('http://www.justsayinapp.com/post/') > -1 ){
 					this.getJustSayinHTML(links[i].expanded_url,this.tweet);
+				}
+				if (links[i].expanded_url.indexOf('http://boo.fm/') > -1 ){
+					this.getAudioBooHTML(links[i].expanded_url,this.tweet);
 				}
 			}
 		}
@@ -479,6 +482,53 @@ var TweetToaster = Class.create(Toaster, {
 					Element.removeClassName('loading', 'show');
 				}
 				//Mojo.Log.info('justsayin failure: ' + response.responseText);
+			}
+		});
+	},
+	getAudioBooHTML: function(url, tweet, callback) {
+		var req = new Ajax.Request(url, {
+			method: 'GET',
+				onSuccess: function(response) {
+				if (Ajax.activeRequestCount === 1) {
+					Element.removeClassName('loading', 'show');
+				}
+
+				var myNode = document.createElement('div');
+				var doc = document.implementation.createHTMLDocument('');
+				doc.open();
+				myHtml = response.responseText;
+				doc.write(myHtml);
+				doc.close();
+				var metaValues = doc.getElementsByTagName("link");
+				var myAudio;
+				for(var i=0; i<metaValues.length; i++){
+					if(metaValues[i].href.indexOf('.mp3') > -1){
+						myAudio = metaValues[i].href;
+						//Mojo.Log.error('myAudio: ' + myAudio);						
+					}
+				}
+				//if(index === 0) {
+					if(myAudio) {
+						tweet.myAudioLink = myAudio;
+						tweet.mediaUrl = tweet.myAudioLink;
+						//Mojo.Log.error('audioboo mp3: ' + tweet.myAudioLink);
+					}
+
+				//} else {
+				//	tweet.myAudioLink2 = String((myAudio[0].getAttribute("poster")).match(/.*.mp3/));
+				//	tweet.mediaUrl2 = tweet.myAudioLink2;
+				//	Mojo.Log.info('justsayinmp3: ' + tweet.myAudioLink2);
+				//}
+				//controller.modelChanged(model);
+
+				myNode = NULL; 
+				doc = NULL;
+			}.bind(this),
+			onFailure: function(response) {
+				if (Ajax.activeRequestCount === 1) {
+					Element.removeClassName('loading', 'show');
+				}
+				Mojo.Log.error('audioboo failure: ' + response.responseText);
 			}
 		});
 	},
@@ -965,6 +1015,19 @@ transport.responseText);
 			});
 		} else if((url.indexOf('http://www.justsayinapp.com/post/') > -1) && mediaUrl) {
 			if(mediaUrl.indexOf('audio.mp3') > -1 ) {
+				Mojo.Log.info('Streaming ' + mediaUrl);
+				this.controller.serviceRequest("palm://com.palm.applicationManager", {
+					method: "launch",
+					parameters: {
+						id: "com.palm.app.streamingmusicplayer",
+						params: {
+							target: mediaUrl
+						}
+					}
+				});
+			}
+		} else if(((url.indexOf('https://audioboo.fm/boos/') > -1) || (url.indexOf('http://boo.fm/') > -1)) && mediaUrl) {
+			if(mediaUrl.indexOf('.mp3') > -1 ) {
 				Mojo.Log.info('Streaming ' + mediaUrl);
 				this.controller.serviceRequest("palm://com.palm.applicationManager", {
 					method: "launch",

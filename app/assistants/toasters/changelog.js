@@ -1,6 +1,7 @@
 var ChangelogToaster = Class.create(Toaster, {
 	items: [
 		{ version: '1.4.5' },
+		{ item: 'Support for "audioboo" audio' },
 		{ item: 'Profile Mentions now no longer display retweets' },
 		{ item: 'Mentions work in profile panel again' },
 		{ item: 'Suppport for "justsayin" audio' },
