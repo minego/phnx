@@ -24,9 +24,9 @@ AppAssistant.prototype = {
 		} else if (params.composeTweet) {
 			// code for x-launch-params still work-in-progress
 			Mojo.Log.info("Called Launch Param correctly");
-        	params.action = 'prepPost';
+			params.action = 'prepPost';
 			params.msg = params.composeTweet;
-        } else {
+    } else {
 			Mojo.Log.info('params: ' + params);
 			// Launch the app normally, load the default user if it exists.
 			this.launchMain();

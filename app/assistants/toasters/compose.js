@@ -393,8 +393,11 @@ var ComposeToaster = Class.create(Toaster, {
 
 			var add = [];
 			for (var i = 0, word; word = info.mentions[i]; i++) {
-				if (-1 == msg.indexOf(word)) {
-					add.push(word);
+				//First conditional needed as .@mentions were causing greater than 140char tweets
+				if (-1 == msg.indexOf('.'+word)){
+					if (-1 == msg.indexOf(word)) {
+						add.push(word);
+					}
 				}
 			}
 
@@ -511,7 +514,6 @@ var ComposeToaster = Class.create(Toaster, {
 							}
 							return;
 						}
-
 						sendfunc(msg, sendnext);
 					}.bind(this);
 
