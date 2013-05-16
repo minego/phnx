@@ -33,32 +33,37 @@ AppAssistant.prototype = {
 			this.launchMain();
 			var am = new Account();
 			var accounts;
-			am.all(function(r){
-				accounts = r;
-				if (accounts.length > 0) {
-					//Mojo.Log.info('Starting app, accounts exist');
-					// Push the main scene with the first account set as default.
-					if (defaultUser !== '0') {
-						for (var i=0; i < accounts.length; i++) {
-							if (accounts[i].id === defaultUser) {
-								user = accounts[i];
+			var user = {};
+			//Delay toaster call on initial start
+			setTimeout(function() {
+				am.all(function(r){
+					accounts = r;
+					if (accounts.length > 0) {
+						//Mojo.Log.info('Starting app, accounts exist');
+						// Push the main scene with the first account set as default.
+						if (defaultUser !== '0') {
+							for (var i=0; i < accounts.length; i++) {
+								if (accounts[i].id === defaultUser) {
+									user = accounts[i];
+								}
 							}
 						}
+						else {
+							// Use the first user if an explicit default has not been chosen
+							user = accounts[0];
+						}
 					}
-					else {
-						// Use the first user if an explicit default has not been chosen
-						user = accounts[0];
-					}
-				}
-			}.bind(this));
-			this.toasters.add(new ComposeToaster({
+				}.bind(this));
+				this.toasters.add(new ComposeToaster({
 				'from':user,'text':params.msg}, this
-			));
+				));
+			}.bind(this),5000);
     } else {
 			Mojo.Log.info('params: ' + params);
 			// Launch the app normally, load the default user if it exists.
 			this.launchMain();
-			this.toasters.add({}, new ComposeToaster(this));
+			//Removed line below - not quite sure why it was there.
+			//this.toasters.add({}, new ComposeToaster(this));
 			// this.checkNotifications(); // for debugging
 		}
 		var stageCallback = function(stageController) {
