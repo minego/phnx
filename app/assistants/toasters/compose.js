@@ -558,6 +558,8 @@ var ComposeToaster = Class.create(Toaster, {
 					this.assistant.toasters.backX(2);
 				}
 			}.bind(this));
+			//For some reason if tweet is composed from justtype, toaster won't hide so you need the following to hide it on submit
+			this.assistant.toasters.back();
 		}
 	},
 	easterEggs: function(t) {

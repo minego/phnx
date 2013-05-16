@@ -102,3 +102,4 @@ Modified profile-assistant.js to hide retweets in mentions
 Modified tweet.js to allow playing of "justsayin" mp3's
 Modified tweet.js to allow playing of "audioboo" mp3's 
 Modified compose.js to allow for splitting of .@mention tweets without failing with >140chars
+Modified app-asistant.js, appinfo.json, compose.js for prelim improvement of JustType launching. Not really working properly yet.

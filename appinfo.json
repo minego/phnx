@@ -15,7 +15,7 @@
 	"noWindow":				true,
 	"universalSearch": {
 		"action":  {
-			"displayName":	"Project Macaw",
+			"displayName":	"Tweet with Project Macaw",
 			"url":			"net.minego.phnx",
 			"launchParam":	{ "action": "prepPost", "msg":"#{searchTerms}" }
 		}

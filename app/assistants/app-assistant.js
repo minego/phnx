@@ -21,11 +21,39 @@ AppAssistant.prototype = {
 		} else if (params.dockMode) {
 			this.launchMain();
 			// This is exhibition mode
-		} else if (params.composeTweet) {
+//		} else if (params.composeTweet) {
+		} else if (params.action === 'prepPost') {
 			// code for x-launch-params still work-in-progress
-			Mojo.Log.info("Called Launch Param correctly");
-			params.action = 'prepPost';
-			params.msg = params.composeTweet;
+			Mojo.Log.info("Called Launch Param correctly: " + params.msg);
+			//Mojo.Log.info("params.msg: " + params.msg);
+			//params.action = 'prepPost';
+			//params.msg = params.composeTweet;
+			var prefs = new LocalStorage();	
+			var defaultUser = prefs.read('defaultAccount');
+			this.launchMain();
+			var am = new Account();
+			var accounts;
+			am.all(function(r){
+				accounts = r;
+				if (accounts.length > 0) {
+					//Mojo.Log.info('Starting app, accounts exist');
+					// Push the main scene with the first account set as default.
+					if (defaultUser !== '0') {
+						for (var i=0; i < accounts.length; i++) {
+							if (accounts[i].id === defaultUser) {
+								user = accounts[i];
+							}
+						}
+					}
+					else {
+						// Use the first user if an explicit default has not been chosen
+						user = accounts[0];
+					}
+				}
+			}.bind(this));
+			this.toasters.add(new ComposeToaster({
+				'from':user,'text':params.msg}, this
+			));
     } else {
 			Mojo.Log.info('params: ' + params);
 			// Launch the app normally, load the default user if it exists.
@@ -48,8 +76,8 @@ AppAssistant.prototype = {
 				case 'prepPost':
 				case 'post':
 						this.toasters.add(new ComposeToaster({
-						'text':launchParams.msg}, this
-					));
+							'text':params.msg}, this
+						));
 					break;
 			}
 		};
