@@ -1,7 +1,7 @@
 var ChangelogToaster = Class.create(Toaster, {
 	items: [
 		{ version: '1.4.6' },
-		{ item: '' },
+		{ item: 'Panel names show account name for non-current panel owners on TP' },
 		
 		{ version: '1.4.5' },
 		{ item: 'Support for "audioboo" audio' },

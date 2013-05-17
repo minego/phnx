@@ -235,7 +235,11 @@ MainAssistant.prototype = {
 					barhtml.push('	class="nav-icon ' + panel.icon + '">');
 
 					if (this.largedevice) {
-						barhtml.push('<p>' + panel.title + '</p>');
+						if(user.username === this.user.username){
+							barhtml.push('<p>' + panel.title + '</p>');
+						} else {
+							barhtml.push('<p>' + panel.title + ' (' + user.username + ')</p>');
+						}
 					}
 
 					barhtml.push('<div id="beacon-' + panel.index + '" class="beacon"></div>');
