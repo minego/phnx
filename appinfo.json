@@ -17,9 +17,14 @@
 		"action":  {
 			"displayName":	"Tweet with Project Macaw",
 			"url":			"net.minego.phnx",
-			"launchParam":	{ "action": "prepPost", "msg":"#{searchTerms}" }
+			"launchParam":	{ "action": "tweet", "msg":"#{searchTerms}" }
+		},
+		"search": {
+			"displayName":	"Search User Project Macaw",
+			"url":			"net.minego.phnx",
+			"launchParam":	{ "action": "searchUser", "searchedUser":"#{searchTerms}" }
 		}
-    },
+  },
 	"uiRevision":			2
 }
 

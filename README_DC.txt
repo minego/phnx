@@ -102,5 +102,7 @@ Modified profile-assistant.js to hide retweets in mentions
 Modified tweet.js to allow playing of "justsayin" mp3's
 Modified tweet.js to allow playing of "audioboo" mp3's 
 Modified compose.js to allow for splitting of .@mention tweets without failing with >140chars
-Modified app-asistant.js, appinfo.json, compose.js for prelim improvement of JustType launching. Not really working properly yet.
+Modified app-assistant.js, appinfo.json, compose.js for prelim improvement of JustType launching. Not really working properly yet.
 Updated main-assistant.js so that panels on touchpad that are from other accounts show account name next to panel id.
+Modified app-assistant.js and appinfo.json to allow for tweeting and user searching from JustType.  Working properly now.
+Modified app-assistant.js and status-assistant.js to give cross-app launching of "search".

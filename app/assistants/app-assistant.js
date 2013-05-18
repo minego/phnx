@@ -22,42 +22,135 @@ AppAssistant.prototype = {
 			this.launchMain();
 			// This is exhibition mode
 //		} else if (params.composeTweet) {
-		} else if (params.action === 'prepPost') {
+		} else if (params.action === 'tweet') {
 			// code for x-launch-params still work-in-progress
-			Mojo.Log.info("Called Launch Param correctly: " + params.msg);
-			//Mojo.Log.info("params.msg: " + params.msg);
-			//params.action = 'prepPost';
-			//params.msg = params.composeTweet;
+			Mojo.Log.info("Called Launch Param tweet correctly: " + params.msg);
 			var prefs = new LocalStorage();	
 			var defaultUser = prefs.read('defaultAccount');
 			this.launchMain();
 			var am = new Account();
 			var accounts;
 			var user = {};
-			//Delay toaster call on initial start
-			setTimeout(function() {
-				am.all(function(r){
-					accounts = r;
-					if (accounts.length > 0) {
-						//Mojo.Log.info('Starting app, accounts exist');
-						// Push the main scene with the first account set as default.
-						if (defaultUser !== '0') {
-							for (var i=0; i < accounts.length; i++) {
-								if (accounts[i].id === defaultUser) {
-									user = accounts[i];
-								}
+
+			am.all(function(r){
+				accounts = r;
+				if (accounts.length > 0) {
+					//Mojo.Log.info('Starting app, accounts exist');
+					// Push the main scene with the first account set as default.
+					if (defaultUser !== '0') {
+						for (var i=0; i < accounts.length; i++) {
+							if (accounts[i].id === defaultUser) {
+								user = accounts[i];
 							}
 						}
-						else {
-							// Use the first user if an explicit default has not been chosen
-							user = accounts[0];
-						}
 					}
-				}.bind(this));
+					else {
+						// Use the first user if an explicit default has not been chosen
+						user = accounts[0];
+					}
+				}
 				this.toasters.add(new ComposeToaster({
 				'from':user,'text':params.msg}, this
 				));
-			}.bind(this),5000);
+			}.bind(this));
+    } else if (params.action === 'searchUser') {
+			// code for x-launch-params still work-in-progress
+			/*		"search": {
+			"displayName":	"Search User Project Macaw",
+			"url":			"net.minego.phnx",
+			"launchParam":	{ "action": "searchUser", "searchedUser":"#{searchTerms}" }
+			}*/
+			Mojo.Log.info("Called Launch Param searchUser correctly: " + params.searchedUser);
+			var prefs = new LocalStorage();	
+			var defaultUser = prefs.read('defaultAccount');
+			this.launchMain();
+			var am = new Account();
+			var accounts;
+			var user = {};
+
+			am.all(function(r){
+				accounts = r;
+				if (accounts.length > 0) {
+					//Mojo.Log.info('Starting app, accounts exist');
+					// Push the main scene with the first account set as default.
+					if (defaultUser !== '0') {
+						for (var i=0; i < accounts.length; i++) {
+							if (accounts[i].id === defaultUser) {
+								user = accounts[i];
+							}
+						}
+					}
+					else {
+						// Use the first user if an explicit default has not been chosen
+						user = accounts[0];
+					}
+				}
+				if (params.searchedUser.length > 0) {
+					var Twitter = new TwitterAPI(user);
+					Twitter.getUser(params.searchedUser, function(r){
+						this.controller.getActiveStageController().pushScene({
+							name: 'profile',
+							disableSceneScroller: true
+						}, r.responseJSON);
+					}.bind(this));
+				}
+			}.bind(this));
+    } else if (params.action === 'search') {
+			// code for x-launch-params still work-in-progress
+			/*		"search": {
+			"displayName":	"Search Project Macaw",
+			"url":			"net.minego.phnx",
+			"launchParam":	{ "action": "search", "searchTerms":"#{searchTerms}" }
+			}*/
+			Mojo.Log.info("Called Launch Param search correctly: " + params.searchTerms);
+			var prefs = new LocalStorage();	
+			var defaultUser = prefs.read('defaultAccount');
+			this.launchMain();
+			var am = new Account();
+			var accounts;
+			var user = {};
+
+			am.all(function(r){
+				accounts = r;
+				if (accounts.length > 0) {
+					//Mojo.Log.info('Starting app, accounts exist');
+					// Push the main scene with the first account set as default.
+					if (defaultUser !== '0') {
+						for (var i=0; i < accounts.length; i++) {
+							if (accounts[i].id === defaultUser) {
+								user = accounts[i];
+							}
+						}
+					}
+					else {
+						// Use the first user if an explicit default has not been chosen
+						user = accounts[0];
+					}
+				}
+				if (params.searchTerms.length > 0) {
+					var Twitter = new TwitterAPI(user);
+					//var savedSearchesModel = {items: []};
+					Twitter.getSavedSearches(function(response){
+						savedSearchesModel.items = response.responseJSON;
+					}.bind(this));
+					Twitter.search(params.searchTerms, function(response) {
+					// this.toasters.add(new SearchToaster(query, response.responseJSON, this));
+						var opts = {
+							type: 'search',
+							query: params.searchTerms,
+							items: response.responseJSON.statuses,
+							user: user,
+							//savedSearchesModel: savedSearchesModel, // Added by DC
+							savedSearchesModel: null,
+							assistant: this,
+							controller: this.controller 
+						};
+						this.controller.getActiveStageController().pushScene('status', opts);
+						this.controller.modelChanged(savedSearchesModel);
+						//this.controller.get('saved-searches').show();
+					}.bind(this));
+				}
+			}.bind(this));
     } else {
 			Mojo.Log.info('params: ' + params);
 			// Launch the app normally, load the default user if it exists.
@@ -73,13 +166,12 @@ AppAssistant.prototype = {
 
 				/**
 				 * {
-				 *   action:"prepPost",
+				 *   action:"tweet",
 				 *   msg:"Some Text",
 				 *   account:"ACCOUNT_HASH" // optional
 				 * }
 				 */
-				case 'prepPost':
-				case 'post':
+				case 'tweet':
 						this.toasters.add(new ComposeToaster({
 							'text':params.msg}, this
 						));

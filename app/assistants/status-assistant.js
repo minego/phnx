@@ -81,22 +81,25 @@ StatusAssistant.prototype = {
 		this.controller.listen('more', Mojo.Event.tap, this.moreTapped.bind(this));
 
 		//var Twitter = new TwitterAPI(this.opts.user, this.controller.stageController);
-		
 		if(this.opts.type === 'search') {
-			for (var i=0; i<this.opts.savedSearchesModel.items.length; i++) {			
-				if(this.opts.savedSearchesModel.items[i].name == this.opts.query) {
-					this.matchFound = 1;
-					this.query_id = this.opts.savedSearchesModel.items[i].id;
-				} 
+			if(this.opts.savedSearchesModel){
+				for (var i=0; i<this.opts.savedSearchesModel.items.length; i++) {			
+					if(this.opts.savedSearchesModel.items[i].name == this.opts.query) {
+						this.matchFound = 1;
+						this.query_id = this.opts.savedSearchesModel.items[i].id;
+					} 
+				}
 			}
-			if(this.matchFound === 0) {
-				this.controller.listen('save-search', Mojo.Event.tap, this.saveSearchTapped.bind(this));
-				this.controller.get('save-search').setStyle({'display':'inline'});
-				this.controller.get('delete-search').setStyle({'display':'none'});
-			} else {
-				this.controller.listen('delete-search', Mojo.Event.tap, this.deleteSearchTapped.bind(this));
-				this.controller.get('delete-search').setStyle({'display':'inline'});
-				this.controller.get('save-search').setStyle({'display':'none'});
+			if(this.opts.savedSearchesModel){
+				if(this.matchFound === 0) {
+					this.controller.listen('save-search', Mojo.Event.tap, this.saveSearchTapped.bind(this));
+					this.controller.get('save-search').setStyle({'display':'inline'});
+					this.controller.get('delete-search').setStyle({'display':'none'});
+				} else {
+					this.controller.listen('delete-search', Mojo.Event.tap, this.deleteSearchTapped.bind(this));
+					this.controller.get('delete-search').setStyle({'display':'inline'});
+					this.controller.get('save-search').setStyle({'display':'none'});
+				}
 			}
 		} else {
 			this.controller.get('save-search').setStyle({'display':'none'});
