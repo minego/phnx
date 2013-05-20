@@ -1,6 +1,7 @@
 var ChangelogToaster = Class.create(Toaster, {
 	items: [
 		{ version: '1.4.6' },
+		{ item: 'Profile history, mentions and favourites handle retweets correctly' },
 		{ item: 'Cross-app launching allows using PM for twitter searches (but you cannot save this search like normal)' },
 		{ item: 'JustType works for composing tweets and searching for users. Compose tweet will be sent by default user' },
 		{ item: 'Panel names show account name for non-current panel owners on TP' },

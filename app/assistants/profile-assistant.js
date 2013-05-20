@@ -303,16 +303,17 @@ ProfileAssistant.prototype = {
 			var th = new TweetHelper();
 			var prefs = new LocalStorage();
 			var processVine = prefs.read('showVine');
-			for (var i=0; i < response.responseJSON.length; i++) {
-				var tweet = response.responseJSON[i];
-				tweet = th.process(tweet,this.historyModel,this.controller,processVine);
-			}
 			if (this.historyModel.items.length === 0) {
-				this.historyModel.items = response.responseJSON;
-			}
-			else {
-				for (i = response.responseJSON.length - 1; i >= 0; i--){
-					this.historyModel.items.splice(0, 0, response.responseJSON[i]);
+				var tweet;
+				for (var i=0; i < response.responseJSON.length; i++) {
+					tweet = th.process(response.responseJSON[i],this.historyModel,this.controller,processVine);
+					this.historyModel.items[i] = tweet;
+				}
+			}	else {
+				var tweet;
+				for (var i = response.responseJSON.length - 1; i >= 0; i--){
+					tweet = th.process(response.responseJSON[i],this.historyModel,this.controller,processVine);
+					this.historyModel.items.splice(0, 0, tweet);
 				}
 			}
 			this.user.history = this.historyModel.items;
@@ -335,17 +336,19 @@ ProfileAssistant.prototype = {
 			var th = new TweetHelper();
 			var prefs = new LocalStorage();
 			var processVine = prefs.read('showVine');
+
 			for (var i=0; i < items.length; i++) {
 				items[i] = th.process(items[i],this.mentionsModel,this.controller,processVine);
 				if(items[i].is_rt === true){
 					items.splice(i,1);
+					i--;
 				}
 			}
 			if (this.mentionsModel.items.length === 0) {
 				this.mentionsModel.items = items;
 			}
 			else {
-				for (i = items.length - 1; i >= 0; i--){
+				for (var i = items.length - 1; i >= 0; i--){
 					this.mentionsModel.items.splice(0, 0, items[i]);
 				}
 			}
@@ -369,16 +372,17 @@ ProfileAssistant.prototype = {
 			var th = new TweetHelper();
 			var prefs = new LocalStorage();
 			var processVine = prefs.read('showVine');
-			for (var i=0; i < response.responseJSON.length; i++) {
-				var tweet = response.responseJSON[i];
-				tweet = th.process(tweet,this.favoritesModel,this.controller,processVine);
-			}
 			if (this.favoritesModel.items.length === 0) {
-				this.favoritesModel.items = response.responseJSON;
-			}
-			else {
-				for (i = response.responseJSON.length - 1; i >= 0; i--){
-					this.favoritesModel.items.splice(0, 0, response.responseJSON[i]);
+				var tweet;
+				for (var i=0; i < response.responseJSON.length; i++) {
+					tweet = th.process(response.responseJSON[i],this.favoritesModel,this.controller,processVine);
+					this.favoritesModel.items[i] = tweet;
+				}
+			} else {
+				var tweet;
+				for (var i = response.responseJSON.length - 1; i >= 0; i--){
+					tweet = th.process(response.responseJSON[i],this.favoritesModel,this.controller,processVine);
+					this.favoritesModel.items.splice(0, 0, tweet);
 				}
 			}
 			this.user.favorites = this.favoritesModel.items;

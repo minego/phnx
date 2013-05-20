@@ -106,3 +106,4 @@ Modified app-assistant.js, appinfo.json, compose.js for prelim improvement of Ju
 Updated main-assistant.js so that panels on touchpad that are from other accounts show account name next to panel id.
 Modified app-assistant.js and appinfo.json to allow for tweeting and user searching from JustType.  Working properly now.
 Modified app-assistant.js and status-assistant.js to give cross-app launching of "search".
+Modified profile-assistant.js to better handle display of retweets in history, mentions (still hides but processes list better), and favourites
