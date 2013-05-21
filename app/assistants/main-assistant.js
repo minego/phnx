@@ -1514,7 +1514,7 @@ MainAssistant.prototype = {
 				var panel = this.getPanel(this.panels[this.timeline]);
 				this.fillGap(panel);
 			} else {
-				this.toasters.add(new TweetToaster(event.item, this));
+				this.toasters.add(new TweetToaster(event.item, this, this.savedSearchesModel));
 			}
 		}
 	},

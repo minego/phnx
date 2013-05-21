@@ -174,7 +174,7 @@ StatusAssistant.prototype = {
 		}
 
 		Twitter.search(args, function(r){
-			var items = r.responseJSON.results;
+			var items = r.responseJSON.statuses; //results
 			this.gotItems(items);
 		}.bind(this));
 	},

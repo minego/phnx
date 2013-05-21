@@ -1,5 +1,5 @@
 var TweetToaster = Class.create(Toaster, {
-	initialize: function(tweet, assistant) {
+	initialize: function(tweet, assistant, savedSearchesModel) {
 		this.toasterId			= toasterIndex++;
 		this.nodeId				= 'toaster-' + this.toasterId;
 		this.visible			= false;
@@ -10,6 +10,7 @@ var TweetToaster = Class.create(Toaster, {
 		this.tweet.toasterId	= this.toasterId;
 		this.user				= this.controller.stageController.user;
 		this.users				= this.controller.stageController.users || [ this.user ];
+		this.savedSearchesModel = savedSearchesModel;
 
 		/* The tweet may be from a panel for another account */
 		if (typeof(tweet.owner) !== 'undefined') {
@@ -928,7 +929,10 @@ transport.responseText);
 								var opts = {
 									type: 'search',
 									query: hashtag,
-									items: response.responseJSON.results,
+									items: response.responseJSON.statuses,
+									savedSearchesModel: this.savedSearchesModel, // Added by DC
+									assistant: this,
+									controller: this.controller, 
 									user: this.user
 								};
 								this.controller.stageController.pushScene('status', opts);
