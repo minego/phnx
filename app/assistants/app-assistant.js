@@ -27,7 +27,7 @@ AppAssistant.prototype = {
 			Mojo.Log.info("Called Launch Param tweet correctly: " + params.msg);
 			var prefs = new LocalStorage();	
 			var defaultUser = prefs.read('defaultAccount');
-			this.launchMain();
+			//this.launchMain();
 			var am = new Account();
 			var accounts;
 			var user = {};
@@ -49,9 +49,22 @@ AppAssistant.prototype = {
 						user = accounts[0];
 					}
 				}
-				this.toasters.add(new ComposeToaster({
-				'from':user,'text':params.msg}, this
-				));
+
+				// Check if the user's stage is active & has scenes
+				var appController = Mojo.Controller.getAppController();
+				var userStage = appController.getStageProxy(global.mainStage + user.key);
+				var userStageController = appController.getStageController(global.mainStage + user.key);
+				if (userStage) {
+					//Force new card composing until i can work out how to prevent the double compose toaster problem - last param set to true for new card
+					//this.launchMain();
+					if(userStageController) {
+						userStageController.window.focus();
+					}
+					//OpenComposeToaster(this.toasters,{'from':user,'text':params.msg} , this);
+					OpenComposeToaster(this.toasters,{'from':user,'text':params.msg} , this, true);
+				} else {
+					OpenComposeToaster(this.toasters,{'from':user,'text':params.msg} , this, true);
+				}
 			}.bind(this));
     } else if (params.action === 'searchUser') {
 			// code for x-launch-params still work-in-progress

@@ -495,7 +495,7 @@ var ComposeToaster = Class.create(Toaster, {
 					}
 
 					messages = this.split(txt, info);
-					var sendnext = function(response) {
+					var sendnext = function() {
 						var msg = messages.shift();
 
 						if (!msg) {
@@ -542,15 +542,15 @@ var ComposeToaster = Class.create(Toaster, {
 				//display some joke banners teehee
 				this.easterEggs(txt);
 			}
-
 			sendfunc(txt, function(response) {
+				//Mojo.Log.info('response : ' + response.responseJSON.id);
 				var prefs = new LocalStorage();
 				var refresh = prefs.read('refreshOnSubmit');
-
 				if (refresh) {
-					this.assistant.refreshAll();
+					if(typeof this.assistant.refreshAll == 'function'){
+						this.assistant.refreshAll();
+					}
 				}
-
 				if (!this.rt || this.dm) {
 					this.assistant.toasters.back();
 				} else {
@@ -559,7 +559,7 @@ var ComposeToaster = Class.create(Toaster, {
 				}
 			}.bind(this));
 			//For some reason if tweet is composed from justtype, toaster won't hide so you need the following to hide it on submit
-			this.assistant.toasters.back();
+			//this.assistant.toasters.back();
 		}
 	},
 	easterEggs: function(t) {
