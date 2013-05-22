@@ -1,6 +1,8 @@
 var ChangelogToaster = Class.create(Toaster, {
 	items: [
 		{ version: '1.4.6' },
+		{ item: 'Tweets containing huge words no longer cause crash and span correctly' },
+		{ item: 'Search #tags from tweets works again (as well as refreshing already displayed searches)' }, 
 		{ item: 'Profile history, mentions and favourites handle retweets correctly' },
 		{ item: 'Cross-app launching allows using PM for twitter searches (but you cannot save this search like normal)' },
 		{ item: 'JustType works for composing tweets and searching for users. Compose tweet will be sent by default user' },

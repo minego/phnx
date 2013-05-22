@@ -107,3 +107,5 @@ Updated main-assistant.js so that panels on touchpad that are from other account
 Modified app-assistant.js and appinfo.json to allow for tweeting and user searching from JustType.  Working properly now.
 Modified app-assistant.js and status-assistant.js to give cross-app launching of "search".
 Modified profile-assistant.js to better handle display of retweets in history, mentions (still hides but processes list better), and favourites
+Modified main-assistant.js, status-assistant.js and tweet.js to fix searching of tags from tweets
+Modified compose.js to handle tweets that contain huge single words that when spanned (so with mentions, part x of x, etc), will create tweets larger than one 140. No longer locks up luna.

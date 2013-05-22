@@ -39,6 +39,25 @@ var OpenComposeToaster = function OpenComposeToaster(toasters, args, assistant, 
 	}
 };
 
+Array.prototype.unique = function() {
+    var a = this.concat();
+    for(var i=0; i<a.length; ++i) {
+        for(var j=i+1; j<a.length; ++j) {
+            if(a[i] === a[j])
+                a.splice(j--, 1);
+        }
+    }
+
+    return a;
+};
+
+function splitStringAtInterval (string, interval) {
+	var result = [];
+	for (var i=0; i<string.length; i+=interval)
+ 	 result.push(string.substring (i, i+interval));
+	return result;
+};
+
 var ComposeToaster = Class.create(Toaster, {
 	initialize: function(opts, assistant) {
 		if (!assistant) {
@@ -107,7 +126,6 @@ var ComposeToaster = Class.create(Toaster, {
 			} else {
 				txt = opts.text;
 			}
-
 			get(this.textarea).value = txt;
 			this.updateCounter();
 		}
@@ -143,14 +161,11 @@ var ComposeToaster = Class.create(Toaster, {
 	},
 	updateCounter: function() {
 		var txt		= get(this.textarea).value;
-
 		if (txt.length <= this.availableChars) {
 			get('count-' + this.id).update(this.availableChars - txt.length);
 			return;
 		}
-
 		var msgs	= this.split(txt);
-
 		get('count-' + this.id).update(
 			(this.availableChars - 1 - msgs[msgs.length - 1].length) +
 			'x' + msgs.length);
@@ -312,7 +327,7 @@ var ComposeToaster = Class.create(Toaster, {
 					if (length) {
 						length++;
 					}
-					length += word.length;
+					length += word.length;					
 					continue;
 				}
 
@@ -349,6 +364,15 @@ var ComposeToaster = Class.create(Toaster, {
 			}
 		}
 
+		for (var i = 0, word; word = words[i]; i++) {
+			if(word.length > (140-(needed+ (mentions.length ? 14 : 10)))){
+				var chunks;
+				chunks = splitStringAtInterval(word,140-(needed+ (mentions.length ? 14 : 10)));
+				words.splice(i,1);
+				words = words.concat(chunks).unique(); 
+			}
+		}
+
 		/* Include 10 chars padding for the "x of y" text */
 		return({
 			words:		words,
@@ -361,7 +385,6 @@ var ComposeToaster = Class.create(Toaster, {
 
 	split: function(txt, info) {
 		var messages = [];
-
 		if (!info) {
 			info = this.splitPrep(txt);
 		}
@@ -373,7 +396,6 @@ var ComposeToaster = Class.create(Toaster, {
 			*/
 			var left	= this.availableChars - info.needed + 1;
 			var msg		= [];
-
 			while (info.words.length && left > 0) {
 				if (0 == info.words[0].indexOf('@') ||
 					0 == info.words[0].indexOf('.@')
@@ -390,7 +412,6 @@ var ComposeToaster = Class.create(Toaster, {
 					break;
 				}
 			}
-
 			var add = [];
 			for (var i = 0, word; word = info.mentions[i]; i++) {
 				//First conditional needed as .@mentions were causing greater than 140char tweets
@@ -400,23 +421,17 @@ var ComposeToaster = Class.create(Toaster, {
 					}
 				}
 			}
-
 			if (add.length) {
 				msg.push(' // ' + add.join(' '));
 			}
 
 			messages.push(msg.join(' '));
 		}
-
 		/* Add a prefix to each message: "x of y: " */
 		var totext = '';
 
 		if (info.to.length) {
 			totext = info.to.join(' ') + ' ';
-		}
-
-		for (var i = 0; messages[i]; i++) {
-			messages[i] = totext + (i + 1) + ' of ' + messages.length + ': ' + messages[i];
 		}
 
 		return(messages);
