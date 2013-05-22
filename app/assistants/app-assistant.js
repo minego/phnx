@@ -24,7 +24,7 @@ AppAssistant.prototype = {
 //		} else if (params.composeTweet) {
 		} else if (params.action === 'tweet') {
 			// code for x-launch-params still work-in-progress
-			Mojo.Log.error("Called Launch Param tweet correctly: " + params.msg);
+			Mojo.Log.info("Called Launch Param tweet correctly: " + params.msg);
 			var prefs = new LocalStorage();	
 			var defaultUser = prefs.read('defaultAccount');
 			//this.launchMain();
