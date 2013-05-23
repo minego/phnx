@@ -697,11 +697,14 @@ var ComposeToaster = Class.create(Toaster, {
 		});
 
 		var callback = function(shrt, lng){
-			this.controller.get(this.textarea).value = this.controller.get(this.textarea).value.replace(new RegExp(lng, 'g'), shrt);
+			//Below line won't shorten if the link has a '?' in it.  As we are just replacing and really don't need a regexp, just do a simple replace
+			//this.controller.get(this.textarea).value = this.controller.get(this.textarea).value.replace(new RegExp(lng, 'g'), shrt);
+			this.controller.get(this.textarea).value = this.controller.get(this.textarea).value.split(lng).join(shrt)
 		};
 
 		for (var i=0; i < urls.length; i++) {
 			var u = urls[i];
+			Mojo.Log.error('urls: ' + urls[i]);
 			if (u.indexOf('bit.ly') < 0) {
 				bitly.shorten(u, callback.bind(this));
 			}
