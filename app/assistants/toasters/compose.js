@@ -704,7 +704,6 @@ var ComposeToaster = Class.create(Toaster, {
 
 		for (var i=0; i < urls.length; i++) {
 			var u = urls[i];
-			Mojo.Log.error('urls: ' + urls[i]);
 			if (u.indexOf('bit.ly') < 0) {
 				bitly.shorten(u, callback.bind(this));
 			}
