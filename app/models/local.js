@@ -38,6 +38,7 @@ function LocalStorage() {
 		browserSelection: 'stockBrowser',
 		forwardSwipe: 'current',
 		showVine: false,
+		useFoursquareApp: false,
 		refreshOnMaximize: false,
 		autoCorrect: true,
 		filters: [],

@@ -25,7 +25,8 @@ function PreferencesAssistant(section) {
 		);
 	}
 	advanced.push({key: 'delReceivedDM', type: 'toggle', label: 'Allow deletion of received DMs'},
-				{key: 'showVine', type: 'toggle', label: 'Process Vine links - warning *resource hog*'}
+				{key: 'showVine', type: 'toggle', label: 'Process Vine links - warning *resource hog*'},
+				{key: 'useFoursquareApp', type: 'toggle', label: 'Pass 4sq.com links to Foursquare app (requires v2.8.5)'}
 	);
 
 	this.sections = {

@@ -972,6 +972,9 @@ transport.responseText);
 	handleLink: function(url,mediaUrl) {
 		//looks for images and other neat things in urls
 		var img;
+		var prefs = new LocalStorage();
+		var useFoursquareApp = prefs.read('useFoursquareApp');
+
 
 		if (url.indexOf('http://yfrog.com') > -1) {
 			this.showPreview(url + ':iphone', url);
@@ -1045,8 +1048,8 @@ transport.responseText);
 			}
 		} 
 		 
-/* Potential support for @zhephree's foursquare app
-		else if(url.indexOf('http://4sq.com/') > -1) {
+ //Potential support for @zhephree's foursquare app
+		else if((url.indexOf('http://4sq.com/') > -1) && useFoursquareApp) {
 			this.controller.serviceRequest("palm://com.palm.applicationManager", {
 				method: 'launch',
 					parameters: {
@@ -1058,7 +1061,7 @@ transport.responseText);
 				}.bind(this)
       })
 		}
-		*/ 
+		
 		else{
 			this.showWebview(url);
 		}
@@ -1142,6 +1145,13 @@ transport.responseText);
 	},
 	rtTapped: function(event) {
 		var Twitter = new TwitterAPI(this.user);
+		//Update retweet counter
+		Twitter.getStatus(this.tweet.id, function(response, meta) {
+			var tweet = response.responseJSON;
+			var th = new TweetHelper();
+			tweet = th.process(tweet);
+			this.tweet.retweet_count = tweet.retweet_count;
+		}.bind(this));
 		Twitter.showRetweets(this.tweet.id_str, function(response) {
 			if (response.responseJSON.length > 0) {
 				var users = [];

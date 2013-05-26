@@ -66,17 +66,16 @@ AppAssistant.prototype = {
 					OpenComposeToaster(this.toasters,{'from':user,'text':params.msg} , this, true);
 				}
 			}.bind(this));
-    } else if (params.action === 'searchUser') {
+    } else if (params.action === 'user') {
 			// code for x-launch-params still work-in-progress
 			/*		"search": {
 			"displayName":	"Search User Project Macaw",
 			"url":			"net.minego.phnx",
-			"launchParam":	{ "action": "searchUser", "searchedUser":"#{searchTerms}" }
+			"launchParam":	{ "action": "user", "userid":"#{searchTerms}" }
 			}*/
-			Mojo.Log.info("Called Launch Param searchUser correctly: " + params.searchedUser);
+			Mojo.Log.info("Called Launch Param user correctly: " + params.userid);
 			var prefs = new LocalStorage();	
 			var defaultUser = prefs.read('defaultAccount');
-			this.launchMain();
 			var am = new Account();
 			var accounts;
 			var user = {};
@@ -98,9 +97,21 @@ AppAssistant.prototype = {
 						user = accounts[0];
 					}
 				}
-				if (params.searchedUser.length > 0) {
+				
+				// Check if the user's stage is active & has scenes
+				var appController = Mojo.Controller.getAppController();
+				var userStage = appController.getStageProxy(global.mainStage + user.key);
+				var userStageController = appController.getStageController(global.mainStage + user.key);
+				if (userStage) {
+					if(userStageController) {
+						userStageController.window.focus();
+					}
+				} else {
+					this.launchMain();
+				}				
+				if (params.userid.length > 0) {
 					var Twitter = new TwitterAPI(user);
-					Twitter.getUser(params.searchedUser, function(r){
+					Twitter.getUser(params.userid, function(r){
 						this.controller.getActiveStageController().pushScene({
 							name: 'profile',
 							disableSceneScroller: true

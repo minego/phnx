@@ -22,7 +22,7 @@
 		"search": {
 			"displayName":	"Search User Project Macaw",
 			"url":			"net.minego.phnx",
-			"launchParam":	{ "action": "searchUser", "searchedUser":"#{searchTerms}" }
+			"launchParam":	{ "action": "user", "userid":"#{searchTerms}" }
 		}
   },
 	"uiRevision":			2
