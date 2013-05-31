@@ -8,7 +8,6 @@ var UserListToaster = Class.create(Toaster, {
 		this.title = title;
 
 		this.listModel = {"items": items};
-
 		// Use the status list template - it's just a scrollers with a list & title
 		this.render({'toasterId':this.id, title: this.title}, 'templates/toasters/status-list');
 

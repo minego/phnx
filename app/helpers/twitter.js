@@ -191,23 +191,37 @@ TwitterAPI.prototype = {
 	},
 	gotIds: function(response, meta) {
 		var start	= meta.start || 0;
-		var ids		= response.responseJSON.ids.slice(start, start + 99);
-
+		//var ids		= response.responseJSON.ids.slice(start, start + 99);
+		var ids		= response.responseJSON.ids.slice(start, start + 100); // slice doesn't include the end number hence adding one more
+		var allIds = response.responseJSON.ids;
+		
 		if (!ids || ids.length <= 0) {
+			var lookup = {};
+			for (var i = 0, len = meta.results.length; i < len; i++) {
+				lookup[meta.results[i].id] = meta.results[i];
+			}
+			var j = 0;
+			for (var i = 0, len = meta.results.length; i < len; i++) {
+				if(lookup[allIds[j]]){
+					meta.results[i] = lookup[allIds[j]];
+				} else {
+					Mojo.Log.error('userId not found: ' + allIds[j]);
+					i--;
+				}
+				j++;
+			}
 			meta.callback(meta.results || []);
 			return;
 		}
-
+		//Mojo.Log.info('ids: ' + ids.join(','));
 		meta.start	= start + 100;
 		this.getUsersById(ids.join(','), function(r) {
 			if (meta.results) {
 				var tmp = meta.results;
-
 				meta.results = tmp.concat(r.responseJSON);
 			} else {
 				meta.results = r.responseJSON;
 			}
-
 			this.gotIds(response, meta);
 		}.bind(this));
 	},

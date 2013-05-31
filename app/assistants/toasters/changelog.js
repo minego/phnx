@@ -1,6 +1,7 @@
 var ChangelogToaster = Class.create(Toaster, {
 	items: [
 		{ version: '1.4.6' },
+		{ item: 'Follows/Following now returns users in order - newest at top' },
 		{ item: 'Option to pass 4sq.com links through foursquare app.  Requires V2.8.5 of foursquare' },
 		{ item: 'Tweets containing huge words no longer cause crash and span correctly' },
 		{ item: 'Search #tags from tweets works again (as well as refreshing already displayed searches)' }, 
