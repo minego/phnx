@@ -1146,7 +1146,7 @@ transport.responseText);
 	rtTapped: function(event) {
 		var Twitter = new TwitterAPI(this.user);
 		//Update retweet counter
-		Twitter.getStatus(this.tweet.id, function(response, meta) {
+		Twitter.getStatus(this.tweet.id_str, function(response, meta) {
 			var tweet = response.responseJSON;
 			var th = new TweetHelper();
 			tweet = th.process(tweet);
