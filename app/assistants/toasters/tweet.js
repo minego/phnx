@@ -1156,7 +1156,8 @@ transport.responseText);
 			if (response.responseJSON.length > 0) {
 				var users = [];
 				var r = response.responseJSON;
-				for (var i=0; i < r.length; i++) {
+				var maxResponseLen = (r.length > 500 ? 500 : r.length);
+				for (var i=0; i < maxResponseLen; i++) {
 					users.push(r[i].user);
 				}
 				this.assistant.toasters.add(new UserListToaster('Status Retweets', users, this.assistant));

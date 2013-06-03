@@ -192,7 +192,10 @@ TwitterAPI.prototype = {
 	gotIds: function(response, meta) {
 		var start	= meta.start || 0;
 		//var ids		= response.responseJSON.ids.slice(start, start + 99);
-		var ids		= response.responseJSON.ids.slice(start, start + 100); // slice doesn't include the end number hence adding one more
+		var ids;
+		if(start <= 400) {
+			ids		= response.responseJSON.ids.slice(start, start + 100); // slice doesn't include the end number hence adding one more
+		}
 		var allIds = response.responseJSON.ids;
 		
 		if (!ids || ids.length <= 0) {

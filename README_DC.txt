@@ -114,3 +114,5 @@ Modified tweet.js to update retweet counter. Doesn't refresh toaster but will be
 Modified tweet.js, local.js, preferences-assistant.js, app-assistant.js and appinfo.json to allow passing of 4sq.com links through the foursquare app.  However, to use this function it requires V2.8.5 of foursquare.  I have made a pull request, but in the meantime, you could get from my github repo (davec555).
 Modified user-item.html and phnx.css to show real name as well as twitter handle when showing list of followers/following.
 Modifed twitter.js to return followers/friends in order.
+Modified tweet.js to only add max 500 retweets to displayed list.
+Modified twitter.js to only add max 500 followers/following to displayed list.
