@@ -433,6 +433,9 @@ var ComposeToaster = Class.create(Toaster, {
 		if (info.to.length) {
 			totext = info.to.join(' ') + ' ';
 		}
+		for (var i = 0; messages[i]; i++) {
+			messages[i] = totext + (i + 1) + ' of ' + messages.length + ': ' + messages[i];
+		}
 
 		return(messages);
 	},
