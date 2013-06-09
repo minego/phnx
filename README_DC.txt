@@ -117,3 +117,4 @@ Modifed twitter.js to return followers/friends in order.
 Modified tweet.js to only add max 500 retweets to displayed list.
 Modified twitter.js to only add max 500 followers/following to displayed list.
 Modified compose.js to fix multi-tweet spanning with mentions and 'to' mentions.  Accidently had removed a little loop that did this previously.  Whoops.
+Modified String.js and compose.js so that tweets with '“@username' are parsed and linked correctly.

@@ -316,7 +316,7 @@ var ComposeToaster = Class.create(Toaster, {
 		*/
 		if (!this.dm) {
 			for (var i = 0, word; word = words[i]; i++) {
-				if (0 == word.indexOf('.@')) {
+				if (0 == word.indexOf('.@') || 0 == word.indexOf('"@')) {
 					todone = true;
 					word = word.slice(1);
 				} else if (0 == word.indexOf('@')) {
@@ -398,7 +398,8 @@ var ComposeToaster = Class.create(Toaster, {
 			var msg		= [];
 			while (info.words.length && left > 0) {
 				if (0 == info.words[0].indexOf('@') ||
-					0 == info.words[0].indexOf('.@')
+					0 == info.words[0].indexOf('.@') ||
+					0 == info.words[0].indexOf('".@')
 				) {
 					/*
 						This is a mention, so it's length is already
@@ -415,7 +416,7 @@ var ComposeToaster = Class.create(Toaster, {
 			var add = [];
 			for (var i = 0, word; word = info.mentions[i]; i++) {
 				//First conditional needed as .@mentions were causing greater than 140char tweets
-				if (-1 == msg.indexOf('.'+word)){
+				if (-1 == msg.indexOf('.'+word) && -1 == msg.indexOf('"'+word)){
 					if (-1 == msg.indexOf(word)) {
 						add.push(word);
 					}
