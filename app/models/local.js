@@ -20,6 +20,7 @@ function LocalStorage() {
 		refreshFlushAtLaunch: false,
 		enterToSubmit: false,
 		delReceivedDM: false,
+		absoluteTimeStamps: false,
 		hideAvatar: false,
 		hideToolbar: false,
 		hideTabs: false,

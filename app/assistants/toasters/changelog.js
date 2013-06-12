@@ -1,6 +1,7 @@
 var ChangelogToaster = Class.create(Toaster, {
 	items: [
 		{ version: '1.4.6' },
+		{ item: 'Added preference option to display timestamps as absolute or relative' },
 		{ item: 'Follows/Following and Retweets now max out properly at newest 500 items' },
 		{ item: 'Follows/Following now returns users in order - newest at top' },
 		{ item: 'Option to pass 4sq.com links through foursquare app.  Requires V2.8.5 of foursquare' },

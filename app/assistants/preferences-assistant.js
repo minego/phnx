@@ -87,6 +87,7 @@ function PreferencesAssistant(section) {
 				{label: 'Details Only', value: 'detailsEmoji'},
 				{label: 'Always Show', value: 'showEmoji'}
 			]},
+			{key: 'absoluteTimeStamps', type: 'toggle', label: 'Absolute TimeStamps'},
 			{key: 'hideAvatar',		type: 'toggle', label: 'Hide Avatars'},
 			{key: 'hideUsername',	type: 'toggle', label: 'Hide Name'},
 			{key: 'hideScreenname',	type: 'toggle', label: 'Hide Username'},
