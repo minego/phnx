@@ -119,3 +119,4 @@ Modified twitter.js to only add max 500 followers/following to displayed list.
 Modified compose.js to fix multi-tweet spanning with mentions and 'to' mentions.  Accidently had removed a little loop that did this previously.  Whoops.
 Modified String.js and compose.js so that tweets with '“@username' are parsed and linked correctly.
 Modified preferences-assistant.js, local.js, tweet.js, user.html, search.html, item.html, item-one-column.html, convo.html, convo-item.html and tweet-item.html to display absolute or relative timestamps.  Details view remains as was.
+MOdified main-assistant.js, profile-assistant.js, status-assistant.js, convo.js, search.js, status-list.js and tweet.js to fix preference reading for absTimeStamp val.

@@ -25,7 +25,8 @@ var ConvoToaster = Class.create(Toaster, {
 			var th = new TweetHelper();
 			var prefs = new LocalStorage();
 			var processVine = prefs.read('showVine');
-			tweet = th.process(tweet,this.convoModel,this.controller,processVine);
+			var absTimeStampVal = prefs.read('absoluteTimeStamps');
+			tweet = th.process(tweet,this.convoModel,this.controller,processVine,absTimeStampVal);
 			this.convoModel.items.push(tweet);
 			get('convo-list-' + this.id).mojo.noticeUpdatedItems(0, this.convoModel.items);
 			if (tweet.in_reply_to_status_id_str !== null) {

@@ -1165,13 +1165,14 @@ MainAssistant.prototype = {
 		var user		= this.getAccount(panel.tab.account);
 		var prefs = new LocalStorage();
 		var processVine = prefs.read('showVine');
+		var absTimeStampVal = prefs.read('absoluteTimeStamps');
 
 		for (var i = 0, tweet; tweet = tweets[i]; i++) {
 			/* Store a reference to the account that loaded this tweet */
 			tweet.owner = user.id;
 
 			if (tweet.dm || !th.filter(tweet, filters)) {
-				tweets[i] = th.process(tweet,panel.model,this.controller,processVine);
+				tweets[i] = th.process(tweet,panel.model,this.controller,processVine,absTimeStampVal);
 			} else {
 				tweets.splice(i, 1);
 			}

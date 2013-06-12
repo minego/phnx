@@ -145,9 +145,10 @@ StatusAssistant.prototype = {
 		var type = this.opts.type;
 		var prefs = new LocalStorage();
 		var processVine = prefs.read('showVine');
+		var absTimeStampVal = prefs.read('absoluteTimeStamps');
         
-        for (var i=0; i < items.length; i++) {
-            items[i] = th.process(items[i],this.itemsModel,this.controller,processVine);
+		for (var i=0; i < items.length; i++) {
+			items[i] = th.process(items[i],this.itemsModel,this.controller,processVine,absTimeStampVal);
 		}
 		
 		var templates = {
@@ -225,14 +226,15 @@ StatusAssistant.prototype = {
 		}
 		var prefs = new LocalStorage();
 		var processVine = prefs.read('showVine');
+		var absTimeStampVal = prefs.read('absoluteTimeStamps');
 
 		for (i=0; i < this.itemsModel.items.length; i++) {
 			var tweet = this.itemsModel.items[i];
 			if (type === 'search') {
-				tweet = th.processSearch(tweet,this.itemsModel,this.controller,processVine);
+				tweet = th.processSearch(tweet,this.itemsModel,this.controller,processVine,absTimeStampVal);
 			}
 			else if (type === 'list'  || type === 'retweets') {
-				tweet = th.process(tweet,this.itemsModel,this.controller,processVine);
+				tweet = th.process(tweet,this.itemsModel,this.controller,processVine,absTimeStampVal);
 			}
 
 			if (tweet.id_str !== newId) {
@@ -252,10 +254,11 @@ StatusAssistant.prototype = {
 				var tmpMediaUrl2 = event.item.mediaUrl2;
 				var prefs = new LocalStorage();
 				var processVine = prefs.read('showVine');
+				var absTimeStampVal = prefs.read('absoluteTimeStamps');
 				var Twitter = new TwitterAPI(this.opts.user, this.controller.stageController);
 				Twitter.getStatus(event.item.id_str, function(response){
 					var th = new TweetHelper();
-					var tweet = th.process(response.responseJSON,null,null,processVine);
+					var tweet = th.process(response.responseJSON,null,null,processVine,absTimeStampVal);
 					tweet.thumbnail = tmpThumb;
 					tweet.mediaUrl = tmpMediaUrl;
 					tweet.thumbnail2 = tmpThumb2;
@@ -420,9 +423,10 @@ StatusAssistant.prototype = {
 
 		var prefs = new LocalStorage();
 		var processVine = prefs.read('showVine');
+		var absTimeStampVal = prefs.read('absoluteTimeStamps');
 
 		for (i=0; i < model.items.length; i++) {
-			model.items[i] = th.process(model.items[i],model,this.controller,processVine);
+			model.items[i] = th.process(model.items[i],model,this.controller,processVine,absTimeStampVal);
 		}
 
 		this.controller.modelChanged(model);
