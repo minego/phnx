@@ -1,7 +1,7 @@
 var TweetHelper = function() {};
 
 TweetHelper.prototype = {
-	process: function(tweet,model,controller,processVine,absTimeStampVal) {
+	process: function(tweet,model,controller,processVine) {
 		// takes a tweet and does all sorts of stuff to it
 
 		// Save the created_at property for all tweets
@@ -195,14 +195,7 @@ TweetHelper.prototype = {
 			tweet.convo_class = 'show';
 		}
 
-		//var prefs = new LocalStorage();
-		//var absTimeStampVal = prefs.read('absoluteTimeStamps');
-		if(absTimeStampVal){
-			tweet.displayed_time_str = (d.toTimeString(d)).slice(0,8) + ' ' + d.toDateString(d);
-		}	else {
-			tweet.displayed_time_str = tweet.time_str;
-		}
-		//Mojo.Log.error('displayed_time_str: ' + tweet.displayed_time_str);
+		tweet.displayed_time_str = (d.toTimeString(d)).slice(0,8) + ' ' + d.toDateString(d);
 
 		//keep the plaintext version for quote-style RTs (so HTML doesn't get tossed in there)
 		tweet.stripped = tweet.text;
@@ -276,7 +269,7 @@ TweetHelper.prototype = {
 
 		return(null);
 	},
-	processSearch: function(tweet,model,controller,processVine,absTimeStampVal) {
+	processSearch: function(tweet,model,controller,processVine) {
 		// search tweets are stupid and in a different format from the rest.
 		if(tweet.source.indexOf('&lt') > -1) {
 			tweet.source = tweet.source.unescapeHTML(); // search returns escaped HTML for some reason

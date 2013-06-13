@@ -11,10 +11,9 @@ var StatusListToaster = Class.create(Toaster, {
 		var th = new TweetHelper();
 		var prefs = new LocalStorage();
 		var processVine = prefs.read('showVine');
-		var absTimeStampVal = prefs.read('absoluteTimeStamps');
 
 		for (var i=0; i < items.length; i++) {
-			items[i] = th.process(items[i],this.listModel,this.controller,processVine,absTimeStampVal);
+			items[i] = th.process(items[i],this.listModel,this.controller,processVine);
 		}
 
 		//this.listModel = {"items": items};

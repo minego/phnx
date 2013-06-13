@@ -100,6 +100,7 @@ ProfileAssistant.prototype = {
 			global.setShowThumbs(body,	prefs.read('showThumbs'));
 			global.setFullWidthThumbs(body, prefs.read('fullWidthThumbs'));
 			global.setShowEmoji(body,	prefs.read('showEmoji'));
+			global.setAbsTimeStamp(body, prefs.read('absoluteTimeStamps'));
 			global.setFadeShim(body, prefs.read('fadeShim'));
 			
 			global.setHide(body,
@@ -303,17 +304,16 @@ ProfileAssistant.prototype = {
 			var th = new TweetHelper();
 			var prefs = new LocalStorage();
 			var processVine = prefs.read('showVine');
-			var absTimeStampVal = prefs.read('absoluteTimeStamps');
 			if (this.historyModel.items.length === 0) {
 				var tweet;
 				for (var i=0; i < response.responseJSON.length; i++) {
-					tweet = th.process(response.responseJSON[i],this.historyModel,this.controller,processVine,absTimeStampVal);
+					tweet = th.process(response.responseJSON[i],this.historyModel,this.controller,processVine);
 					this.historyModel.items[i] = tweet;
 				}
 			}	else {
 				var tweet;
 				for (var i = response.responseJSON.length - 1; i >= 0; i--){
-					tweet = th.process(response.responseJSON[i],this.historyModel,this.controller,processVine,absTimeStampVal);
+					tweet = th.process(response.responseJSON[i],this.historyModel,this.controller,processVine);
 					this.historyModel.items.splice(0, 0, tweet);
 				}
 			}
@@ -337,10 +337,9 @@ ProfileAssistant.prototype = {
 			var th = new TweetHelper();
 			var prefs = new LocalStorage();
 			var processVine = prefs.read('showVine');
-			var absTimeStampVal = prefs.read('absoluteTimeStamps');
 
 			for (var i=0; i < items.length; i++) {
-				items[i] = th.process(items[i],this.mentionsModel,this.controller,processVine,absTimeStampVal);
+				items[i] = th.process(items[i],this.mentionsModel,this.controller,processVine);
 				if(items[i].is_rt === true){
 					items.splice(i,1);
 					i--;
@@ -374,17 +373,16 @@ ProfileAssistant.prototype = {
 			var th = new TweetHelper();
 			var prefs = new LocalStorage();
 			var processVine = prefs.read('showVine');
-			var absTimeStampVal = prefs.read('absoluteTimeStamps');
 			if (this.favoritesModel.items.length === 0) {
 				var tweet;
 				for (var i=0; i < response.responseJSON.length; i++) {
-					tweet = th.process(response.responseJSON[i],this.favoritesModel,this.controller,processVine,absTimeStampVal);
+					tweet = th.process(response.responseJSON[i],this.favoritesModel,this.controller,processVine);
 					this.favoritesModel.items[i] = tweet;
 				}
 			} else {
 				var tweet;
 				for (var i = response.responseJSON.length - 1; i >= 0; i--){
-					tweet = th.process(response.responseJSON[i],this.favoritesModel,this.controller,processVine,absTimeStampVal);
+					tweet = th.process(response.responseJSON[i],this.favoritesModel,this.controller,processVine);
 					this.favoritesModel.items.splice(0, 0, tweet);
 				}
 			}
@@ -480,10 +478,9 @@ ProfileAssistant.prototype = {
 		var Twitter = new TwitterAPI(this.account);
 		var prefs = new LocalStorage();
 		var processVine = prefs.read('showVine');
-		var absTimeStampVal = prefs.read('absoluteTimeStamps');
 		Twitter.getStatus(event.item.id_str, function(response){
 			var th = new TweetHelper();
-			var tweet = th.process(response.responseJSON,null,null,processVine,absTimeStampVal);
+			var tweet = th.process(response.responseJSON,null,null,processVine);
 			this.toasters.add(new TweetToaster(tweet, this));
 		}.bind(this));
 	},

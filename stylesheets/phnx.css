@@ -568,7 +568,9 @@ body.no-gesture {  /* touchpad/emulator */
 .hideUsername .tweet-username,
 .hideScreenname .tweet-screenname,
 .hideTime .tweet-time,
-.hideVia .tweet-via {
+.hideVia .tweet-via,
+.relTimeStamps .tweet-time-abs,
+.absTimeStamps .tweet-time {
 	display: none;
 }
 

@@ -365,6 +365,7 @@ PreferencesAssistant.prototype = {
 		global.setShowThumbs(body,	prefs.read('showThumbs'));
 		global.setFullWidthThumbs(body, prefs.read('fullWidthThumbs'));
 		global.setShowEmoji(body,	prefs.read('showEmoji'));
+		global.setAbsTimeStamp(body, prefs.read('absoluteTimeStamps'));
 		global.setFadeShim(body, prefs.read('fadeShim'));
 		global.setFontSize(body,	prefs.read('fontSize'));
 

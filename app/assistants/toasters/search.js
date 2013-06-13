@@ -12,9 +12,8 @@ var SearchToaster = Class.create(Toaster, {
 		var th = new TweetHelper();
 		var prefs = new LocalStorage();
 		var processVine = prefs.read('showVine');
-		var absTimeStampVal = prefs.read('absoluteTimeStamps');
 		for (var i=0; i < items.length; i++) {
-			items[i] = th.process(items[i],this.listModel,this.controller,processVine,absTimeStampVal);
+			items[i] = th.process(items[i],this.listModel,this.controller,processVine);
 		}
 
 		//this.listModel = {"items": items};
@@ -44,13 +43,12 @@ var SearchToaster = Class.create(Toaster, {
 		var tmpMediaUrl2 = event.item.mediaUrl2;
 		var prefs = new LocalStorage();
 		var processVine = prefs.read('showVine');
-		var absTimeStampVal = prefs.read('absoluteTimeStamps');
 
 		Mojo.Log.error('item: ' + event.item.id_str);
 		var Twitter = new TwitterAPI(this.user);
 		Twitter.getStatus(event.item.id_str, function(response){
 			var th = new TweetHelper();
-			var tweet = th.process(response.responseJSON,null,null,processVine,absTimeStampVal);
+			var tweet = th.process(response.responseJSON,null,null,processVine);
 			tweet.thumbnail = tmpThumb;
 			tweet.mediaUrl = tmpMediaUrl;
 			tweet.thumbnail2 = tmpThumb2;

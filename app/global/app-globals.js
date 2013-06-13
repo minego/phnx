@@ -270,6 +270,15 @@ var global = {
 			Element.addClassName(body, 'detailsEmoji');
 		}
 	},
+	setAbsTimeStamp: function(body, absoluteTimeStamps) {
+		if(absoluteTimeStamps){
+			Element.addClassName(body, 'absTimeStamps');
+			Element.removeClassName(body, 'relTimeStamps');
+		} else {
+			Element.addClassName(body, 'relTimeStamps');
+			Element.removeClassName(body, 'absTimeStamps');
+		}
+	},
 	setFadeShim: function(body, fadeShimStatus) {
 		if(fadeShimStatus){
 			Element.addClassName(body, 'fadeShim');
