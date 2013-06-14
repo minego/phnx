@@ -121,3 +121,4 @@ Modified String.js and compose.js so that tweets with '“@username' are parsed an
 Modified preferences-assistant.js, local.js, tweet.js, user.html, search.html, item.html, item-one-column.html, convo.html, convo-item.html and tweet-item.html to display absolute or relative timestamps.  Details view remains as was.
 Modified main-assistant.js, profile-assistant.js, status-assistant.js, convo.js, search.js, status-list.js and tweet.js to fix preference reading for absTimeStamp val.
 Modified app-globals.js and phnx.css for absTimeStamp use.
+Updated profile.html and content.html to show Profile avatar using V1.1 API.

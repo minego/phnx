@@ -46,7 +46,8 @@
 </div> -->
 <div id="toaster-#{-toasterId}" class="toaster profile">
 	<div class="profile-header">
-		<div id="profile-#{-toasterId}" class="profile-avatar" style="background-image: url(https://api.twitter.com/1/users/profile_image/#{-screen_name}.json?size=bigger)"></div>
+		<!--div id="profile-#{-toasterId}" class="profile-avatar" style="background-image: url(https://api.twitter.com/1/users/profile_image/#{-screen_name}.json?size=bigger)"></div-->
+		<div id="profile-#{-toasterId}" class="profile-avatar" style="background-image: url(#{-profile_image_url})"></div>
 		<div class="profile-titles">
 			<div class="profile-name">#{-name}</div>
 			<div class="profile-location">#{-location}</div>
