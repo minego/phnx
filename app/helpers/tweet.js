@@ -437,6 +437,7 @@ TweetHelper.prototype = {
 
 		var d = new Date(tweet.created_at);
 		tweet.time_str = d.toRelativeTime(1500);
+		tweet.displayed_time_str = (d.toTimeString(d)).slice(0,8) + ' ' + d.toDateString(d);
 		if (tweet.metadata.result_type === 'popular') {
 			tweet.toptweet = 'Top Tweet';
 		}
