@@ -111,6 +111,9 @@ var TweetToaster = Class.create(Toaster, {
 				if ((links[i].expanded_url.indexOf('http://boo.fm/') > -1) || (links[i].expanded_url.indexOf('http://audioboo.fm/') > -1)){
 					this.getAudioBooHTML(links[i].expanded_url,this.tweet);
 				}
+				if ((links[i].expanded_url.indexOf('http://instagram.com/p/') > -1) || (links[i].expanded_url.indexOf('http://instagr.am/p/') > -1)){
+					this.getInstagramVideoHTML(links[i].expanded_url,this.tweet);
+				}
 			}
 		}
 
@@ -530,6 +533,53 @@ var TweetToaster = Class.create(Toaster, {
 					Element.removeClassName('loading', 'show');
 				}
 				Mojo.Log.error('audioboo failure: ' + response.responseText);
+			}
+		});
+	},
+	getInstagramVideoHTML: function(url, tweet, callback) {
+		var req = new Ajax.Request(url, {
+			method: 'GET',
+				onSuccess: function(response) {
+				if (Ajax.activeRequestCount === 1) {
+					Element.removeClassName('loading', 'show');
+				}
+
+				var myNode = document.createElement('div');
+				var doc = document.implementation.createHTMLDocument('');
+				doc.open();
+				myHtml = response.responseText;
+				doc.write(myHtml);
+				doc.close();
+				var metaValues = doc.getElementsByTagName("meta");
+				var myVideo;
+				for(var i=0; i<metaValues.length; i++){
+					if(metaValues[i].content.indexOf('.mp4') > -1){
+						myVideo = metaValues[i].content;
+						//Mojo.Log.error('myVideo: ' + myVideo);						
+					}
+				}
+				//if(index === 0) {
+					if(myVideo) {
+						tweet.myVideoLink = myVideo;
+						tweet.mediaUrl = tweet.myVideoLink;
+						//Mojo.Log.error('instagram mp4: ' + tweet.myVideoLink);
+					}
+
+				//} else {
+				//	tweet.myAudioLink2 = String((myAudio[0].getAttribute("poster")).match(/.*.mp3/));
+				//	tweet.mediaUrl2 = tweet.myAudioLink2;
+				//	Mojo.Log.info('justsayinmp3: ' + tweet.myAudioLink2);
+				//}
+				//controller.modelChanged(model);
+
+				myNode = NULL; 
+				doc = NULL;
+			}.bind(this),
+			onFailure: function(response) {
+				if (Ajax.activeRequestCount === 1) {
+					Element.removeClassName('loading', 'show');
+				}
+				Mojo.Log.error('instagram video failure: ' + response.responseText);
 			}
 		});
 	},

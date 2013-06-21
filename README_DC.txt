@@ -122,3 +122,6 @@ Modified preferences-assistant.js, local.js, tweet.js, user.html, search.html, i
 Modified main-assistant.js, profile-assistant.js, status-assistant.js, convo.js, search.js, status-list.js and tweet.js to fix preference reading for absTimeStamp val.
 Modified app-globals.js and phnx.css for absTimeStamp use.
 Updated profile.html and content.html to show Profile avatar using V1.1 API.
+Updated convo-item.html to show emoji signifier if relevant.
+Updated tweet.js to add Instagram video support.
+Update main-assistant.js slight cleanup.

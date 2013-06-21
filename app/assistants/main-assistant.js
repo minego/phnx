@@ -374,6 +374,9 @@ MainAssistant.prototype = {
 
 		// create the panels
 		var panelHtml = '';
+		showThumbs = prefs.read('showThumbs'); // added by DC
+		showEmoji = prefs.read('showEmoji'); // added by DC
+
 		for (var j = 0, panel; panel = this.panels[j]; j++) {
 			var content = Mojo.View.render({
 				object: panel,
@@ -390,9 +393,6 @@ MainAssistant.prototype = {
 					listTemplate:	"templates/list",
 					renderLimit:	this.renderLimit
 				}, panel.model);
-
-				showThumbs = prefs.read('showThumbs'); // added by DC
-				showEmoji = prefs.read('showEmoji'); // added by DC
 
 				//ask tweetmarker where we left off
 /*
@@ -957,41 +957,41 @@ MainAssistant.prototype = {
 		var lastId = undefined;
 		//var myLastId = undefined;
 
-			if (panel.model.items.length > 0) {
-				var tweet = panel.model.items[0];
+		if (panel.model.items.length > 0) {
+			var tweet = panel.model.items[0];
 
-				if (tweet) {
-					if (tweet.is_rt) {
-						panel.model.myLastId = tweet.original_id;
-					} else {
-						panel.model.myLastId = tweet.id_str;
-					}
+			if (tweet) {
+				if (tweet.is_rt) {
+					panel.model.myLastId = tweet.original_id;
+				} else {
+					panel.model.myLastId = tweet.id_str;
 				}
 			}
-
+		}
 
 		panel.model.items = {};
 		panel.model.items.length = 0;
 
 		if (panel.refresh) {
-			if (panel.model.items.length > 0) {
-				// grab the second tweet for gap detection
-				var tweet = panel.model.items[1];
+			setTimeout(function() {
+				if (panel.model.items.length > 0) {
+					// grab the second tweet for gap detection
+					var tweet = panel.model.items[1];
 
-				if (tweet) {
-					if (tweet.is_rt) {
-						lastId = tweet.original_id;
-					} else {
-						lastId = tweet.id_str;
+					if (tweet) {
+						if (tweet.is_rt) {
+							lastId = tweet.original_id;
+						} else {
+							lastId = tweet.id_str;
+						}
 					}
 				}
-			}
 
 //			panel.model.items = {};
 //			panel.model.items.length = 0;
 
-
-			this.getTweets(panel, lastId);
+				this.getTweets(panel, lastId);
+			}.bind(this), 200);
 		} else if (panel.id === 'search') {
 			this.loadSearch();
 		}
@@ -1268,7 +1268,8 @@ MainAssistant.prototype = {
 		}
 
 		//Block added by DC - allows new tweet marker to work after refresh and flush
-		if (panel.update) {
+		//if (panel.update) {
+		if (panel.refresh) {
 			if(model.myLastId) {
 				for(k=0; k < model.items.length; k++){
 					if(model.items[k].id_str === model.myLastId) {

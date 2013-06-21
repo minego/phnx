@@ -1,6 +1,7 @@
 var ChangelogToaster = Class.create(Toaster, {
 	items: [
 		{ version: '1.4.6' },
+		{ item: 'Added Instagram video support' },
 		{ item: 'Added preference option to display timestamps as absolute or relative' },
 		{ item: 'Follows/Following and Retweets now max out properly at newest 500 items' },
 		{ item: 'Follows/Following now returns users in order - newest at top' },
