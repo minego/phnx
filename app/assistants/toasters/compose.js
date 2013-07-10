@@ -737,7 +737,11 @@ var ComposeToaster = Class.create(Toaster, {
 					//var scrollTop = txtArea.scrollTop;
 					
 					txtArea.value = txtArea.value.substring(0, startPos) + emojiChars + txtArea.value.substring(endPos, txtArea.value.length);
-					txtArea.focus();
+					//txtArea.focus();
+					setTimeout(function(){
+						txtArea.focus();
+						txtArea.setSelectionRange(startPos + emojiChars.length,startPos + emojiChars.length); //focus the cursor at current pos
+					}, 200);					
 					txtArea.selectionStart = startPos + emojiChars.length;
 					txtArea.selectionEnd = startPos + emojiChars.length;
 				} else {

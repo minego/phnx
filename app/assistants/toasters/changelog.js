@@ -1,5 +1,9 @@
 var ChangelogToaster = Class.create(Toaster, {
 	items: [
+		{ version: '1.4.7' },
+		{ item: 'Emoji dialog shows flags again' },
+		{ item: 'Cursor updates correctly in compose toaster when inserting emoji' },
+
 		{ version: '1.4.6' },
 		{ item: 'Added Instagram video support' },
 		{ item: 'Added preference option to display timestamps as absolute or relative' },

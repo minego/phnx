@@ -124,8 +124,10 @@ EmojiDialogAssistant.prototype.listTapHandler = function(event) {
     var myEmojiCode2;
     
     if(myEmojiCode.indexOf('_') > -1){
-    	myEmojiCode1 = myEmojiCode.replace(/([\da-f]+)_000([\da-f]+)/i, '$1');
-    	myEmojiCode2 = myEmojiCode.replace(/([\da-f]+)_000([\da-f]+)/i, '$2');
+//    	myEmojiCode1 = myEmojiCode.replace(/([\da-f]+)_000([\da-f]+)/i, '$1');
+//    	myEmojiCode2 = myEmojiCode.replace(/([\da-f]+)_000([\da-f]+)/i, '$2');
+    	myEmojiCode1 = myEmojiCode.replace(/([\da-f]+)_([\da-f]+)/i, '$1');
+    	myEmojiCode2 = myEmojiCode.replace(/([\da-f]+)_([\da-f]+)/i, '$2');
     } else{
     	myEmojiCode1 = myEmojiCode;
     }

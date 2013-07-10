@@ -124,4 +124,6 @@ Modified app-globals.js and phnx.css for absTimeStamp use.
 Updated profile.html and content.html to show Profile avatar using V1.1 API.
 Updated convo-item.html to show emoji signifier if relevant.
 Updated tweet.js to add Instagram video support.
-Update main-assistant.js slight cleanup.
+Updated main-assistant.js slight cleanup.
+Updated emoji.js so flags show in emoji dialog.
+Updated compose.js so that cursor shows and its position is updated when inserting emoji.
