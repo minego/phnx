@@ -1296,6 +1296,7 @@ MainAssistant.prototype = {
 							this.controller.get('beacon-' + panel.index).removeClassName('show');
 						}
 						scrollId = k; // set the index of the new tweet to auto-scroll to
+						panel.scrollId = scrollId;
 						break; //no need to keep on iterating if we've found our match
 					}
 				}
