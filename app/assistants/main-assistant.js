@@ -1194,6 +1194,9 @@ MainAssistant.prototype = {
 			for (var i = 1, tweet; tweet = tweets[i]; i++) {
 				model.items.splice((model.items.length - 1) + i, 0, tweet);
 			}
+			if(!panel.scrollId){
+				panel.scrollId = 0;
+			}
 		} else if (model.items.length > 0 && !this.loadingMore) {
 			// a typical refresh is being performed here (append to top)
 			var k;
@@ -1247,10 +1250,14 @@ MainAssistant.prototype = {
 			}
 
 			scrollId = tweetCount; // set the index of the new tweet to auto-scroll to
+			panel.scrollId= scrollId;
 		} else {
 			// the timeline was empty so do a 1:1 mirror of the tweets response
 			model.items = tweets;
 			fullLoad = 1;
+			if(!panel.scrollId){
+				panel.scrollId = 0;
+			}
 		}
 
 		// Write a few (10) of the latest tweets to the user's cache (async)
@@ -1338,7 +1345,7 @@ MainAssistant.prototype = {
 		if (model.items.length === 0 || (this.loadingMore && tweets.length === 0)) {
 			this.controller.get(more).hide();
 		}
-		panel.scrollId= scrollId;
+		//panel.scrollId= scrollId;
 		this.loading = false;
 	},
 	fillGap: function(panel) {
