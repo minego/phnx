@@ -127,3 +127,4 @@ Updated tweet.js to add Instagram video support.
 Updated main-assistant.js slight cleanup.
 Updated emoji.js so flags show in emoji dialog.
 Updated compose.js so that cursor shows and its position is updated when inserting emoji.
+Modified main-assistant.js so that holding on a nav icon in the tabs bar will scroll the current list to the New Items separator. Tap still scrolls to top or bottom of list.

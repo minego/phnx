@@ -1338,6 +1338,7 @@ MainAssistant.prototype = {
 		if (model.items.length === 0 || (this.loadingMore && tweets.length === 0)) {
 			this.controller.get(more).hide();
 		}
+		panel.scrollId= scrollId;
 		this.loading = false;
 	},
 	fillGap: function(panel) {
@@ -1599,6 +1600,35 @@ MainAssistant.prototype = {
 			this.scrollTo(panelIndex);
 		}
 	},
+	navButtonHeld: function(event) {
+		var screenWidth = this.controller.window.innerWidth;
+		var src = event.srcElement;
+
+		while (src && (!src.id || 0 != src.id.indexOf('nav-'))) {
+			src = src.parentNode;
+		}
+
+		var id			= src.id.substr(src.id.indexOf('-') + 1);
+		var panelIndex	= parseInt(id);
+		//var panel = this.getPanel(panelIndex);
+
+		// If it's the current panel, scroll to the top otherwise, scroll to
+		// that panel
+		if (this.timeline === panelIndex || screenWidth > this.panelWidth) {
+			var scroller = this.controller.get('scroller-' + panelIndex);
+
+			if (scroller) {
+				var position = scroller.mojo.getScrollPosition();
+				var size = scroller.mojo.scrollerSize();
+				if (this.panels[panelIndex].scrollId !== 0) {
+					this.controller.get('list-' + panelIndex).mojo.revealItem(this.panels[panelIndex].scrollId, true);
+				} 
+			}
+		} else {
+			this.scrollTo(panelIndex);
+		}
+		event.stop(); //to prevent navButtonTapped from executing as well
+	},
 	listTapped: function(event) {
 		var listId = event.item.id_str;
 		var Twitter = new TwitterAPI(this.user);
@@ -1719,6 +1749,8 @@ MainAssistant.prototype = {
 			if (this.largedevice || i < 6) {
 				this.listeners.push([ 'nav-' + i,
 										Mojo.Event.tap,				this.navButtonTapped	]);
+				this.listeners.push([ 'nav-' + i,
+										Mojo.Event.hold,				this.navButtonHeld	]);
 			}
 
 			panel.assistant = this;
