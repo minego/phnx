@@ -268,22 +268,46 @@ ProfileAssistant.prototype = {
 		}
 	},
 	refreshAll: function() {
-		this.getHistory({'since_id':this.historyModel.items[0].id_str});
-		this.getMentions({'since_id':this.mentionsModel.items[0].id_str});
-		this.getFavorites({'since_id':this.favoritesModel.items[0].id_str});
+		if (this.historyModel.items.length === 0) {
+			this.getHistory();
+		} else {
+			this.getHistory({'since_id':this.historyModel.items[0].id_str});
+		}
+		if (this.mentionsModel.items.length === 0) {
+			this.getMentions();
+		} else {
+			this.getMentions({'since_id':this.mentionsModel.items[0].id_str});
+		}
+		if (this.favoritesModel.items.length === 0) {
+			this.getFavorites();
+		} else {
+			this.getFavorites({'since_id':this.favoritesModel.items[0].id_str});
+		}
 	},
 	refresh: function() {
 		// Refresh the current panel
 		var panel = this.panels[this.currentPanel];
 		switch(panel) {
 			case 'history':
-				this.getHistory({'since_id':this.historyModel.items[0].id_str});
+				if (this.historyModel.items.length === 0) {
+					this.getHistory();
+				} else {
+					this.getHistory({'since_id':this.historyModel.items[0].id_str});
+				}
 				break;
 			case 'mentions':
-				this.getMentions({'since_id':this.mentionsModel.items[0].id_str});
+				if (this.mentionsModel.items.length === 0) {
+					this.getMentions();
+				} else {
+					this.getMentions({'since_id':this.mentionsModel.items[0].id_str});
+				}
 				break;
 			case 'favorites':
-				this.getFavorites({'since_id':this.favoritesModel.items[0].id_str});
+				if (this.favoritesModel.items.length === 0) {
+					this.getFavorites();
+				} else {
+					this.getFavorites({'since_id':this.favoritesModel.items[0].id_str});
+				}
 				break;
 		}
 	},
