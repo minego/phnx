@@ -955,6 +955,12 @@ transport.responseText);
 			}
 		} else if (e.id === 'hashtag') {
 			var hashtag = e.innerText;
+			var prefs = new LocalStorage();
+			var searchMaxResults = prefs.read('searchMaxResults');
+			var args = {
+				q: hashtag,
+				count: searchMaxResults
+			};
 
 			this.controller.popupSubmenu({
 				items: [
@@ -975,7 +981,7 @@ transport.responseText);
 				onChoose: function(command) {
 					switch (command) {
 						case 'cmdSearch':
-							Twitter.search(hashtag, function(response) {
+							Twitter.search(args, function(response) {
 								var opts = {
 									type: 'search',
 									query: hashtag,

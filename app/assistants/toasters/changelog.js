@@ -1,6 +1,8 @@
 var ChangelogToaster = Class.create(Toaster, {
 	items: [
 		{ version: '1.4.7' },
+		{ item: 'Pref options added to specify number of results for lists, searches and retweets'},
+		{ item: 'Pref option added to specify number of results to return for timeline/mentions/favourites in Profile view'},
 		{ item: 'Holding a Navigation Tab icon scrolls to the New Item separator if one exists. Tap still scrolls to top/bottom' },
 		{ item: 'Emoji dialog shows flags again' },
 		{ item: 'Cursor updates correctly in compose toaster when inserting emoji' },

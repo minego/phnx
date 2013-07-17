@@ -44,7 +44,11 @@ function LocalStorage() {
 		autoCorrect: true,
 		filters: [],
 		version: null,
-
+		profileMaxResults: 100,
+		listMaxResults: 100,
+		rtMaxResults: 100,
+		searchMaxResults: 100,
+		
 		tabs: [
 			{ "type": "h" },
 			{ "type": "m" },

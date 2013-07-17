@@ -143,19 +143,19 @@ TwitterAPI.prototype = {
 	listStatuses: function(args, callback) {
 		this.sign('GET', this.url(this.endpoints.listStatuses), callback, args, {});
 	},
-	search: function(query, callback) {
-		// Query can be either a string or an object literal with named parameters in it
-		var args = {"result_type":"mixed","count":"100","include_entities":"1"}; //DC Added include_entities for inline thumbs
-
-		if (typeof(query) === 'string') {
-			args.q = query;
+	search: function(passedArgs, callback) {
+		// Query (passedArgs.q) can be either a string or an object literal with named parameters in it
+		//var args = {"result_type":"mixed","count":"100","include_entities":"1"}; //DC Added include_entities for inline thumbs
+		var args = {"result_type":"mixed","count":passedArgs.count,"include_entities":"1"}; //DC Added include_entities for inline thumbs
+		
+		if (typeof(passedArgs.q) === 'string') {
+			args.q = passedArgs.q;
 		}
 		else {
-			for (var key in query) {
-				args[key] = query[key];
+			for (var key in passedArgs.q) {
+				args[key] = passedArgs.q[key];
 			}
 		}
-
 		// var prefs = new LocalStorage();
 		// if (prefs.read('limitToLocale')) {
 		// 	var locale = Mojo.Locale.getCurrentLocale();
@@ -170,8 +170,9 @@ TwitterAPI.prototype = {
 		};
 		this.sign('GET', this.url(this.endpoints.statusRetweets + '/' + id), callback, args, {});
 	},
-	retweetsOfMe: function(callback) {
-		this.sign('GET', this.url(this.endpoints.retweetsOfMe), callback, {"count": 100}, {});
+	retweetsOfMe: function(args, callback) {
+		//this.sign('GET', this.url(this.endpoints.retweetsOfMe), callback, {"count": 100}, {});
+		this.sign('GET', this.url(this.endpoints.retweetsOfMe), callback, args, {});
 	},
 	block: function(id, callback) {
 		this.sign('POST', this.url(this.endpoints.block), callback, {'user_id': id}, {});

@@ -102,7 +102,7 @@ ProfileAssistant.prototype = {
 			global.setShowEmoji(body,	prefs.read('showEmoji'));
 			global.setAbsTimeStamp(body, prefs.read('absoluteTimeStamps'));
 			global.setFadeShim(body, prefs.read('fadeShim'));
-			
+						
 			global.setHide(body,
 				prefs.read('hideAvatar'),
 				prefs.read('hideUsername'),
@@ -313,10 +313,13 @@ ProfileAssistant.prototype = {
 	},
 	getHistory: function(opts) {
 		var Twitter = new TwitterAPI(this.account);
-
+		var prefs = new LocalStorage();
+		var profileMaxResults = prefs.read('profileMaxResults');
+		
 		var args = {
 			"user_id": this.user.id_str,
-			"count": 100,
+			//"count": 100,
+			"count": profileMaxResults,
 			"include_entities": true
 		};
 
@@ -347,8 +350,12 @@ ProfileAssistant.prototype = {
 	},
 	getMentions: function(opts) {
 		var Twitter = new TwitterAPI(this.account);
+		var prefs = new LocalStorage();
+		var profileMaxResults = prefs.read('profileMaxResults');
+
 		var args = {
-			"count": 100,
+			//"count": 100,
+			"count": profileMaxResults,
 			"include_entities": true, 
 			"q": '@' + this.user.screen_name
 		};
@@ -383,8 +390,12 @@ ProfileAssistant.prototype = {
 	},
 	getFavorites: function(opts) {
 		var Twitter = new TwitterAPI(this.account);
+		var prefs = new LocalStorage();
+		var profileMaxResults = prefs.read('profileMaxResults');
+
 		var args = {
-			count:				100,
+			//count:				100,
+			count: profileMaxResults,
 			include_entities:	true,
 			user_id:			this.user.id_str
 		};

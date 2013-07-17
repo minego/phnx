@@ -1640,7 +1640,10 @@ MainAssistant.prototype = {
 	listTapped: function(event) {
 		var listId = event.item.id_str;
 		var Twitter = new TwitterAPI(this.user);
-		Twitter.listStatuses({'list_id': listId, "count": "100", 'include_entities': 'true'}, function(response){
+		var prefs = new LocalStorage();
+		var listMaxResults = prefs.read('listMaxResults');
+
+		Twitter.listStatuses({'list_id': listId, "count": listMaxResults, 'include_entities': 'true'}, function(response){
 			var opts = {
 				id: listId,
 				name: event.item.slug,
@@ -1658,7 +1661,14 @@ MainAssistant.prototype = {
 	},
 	search: function(query) {
 		var Twitter = new TwitterAPI(this.user);
-		Twitter.search(query, function(response) {
+		var prefs = new LocalStorage();
+		var searchMaxResults = prefs.read('searchMaxResults');
+
+		var args = {
+			q: query,
+			count: searchMaxResults
+		};
+		Twitter.search(args, function(response) {
 			// this.toasters.add(new SearchToaster(query, response.responseJSON, this));
 			var opts = {
 				type: 'search',
@@ -1676,6 +1686,9 @@ MainAssistant.prototype = {
 	},
 	rtTapped: function(event) {
 		var Twitter = new TwitterAPI(this.user);
+		var prefs = new LocalStorage();
+		var rtMaxResults = prefs.read('rtMaxResults');
+				
 		var id = event.srcElement.id;
 		var opts = {
 			type: 'retweets',
@@ -1699,7 +1712,7 @@ MainAssistant.prototype = {
 			opts.items = this.user.retweetedItems;
 			this.controller.stageController.pushScene('status', opts);
 		} else if (id === 'rt-ofyou') {
-			Twitter.retweetsOfMe(function(response) {
+			Twitter.retweetsOfMe({"count": rtMaxResults}, function(response) {
 				if (response.responseJSON.length > 0) {
 					opts.name = 'RTs of You';
 					opts.items = response.responseJSON;

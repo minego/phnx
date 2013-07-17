@@ -128,3 +128,5 @@ Updated main-assistant.js slight cleanup.
 Updated emoji.js so flags show in emoji dialog.
 Updated compose.js so that cursor shows and its position is updated when inserting emoji.
 Modified main-assistant.js so that holding on a nav icon in the tabs bar will scroll the current list to the New Items separator. Tap still scrolls to top or bottom of list.
+Modified preferences-assistant.js, profile-assistant.js & local.js to give Pref option to specify number of items returned for timeline/mentions/favourites in Profile view.
+Modified app-assistant.js, main-assistant.js, preferences-assistant.js, status-assistant.js, tweet.js, twitter.js and local.js to give Pref options to specifiy number of items returned for lists, searches and retweets.

@@ -47,7 +47,35 @@ function PreferencesAssistant(section) {
 			{key: 'refreshFlushAtLaunch', type: 'toggle', label: 'Refresh & flush at launch'},
 			{key: 'enterToSubmit', type: 'toggle', label: 'Enter to submit'},
 			{key: 'autoCorrect', type: 'toggle', label: 'Auto Correct'},
-			{key: 'composeCard', type: 'toggle', label: 'Compose in new Card'}
+			{key: 'composeCard', type: 'toggle', label: 'Compose in new Card'},
+			{key: 'profileMaxResults', type: 'select', label: 'Profile Max Items', items: [
+				{label: '10', value: 10},
+				{label: '25', value: 25},
+				{label: '50', value: 50},
+				{label: '75', value: 75},
+				{label: '100', value: 100}
+			]},
+			{key: 'listMaxResults', type: 'select', label: 'List Max Items', items: [
+				{label: '10', value: 10},
+				{label: '25', value: 25},
+				{label: '50', value: 50},
+				{label: '75', value: 75},
+				{label: '100', value: 100}
+			]},
+			{key: 'rtMaxResults', type: 'select', label: 'Retweet Max Items', items: [
+				{label: '10', value: 10},
+				{label: '25', value: 25},
+				{label: '50', value: 50},
+				{label: '75', value: 75},
+				{label: '100', value: 100}
+			]},
+			{key: 'searchMaxResults', type: 'select', label: 'Search Max Items', items: [
+				{label: '10', value: 10},
+				{label: '25', value: 25},
+				{label: '50', value: 50},
+				{label: '75', value: 75},
+				{label: '100', value: 100}
+			]}		
 		],
 		'Appearance': [
 			{key: 'theme', type: 'select', label: 'Theme', items: [
@@ -368,7 +396,7 @@ PreferencesAssistant.prototype = {
 		global.setAbsTimeStamp(body, prefs.read('absoluteTimeStamps'));
 		global.setFadeShim(body, prefs.read('fadeShim'));
 		global.setFontSize(body,	prefs.read('fontSize'));
-
+		
 		global.setHide(body,
 			prefs.read('hideAvatar'),
 			prefs.read('hideUsername'),

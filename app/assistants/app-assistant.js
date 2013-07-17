@@ -157,7 +157,14 @@ AppAssistant.prototype = {
 					Twitter.getSavedSearches(function(response){
 						savedSearchesModel.items = response.responseJSON;
 					}.bind(this));
-					Twitter.search(params.searchTerms, function(response) {
+					var prefs = new LocalStorage();
+					var searchMaxResults = prefs.read('searchMaxResults');
+
+					var args = {
+						q: params.searchTerms,
+						count: searchMaxResults
+					};					
+					Twitter.search(args, function(response) {
 					// this.toasters.add(new SearchToaster(query, response.responseJSON, this));
 						var opts = {
 							type: 'search',

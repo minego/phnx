@@ -117,7 +117,13 @@ StatusAssistant.prototype = {
 	},
 	initList: function(search) {
 		var opts = this.opts;
+		var prefs = new LocalStorage();
+		var searchMaxResults = prefs.read('searchMaxResults');
 
+		var args = {
+			"q": opts.query,
+			"count": searchMaxResults
+		};
 		// Set the scene's title
 		var title = "";
         
@@ -134,7 +140,8 @@ StatusAssistant.prototype = {
 		} else if (search) {
             // Search twitter for the items
 			var Twitter = new TwitterAPI(opts.user, this.controller.stageController);
-			Twitter.search(opts.query, function(r){
+			
+			Twitter.search(args, function(r){
 				var items = r.responseJSON.statuses; //results;
 				this.setupList(items);
 			}.bind(this));
@@ -164,15 +171,18 @@ StatusAssistant.prototype = {
 	},
 	refreshSearch: function() {
 		var Twitter = new TwitterAPI(this.opts.user, this.controller.stageController);
+		var prefs = new LocalStorage();
+		var searchMaxResults = prefs.read('searchMaxResults');
 
 		var args = {
-			q: this.opts.query,
+			"q": this.opts.query,
+			"count": searchMaxResults
 		};
 
 		if (this.itemsModel.items && this.itemsModel.items[0]) {
 			args.since_id = this.itemsModel.items[0].id_str;
 		}
-
+		
 		Twitter.search(args, function(r){
 			var items = r.responseJSON.statuses; //results
 			this.gotItems(items);
@@ -180,7 +190,10 @@ StatusAssistant.prototype = {
 	},
 	loadList: function(args, callback) {
 		var Twitter = new TwitterAPI(this.opts.user, this.controller.stageController);
-		var opts = {'list_id': this.opts.id, "count": "100", 'include_entities': 'true'};
+		var prefs = new LocalStorage();
+		var listMaxResults = prefs.read('listMaxResults');
+
+		var opts = {'list_id': this.opts.id, "count": listMaxResults, 'include_entities': 'true'};
 
 		for (var key in args) {
 			opts[key] = args[key];
@@ -192,7 +205,10 @@ StatusAssistant.prototype = {
 	},
 	loadRTs: function(args, callback) {
 		var Twitter = new TwitterAPI(this.opts.user, this.controller.stageController);
-		var opts = {'list_id': this.opts.id, "count": "100", 'include_entities': 'true'};
+		var prefs = new LocalStorage();
+		var rtMaxResults = prefs.read('rtMaxResults');
+
+		var opts = {'list_id': this.opts.id, "count": rtMaxResults, 'include_entities': 'true'};
 
 		for (var key in args) {
 			opts[key] = args[key];
