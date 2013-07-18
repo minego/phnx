@@ -144,16 +144,16 @@ TwitterAPI.prototype = {
 		this.sign('GET', this.url(this.endpoints.listStatuses), callback, args, {});
 	},
 	search: function(passedArgs, callback) {
-		// Query (passedArgs.q) can be either a string or an object literal with named parameters in it
+		// Query (passedArgs) can be either a string or an object literal with named parameters in it
 		//var args = {"result_type":"mixed","count":"100","include_entities":"1"}; //DC Added include_entities for inline thumbs
-		var args = {"result_type":"mixed","count":passedArgs.count,"include_entities":"1"}; //DC Added include_entities for inline thumbs
-		
-		if (typeof(passedArgs.q) === 'string') {
-			args.q = passedArgs.q;
+		var args = {"result_type":"mixed","include_entities":"1"}; //DC Added include_entities for inline thumbs
+
+		if (typeof(passedArgs) === 'string') {
+			args.q = passedArgs;
 		}
 		else {
-			for (var key in passedArgs.q) {
-				args[key] = passedArgs.q[key];
+			for (var key in passedArgs) {
+				args[key] = passedArgs[key];
 			}
 		}
 		// var prefs = new LocalStorage();

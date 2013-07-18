@@ -122,7 +122,7 @@ StatusAssistant.prototype = {
 
 		var args = {
 			"q": opts.query,
-			"count": searchMaxResults
+			"count": searchMaxResults,
 		};
 		// Set the scene's title
 		var title = "";
@@ -176,7 +176,7 @@ StatusAssistant.prototype = {
 
 		var args = {
 			"q": this.opts.query,
-			"count": searchMaxResults
+			"count": searchMaxResults,
 		};
 
 		if (this.itemsModel.items && this.itemsModel.items[0]) {
