@@ -1,6 +1,8 @@
 var ChangelogToaster = Class.create(Toaster, {
 	items: [
 		{ version: '1.4.7' },
+		{ item: 'Prelim work for "gap" support'},
+		{ item: 'Pref options added to specify number of results for Home, Mentions and Favorites timeline'},
 		{ item: 'Pref options added to specify number of results for lists, searches and retweets'},
 		{ item: 'Pref option added to specify number of results to return for timeline/mentions/favourites in Profile view'},
 		{ item: 'Holding a Navigation Tab icon scrolls to the New Item separator if one exists. Tap still scrolls to top/bottom' },

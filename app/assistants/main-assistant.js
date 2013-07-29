@@ -9,6 +9,7 @@ function MainAssistant(opts) {
 	this.loadingMore = false; //flag to determine if items should go to the bottom of a list
 	this.imagePreview = false;
 	this.favStatusChanged = false; // added by DC
+	this.loadingGaps = false;
 	this.loading = false;
 
 	this.savedSearchesLoaded = false;
@@ -310,6 +311,10 @@ MainAssistant.prototype = {
 				label: 'Refresh & Flush',
 				command: 'cmdRefreshFlush'
 			},
+//			{
+//				label: 'Check Rate Limit',
+//				command: 'cmdRateLimit'
+//			},
 			{
 				label: 'Lookup User',
 				command: 'cmdFindUser'
@@ -648,6 +653,9 @@ MainAssistant.prototype = {
 				}
 			} else if (event.command === 'cmdFindUser') {
 				this.toasters.add(new LookupToaster(this));
+			} else if (event.command === 'cmdRateLimit') {
+				var Twitter = new TwitterAPI(this.user);
+				Twitter.rateLimit();
 			} else if (event.command === 'cmdAddFilter') {
 				this.toasters.add(new AddFilterToaster(this));
 			} else if (event.command === 'cmdManageTabs') {
@@ -927,6 +935,7 @@ MainAssistant.prototype = {
 			var lastId = undefined;
 
 			this.loadingMore = false;
+			this.loadingGaps = false;
 
 			setTimeout(function() {
 				if (!panel.model.items) {
@@ -954,6 +963,7 @@ MainAssistant.prototype = {
 	},
 	refreshPanelFlush: function(panel) {
 		this.loadingMore = false;
+		this.loadingGaps = false;
 		var lastId = undefined;
 		//var myLastId = undefined;
 
@@ -1029,15 +1039,15 @@ MainAssistant.prototype = {
 		return null;
 	},
 	loadMore: function(timeline) {
-        var model = this.panels[this.timeline].model;
+		var model = this.panels[this.timeline].model;
 
-        if (model && model.items && model.items.length > 0) {
-            this.loadingMore = true;
-            var maxId = model.items[model.items.length - 1].id_str;
-            var panel = this.panels[this.timeline];
+		if (model && model.items && model.items.length > 0) {
+			this.loadingMore = true;
+			var maxId = model.items[model.items.length - 1].id_str;
+			var panel = this.panels[this.timeline];
 
 			this.getTweets(panel, undefined, maxId);
-        }
+		}
 	},
 
 	getDMs: function(Twitter, args, panel) {
@@ -1103,23 +1113,48 @@ MainAssistant.prototype = {
 	getTweets: function(panel, lastId, maxId) {
 		var Twitter;
 		var user	= this.getAccount(panel.tab.account);
+		var prefs = new LocalStorage();
+		var homeMaxResults = prefs.read('homeMaxResults');
+		var mentionsMaxResults = prefs.read('mentionsMaxResults');
+		var favMaxResults = prefs.read('favMaxResults');
 		var args	= {
-			'count':			this.count,
+			//'count':			this.count,
+			//'count':			homeMaxResults,
 			'include_entities':	'true'
 		};
 
+		switch(panel.resource){
+			case 'home':
+				args.count = homeMaxResults;
+				break;
+			case 'mentions':
+				args.count = mentionsMaxResults;
+				break;
+			case 'userFavorites':
+				args.count = favMaxResults;
+				break;
+			default:
+				args.count = 200;
+				break;
+		}
+		
 		if (!user) {
 			console.log('Invalid account: ' + panel.tab.account);
 			return;
 		}
 		Twitter = new TwitterAPI(user);
 
+		if(lastId && maxId) {
+			args.count++;
+		}
 		if (lastId) {
 			args.since_id = lastId;
+			panel.gapEnd = lastId;
 		}
 
 		if (maxId) {
 			args.max_id = maxId;
+			panel.gapStart = maxId;
 		}
 
 		if (panel.resource === 'messages') {
@@ -1166,6 +1201,7 @@ MainAssistant.prototype = {
 		var prefs = new LocalStorage();
 		var processVine = prefs.read('showVine');
 
+		//Mojo.Log.error('xCount: ' + xCount); //Twitter doesn't always return the number of tweets you are expecting, which is VERY annoying.
 		for (var i = 0, tweet; tweet = tweets[i]; i++) {
 			/* Store a reference to the account that loaded this tweet */
 			tweet.owner = user.id;
@@ -1187,7 +1223,9 @@ MainAssistant.prototype = {
 
 		var scrollId = 0; // this is the INDEX (not ID, sorry) of the new tweet to scroll to
 		var fullLoad = 0; // added by DC. Used to flag when full 1:1 tweet pull is used
+		var gapIndex = 0;
 
+		//Mojo.Log.error('loadingGaps: ' + this.loadingGaps);
 		if (model.items.length > 0 && this.loadingMore) {
 			// loading "more" items (not refreshing), so append to bottom
 			// start the loop at i = 1 so tweets aren't duplicated
@@ -1195,6 +1233,55 @@ MainAssistant.prototype = {
 				model.items.splice((model.items.length - 1) + i, 0, tweet);
 			}
 			if(!panel.scrollId){
+				panel.scrollId = 0;
+			}
+		} else if (model.items.length > 0 && this.loadingGaps) {
+			//filling a gap
+			// loop through old tweets to find gap index
+			//Mojo.Log.error('loading gaps...' + model.items.length);
+			for (k=0; k < model.items.length; k++) {
+				if (model.items[k].cssClass === 'new-tweet'){
+					model.items[k].cssClass = "old-tweet";
+					//Mojo.Log.error('found new-tweet div at: ' + k);
+					gapIndex = k+1;
+				}
+				if (model.items[k].cssClass === 'are-gaps'){
+					model.items[k].cssClass = "no-gaps";
+					//Mojo.Log.error('found are-gaps div at: ' + k);
+					gapIndex = k+1;
+				}
+			}
+
+			if(xCount !== 0) {
+				//Mojo.Log.error('Splicing in ' + xCount + ' tweets at index ' + gapIndex);
+				//tweets[tweets.length-1].cssClass = 'new-tweet';
+				tweets[tweets.length-1].cssClass = 'are-gaps';
+			
+				// TODO: Make this message tappable to load gaps
+				var msg = xCount-1 + ' Revealed ' + (this.nouns[panel.id] || "Tweet");
+
+				if (xCount-1 > 1) {
+					msg += 's'; //pluralize
+				}
+
+				if(tweets[tweets.length - 1].id_str !== panel.gapEnd){
+					msg += '<br /><span>Tap to load missing tweets</span>';
+				}
+
+				tweets[tweets.length-1].dividerMessage = msg;
+
+				for (var i = 1, tweet; tweet = tweets[i]; i++) {
+					//Mojo.Log.error('i: ' + i + ' , ' + tweet.text);
+					model.items.splice((gapIndex-1) + i, 0, tweet);
+				}
+				panel.gapStart = tweets[tweets.length - 1].id_str;
+
+				if(!panel.scrollId){
+					panel.scrollId = 0;
+				}	else {
+					panel.scrollId+=xCount-1;
+				}
+			} else {
 				panel.scrollId = 0;
 			}
 		} else if (model.items.length > 0 && !this.loadingMore) {
@@ -1206,6 +1293,13 @@ MainAssistant.prototype = {
 				// remove the tweet divider
 				if (model.items[k].cssClass === 'new-tweet'){
 					model.items[k].cssClass = "old-tweet";
+				}
+				if (model.items[k].cssClass === 'are-gaps'){
+					if (tweets[tweets.length - 1].id_str === model.items[0].id_str) {
+						model.items[k].cssClase = "no-gaps";
+					} else {
+						model.items[k].dividerMessage = '<span>Tap to load missing tweets</span>';
+					}
 				}
 			}
 
@@ -1222,9 +1316,10 @@ MainAssistant.prototype = {
 				loopCount = tweets.length - 1;
 				panel.gapStart = tweets[tweets.length - 1].id_str;
 				panel.gapEnd = model.items[0].id_str;
+				//Mojo.Log.error('gotItems panel.gapStart:panel.gapEnd: '+ panel.gapStart + ' : ' + panel.gapEnd);
 			}
 
-			hasGap = false; // ignore gap detection in this release
+			//hasGap = false; // ignore gap detection in this release
 
 			var j;
 			for (j = loopCount; j >= 0; j--) {
@@ -1242,6 +1337,7 @@ MainAssistant.prototype = {
 
 					if (hasGap) {
 						msg += '<br /><span>Tap to load missing tweets</span>';
+						tweets[j].cssClass = 'are-gaps';
 					}
 
 					tweets[j].dividerMessage = msg;
@@ -1350,24 +1446,53 @@ MainAssistant.prototype = {
 		this.loading = false;
 	},
 	fillGap: function(panel) {
-		var user	= this.getAccount(panel.tab.account);
-		var args	= {
-			count: this.count,
-			include_entities: 'true',
-			max_id: panel.gapStart,
-			since_id: panel.gapEnd
-		};
-		var Twitter;
-
-		if (!user) {
+		if(!panel){
 			return;
-		}
+		} else {
+			if(panel.gapStart && panel.gapEnd){
+				var user	= this.getAccount(panel.tab.account);
+				var prefs = new LocalStorage();
+				var homeMaxResults = prefs.read('homeMaxResults');
+				var mentionsMaxResults = prefs.read('mentionsMaxResults');
+				var favMaxResults = prefs.read('favMaxResults');
+				var args	= {
+					//count: this.count,
+					//count: homeMaxResults,
+					include_entities: 'true',
+					max_id: panel.gapStart,
+					since_id: panel.gapEnd
+				};
+				this.loadingGaps = true;
+				switch(panel.resource){
+					case 'home':
+						args.count = homeMaxResults;
+						break;
+					case 'mentions':
+						args.count = mentionsMaxResults;
+						break;
+					case 'userFavorites':
+						args.count = favMaxResults;
+						break;
+					default:
+						args.count = 200;
+						break;
+				}
+				
+				var Twitter;
 
-		Twitter = new TwitterAPI(user);
-		Twitter.timeline(panel, this.gotGap.bind(this), args, this);
+				if (!user) {
+					return;
+				}
+				//Mojo.Log.error('fillGap args.max_id:args.since_id: '+ args.max_id + ' : ' + args.since_id);
+				//Twitter = new TwitterAPI(user);
+				//Twitter.timeline(panel, this.gotGap.bind(this), args, this);
+				this.getTweets(panel, args.since_id, args.max_id);
+			}
+		}
 	},
 	gotGap: function(response, meta) {
 		banner('Not done yet');
+		//this.gotItems(response, panel);
 	},
 	timeSince: function(time) {
 		//using a modified Date function in helpers/date.js
@@ -1518,10 +1643,15 @@ MainAssistant.prototype = {
 
 			if (event.originalEvent.srcElement.id === 'gap') {
 				// Load the gap if it's gappy
-				Mojo.Log.info('gaptastic!');
+				//Mojo.Log.error('gaptastic!');
 
 				// TODO	This is not a good way to find the panel...
-				var panel = this.getPanel(this.panels[this.timeline]);
+				//Mojo.Log.error('this.panels[this.timeline].id: ' + this.panels[this.timeline].id);
+				var src = event.srcElement;
+				var id			= src.id.substr(src.id.indexOf('-') + 1);
+				var panelIndex	= parseInt(id);
+				//var panel = this.getPanel(this.panels[panelIndex]);
+				var panel = this.panels[this.timeline];
 				this.fillGap(panel);
 			} else {
 				this.toasters.add(new TweetToaster(event.item, this, this.savedSearchesModel));

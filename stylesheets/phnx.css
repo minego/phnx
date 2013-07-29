@@ -851,6 +851,12 @@ body.no-gesture {  /* touchpad/emulator */
 .old-tweet div.new-indicator {
 	display: none;
 }
+.are-gaps div.new-indicator {
+	display: block;
+}
+.no-gaps div.new-indicator{
+	display: none;
+}
 .new-indicator {
 	display: none;
 	background: url(../images/low/tweet-highlight.png) center top repeat-x, url(../images/low/tweet-highlight-bottom.png) center bottom repeat-x;

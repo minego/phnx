@@ -35,7 +35,7 @@ var TwitterAPI = function(user, stageController) {
 		userFavorites:		'favorites/list',
 		followUser:			'friendships/create',
 		unfollowUser:		'friendships/destroy',
-		rateLimit:			'account/rate_limit_status',
+		rateLimit:			'application/rate_limit_status',
 		trends:				'trends/place',
 		savedSearches:		'saved_searches/list',
 		saveSearch:			'saved_searches/create',
@@ -112,8 +112,10 @@ TwitterAPI.prototype = {
 		// Displays a banner about the current rate limit
 		this.sign('GET', this.url(this.endpoints.rateLimit), function(response, meta){
 			var status = response.responseJSON;
-			var resetDate = new Date(status.reset_time);
-			banner(status.remaining_hits + '/' + status.hourly_limit + ' until ' + resetDate.toUTCString());
+			// Below resources no longer work with API V1.1
+			//var resetDate = new Date(status.reset_time);
+			//banner(status.remaining_hits + '/' + status.hourly_limit + ' until ' + resetDate.toUTCString());
+			//Mojo.Log.error("Rate_Limits: " + status);
 		}, {}, {});
 	},
 	trends: function(callback) {
