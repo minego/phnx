@@ -1110,7 +1110,7 @@ MainAssistant.prototype = {
 		return(null);
 	},
 
-	getTweets: function(panel, lastId, maxId) {
+	getTweets: function(panel, lastId, maxId, tappedId) {
 		var Twitter;
 		var user	= this.getAccount(panel.tab.account);
 		var prefs = new LocalStorage();
@@ -1149,12 +1149,10 @@ MainAssistant.prototype = {
 		}
 		if (lastId) {
 			args.since_id = lastId;
-			panel.gapEnd = lastId;
 		}
 
 		if (maxId) {
 			args.max_id = maxId;
-			panel.gapStart = maxId;
 		}
 
 		if (panel.resource === 'messages') {
@@ -1169,7 +1167,7 @@ MainAssistant.prototype = {
 		args['include_rts'] = '1';
 
 		var gotItemsCB = function(response, meta) {
-			this.gotItems(response, panel);
+			this.gotItems(response, panel, tappedId);
 		}.bind(this);
 
 		// TODO	Allow a search results panel
@@ -1185,7 +1183,7 @@ MainAssistant.prototype = {
 		}
 	},
 
-	gotItems: function(response, panel) {
+	gotItems: function(response, panel, tappedId) {
 		// one-size-fits-all function to handle timeline updates
 		// Does lots of looping to update relative times. Needs optimization
 
@@ -1223,7 +1221,7 @@ MainAssistant.prototype = {
 
 		var scrollId = 0; // this is the INDEX (not ID, sorry) of the new tweet to scroll to
 		var fullLoad = 0; // added by DC. Used to flag when full 1:1 tweet pull is used
-		var gapIndex = 0;
+		var gapIndex = 0; //gapIndex will need to be an array for multiple gaps for hold and scrollto
 
 		//Mojo.Log.error('loadingGaps: ' + this.loadingGaps);
 		if (model.items.length > 0 && this.loadingMore) {
@@ -1243,18 +1241,23 @@ MainAssistant.prototype = {
 				if (model.items[k].cssClass === 'new-tweet'){
 					model.items[k].cssClass = "old-tweet";
 					//Mojo.Log.error('found new-tweet div at: ' + k);
-					gapIndex = k+1;
+					if(model.items[k].id_str === tappedId) {
+						gapIndex = k+1;
+					}
 				}
 				if (model.items[k].cssClass === 'are-gaps'){
-					model.items[k].cssClass = "no-gaps";
 					//Mojo.Log.error('found are-gaps div at: ' + k);
-					gapIndex = k+1;
+					if(model.items[k].id_str === tappedId) {
+						model.items[k].cssClass = "no-gaps";
+						gapIndex = k+1;
+					}
+					//Mojo.Log.error('gapIndex = ' + gapIndex);
 				}
 			}
 
+			//Mojo.Log.error('xCount: ' + xCount);
 			if(xCount !== 0) {
 				//Mojo.Log.error('Splicing in ' + xCount + ' tweets at index ' + gapIndex);
-				//tweets[tweets.length-1].cssClass = 'new-tweet';
 				tweets[tweets.length-1].cssClass = 'are-gaps';
 			
 				// TODO: Make this message tappable to load gaps
@@ -1264,17 +1267,18 @@ MainAssistant.prototype = {
 					msg += 's'; //pluralize
 				}
 
-				if(tweets[tweets.length - 1].id_str !== panel.gapEnd){
+				if(tweets[tweets.length - 1].id_str !== model.items[gapIndex].gapEnd){
 					msg += '<br /><span>Tap to load missing tweets</span>';
 				}
 
 				tweets[tweets.length-1].dividerMessage = msg;
+				tweets[tweets.length-1].gapStart = tweets[tweets.length-1].id_str;
+				tweets[tweets.length-1].gapEnd = model.items[gapIndex].id_str;
+				//maybe clear out model.items[gapIndex].gapStart and .gapEnd here
 
 				for (var i = 1, tweet; tweet = tweets[i]; i++) {
-					//Mojo.Log.error('i: ' + i + ' , ' + tweet.text);
 					model.items.splice((gapIndex-1) + i, 0, tweet);
 				}
-				panel.gapStart = tweets[tweets.length - 1].id_str;
 
 				if(!panel.scrollId){
 					panel.scrollId = 0;
@@ -1294,13 +1298,6 @@ MainAssistant.prototype = {
 				if (model.items[k].cssClass === 'new-tweet'){
 					model.items[k].cssClass = "old-tweet";
 				}
-				if (model.items[k].cssClass === 'are-gaps'){
-					if (tweets[tweets.length - 1].id_str === model.items[0].id_str) {
-						model.items[k].cssClase = "no-gaps";
-					} else {
-						model.items[k].dividerMessage = '<span>Tap to load missing tweets</span>';
-					}
-				}
 			}
 
 			var hasGap, loopCount;
@@ -1314,9 +1311,8 @@ MainAssistant.prototype = {
 			} else {
 				hasGap = true;
 				loopCount = tweets.length - 1;
-				panel.gapStart = tweets[tweets.length - 1].id_str;
-				panel.gapEnd = model.items[0].id_str;
-				//Mojo.Log.error('gotItems panel.gapStart:panel.gapEnd: '+ panel.gapStart + ' : ' + panel.gapEnd);
+				tweets[tweets.length - 1].gapStart = tweets[tweets.length - 1].id_str;
+				tweets[tweets.length - 1].gapEnd = model.items[0].id_str;
 			}
 
 			//hasGap = false; // ignore gap detection in this release
@@ -1345,8 +1341,10 @@ MainAssistant.prototype = {
 				model.items.splice(0,0,tweets[j]);
 			}
 
-			scrollId = tweetCount; // set the index of the new tweet to auto-scroll to
-			panel.scrollId= scrollId;
+			if(tweetCount !== 0){
+				scrollId = tweetCount; // set the index of the new tweet to auto-scroll to
+				panel.scrollId= scrollId;
+			}
 		} else {
 			// the timeline was empty so do a 1:1 mirror of the tweets response
 			model.items = tweets;
@@ -1445,49 +1443,22 @@ MainAssistant.prototype = {
 		//panel.scrollId= scrollId;
 		this.loading = false;
 	},
-	fillGap: function(panel) {
+	fillGap: function(panel,startGapId,endGapId,tappedId) {
 		if(!panel){
 			return;
 		} else {
-			if(panel.gapStart && panel.gapEnd){
+			if(startGapId && endGapId){
 				var user	= this.getAccount(panel.tab.account);
-				var prefs = new LocalStorage();
-				var homeMaxResults = prefs.read('homeMaxResults');
-				var mentionsMaxResults = prefs.read('mentionsMaxResults');
-				var favMaxResults = prefs.read('favMaxResults');
-				var args	= {
-					//count: this.count,
-					//count: homeMaxResults,
-					include_entities: 'true',
-					max_id: panel.gapStart,
-					since_id: panel.gapEnd
-				};
 				this.loadingGaps = true;
-				switch(panel.resource){
-					case 'home':
-						args.count = homeMaxResults;
-						break;
-					case 'mentions':
-						args.count = mentionsMaxResults;
-						break;
-					case 'userFavorites':
-						args.count = favMaxResults;
-						break;
-					default:
-						args.count = 200;
-						break;
-				}
-				
 				var Twitter;
 
 				if (!user) {
 					return;
 				}
-				//Mojo.Log.error('fillGap args.max_id:args.since_id: '+ args.max_id + ' : ' + args.since_id);
-				//Twitter = new TwitterAPI(user);
-				//Twitter.timeline(panel, this.gotGap.bind(this), args, this);
-				this.getTweets(panel, args.since_id, args.max_id);
-			}
+				this.getTweets(panel, endGapId, startGapId, tappedId);
+			} else {
+				this.refresh();
+			}	
 		}
 	},
 	gotGap: function(response, meta) {
@@ -1646,13 +1617,16 @@ MainAssistant.prototype = {
 				//Mojo.Log.error('gaptastic!');
 
 				// TODO	This is not a good way to find the panel...
-				//Mojo.Log.error('this.panels[this.timeline].id: ' + this.panels[this.timeline].id);
+				//Mojo.Log.error('this.timeline1: ' + this.timeline);
 				var src = event.srcElement;
 				var id			= src.id.substr(src.id.indexOf('-') + 1);
 				var panelIndex	= parseInt(id);
 				//var panel = this.getPanel(this.panels[panelIndex]);
+				this.timeline = id;
 				var panel = this.panels[this.timeline];
-				this.fillGap(panel);
+	
+				//Mojo.Log.error('event.item.gapStart:event.item.gapEnd : ' + event.item.gapStart + ' : ' + event.item.gapEnd);
+				this.fillGap(panel,event.item.gapStart,event.item.gapEnd,event.item.id_str);
 			} else {
 				this.toasters.add(new TweetToaster(event.item, this, this.savedSearchesModel));
 			}
