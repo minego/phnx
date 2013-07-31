@@ -1695,9 +1695,8 @@ MainAssistant.prototype = {
 
 		// If it's the current panel, scroll to the top otherwise, scroll to
 		// that panel
-		if (this.timeline === panelIndex || screenWidth > this.panelWidth) {
+		if (this.timeline == panelIndex || screenWidth > this.panelWidth) {
 			var scroller = this.controller.get('scroller-' + panelIndex);
-
 			if (scroller) {
 				var position = scroller.mojo.getScrollPosition();
 				var size = scroller.mojo.scrollerSize();
@@ -1726,7 +1725,7 @@ MainAssistant.prototype = {
 
 		// If it's the current panel, scroll to the top otherwise, scroll to
 		// that panel
-		if (this.timeline === panelIndex || screenWidth > this.panelWidth) {
+		if (this.timeline == panelIndex || screenWidth > this.panelWidth) {
 			var scroller = this.controller.get('scroller-' + panelIndex);
 
 			if (scroller) {
