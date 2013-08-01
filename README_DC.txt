@@ -131,3 +131,4 @@ Modified main-assistant.js so that holding on a nav icon in the tabs bar will sc
 Modified preferences-assistant.js, profile-assistant.js & local.js to give Pref option to specify number of items returned for timeline/mentions/favourites in Profile view.
 Modified app-assistant.js, main-assistant.js, preferences-assistant.js, status-assistant.js, tweet.js, twitter.js and local.js to give Pref options to specifiy number of items returned for lists, searches and retweets.
 Modified main-assistant.js and phnx.css to support gaps.
+Modified profile.html, content.html, twitter.js and profile-assistant.js so that url's in the profile view of the user show as expanded links (not twitter t.co links)

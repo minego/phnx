@@ -123,6 +123,10 @@ ProfileAssistant.prototype = {
 			this.controller.get('account-shim').update(cardHtml);
 		}
 
+		if(this.user.entities.url.urls[0].expanded_url){
+			//this.user.url = this.user.entities.url.urls[0].expanded_url;
+			this.user.expanded_url = this.user.entities.url.urls[0].expanded_url;
+		}
 		//this.account = this.controller.stageController.user;
 
 		var created = new Date(this.user.created_at);
@@ -146,6 +150,12 @@ ProfileAssistant.prototype = {
 		}
 		if (!this.user.url) {
 			this.controller.get('url').hide();
+		} else {
+			if(this.user.entities.url.urls[0].expanded_url){
+				this.user.url = this.user.entities.url.urls[0].expanded_url;
+				this.user.expanded_url = this.user.entities.url.urls[0].expanded_url;
+				Mojo.Log.error('user.url, user.expanded_url: ' + this.user.url + ' : ' + this.user.expanded_url);
+			}
 		}
 
 		this.controller.setupWidget('list-history',{itemTemplate: "templates/tweets/item",listTemplate: "templates/list", renderLimit: this.renderLimit}, this.historyModel);

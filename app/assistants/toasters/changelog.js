@@ -1,6 +1,7 @@
 var ChangelogToaster = Class.create(Toaster, {
 	items: [
 		{ version: '1.4.7' },
+		{ item: 'Expanded URLs shown on profile page'},
 		{ item: 'Prelim work for "gap" support'},
 		{ item: 'Pref options added to specify number of results for Home, Mentions and Favorites timeline'},
 		{ item: 'Pref options added to specify number of results for lists, searches and retweets'},

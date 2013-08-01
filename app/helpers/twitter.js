@@ -81,7 +81,7 @@ TwitterAPI.prototype = {
 		this.sign('POST', this.url(this.endpoints.statusUpdate), callback, args, {'assistant':assistant});
 	},
 	getUser: function(screen_name, callback) {
-		this.sign('GET', this.url(this.endpoints.showUser), callback, {'screen_name': screen_name}, {});
+		this.sign('GET', this.url(this.endpoints.showUser), callback, {'screen_name': screen_name, include_entities: true}, {});
 	},
 	getUsersById: function(userIds, callback) {
 		this.sign('GET', this.url(this.endpoints.lookupUsers), callback, {'user_id': userIds}, {});
