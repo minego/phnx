@@ -123,9 +123,11 @@ ProfileAssistant.prototype = {
 			this.controller.get('account-shim').update(cardHtml);
 		}
 
-		if(this.user.entities.url.urls[0].expanded_url){
-			//this.user.url = this.user.entities.url.urls[0].expanded_url;
-			this.user.expanded_url = this.user.entities.url.urls[0].expanded_url;
+		if(this.user.url){
+			if(this.user.entities.url.urls[0].expanded_url){
+				//this.user.url = this.user.entities.url.urls[0].expanded_url;
+				this.user.expanded_url = this.user.entities.url.urls[0].expanded_url;
+			}
 		}
 		//this.account = this.controller.stageController.user;
 
