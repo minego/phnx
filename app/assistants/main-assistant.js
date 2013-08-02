@@ -688,6 +688,7 @@ MainAssistant.prototype = {
 			var screenHeight = this.controller.window.innerHeight;
 			var screenWidth = this.controller.window.innerWidth;
 			var height = screenHeight - 0; //subtract the header
+			height += 1; //On Pre3 there is 1 extra line at bottom that needs to be accounted for
 			var i;
 
 			this.panelWidth = 320;
