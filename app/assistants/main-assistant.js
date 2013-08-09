@@ -558,6 +558,10 @@ MainAssistant.prototype = {
 						this.refreshPanelFlush(panel);
 					}
 				}
+				// Load the list of people being followed for auto complete
+				if (!global.following || !global.following.length) {
+					this.refreshFollowing();
+				}
 			}
 
 			// TODO	Either make these work for each account or don't let you
