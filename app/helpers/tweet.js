@@ -26,6 +26,9 @@ TweetHelper.prototype = {
 			tweet.via = 'via';
 			// Save the link to the tweet on Twitter.com for fun times
 			tweet.link = 'https://twitter.com/#!' + tweet.user.screen_name + '/status/' + tweet.id_str;
+			if (Mojo.Environment.DeviceInfo.modelNameAscii == "Pre3"){ 
+				tweet.user.profile_image_url	= tweet.user.profile_image_url.replace('_normal', '_bigger'); // Use higher res avatar for Pre3
+			}
 		}
 
 

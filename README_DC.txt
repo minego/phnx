@@ -135,3 +135,4 @@ Modified profile.html, content.html, twitter.js and profile-assistant.js so that
 Created hires icons/buttons/images for Pre3
 Modified main-assistant.js so auto-complete list is populated when Refresh & Flush at launch is enabled.
 Created hi-res load-fade.png for Pre3 to remove faint horizontal line
+Modified tweet.js and main-assistant.js to allow for higher res avatars on Pre3.

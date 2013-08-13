@@ -1073,7 +1073,10 @@ MainAssistant.prototype = {
 
 				for (var i = 0, tweet; tweet = r2.responseJSON[i]; i++) {
 					var id	= tweet.sender.id_str;
-					var img	= tweet.sender.profile_image_url;
+					var img = tweet.sender.profile_image_url;
+					if (Mojo.Environment.DeviceInfo.modelNameAscii == "Pre3"){ 
+						img	= img.replace('_normal', '_bigger'); // Use higher res avatar for Pre3
+					}
 
 					tweet.user = tweet.recipient;
 
