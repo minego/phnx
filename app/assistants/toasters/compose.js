@@ -449,12 +449,16 @@ var ComposeToaster = Class.create(Toaster, {
 		var sendfunc;
 
 		if (!this.dm) {
-			sendfunc = function sendTweet(txt, cb) {
+			sendfunc = function sendTweet(txt, cb, reply_id) {
 				args = {'status': txt};
 
 				if (this.reply) {
 					args.in_reply_to_status_id = this.reply_id;
 				}
+				if (reply_id){
+					args.in_reply_to_status_id = reply_id;
+				}
+					
 
 				if (this.geo) {
 					args['lat'] = this.lat;
@@ -514,7 +518,12 @@ var ComposeToaster = Class.create(Toaster, {
 					}
 
 					messages = this.split(txt, info);
-					var sendnext = function() {
+					var sendnext = function(response) {
+						var reply_id;
+						if(response){
+							reply_id = response.responseJSON.id_str;
+						}
+						
 						var msg = messages.shift();
 
 						if (!msg) {
@@ -533,7 +542,7 @@ var ComposeToaster = Class.create(Toaster, {
 							}
 							return;
 						}
-						sendfunc(msg, sendnext);
+						sendfunc(msg, sendnext,reply_id);
 					}.bind(this);
 
 					/* kick it off */
@@ -562,7 +571,6 @@ var ComposeToaster = Class.create(Toaster, {
 				this.easterEggs(txt);
 			}
 			sendfunc(txt, function(response) {
-				//Mojo.Log.info('response : ' + response.responseJSON.id);
 				var prefs = new LocalStorage();
 				var refresh = prefs.read('refreshOnSubmit');
 				if (refresh) {
