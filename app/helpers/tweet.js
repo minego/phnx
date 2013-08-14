@@ -21,6 +21,9 @@ TweetHelper.prototype = {
 			else{
 				tweet.is_rt = false;
 			}
+			if (tweet.favorite_count > 0){
+				tweet.tweet_fav_class = 'show';
+			}
 			//disable clickable source links
 			tweet.source = tweet.source.replace('href="', 'href="#');
 			tweet.via = 'via';

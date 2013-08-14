@@ -136,3 +136,4 @@ Created hires icons/buttons/images for Pre3
 Modified main-assistant.js so auto-complete list is populated when Refresh & Flush at launch is enabled.
 Created hi-res load-fade.png for Pre3 to remove faint horizontal line
 Modified tweet.js and main-assistant.js to allow for higher res avatars on Pre3.
+Modified tweet.js (both of them), details.html and phnx.css to show number of favourites a tweet has received and also expanded the width of the retweet button so its less likely to wrap to the next line.

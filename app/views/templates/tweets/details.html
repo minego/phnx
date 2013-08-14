@@ -4,6 +4,7 @@
 	   	<td valign="top" width="40">
 	     	<div id="user-avatar" class="tweet-avatar details" style="background-image: url(#{-user.profile_image_url});"></div>
 				<div id="rt-#{-toasterId}" class="rt-wrapper"><span class="rt-button #{-rt_class}" x-mojo-tap-highlight="immediate">#{-retweet_count}</span></div>
+				<div id="fav-#{-toasterId}" class="fav-wrapper"><span class="fav-button #{-tweet_fav_class}" x-mojo-tap-highlight="immediate"><span class="fav-heart">♥ </span>#{-favorite_count}</span></div>
 	    </td>
 	    <td>
 	     	<div class="content-wrapper">

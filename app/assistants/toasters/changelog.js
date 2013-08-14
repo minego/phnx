@@ -1,6 +1,8 @@
 var ChangelogToaster = Class.create(Toaster, {
 	items: [
 		{ version: '1.4.7' },
+		{ item: 'Added number of favorites for a tweet in Details toaster'},
+		{ item: 'Expanded width of Retweet count in Details toaster'},
 		{ item: 'Higher res avatars on Pre3'},
 		{ item: 'Created some additional Pre3 hires buttons/icons'},
 		{ item: 'Expanded URLs shown on profile page'},

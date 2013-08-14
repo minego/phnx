@@ -99,6 +99,7 @@ var TweetToaster = Class.create(Toaster, {
 			this.controller.get('details-' + this.toasterId).update(tweetHtml);
 
 			Mojo.Event.listen(this.controller.get('rt-' + this.toasterId), Mojo.Event.tap, this.rtTapped.bind(this));
+			Mojo.Event.listen(this.controller.get('fav-' + this.toasterId), Mojo.Event.tap, this.favTapped.bind(this));
 		}.bind(this));
 
 		//Retrieve justsayin and audioboo mp3 links
@@ -1201,12 +1202,13 @@ transport.responseText);
 	},
 	rtTapped: function(event) {
 		var Twitter = new TwitterAPI(this.user);
-		//Update retweet counter
+		//Update retweet/favourite counter
 		Twitter.getStatus(this.tweet.id_str, function(response, meta) {
 			var tweet = response.responseJSON;
 			var th = new TweetHelper();
 			tweet = th.process(tweet);
 			this.tweet.retweet_count = tweet.retweet_count;
+			this.tweet.favorite_count = tweet.favorite_count;
 		}.bind(this));
 		Twitter.showRetweets(this.tweet.id_str, function(response) {
 			if (response.responseJSON.length > 0) {
@@ -1221,6 +1223,18 @@ transport.responseText);
 			else {
 				ex('Twitter did not return anything');
 			}
+		}.bind(this));
+	},
+	favTapped: function(event) {
+		//Currently no way with the REST API to return a list of users that favourited a tweet
+		var Twitter = new TwitterAPI(this.user);
+		//Update retweet/favourite counter
+		Twitter.getStatus(this.tweet.id_str, function(response, meta) {
+			var tweet = response.responseJSON;
+			var th = new TweetHelper();
+			tweet = th.process(tweet);
+			this.tweet.retweet_count = tweet.retweet_count;
+			this.tweet.favorite_count = tweet.favorite_count;
 		}.bind(this));
 	},
 	setup: function() {
@@ -1348,6 +1362,7 @@ transport.responseText);
 		Mojo.Event.listen(this.controller.get('details-' + this.toasterId), Mojo.Event.tap, this.detailsTapped.bind(this));
 		Mojo.Event.listen(this.controller.get('details-' + this.toasterId), Mojo.Event.hold, this.detailsHeld.bind(this));
 		Mojo.Event.listen(this.controller.get('rt-' + this.toasterId), Mojo.Event.tap, this.rtTapped.bind(this));
+		Mojo.Event.listen(this.controller.get('fav-' + this.toasterId), Mojo.Event.tap, this.favTapped.bind(this));
 		// Mojo.Event.listen(this.controller.get('preview'), Mojo.Event.tap, this.previewTapped.bind(this));
 		Mojo.Event.listen(this.controller.get('reply-' + this.toasterId), Mojo.Event.tap, this.actionTapped.bind(this));
 		Mojo.Event.listen(this.controller.get('retweet-' + this.toasterId), Mojo.Event.tap, this.actionTapped.bind(this));
@@ -1362,6 +1377,7 @@ transport.responseText);
 		Mojo.Event.stopListening(this.controller.get('details-' + this.toasterId), Mojo.Event.tap, this.detailsTapped);
 		Mojo.Event.stopListening(this.controller.get('details-' + this.toasterId), Mojo.Event.hold, this.detailsHeld);
 		Mojo.Event.stopListening(this.controller.get('rt-' + this.toasterId), Mojo.Event.tap, this.rtTapped);
+		Mojo.Event.stopListening(this.controller.get('fav-' + this.toasterId), Mojo.Event.tap, this.favTapped);
 		// Mojo.Event.stopListening(this.controller.get('preview'), Mojo.Event.tap, this.previewTapped.bind(this));
 		Mojo.Event.stopListening(this.controller.get('reply-' + this.toasterId), Mojo.Event.tap, this.actionTapped);
 		Mojo.Event.stopListening(this.controller.get('retweet-' + this.toasterId), Mojo.Event.tap, this.actionTapped);

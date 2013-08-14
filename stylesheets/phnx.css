@@ -817,10 +817,10 @@ body.no-gesture {  /* touchpad/emulator */
 	color: #bbb;
 }
 .rt-wrapper {
-	margin-right: 8px;
+	margin-right: 0px;
 	text-align: center;
-	width: 50px;
-	margin-left: -2px;
+	width: 58px;
+	margin-left: -5px;
 }
 .rt-button {
 	border-width: 2px;
@@ -829,8 +829,8 @@ body.no-gesture {  /* touchpad/emulator */
 	font-weight: bold;
 	color: #d2d2d2;
 	clear: both;
-	background: url('../images/low/rt-icon.png') 4px center no-repeat;
-	padding: 0px 8px 0px 21px;
+	background: url('../images/low/rt-icon.png') 1px center no-repeat;
+	padding: 0px 8px 0px 18px;
 	position: relative;
 	top: 4px;
 	display: none;
@@ -840,7 +840,36 @@ body.no-gesture {  /* touchpad/emulator */
 }
 .rt-button.selected {
 	-webkit-border-radius: 2px;
-	background: url('../images/low/rt-icon.png') 4px center no-repeat,url('../images/trans13.png');
+	background: url('../images/low/rt-icon.png') 1px center no-repeat,url('../images/trans13.png');
+}
+.fav-wrapper {
+	margin-right: 0px;
+	text-align: center;
+	width: 58px;
+	margin-left: -5px;
+}
+.fav-button {
+	border-width: 2px;
+	-webkit-border-image: url(../images/low/rt-button.png) 2 stretch;
+	font-size: 12px;
+	font-weight: bold;
+	color: #d2d2d2;
+	clear: both;
+	//background: url('../images/low/rt-icon.png') 4px center no-repeat;
+	padding: 0px 8px 0px 2px;
+	position: relative;
+	top: 4px;
+	display: none;
+}
+.fav-heart {
+	color: #777;
+}
+.fav-button.show {
+	display: inline;
+}
+.fav-button.selected {
+	-webkit-border-radius: 2px;
+	background: url('../images/trans13.png');
 }
 .new-tweet{
 /*	margin-bottom: 33px;*/
