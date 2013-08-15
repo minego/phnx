@@ -1,6 +1,7 @@
 var ChangelogToaster = Class.create(Toaster, {
 	items: [
 		{ version: '1.4.7' },
+		{ item: 'Retweet and Favourite counts are updated before displaying Details toaster'},
 		{ item: 'Multi-part tweets are now flagged as replies to the previous part of the long tweet when viewing a conversation'},
 		{ item: 'Added number of favorites for a tweet in Details toaster'},
 		{ item: 'Expanded width of Retweet count in Details toaster'},

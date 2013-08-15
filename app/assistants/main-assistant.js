@@ -1636,7 +1636,26 @@ MainAssistant.prototype = {
 				//Mojo.Log.error('event.item.gapStart:event.item.gapEnd : ' + event.item.gapStart + ' : ' + event.item.gapEnd);
 				this.fillGap(panel,event.item.gapStart,event.item.gapEnd,event.item.id_str);
 			} else {
-				this.toasters.add(new TweetToaster(event.item, this, this.savedSearchesModel));
+				var Twitter = new TwitterAPI(this.user);
+				//Update retweet/favourite counter
+				Twitter.getStatus(event.item.id_str, function(response, meta) {
+					var tweet = response.responseJSON;
+					var th = new TweetHelper();
+					tweet = th.process(tweet);
+					event.item.retweet_count = tweet.retweet_count;
+					event.item.favorite_count = tweet.favorite_count;
+					if (typeof(event.item.retweeted_status) !== "undefined") {
+						event.item.rt_class = 'show';
+					} else {
+						delete event.item.rt_class
+					}
+					if (event.item.favorite_count > 0){
+						event.item.tweet_fav_class = 'show';
+					} else {
+						delete event.item.tweet_fav_class;
+					}
+					this.toasters.add(new TweetToaster(event.item, this, this.savedSearchesModel));
+				}.bind(this));
 			}
 		}
 	},

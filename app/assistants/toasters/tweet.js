@@ -1202,14 +1202,7 @@ transport.responseText);
 	},
 	rtTapped: function(event) {
 		var Twitter = new TwitterAPI(this.user);
-		//Update retweet/favourite counter
-		Twitter.getStatus(this.tweet.id_str, function(response, meta) {
-			var tweet = response.responseJSON;
-			var th = new TweetHelper();
-			tweet = th.process(tweet);
-			this.tweet.retweet_count = tweet.retweet_count;
-			this.tweet.favorite_count = tweet.favorite_count;
-		}.bind(this));
+
 		Twitter.showRetweets(this.tweet.id_str, function(response) {
 			if (response.responseJSON.length > 0) {
 				var users = [];
@@ -1227,15 +1220,6 @@ transport.responseText);
 	},
 	favTapped: function(event) {
 		//Currently no way with the REST API to return a list of users that favourited a tweet
-		var Twitter = new TwitterAPI(this.user);
-		//Update retweet/favourite counter
-		Twitter.getStatus(this.tweet.id_str, function(response, meta) {
-			var tweet = response.responseJSON;
-			var th = new TweetHelper();
-			tweet = th.process(tweet);
-			this.tweet.retweet_count = tweet.retweet_count;
-			this.tweet.favorite_count = tweet.favorite_count;
-		}.bind(this));
 	},
 	setup: function() {
 		this.menuItems = [
