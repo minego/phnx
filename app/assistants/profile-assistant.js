@@ -528,7 +528,7 @@ ProfileAssistant.prototype = {
 			tweet = th.process(tweet);
 			event.item.retweet_count = tweet.retweet_count;
 			event.item.favorite_count = tweet.favorite_count;
-			if (typeof(event.item.retweeted_status) !== "undefined") {
+			if (event.item.retweet_count > 0) {
 				event.item.rt_class = 'show';
 			} else {
 				delete event.item.rt_class
@@ -538,8 +538,15 @@ ProfileAssistant.prototype = {
 			} else {
 				delete event.item.tweet_fav_class;
 			}
-			this.toasters.add(new TweetToaster(event.item, this, this.savedSearchesModel));
+			var tweetHtml = Mojo.View.render({
+				object: event.item,
+				template: 'templates/tweets/details'
+			});
+			var controller = getController();
+			var currentToasterIndex = toasterIndex - 1;
+			controller.get('details-' + currentToasterIndex).update(tweetHtml);
 		}.bind(this));
+		this.toasters.add(new TweetToaster(event.item, this, this.savedSearchesModel));
 	},
 	mentionTapped: function(event) {
 		var Twitter = new TwitterAPI(this.account);
