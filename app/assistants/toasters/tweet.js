@@ -257,6 +257,29 @@ var TweetToaster = Class.create(Toaster, {
 				this.tweet.favorited = true;
 				this.controller.get('favorite-' + this.toasterId).addClassName('favorited');
 				this.tweet.favSet = false;
+				this.tweet.fav_class = 'show';
+				var tweet = response.responseJSON;
+				var th = new TweetHelper();
+				tweet = th.process(tweet);
+				this.tweet.retweet_count = tweet.retweet_count;
+				// Looks like .favorite_count isn't returned by Twitter when faving so at least add our favourite even though the count may not be entirely accurate
+				// Could do a completely new call to get the status of a tweet, but that will mean 2 calls for every fav/unfav.  Hopefully Twitter will update to return favorite_count.
+				this.tweet.favorite_count++;// = tweet.favorite_count;
+				if (this.tweet.retweet_count > 0) {
+					this.tweet.rt_class = 'show';
+				} else {
+					delete this.tweet.rt_class
+				}
+				if (this.tweet.favorite_count > 0){
+					this.tweet.tweet_fav_class = 'show';
+				} else {
+					delete this.tweet.tweet_fav_class;
+				}
+				var tweetHtml = Mojo.View.render({
+					object: this.tweet,
+					template: 'templates/tweets/details'
+				});
+				this.controller.get('details-' + this.toasterId).update(tweetHtml);				
 			}.bind(this));
 		}
 		else {
@@ -264,6 +287,29 @@ var TweetToaster = Class.create(Toaster, {
 				this.tweet.favorited = false;
 				this.controller.get('favorite-' + this.toasterId).removeClassName('favorited');
 				//this.tweet.favSet = true;
+				this.tweet.fav_class = 'hide';
+				var tweet = response.responseJSON;
+				var th = new TweetHelper();
+				tweet = th.process(tweet);
+				this.tweet.retweet_count = tweet.retweet_count;
+				// Looks like .favorite_count isn't returned by Twitter when faving so at least remove our favourite even though the count may not be entirely accurate
+				// Could do a completely new call to get the status of a tweet, but that will mean 2 calls for every fav/unfav.  Hopefully Twitter will update to return favorite_count.
+				this.tweet.favorite_count--;// = tweet.favorite_count;
+				if (this.tweet.retweet_count > 0) {
+					this.tweet.rt_class = 'show';
+				} else {
+					delete this.tweet.rt_class
+				}
+				if (this.tweet.favorite_count > 0){
+					this.tweet.tweet_fav_class = 'show';
+				} else {
+					delete this.tweet.tweet_fav_class;
+				}
+				var tweetHtml = Mojo.View.render({
+					object: this.tweet,
+					template: 'templates/tweets/details'
+				});
+				this.controller.get('details-' + this.toasterId).update(tweetHtml);								
 			}.bind(this));
 		}
 		this.favStatusChanged = true;
