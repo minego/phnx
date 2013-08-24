@@ -221,6 +221,8 @@ AppAssistant.prototype = {
 			stage.pushScene('preferences', 'Appearance');
 		} else if (event.command === 'cmdPreferencesNotifications') {
 			stage.pushScene('preferences', 'Notifications');
+		} else if (event.command === 'cmdPreferencesLoadCounts') {
+			stage.pushScene('preferences', 'Load Counts');
 		} else if (event.command === 'cmdPreferencesAdvanced') {
 			stage.pushScene('preferences', 'Advanced Settings');
 		} else if (event.command === 'cmdAbout') {

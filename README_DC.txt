@@ -141,3 +141,4 @@ Modified compose.js so that tweets spanning multiple tweets set the reply_id fla
 Modified main-assistant.js and profile-assistant.js so that tweet taps from lists will refresh the fav and retweet counts and update details toaster so counts are accurate.
 Modified tweet.js so that fav/unfav'ing refreshes the displayed details toaster.
 Modified main-assistant.js, preferences-assistant.js and local.js to allow for pull-to-refres refresh&flush option.
+Modified main-assistant.js, preferences-assistant.js and app-assistant.js to add extra menu for LoadCounts.

@@ -344,6 +344,10 @@ MainAssistant.prototype = {
 						command: 'cmdPreferencesNotifications'
 					},
 					{
+						label: 'Load Counts',
+						command: 'cmdPreferencesLoadCounts'
+					},
+					{
 						label: 'Advanced Settings',
 						command: 'cmdPreferencesAdvanced'
 					},

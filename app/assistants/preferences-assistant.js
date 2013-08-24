@@ -25,7 +25,7 @@ function PreferencesAssistant(section) {
 		);
 	}
 	advanced.push(
-		{key: 'ptrCount', type: 'select', label: 'Pull-to-Refresh & Flush', items: [
+		{key: 'ptrCount', type: 'select', label: 'Pull2Refresh & Flush', items: [
 			{label: 'Never', value: '0'},
 			{label: '5', value: '5'},
 			{label: '10', value: '10'},
@@ -56,59 +56,7 @@ function PreferencesAssistant(section) {
 			{key: 'refreshFlushAtLaunch', type: 'toggle', label: 'Refresh & flush at launch'},
 			{key: 'enterToSubmit', type: 'toggle', label: 'Enter to submit'},
 			{key: 'autoCorrect', type: 'toggle', label: 'Auto Correct'},
-			{key: 'composeCard', type: 'toggle', label: 'Compose in new Card'},
-			{key: 'homeMaxResults', type: 'select', label: 'Home Max Items', items: [
-				{label: '10', value: 10},
-				{label: '25', value: 25},
-				{label: '50', value: 50},
-				{label: '75', value: 75},
-				{label: '100', value: 100},
-				{label: '200', value: 200}
-			]},
-			{key: 'mentionsMaxResults', type: 'select', label: 'Mentions Max Items', items: [
-				{label: '10', value: 10},
-				{label: '25', value: 25},
-				{label: '50', value: 50},
-				{label: '75', value: 75},
-				{label: '100', value: 100},
-				{label: '200', value: 200}
-			]},
-			{key: 'favMaxResults', type: 'select', label: 'Favorite Max Items', items: [
-				{label: '10', value: 10},
-				{label: '25', value: 25},
-				{label: '50', value: 50},
-				{label: '75', value: 75},
-				{label: '100', value: 100},
-				{label: '200', value: 200}
-			]},			
-			{key: 'profileMaxResults', type: 'select', label: 'Profile Max Items', items: [
-				{label: '10', value: 10},
-				{label: '25', value: 25},
-				{label: '50', value: 50},
-				{label: '75', value: 75},
-				{label: '100', value: 100}
-			]},
-			{key: 'listMaxResults', type: 'select', label: 'List Max Items', items: [
-				{label: '10', value: 10},
-				{label: '25', value: 25},
-				{label: '50', value: 50},
-				{label: '75', value: 75},
-				{label: '100', value: 100}
-			]},
-			{key: 'rtMaxResults', type: 'select', label: 'Retweet Max Items', items: [
-				{label: '10', value: 10},
-				{label: '25', value: 25},
-				{label: '50', value: 50},
-				{label: '75', value: 75},
-				{label: '100', value: 100}
-			]},
-			{key: 'searchMaxResults', type: 'select', label: 'Search Max Items', items: [
-				{label: '10', value: 10},
-				{label: '25', value: 25},
-				{label: '50', value: 50},
-				{label: '75', value: 75},
-				{label: '100', value: 100}
-			]}		
+			{key: 'composeCard', type: 'toggle', label: 'Compose in new Card'}
 		],
 		'Appearance': [
 			{key: 'theme', type: 'select', label: 'Theme', items: [
@@ -180,6 +128,60 @@ function PreferencesAssistant(section) {
 			{key: 'notificationMentions', type: 'toggle', label: 'Mentions'},
 			{key: 'notificationMessages', type: 'toggle', label: 'Messages'},
 			{key: 'notificationShieldMessages', type: 'toggle', label: 'Shield Messages'}
+		],
+		'Load Counts': [
+			{key: 'homeMaxResults', type: 'select', label: 'Home Max Items', items: [
+				{label: '10', value: 10},
+				{label: '25', value: 25},
+				{label: '50', value: 50},
+				{label: '75', value: 75},
+				{label: '100', value: 100},
+				{label: '200', value: 200}
+			]},
+			{key: 'mentionsMaxResults', type: 'select', label: 'Mentions Max Items', items: [
+				{label: '10', value: 10},
+				{label: '25', value: 25},
+				{label: '50', value: 50},
+				{label: '75', value: 75},
+				{label: '100', value: 100},
+				{label: '200', value: 200}
+			]},
+			{key: 'favMaxResults', type: 'select', label: 'Favorite Max Items', items: [
+				{label: '10', value: 10},
+				{label: '25', value: 25},
+				{label: '50', value: 50},
+				{label: '75', value: 75},
+				{label: '100', value: 100},
+				{label: '200', value: 200}
+			]},			
+			{key: 'profileMaxResults', type: 'select', label: 'Profile Max Items', items: [
+				{label: '10', value: 10},
+				{label: '25', value: 25},
+				{label: '50', value: 50},
+				{label: '75', value: 75},
+				{label: '100', value: 100}
+			]},
+			{key: 'listMaxResults', type: 'select', label: 'List Max Items', items: [
+				{label: '10', value: 10},
+				{label: '25', value: 25},
+				{label: '50', value: 50},
+				{label: '75', value: 75},
+				{label: '100', value: 100}
+			]},
+			{key: 'rtMaxResults', type: 'select', label: 'Retweet Max Items', items: [
+				{label: '10', value: 10},
+				{label: '25', value: 25},
+				{label: '50', value: 50},
+				{label: '75', value: 75},
+				{label: '100', value: 100}
+			]},
+			{key: 'searchMaxResults', type: 'select', label: 'Search Max Items', items: [
+				{label: '10', value: 10},
+				{label: '25', value: 25},
+				{label: '50', value: 50},
+				{label: '75', value: 75},
+				{label: '100', value: 100}
+			]}		
 		],
 		'Advanced Settings': advanced
 	};
