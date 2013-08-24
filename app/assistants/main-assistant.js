@@ -130,7 +130,8 @@ MainAssistant.prototype = {
 						resource:	"home",
 						refresh:	true,
 						update:		true,
-						icon:		"nav-home"
+						icon:		"nav-home",
+						count: 0
 					};
 					break;
 
@@ -141,7 +142,8 @@ MainAssistant.prototype = {
 						resource:	"mentions",
 						refresh:	true,
 						update:		true,
-						icon:		"nav-mentions"
+						icon:		"nav-mentions",
+						count: 0
 					};
 					break;
 
@@ -152,7 +154,8 @@ MainAssistant.prototype = {
 						resource:	"userFavorites",
 						refresh:	true,
 						update:		true,
-						icon:		"nav-favorites"
+						icon:		"nav-favorites",
+						count: 0
 					};
 					break;
 
@@ -163,7 +166,8 @@ MainAssistant.prototype = {
 						resource:	"messages",
 						refresh:	true,
 						update:		true,
-						icon:		"nav-messages"
+						icon:		"nav-messages",
+						count: 0
 					};
 					break;
 
@@ -179,7 +183,8 @@ MainAssistant.prototype = {
 							resource:	"listStatuses",
 							refresh:	true,
 							update:		true,
-							icon:		"nav-lists"
+							icon:		"nav-lists",
+							count: 0
 						};
 					} else {
 						/* Show the lists that the user has and/or follows */
@@ -764,7 +769,6 @@ MainAssistant.prototype = {
 			panel.timeout = setTimeout(function() {
 				if ((pos = scroller.mojo.getScrollPosition()) && pos.top >= 1) {
 					panel.ptr = true;
-
 					if (ptr) {
 						ptr.addClassName('ptr-text-showing');
 					}
@@ -802,7 +806,15 @@ MainAssistant.prototype = {
 
 		if ((pos = scroller.mojo.getScrollPosition())) {
 			if (pos.top > 10 && Ajax.activeRequestCount === 0) {
-				panel.assistant.refreshPanel(panel);
+				var prefs = new LocalStorage();
+				var ptrCount = prefs.read('ptrCount');
+
+				panel.count++;
+				if((panel.count > ptrCount) && ptrCount !== 0){
+					panel.assistant.refreshPanelFlush(panel);
+				} else {
+					panel.assistant.refreshPanel(panel);
+				}
 			}
 			// Mojo.Log.info(pos.top);
 		}

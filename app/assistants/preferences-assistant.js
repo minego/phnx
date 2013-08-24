@@ -24,6 +24,15 @@ function PreferencesAssistant(section) {
 			]}
 		);
 	}
+	advanced.push(
+		{key: 'ptrCount', type: 'select', label: 'Pull-to-Refresh & Flush', items: [
+			{label: 'Never', value: '0'},
+			{label: '5', value: '5'},
+			{label: '10', value: '10'},
+			{label: '15', value: '15'},
+			{label: '20', value: '20'}
+		]}
+	);
 	advanced.push({key: 'delReceivedDM', type: 'toggle', label: 'Allow deletion of received DMs'},
 				{key: 'showVine', type: 'toggle', label: 'Process Vine links - warning *resource hog*'},
 				{key: 'useFoursquareApp', type: 'toggle', label: 'Pass 4sq.com links to Foursquare app (requires v2.8.5)'}

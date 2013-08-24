@@ -140,3 +140,4 @@ Modified tweet.js (both of them), details.html and phnx.css to show number of fa
 Modified compose.js so that tweets spanning multiple tweets set the reply_id flag to the earlier portion of the split tweet, so conversations will show all parts of the multi-part tweets instead of just the one selected.
 Modified main-assistant.js and profile-assistant.js so that tweet taps from lists will refresh the fav and retweet counts and update details toaster so counts are accurate.
 Modified tweet.js so that fav/unfav'ing refreshes the displayed details toaster.
+Modified main-assistant.js, preferences-assistant.js and local.js to allow for pull-to-refres refresh&flush option.

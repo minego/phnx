@@ -1,6 +1,7 @@
 var ChangelogToaster = Class.create(Toaster, {
 	items: [
 		{ version: '1.4.7' },
+		{ item: 'Advanced pref option to allow for a Refresh&Flush after specified number of pull-to-refreshes per panel},
 		{ item: 'Retweet and Favourite counts are updated before displaying Details toaster'},
 		{ item: 'Multi-part tweets are now flagged as replies to the previous part of the long tweet when viewing a conversation'},
 		{ item: 'Added number of favorites for a tweet in Details toaster'},

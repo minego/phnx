@@ -38,6 +38,7 @@ function LocalStorage() {
 		cardIcons: 'auto',
 		browserSelection: 'stockBrowser',
 		forwardSwipe: 'current',
+		ptrCount: 10,
 		showVine: false,
 		useFoursquareApp: false,
 		refreshOnMaximize: false,
