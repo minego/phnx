@@ -814,7 +814,7 @@ MainAssistant.prototype = {
 				var ptrCount = prefs.read('ptrCount');
 
 				panel.count++;
-				if((panel.count > ptrCount) && ptrCount !== 0){
+				if((panel.count >= ptrCount) && ptrCount !== 0){
 					panel.assistant.refreshPanelFlush(panel);
 				} else {
 					panel.assistant.refreshPanel(panel);

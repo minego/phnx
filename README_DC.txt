@@ -142,3 +142,4 @@ Modified main-assistant.js and profile-assistant.js so that tweet taps from list
 Modified tweet.js so that fav/unfav'ing refreshes the displayed details toaster.
 Modified main-assistant.js, preferences-assistant.js and local.js to allow for pull-to-refres refresh&flush option.
 Modified main-assistant.js, preferences-assistant.js and app-assistant.js to add extra menu for LoadCounts.
+Modified phnx.css and convo-item.html so that conversation view shows only small thumbnails as fullwidth thumbs were disappearing due to auto height which resulted in height of 0.  If I can work around this bug I'll return to full width.
