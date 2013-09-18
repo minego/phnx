@@ -37,6 +37,7 @@ function LocalStorage() {
 		limitToLocale: false,
 		cardIcons: 'auto',
 		browserSelection: 'stockBrowser',
+		mobilizeWebLinks: false,
 		forwardSwipe: 'current',
 		ptrCount: 10,
 		showVine: false,

@@ -407,6 +407,7 @@ var TweetToaster = Class.create(Toaster, {
 		this.assistant.toasters.back();
 	},
 	popupHandler: function(command) {
+		var parsedLink = '';
 		switch (command) {
 			case 'cmdMention':
 				this.mention();
@@ -483,6 +484,15 @@ var TweetToaster = Class.create(Toaster, {
 			case 'cmdOpenInAppBrowser':
 				this.controller.stageController.pushScene('webview', this.url);
 				break;
+			case 'cmdMobilizeStockBrowser':
+				parsedLink = 'http://www.instapaper.com/m?u=' + encodeURIComponent(this.url);
+				global.openBrowser(parsedLink);
+				break;
+			// Mobilized InAppBrowser doesn't really work nicely
+			//case 'cmdMobilizeInAppBrowser':
+			//	parsedLink = 'http://www.instapaper.com/m?u=' + encodeURIComponent(this.url);
+			//	this.controller.stageController.pushScene('webview', parsedLink);
+			//	break;
 			// DC temp test code
 			//case 'cmdGetVineHTML':
 				//this.getVineHTML();
@@ -1195,12 +1205,17 @@ transport.responseText);
 	},
 	showWebview: function(src, url) {
 		var prefs = new LocalStorage();
+		var parsedLink = src;
 
 		if (prefs.read('browserSelection') === 'inAppBrowser') {
+			//parsedLink = 'http://www.instapaper.com/m?u=' + encodeURIComponent(src);
 			this.controller.stageController.pushScene('webview', src);
 			Mojo.Log.info("Launching In App Browser");
 		} else {
-			global.openBrowser(src);
+			if (prefs.read('mobilizeWebLinks')) {
+				parsedLink = 'http://www.instapaper.com/m?u=' + encodeURIComponent(src);
+			}
+			global.openBrowser(parsedLink);
 			Mojo.Log.info("Launching Stock Browser");
 		}
 		//this.controller.stageController.pushScene('webview', src);
@@ -1348,6 +1363,15 @@ transport.responseText);
 				label:				$L('Open in In-App Browser'),
 				command:			'cmdOpenInAppBrowser'
 			},
+			{
+				label:				$L('Mobilize in System Browser'),
+				command:			'cmdMobilizeStockBrowser'
+			},
+			//Mobilize inAppBrowswer doesn't really work nicely
+			//{
+			//	label:				$L('Mobilize in In-App Browser'),
+			//	command:			'cmdMobilizeInAppBrowser'
+			//},
 			{
 				label:				$L('Share'),
 				items: [

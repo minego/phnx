@@ -46,6 +46,7 @@ function PreferencesAssistant(section) {
 				{label: 'Stock Browser', value: 'stockBrowser'},
 				{label: 'Ask', value: 'ask' }
 			]},
+			{key: 'mobilizeWebLinks', type: 'toggle', label: 'Mobilize Web Links'},
 			{key: 'cardIcons', type: 'select', label: 'Card icons', items: [
 				{label: 'Automatic', value: 'auto'},
 				{label: 'Always Show', value: 'always'},
@@ -334,7 +335,14 @@ PreferencesAssistant.prototype = {
 		var prefs = new LocalStorage();
 		
 		this.controller.get('sections').update(pageHtml);
-		
+
+		if (!this.section || this.section == "General Settings") {
+			if (prefs.read('browserSelection') === "stockBrowser") {
+				this.controller.get('toggleRow-mobilizeWebLinks').show();
+			} else {
+				this.controller.get('toggleRow-mobilizeWebLinks').hide();
+			}
+		}					
 		if (!this.section || this.section == "Notifications") {
 			if (prefs.read('notificationSound') === "notificationsCustom") {
 				this.controller.get('tonePathRow').show();
@@ -358,6 +366,9 @@ PreferencesAssistant.prototype = {
 			this.controller.listen('select-notificationSound', Mojo.Event.propertyChange, this.soundChanged.bind(this));
 			//this.controller.listen('tonePathRow', Mojo.Event.tap, this.tonePathTapHandler.bindAsEventListener(this));
 			this.controller.listen('tonePathRow', Mojo.Event.tap, this.tonePathTapHandler.bind(this));
+		}
+		if(!this.section || this.section == "General Settings") {
+			this.controller.listen('select-browserSelection', Mojo.Event.propertyChange, this.browserChanged.bind(this));
 		}
 	},
 	closeTapped: function() {
@@ -389,6 +400,14 @@ PreferencesAssistant.prototype = {
 			this.controller.get('tonePathRow').show();
 		} else {
 			this.controller.get('tonePathRow').hide();
+		}
+	},
+	browserChanged: function(event) {
+		Mojo.Log.error('event: ' + event.value);
+		if (event.value == "stockBrowser") {
+			this.controller.get('toggleRow-mobilizeWebLinks').show();
+		} else {
+			this.controller.get('toggleRow-mobilizeWebLinks').hide();
 		}
 	},
 	themeChanged: function(event) {
@@ -455,6 +474,9 @@ PreferencesAssistant.prototype = {
 		if(!this.section || this.section == "Notifications") {
 			this.controller.stopListening('select-notificationSound', Mojo.Event.propertyChange, this.soundChanged);
 			this.controller.stopListening('tonePathRow', Mojo.Event.tap, this.tonePathTapHandler);
+		}
+		if(!this.section || this.section == "General Settings") {
+			this.controller.stopListening('select-browserSelection', Mojo.Event.propertyChange, this.browserChanged);
 		}
 	}
 };
