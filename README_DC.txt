@@ -144,3 +144,4 @@ Modified main-assistant.js, preferences-assistant.js and local.js to allow for p
 Modified main-assistant.js, preferences-assistant.js and app-assistant.js to add extra menu for LoadCounts.
 Modified phnx.css and convo-item.html so that conversation view shows only small thumbnails as fullwidth thumbs were disappearing due to auto height which resulted in height of 0.  If I can work around this bug I'll return to full width.
 Modified preferences-assistant.js, local.js, tweet.js and toggle.html to allow for option to Mobilize web links for the stockBrowser for easier reading on phones.
+Modified main-assistant.js so that owning user of panel is used for updating fav/retweets when tapping a tweet.

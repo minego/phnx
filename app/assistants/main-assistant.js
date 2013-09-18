@@ -1653,7 +1653,11 @@ MainAssistant.prototype = {
 				this.fillGap(panel,event.item.gapStart,event.item.gapEnd,event.item.id_str);
 			} else {
 				if(!event.item.dm){
-					var Twitter = new TwitterAPI(this.user);
+					var src = event.srcElement;
+					var id = src.id.substr(src.id.indexOf('-') + 1);
+					this.timeline = id;
+					var panel = this.panels[this.timeline];
+					var Twitter	= new TwitterAPI(this.getAccount(panel.tab.account));
 					//Update retweet/favourite counter
 					Twitter.getStatus(event.item.id_str, function(response, meta) {
 						var tweet = response.responseJSON;
