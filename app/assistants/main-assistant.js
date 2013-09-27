@@ -774,6 +774,14 @@ MainAssistant.prototype = {
 				if ((pos = scroller.mojo.getScrollPosition()) && pos.top >= 1) {
 					panel.ptr = true;
 					if (ptr) {
+						var prefs = new LocalStorage();
+						var ptrCount = prefs.read('ptrCount');
+
+						if((panel.count+1 >= ptrCount) && ptrCount !== 0){
+							panel.assistant.controller.get("ptr-text-" + panel.index).update('Release to refresh & flush');
+						} else {
+							panel.assistant.controller.get("ptr-text-" + panel.index).update('Release to refresh ');
+						}
 						ptr.addClassName('ptr-text-showing');
 					}
 				}
@@ -816,6 +824,7 @@ MainAssistant.prototype = {
 				panel.count++;
 				if((panel.count >= ptrCount) && ptrCount !== 0){
 					panel.assistant.refreshPanelFlush(panel);
+					panel.count = 0;
 				} else {
 					panel.assistant.refreshPanel(panel);
 				}
