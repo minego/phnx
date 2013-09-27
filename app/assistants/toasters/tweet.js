@@ -111,9 +111,9 @@ var TweetToaster = Class.create(Toaster, {
 				this.tweet.retweet_count = tweet.retweet_count;
 				this.tweet.favorite_count = tweet.favorite_count;
 				if (this.tweet.favorite_count > 0) {
-					this.tweet.fav_class = 'show';
+					this.tweet.tweet_fav_class = 'show';
 				} else {
-					this.tweet.fav_class = 'hide';
+					this.tweet.tweet_fav_class = 'hide';
 				}
 				if (this.tweet.retweet_count > 0) {
 					this.tweet.rt_class = 'show';
