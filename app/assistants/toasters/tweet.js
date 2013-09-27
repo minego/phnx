@@ -102,6 +102,36 @@ var TweetToaster = Class.create(Toaster, {
 			Mojo.Event.listen(this.controller.get('fav-' + this.toasterId), Mojo.Event.tap, this.favTapped.bind(this));
 		}.bind(this));
 
+		//Update retweet/favourite counter
+		if (!this.tweet.dm) {
+			Twitter.getStatus(this.tweet.id_str, function(response, meta) {
+				var tweet = response.responseJSON;
+				//var th = new TweetHelper();
+				tweet = th.process(tweet);
+				this.tweet.retweet_count = tweet.retweet_count;
+				this.tweet.favorite_count = tweet.favorite_count;
+				if (this.tweet.favorite_count > 0) {
+					this.tweet.fav_class = 'show';
+				} else {
+					this.tweet.fav_class = 'hide';
+				}
+				if (this.tweet.retweet_count > 0) {
+					this.tweet.rt_class = 'show';
+				} else {
+					this.tweet.rt_class = 'hide';
+				}
+				//re-render the tweet HTML
+				var tweetHtml = Mojo.View.render({
+					object: this.tweet,
+					template: 'templates/tweets/details'
+				});
+				this.controller.get('details-' + this.toasterId).update(tweetHtml);
+
+				Mojo.Event.listen(this.controller.get('rt-' + this.toasterId), Mojo.Event.tap, this.rtTapped.bind(this));
+				Mojo.Event.listen(this.controller.get('fav-' + this.toasterId), Mojo.Event.tap, this.favTapped.bind(this));
+			}.bind(this));
+		}
+
 		//Retrieve justsayin and audioboo mp3 links
 		var links = tweet.entities.urls;
 		for (var i = links.length - 1; i >= 0; i--){
@@ -1263,7 +1293,6 @@ transport.responseText);
 	},
 	rtTapped: function(event) {
 		var Twitter = new TwitterAPI(this.user);
-
 		Twitter.showRetweets(this.tweet.id_str, function(response) {
 			if (response.responseJSON.length > 0) {
 				var users = [];

@@ -1652,38 +1652,6 @@ MainAssistant.prototype = {
 				//Mojo.Log.error('event.item.gapStart:event.item.gapEnd : ' + event.item.gapStart + ' : ' + event.item.gapEnd);
 				this.fillGap(panel,event.item.gapStart,event.item.gapEnd,event.item.id_str);
 			} else {
-				if(!event.item.dm){
-					var src = event.srcElement;
-					var id = src.id.substr(src.id.indexOf('-') + 1);
-					this.timeline = id;
-					var panel = this.panels[this.timeline];
-					var Twitter	= new TwitterAPI(this.getAccount(panel.tab.account));
-					//Update retweet/favourite counter
-					Twitter.getStatus(event.item.id_str, function(response, meta) {
-						var tweet = response.responseJSON;
-						var th = new TweetHelper();
-						tweet = th.process(tweet);
-						event.item.retweet_count = tweet.retweet_count;
-						event.item.favorite_count = tweet.favorite_count;
-						if (event.item.retweet_count > 0) {
-							event.item.rt_class = 'show';
-						} else {
-							delete event.item.rt_class
-						}
-						if (event.item.favorite_count > 0){
-							event.item.tweet_fav_class = 'show';
-						} else {
-							delete event.item.tweet_fav_class;
-						}
-						var tweetHtml = Mojo.View.render({
-							object: event.item,
-							template: 'templates/tweets/details'
-						});
-						var controller = getController();
-						var currentToasterIndex = toasterIndex - 1;
-						controller.get('details-' + currentToasterIndex).update(tweetHtml);
-					}.bind(this));
-				}
 				this.toasters.add(new TweetToaster(event.item, this, this.savedSearchesModel));
 			}
 		}
