@@ -109,6 +109,7 @@ var TweetToaster = Class.create(Toaster, {
 				//var th = new TweetHelper();
 				tweet = th.process(tweet);
 				this.tweet.retweet_count = tweet.retweet_count;
+				//Mojo.Log.error('1) this.tweet.retweet_count:tweet.retweet_count: ' + this.tweet.retweet_count + ' : ' + tweet.retweet_count);
 				this.tweet.favorite_count = tweet.favorite_count;
 				if (this.tweet.favorite_count > 0) {
 					this.tweet.tweet_fav_class = 'show';
@@ -298,7 +299,7 @@ var TweetToaster = Class.create(Toaster, {
 				if (this.tweet.retweet_count > 0) {
 					this.tweet.rt_class = 'show';
 				} else {
-					delete this.tweet.rt_class
+					delete this.tweet.rt_class;
 				}
 				if (this.tweet.favorite_count > 0){
 					this.tweet.tweet_fav_class = 'show';
@@ -313,7 +314,7 @@ var TweetToaster = Class.create(Toaster, {
 			}.bind(this));
 		}
 		else {
-			Twitter.favorite('unfavorite', this.tweet.id_str, function(response){
+			Twitter.favorite('unfavorite', this.tweet.id_str, function(response, meta){
 				this.tweet.favorited = false;
 				this.controller.get('favorite-' + this.toasterId).removeClassName('favorited');
 				//this.tweet.favSet = true;
@@ -322,13 +323,14 @@ var TweetToaster = Class.create(Toaster, {
 				var th = new TweetHelper();
 				tweet = th.process(tweet);
 				this.tweet.retweet_count = tweet.retweet_count;
+				//Mojo.Log.error('2) this.tweet.retweet_count:tweet.retweet_count: ' + this.tweet.retweet_count + ' : ' + tweet.retweet_count);
 				// Looks like .favorite_count isn't returned by Twitter when faving so at least remove our favourite even though the count may not be entirely accurate
 				// Could do a completely new call to get the status of a tweet, but that will mean 2 calls for every fav/unfav.  Hopefully Twitter will update to return favorite_count.
 				this.tweet.favorite_count--;// = tweet.favorite_count;
 				if (this.tweet.retweet_count > 0) {
 					this.tweet.rt_class = 'show';
 				} else {
-					delete this.tweet.rt_class
+					delete this.tweet.rt_class;
 				}
 				if (this.tweet.favorite_count > 0){
 					this.tweet.tweet_fav_class = 'show';

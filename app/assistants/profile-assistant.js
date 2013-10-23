@@ -123,6 +123,10 @@ ProfileAssistant.prototype = {
 			this.controller.get('account-shim').update(cardHtml);
 		}
 
+		if (Mojo.Environment.DeviceInfo.modelNameAscii == "Pre3"){ 
+			var img = this.user.profile_image_url.replace('_normal', '_bigger');
+			this.user.profile_image_url = img;
+		}
 		if(this.user.url){
 			if(this.user.entities.url.urls[0].expanded_url){
 				//this.user.url = this.user.entities.url.urls[0].expanded_url;
@@ -156,7 +160,7 @@ ProfileAssistant.prototype = {
 			if(this.user.entities.url.urls[0].expanded_url){
 				this.user.url = this.user.entities.url.urls[0].expanded_url;
 				this.user.expanded_url = this.user.entities.url.urls[0].expanded_url;
-				Mojo.Log.error('user.url, user.expanded_url: ' + this.user.url + ' : ' + this.user.expanded_url);
+				//Mojo.Log.error('user.url, user.expanded_url: ' + this.user.url + ' : ' + this.user.expanded_url);
 			}
 		}
 

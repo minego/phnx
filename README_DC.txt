@@ -147,3 +147,4 @@ Modified preferences-assistant.js, local.js, tweet.js and toggle.html to allow f
 Modified main-assistant.js so that owning user of panel is used for updating fav/retweets when tapping a tweet.
 Updated tweet.js and main-assistant.js to clean up refreshing of retweets/favs and to re-instate showing retweeters when clicking the retweet count button.
 Modified main-assistant.js to show 'Release to refresh & flush' when pull to refresh has hit the required count.
+Updated profile-assistant.js so that hi-res avatar is used on a Pre3 for profile pic
