@@ -716,7 +716,12 @@ ProfileAssistant.prototype = {
 	activate: function(event) {
 	},
 	avatarTapped: function(event) {
-		var img = this.user.profile_image_url.replace('_normal', '');
+		var img;
+		if (Mojo.Environment.DeviceInfo.modelNameAscii == "Pre3"){
+			img = this.user.profile_image_url.replace('_bigger', '');
+		} else {
+			img = this.user.profile_image_url.replace('_normal', '');
+		}
 		this.controller.stageController.pushScene('pictureView', img);
 	},
 	followingTapped: function(event) {
