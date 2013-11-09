@@ -149,3 +149,5 @@ Updated tweet.js and main-assistant.js to clean up refreshing of retweets/favs a
 Modified main-assistant.js to show 'Release to refresh & flush' when pull to refresh has hit the required count.
 Updated profile-assistant.js so that hi-res avatar is used on a Pre3 for profile pic
 Fixed comments in css files to be /* */ pairs instead of //
+Updated finishAuth-scene.html to hopefully show avatars of those involved in the project.  Had been api V1 calls.
+Modified finishAuth-assistant.js so that contributors are followed if tapped.

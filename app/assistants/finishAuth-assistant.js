@@ -20,6 +20,41 @@ FinishAuthAssistant.prototype = {
 		else{
 			this.controller.document.getElementsByTagName("body")[0].addClassName('default');
 		}
+		
+		//var Twitter = new TwitterAPI(this.controller.stageController.user);
+		/*Twitter.getUser("baldric555", function(r){
+			var tmp_img = r.responseJSON.profile_image_url.replace('_normal', '_bigger');
+			Mojo.Log.error('baldric555 img: ' + tmp_img);
+		}.bind(this));
+		Twitter.getUser("projectmacaw", function(r){
+			var tmp_img = r.responseJSON.profile_image_url.replace('_normal', '_bigger');
+			Mojo.Log.error('projectmacaw img: ' + tmp_img);
+		}.bind(this));
+		Twitter.getUser("_minego", function(r){
+			var tmp_img = r.responseJSON.profile_image_url.replace('_normal', '_bigger');
+			Mojo.Log.error('_minego img: ' + tmp_img);
+		}.bind(this));
+		Twitter.getUser("dkirker", function(r){
+			var tmp_img = r.responseJSON.profile_image_url.replace('_normal', '_bigger');
+			Mojo.Log.error('dkirker img: ' + tmp_img);
+		}.bind(this));
+		Twitter.getUser("phnxapp", function(r){
+			var tmp_img = r.responseJSON.profile_image_url.replace('_normal', '_bigger');
+			Mojo.Log.error('phnxapp img: ' + tmp_img);
+		}.bind(this));
+		Twitter.getUser("rmxdave", function(r){
+			var tmp_img = r.responseJSON.profile_image_url.replace('_normal', '_bigger');
+			Mojo.Log.error('rmxdave img: ' + tmp_img);
+		}.bind(this));
+		Twitter.getUser("awesomeapps_", function(r){
+			var tmp_img = r.responseJSON.profile_image_url.replace('_normal', '_bigger');
+			Mojo.Log.error('awesomeapps_ img: ' + tmp_img);
+		}.bind(this));
+		Twitter.getUser("penduin", function(r){
+			var tmp_img = r.responseJSON.profile_image_url.replace('_normal', '_bigger');
+			Mojo.Log.error('penduin img: ' + tmp_img);
+		}.bind(this));		
+		*/
 		this.loadSuggestedUsers();
 		this.listen();
 		var tokens = this.response.strip().split('&');
@@ -109,10 +144,18 @@ FinishAuthAssistant.prototype = {
 		this.controller.listen('next-button', Mojo.Event.tap, this.nextTapped.bind(this));
 		this.controller.listen('rmxdave', Mojo.Event.tap, this.followTapped.bind(this));
 		this.controller.listen('ProjectMacaw', Mojo.Event.tap, this.followTapped.bind(this));
+		this.controller.listen('_minego', Mojo.Event.tap, this.followTapped.bind(this));
+		this.controller.listen('baldric555', Mojo.Event.tap, this.followTapped.bind(this));
+		this.controller.listen('dkirker', Mojo.Event.tap, this.followTapped.bind(this));
+		this.controller.listen('penduin', Mojo.Event.tap, this.followTapped.bind(this));							
 	},
 	cleanup: function(event) {
 		this.controller.stopListening('next-button', Mojo.Event.tap, this.nextTapped);
 		this.controller.stopListening('rmxdave', Mojo.Event.tap, this.followTapped);
 		this.controller.stopListening('ProjectMacaw', Mojo.Event.tap, this.followTapped);
+		this.controller.stopListening('_minego', Mojo.Event.tap, this.followTapped);
+		this.controller.stopListening('baldric555', Mojo.Event.tap, this.followTapped);
+		this.controller.stopListening('dkirker', Mojo.Event.tap, this.followTapped);
+		this.controller.stopListening('penduin', Mojo.Event.tap, this.followTapped);					
 	}
 };
