@@ -686,6 +686,14 @@ body.no-gesture {  /* touchpad/emulator */
 		width: 279px;
 	}
 
+	.large-device.showAvatar .details .content-wrapper {
+		width: 684px;
+	}
+
+	.large-device.showAvatar .convo .content-wrapper {
+		width: 684px;
+	}
+	
 	.large-device .search-content-wrapper {
 		width: 748px;
 	}
@@ -701,7 +709,6 @@ body.no-gesture {  /* touchpad/emulator */
 	.large-device.showAvatar .profileScroller .search-content-wrapper {
 		width: 279px;
 	}
-
 }
 
 .inline-thumb{
@@ -1525,7 +1532,7 @@ span.link{
 .toaster {
 	display: block;
 	position: fixed;
-	bottom: -500px;
+	bottom: -600px;
 	left: 0px;
 	width: 100%;
 	-webkit-transition: bottom .5s;

@@ -1,7 +1,10 @@
 var ChangelogToaster = Class.create(Toaster, {
 	items: [
 		{ version: '1.4.7' },
-		{ item: 'Pref option to Mobilize web links launched in system browser.  Also added pop-up to mobilize link.'},
+		{ item: 'TP in portrait mode displays conversations and changelog full width'},
+		{ item: 'Details toaster completely hides on TP in portrait mode and tweet text fills width'},
+		{ item: 'Avatars updated for contributors on final authorization panel and allows for following of contributors on tap'},
+		{ item: 'Pref option to Mobilize web links launched in system browser.  Also added pop-up to mobilize link'},
 		{ item: 'Advanced pref option to allow for a Refresh&Flush after specified number of pull-to-refreshes per panel'},
 		{ item: 'Retweet and Favourite counts are updated before displaying Details toaster'},
 		{ item: 'Multi-part tweets are now flagged as replies to the previous part of the long tweet when viewing a conversation'},

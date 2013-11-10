@@ -151,3 +151,5 @@ Updated profile-assistant.js so that hi-res avatar is used on a Pre3 for profile
 Fixed comments in css files to be /* */ pairs instead of //
 Updated finishAuth-scene.html to hopefully show avatars of those involved in the project.  Had been api V1 calls.
 Modified finishAuth-assistant.js so that contributors are followed if tapped.
+Modified phnx.css to fix TP profile details toaster issues (didnt always clear bottom of screen when hiding and tweet didnt fit full width)
+Modified phnx.css to fix TP profile convo list to display full width
