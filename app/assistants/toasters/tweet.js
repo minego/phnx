@@ -1155,7 +1155,8 @@ transport.responseText);
 		} else if (url.indexOf('https://twitter.com/#!/' + this.twitterUsername + '/status/' + this.twitterId) > -1) {
 			this.assistant.toasters.add(new TweetToaster(url, this.assistant));
 			Mojo.Log.error("TweetToaster for https:// called");
-		}	else if(url.indexOf('https://vines.s3.amazonaws.com/v/') > -1) {
+		}	//else if(url.indexOf('https://vines.s3.amazonaws.com/v/') > -1) {
+			else if(url.indexOf('vine.co/') > -1) {
 			this.controller.serviceRequest("palm://com.palm.applicationManager", {
 				method: "launch",
 				parameters: {

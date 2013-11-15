@@ -1,5 +1,7 @@
 var ChangelogToaster = Class.create(Toaster, {
 	items: [
+		{ version: '1.4.8' },
+		{ item: 'Fixed vine links'},
 		{ version: '1.4.7' },
 		{ item: 'TP in portrait mode displays conversations and changelog full width'},
 		{ item: 'Details toaster completely hides on TP in portrait mode and tweet text fills width'},

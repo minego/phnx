@@ -237,6 +237,9 @@ TweetHelper.prototype = {
 				if(index === 0) {
 					tweet.myStillLink = String((myVideo[0].getAttribute("poster")).match(/.*.jpg/));
 					tweet.myVideoLink = String((mySource[0].getAttribute("src")).match(/.*.mp4/));
+					if(tweet.myVideoLink.indexOf('http') == -1) {
+						tweet.myVideoLink = 'https:' + tweet.myVideoLink;
+					}
 					tweet.thumbnail = tweet.myStillLink;
 					tweet.mediaUrl = tweet.myVideoLink;
 					Mojo.Log.info('vine thumb: ' + tweet.myStillLink);
@@ -244,6 +247,9 @@ TweetHelper.prototype = {
 				} else {
 					tweet.myStillLink2 = String((myVideo[0].getAttribute("poster")).match(/.*.jpg/));
 					tweet.myVideoLink2 = String((mySource[0].getAttribute("src")).match(/.*.mp4/));
+					if(tweet.myVideoLink2.indexOf('http') == -1) {
+						tweet.myVideoLink2 = 'https:' + tweet.myVideoLink2;
+					}
 					tweet.thumbnail2 = tweet.myStillLink2;
 					tweet.mediaUrl2 = tweet.myVideoLink2;
 					Mojo.Log.info('vine thumb2: ' + tweet.myStillLink2);

@@ -153,3 +153,4 @@ Updated finishAuth-scene.html to hopefully show avatars of those involved in the
 Modified finishAuth-assistant.js so that contributors are followed if tapped.
 Modified phnx.css to fix TP profile details toaster issues (didnt always clear bottom of screen when hiding and tweet didnt fit full width)
 Modified phnx.css to fix TP profile convo list to display full width
+Modified both tweet.js to handle changed links to vines
