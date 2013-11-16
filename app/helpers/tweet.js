@@ -233,7 +233,6 @@ TweetHelper.prototype = {
 				myNode.innerHTML = response.responseText;
 				var myVideo = myNode.getElementsByTagName("video");
 				var mySource = myNode.getElementsByTagName("source");
-
 				if(index === 0) {
 					tweet.myStillLink = String((myVideo[0].getAttribute("poster")).match(/.*.jpg/));
 					tweet.myVideoLink = String((mySource[0].getAttribute("src")).match(/.*.mp4/));

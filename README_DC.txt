@@ -154,3 +154,5 @@ Modified finishAuth-assistant.js so that contributors are followed if tapped.
 Modified phnx.css to fix TP profile details toaster issues (didnt always clear bottom of screen when hiding and tweet didnt fit full width)
 Modified phnx.css to fix TP profile convo list to display full width
 Modified both tweet.js to handle changed links to vines
+Modified main-assistant.js to respect max load count of list timeline if its a panel
+Modified main-assistant.js to allow for listStatuses to be on panels > 6 on phones (previously would never refresh due to bug with beacons). Also allows marker to work again.

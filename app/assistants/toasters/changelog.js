@@ -1,5 +1,7 @@
 var ChangelogToaster = Class.create(Toaster, {
 	items: [
+		{ version: '1.4.9' },
+		{ item: 'User lists now work on panels after the 6th panel on phones and marker works after scrolling to those panels'},
 		{ version: '1.4.8' },
 		{ item: 'Fixed vine links'},
 		{ version: '1.4.7' },

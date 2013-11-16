@@ -838,8 +838,10 @@ MainAssistant.prototype = {
 
 		//hide the beacon and new content indicator on the old panel
 		var oldPanel = this.panels[this.timeline];
-		if (oldPanel && oldPanel.refresh) {
-			this.controller.get('beacon-' + oldPanel.index).removeClassName('show');
+		if (oldPanel.index < 6 || this.largedevice) {
+			if (oldPanel && oldPanel.refresh) {
+				this.controller.get('beacon-' + oldPanel.index).removeClassName('show');
+			}
 		}
 
 		// Need to change index for timeline below if changing order of panels - DC
@@ -1149,6 +1151,7 @@ MainAssistant.prototype = {
 		var homeMaxResults = prefs.read('homeMaxResults');
 		var mentionsMaxResults = prefs.read('mentionsMaxResults');
 		var favMaxResults = prefs.read('favMaxResults');
+		var listMaxResults = prefs.read('listMaxResults');
 		var args	= {
 			//'count':			this.count,
 			//'count':			homeMaxResults,
@@ -1165,6 +1168,9 @@ MainAssistant.prototype = {
 			case 'userFavorites':
 				args.count = favMaxResults;
 				break;
+			case 'listStatuses':
+				args.count = listMaxResults;
+				break;				
 			default:
 				args.count = 200;
 				break;
@@ -1243,12 +1249,14 @@ MainAssistant.prototype = {
 			}
 		}
 
-		if (tweets.length > 1) {
-			if (!this.loadingMore) {
-				this.controller.get('beacon-' + panel.index).addClassName('show');
+		if (panel.index < 6 || this.largedevice) {
+			if (tweets.length > 1) {
+				if (!this.loadingMore) {
+					this.controller.get('beacon-' + panel.index).addClassName('show');
+				}
+			} else {
+				this.controller.get('beacon-' + panel.index).removeClassName('show');
 			}
-		} else {
-			this.controller.get('beacon-' + panel.index).removeClassName('show');
 		}
 
 		var scrollId = 0; // this is the INDEX (not ID, sorry) of the new tweet to scroll to
@@ -1417,9 +1425,13 @@ MainAssistant.prototype = {
 							model.items[k-1].cssClass = 'new-tweet';
 							model.myLastId = undefined;
 
-							this.controller.get('beacon-' + panel.index).addClassName('show');
+							if (panel.index < 6 || this.largedevice) {
+								this.controller.get('beacon-' + panel.index).addClassName('show');
+							}
 						} else {
-							this.controller.get('beacon-' + panel.index).removeClassName('show');
+							if (panel.index < 6 || this.largedevice) {
+								this.controller.get('beacon-' + panel.index).removeClassName('show');
+							}
 						}
 						scrollId = k; // set the index of the new tweet to auto-scroll to
 						panel.scrollId = scrollId;
@@ -1786,7 +1798,6 @@ MainAssistant.prototype = {
 				items: response.responseJSON,
 				user: this.user
 			};
-
 			this.controller.stageController.pushScene('status', opts);
 		}.bind(this));
 	},
