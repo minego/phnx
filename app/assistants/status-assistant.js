@@ -152,9 +152,10 @@ StatusAssistant.prototype = {
 		var type = this.opts.type;
 		var prefs = new LocalStorage();
 		var processVine = prefs.read('showVine');
+		var mutedUsers = prefs.read('mutedUsers');
         
 		for (var i=0; i < items.length; i++) {
-			items[i] = th.process(items[i],this.itemsModel,this.controller,processVine);
+			items[i] = th.process(items[i],this.itemsModel,this.controller,processVine,mutedUsers);
 		}
 		
 		var templates = {
@@ -241,14 +242,15 @@ StatusAssistant.prototype = {
 		}
 		var prefs = new LocalStorage();
 		var processVine = prefs.read('showVine');
+		var mutedUsers = prefs.read('mutedUsers');
 
 		for (i=0; i < this.itemsModel.items.length; i++) {
 			var tweet = this.itemsModel.items[i];
 			if (type === 'search') {
-				tweet = th.processSearch(tweet,this.itemsModel,this.controller,processVine);
+				tweet = th.processSearch(tweet,this.itemsModel,this.controller,processVine,mutedUsers);
 			}
 			else if (type === 'list'  || type === 'retweets') {
-				tweet = th.process(tweet,this.itemsModel,this.controller,processVine);
+				tweet = th.process(tweet,this.itemsModel,this.controller,processVine,mutedUsers);
 			}
 
 			if (tweet.id_str !== newId) {
@@ -268,10 +270,11 @@ StatusAssistant.prototype = {
 				var tmpMediaUrl2 = event.item.mediaUrl2;
 				var prefs = new LocalStorage();
 				var processVine = prefs.read('showVine');
+				var mutedUsers = prefs.read('mutedUsers');
 				var Twitter = new TwitterAPI(this.opts.user, this.controller.stageController);
 				Twitter.getStatus(event.item.id_str, function(response){
 					var th = new TweetHelper();
-					var tweet = th.process(response.responseJSON,null,null,processVine);
+					var tweet = th.process(response.responseJSON,null,null,processVine,mutedUsers);
 					tweet.thumbnail = tmpThumb;
 					tweet.mediaUrl = tmpMediaUrl;
 					tweet.thumbnail2 = tmpThumb2;
@@ -436,9 +439,10 @@ StatusAssistant.prototype = {
 
 		var prefs = new LocalStorage();
 		var processVine = prefs.read('showVine');
+		var mutedUsers = prefs.read('mutedUsers');
 
 		for (i=0; i < model.items.length; i++) {
-			model.items[i] = th.process(model.items[i],model,this.controller,processVine);
+			model.items[i] = th.process(model.items[i],model,this.controller,processVine,mutedUsers);
 		}
 
 		this.controller.modelChanged(model);
@@ -480,6 +484,7 @@ StatusAssistant.prototype = {
 		global.setShowThumbs(body,	prefs.read('showThumbs'));
 		global.setFullWidthThumbs(body, prefs.read('fullWidthThumbs'));
 		global.setShowEmoji(body,	prefs.read('showEmoji'));
+		global.setMuteSelectedUsers(body, prefs.read('muteSelectedUsers'));
 		global.setAbsTimeStamp(body, prefs.read('absoluteTimeStamps'));
 		global.setFadeShim(body, prefs.read('fadeShim'));
 		global.setFontSize(body,	prefs.read('fontSize'));

@@ -1,7 +1,7 @@
 var TweetHelper = function() {};
 
 TweetHelper.prototype = {
-	process: function(tweet,model,controller,processVine) {
+	process: function(tweet,model,controller,processVine,mutedUsers) {
 		// takes a tweet and does all sorts of stuff to it
 
 		// Save the created_at property for all tweets
@@ -17,9 +17,29 @@ TweetHelper.prototype = {
 				tweet.is_rt = true;
 				tweet.rt_class = 'show';
 				tweet.footer = "<br />Retweeted by " + retweeter.screen_name;
+				if(mutedUsers){
+					for (var m = 0, mutedUser; mutedUser = mutedUsers[m]; m++) {
+						if (retweeter.screen_name.indexOf(mutedUser.user) > -1) {
+							tweet.hideTweet_class = 'hide';
+							break;
+						} else {
+							delete tweet.hideTweet_class;
+						}
+					}
+				}
 			}
 			else{
 				tweet.is_rt = false;
+				if(mutedUsers){
+					for (var m = 0, mutedUser; mutedUser = mutedUsers[m]; m++) {
+						if (tweet.user.screen_name.indexOf(mutedUser.user) > -1) {
+							tweet.hideTweet_class = 'hide';
+							break;
+						} else {
+							delete tweet.hideTweet_class;
+						}
+					}
+				}
 			}
 			if (tweet.favorite_count > 0){
 				tweet.tweet_fav_class = 'show';
@@ -212,7 +232,7 @@ TweetHelper.prototype = {
 		if(tweet.text.indexOf('<img class="emoji" src=') > -1){
 			tweet.emoji_class = 'show';
 		}
-		
+
 		//Mojo.Log.info(tweet.emojify);
 
 		return tweet;
@@ -280,7 +300,7 @@ TweetHelper.prototype = {
 
 		return(null);
 	},
-	processSearch: function(tweet,model,controller,processVine) {
+	processSearch: function(tweet,model,controller,processVine,mutedUsers) {
 		// search tweets are stupid and in a different format from the rest.
 		if(tweet.source.indexOf('&lt') > -1) {
 			tweet.source = tweet.source.unescapeHTML(); // search returns escaped HTML for some reason
@@ -289,6 +309,17 @@ TweetHelper.prototype = {
 		tweet.source = tweet.source.replace(/&quot;/g, '"');
 		tweet.source = tweet.source.replace('href="', 'href="#');
 		tweet.via = "via";
+
+		if(mutedUsers){
+			for (var m = 0, mutedUser; mutedUser = mutedUsers[m]; m++) {
+				if (tweet.user.screen_name.indexOf(mutedUser.user) > -1) {
+					tweet.hideTweet_class = 'hide';
+					break;
+				} else {
+					delete tweet.hideTweet_class;
+				}
+			}
+		}
 
 		// Expand some shortened links automatically via the entities payload
 		// thumbnail passing added by DC

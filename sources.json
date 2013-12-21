@@ -17,6 +17,7 @@
     {"source": "app/assistants/toasters/tweet.js"},
     {"source": "app/assistants/toasters/convo.js"},
     {"source": "app/assistants/toasters/filters.js"},
+    {"source": "app/assistants/toasters/mutedusers.js"},
     {"source": "app/assistants/toasters/managetabs.js"},
     {"source": "app/assistants/toasters/changelog.js"},
     {"source": "app/assistants/toasters/profile.js"},

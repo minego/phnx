@@ -9,7 +9,7 @@ ProfileAssistant.prototype = {
 	setup: function() {
 		this.controller.setupWidget(Mojo.Menu.appMenu, {omitDefaultItems: true}, {visible: true, items: global.menuItems});
 		this.menuItems = [];
-
+	
 		this.account = this.controller.stageController.user;
 		if (this.user.id_str === this.account.id) {
 			// Testing code for profile image upload - not ready - DC
@@ -18,6 +18,9 @@ ProfileAssistant.prototype = {
 			//	command: 'cmdUpdateProfileImage'
 			//});
 		} else {
+			var prefs = new LocalStorage();
+			var mutedUsers = prefs.read('mutedUsers');
+
 			if (this.user.following) {
 				this.menuItems.push({
 					label: 'Unfollow',
@@ -29,7 +32,19 @@ ProfileAssistant.prototype = {
 					command: 'cmdFollow'
 				});
 			}	
-
+			//if (!mutedUsers || (-1 == mutedUsers.indexOf(this.user.screen_name))) {
+			this.menuItems.push({
+				label: 'Mute User',
+				command: 'cmdMuteUser'
+			});
+			if(mutedUsers){
+				for (var m = 0, mutedUser; mutedUser = mutedUsers[m]; m++) {
+					if (this.user.screen_name.indexOf(mutedUser.user) > -1) {
+						this.menuItems[1] = {label: 'Unmute User', command: 'cmdUnmuteUser'};
+						break;
+					}
+				}
+			}
 			this.menuItems.push({
 				label: 'Public Mention',
 				command: 'cmdMention'
@@ -100,6 +115,7 @@ ProfileAssistant.prototype = {
 			global.setShowThumbs(body,	prefs.read('showThumbs'));
 			global.setFullWidthThumbs(body, prefs.read('fullWidthThumbs'));
 			global.setShowEmoji(body,	prefs.read('showEmoji'));
+			global.setMuteSelectedUsers(body, prefs.read('muteSelectedUsers'));
 			global.setAbsTimeStamp(body, prefs.read('absoluteTimeStamps'));
 			global.setFadeShim(body, prefs.read('fadeShim'));
 						
@@ -268,7 +284,7 @@ ProfileAssistant.prototype = {
 				this.controller.get('follows-verb').update('follows');
 			} else {
 				this.controller.get('follows-verb').update('does not follow');
-				this.menuItems[2].disabled = true;
+				this.menuItems[3].disabled = true;
 			}
 		}.bind(this));
 	},
@@ -347,16 +363,18 @@ ProfileAssistant.prototype = {
 			var th = new TweetHelper();
 			var prefs = new LocalStorage();
 			var processVine = prefs.read('showVine');
+			var mutedUsers = prefs.read('mutedUsers');
+
 			if (this.historyModel.items.length === 0) {
 				var tweet;
 				for (var i=0; i < response.responseJSON.length; i++) {
-					tweet = th.process(response.responseJSON[i],this.historyModel,this.controller,processVine);
+					tweet = th.process(response.responseJSON[i],this.historyModel,this.controller,processVine,mutedUsers);
 					this.historyModel.items[i] = tweet;
 				}
 			}	else {
 				var tweet;
 				for (var i = response.responseJSON.length - 1; i >= 0; i--){
-					tweet = th.process(response.responseJSON[i],this.historyModel,this.controller,processVine);
+					tweet = th.process(response.responseJSON[i],this.historyModel,this.controller,processVine,mutedUsers);
 					this.historyModel.items.splice(0, 0, tweet);
 				}
 			}
@@ -384,9 +402,10 @@ ProfileAssistant.prototype = {
 			var th = new TweetHelper();
 			var prefs = new LocalStorage();
 			var processVine = prefs.read('showVine');
+			var mutedUsers = prefs.read('mutedUsers');
 
 			for (var i=0; i < items.length; i++) {
-				items[i] = th.process(items[i],this.mentionsModel,this.controller,processVine);
+				items[i] = th.process(items[i],this.mentionsModel,this.controller,processVine,mutedUsers);
 				if(items[i].is_rt === true){
 					items.splice(i,1);
 					i--;
@@ -424,16 +443,18 @@ ProfileAssistant.prototype = {
 			var th = new TweetHelper();
 			var prefs = new LocalStorage();
 			var processVine = prefs.read('showVine');
+			var mutedUsers = prefs.read('mutedUsers');
+
 			if (this.favoritesModel.items.length === 0) {
 				var tweet;
 				for (var i=0; i < response.responseJSON.length; i++) {
-					tweet = th.process(response.responseJSON[i],this.favoritesModel,this.controller,processVine);
+					tweet = th.process(response.responseJSON[i],this.favoritesModel,this.controller,processVine,mutedUsers);
 					this.favoritesModel.items[i] = tweet;
 				}
 			} else {
 				var tweet;
 				for (var i = response.responseJSON.length - 1; i >= 0; i--){
-					tweet = th.process(response.responseJSON[i],this.favoritesModel,this.controller,processVine);
+					tweet = th.process(response.responseJSON[i],this.favoritesModel,this.controller,processVine,mutedUsers);
 					this.favoritesModel.items.splice(0, 0, tweet);
 				}
 			}
@@ -580,6 +601,12 @@ ProfileAssistant.prototype = {
 			case 'cmdUnfollow':
 				this.unfollow();
 				break;
+			case 'cmdMuteUser':
+				this.muteUser();
+				break;
+			case 'cmdUnmuteUser':
+				this.unmuteUser();
+				break;
 			case 'cmdMention':
 				this.mention();
 				break;
@@ -633,6 +660,41 @@ ProfileAssistant.prototype = {
 		};
 
 		this.toasters.add(new ConfirmToaster(opts, this));
+	},
+	muteUser: function() {
+		var prefs	= new LocalStorage();
+		var mutedUsers = prefs.read('mutedUsers');
+		var items	= [];
+		
+		if(mutedUsers){
+			for (var i = 0, m; m = mutedUsers[i]; i++) {
+				//items.push({ text: m });
+				//items.push({user: m});
+				items.push(m);
+			}
+		}
+		//items.push({text: this.user.screen_name});
+		items.push({user: this.user.screen_name});
+		prefs.write('mutedUsers',items);
+		banner('Muting @' + this.user.screen_name);
+		this.menuItems[1] = {label: 'Unmute User', command: 'cmdUnmuteUser'};
+	},
+	unmuteUser: function() {
+		var prefs	= new LocalStorage();
+		var mutedUsers = prefs.read('mutedUsers');
+		var items	= [];
+		
+		if(mutedUsers){
+			for (var i = 0, m; m = mutedUsers[i]; i++) {
+				if(-1 == m.user.indexOf(this.user.screen_name)){
+					//items.push({ text: m });
+					items.push(m);
+				}
+			}
+		}
+		prefs.write('mutedUsers',items);
+		banner('Un-muting @' + this.user.screen_name);
+		this.menuItems[1] = {label: 'Mute User', command: 'cmdMuteUser'};
 	},
 	mention: function() {
 		var args = {

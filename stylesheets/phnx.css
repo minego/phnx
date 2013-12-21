@@ -523,6 +523,9 @@ body.no-gesture {  /* touchpad/emulator */
 	clear: both;
 	background: url(../images/low/tweet-border.png) center bottom repeat-x;
 }
+.muteUsers .status-row.hide {
+	display: none;
+}
 .hideTweetBorder .status-row, .user-row{
 	background: url() center bottom repeat-x;
 }

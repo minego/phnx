@@ -33,8 +33,6 @@ var TweetToaster = Class.create(Toaster, {
 			this.tweet.rt_class = 'hide';
 		}
 
-		var favStatusChanged = false; //added by DC
-
 		var th					= new TweetHelper();
 		var Twitter				= new TwitterAPI(this.user);
 
@@ -310,7 +308,23 @@ var TweetToaster = Class.create(Toaster, {
 					object: this.tweet,
 					template: 'templates/tweets/details'
 				});
-				this.controller.get('details-' + this.toasterId).update(tweetHtml);				
+				this.controller.get('details-' + this.toasterId).update(tweetHtml);
+				for (var i=0; i < this.assistant.panels.length; i++) {
+					var panel = this.assistant.panels[i];
+
+					if (panel.type === 'timeline') {
+						for (var j=0; j < panel.model.items.length; j++) {
+							var item = panel.model.items[j];
+							if (item.id_str === this.tweet.id_str) {
+								item.favorited = this.tweet.favorited;
+								item.fav_class = this.tweet.fav_class;
+								item.favSet = this.tweet.favSet;
+								this.controller.modelChanged(panel.model);
+								break;
+							}
+						}
+					}
+				}
 			}.bind(this));
 		}
 		else {
@@ -342,10 +356,24 @@ var TweetToaster = Class.create(Toaster, {
 					template: 'templates/tweets/details'
 				});
 				this.controller.get('details-' + this.toasterId).update(tweetHtml);								
+				for (var i=0; i < this.assistant.panels.length; i++) {
+					var panel = this.assistant.panels[i];
+
+					if (panel.type === 'timeline') {
+						for (var j=0; j < panel.model.items.length; j++) {
+							var item = panel.model.items[j];
+							if (item.id_str === this.tweet.id_str) {
+								item.favorited = this.tweet.favorited;
+								item.fav_class = this.tweet.fav_class;
+								item.favSet = this.tweet.favSet;
+								this.controller.modelChanged(panel.model);
+								break;
+							}
+						}
+					}
+				}
 			}.bind(this));
 		}
-		this.favStatusChanged = true;
-		this.assistant.favStatusChanged = true;
 	},
 	hideTweet: function() {
 		for (var i=0; i < this.assistant.panels.length; i++) {
@@ -428,13 +456,6 @@ var TweetToaster = Class.create(Toaster, {
 	//refreshBack fun added by DC
 	refreshBack: function() {
 		var refresh = (new LocalStorage()).read('refreshOnSubmit');
-
-		if(this.favStatusChanged) {
-			if (refresh) {
-				this.assistant.refresh();
-			}
-			this.favStatusChanged = false;
-		}
 
 		this.assistant.toasters.back();
 	},

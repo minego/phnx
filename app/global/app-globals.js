@@ -270,6 +270,13 @@ var global = {
 			Element.addClassName(body, 'detailsEmoji');
 		}
 	},
+	setMuteSelectedUsers: function(body, muteSelectedUsers) {
+		if(muteSelectedUsers){
+			Element.addClassName(body, 'muteUsers');
+		} else {
+			Element.removeClassName(body, 'muteUsers');
+		}
+	},
 	setAbsTimeStamp: function(body, absoluteTimeStamps) {
 		if(absoluteTimeStamps){
 			Element.addClassName(body, 'absTimeStamps');

@@ -97,6 +97,7 @@ function PreferencesAssistant(section) {
 				{label: 'Details Only', value: 'detailsEmoji'},
 				{label: 'Always Show', value: 'showEmoji'}
 			]},
+			{key: 'muteSelectedUsers', type: 'toggle', label: 'Mute Selected Users'},
 			{key: 'absoluteTimeStamps', type: 'toggle', label: 'Absolute TimeStamps'},
 			{key: 'hideAvatar',		type: 'toggle', label: 'Hide Avatars'},
 			{key: 'hideUsername',	type: 'toggle', label: 'Hide Name'},
@@ -447,6 +448,7 @@ PreferencesAssistant.prototype = {
 		global.setShowThumbs(body,	prefs.read('showThumbs'));
 		global.setFullWidthThumbs(body, prefs.read('fullWidthThumbs'));
 		global.setShowEmoji(body,	prefs.read('showEmoji'));
+		global.setMuteSelectedUsers(body, prefs.read('muteSelectedUsers'));
 		global.setAbsTimeStamp(body, prefs.read('absoluteTimeStamps'));
 		global.setFadeShim(body, prefs.read('fadeShim'));
 		global.setFontSize(body,	prefs.read('fontSize'));

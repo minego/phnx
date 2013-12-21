@@ -8,7 +8,6 @@ function MainAssistant(opts) {
 
 	this.loadingMore = false; //flag to determine if items should go to the bottom of a list
 	this.imagePreview = false;
-	this.favStatusChanged = false; // added by DC
 	this.loadingGaps = false;
 	this.loading = false;
 
@@ -57,6 +56,7 @@ MainAssistant.prototype = {
 		this.user	= this.controller.stageController.user;
 		this.users	= this.controller.stageController.users || [ this.user ];
 		var prefs	= new LocalStorage();
+		var mutedUsers = prefs.read('mutedUsers');
 		var tmp;
 
 		// These nouns are used in the "X New {Noun}" message
@@ -221,6 +221,25 @@ MainAssistant.prototype = {
 					tweet.time_str = d.toRelativeTime(1500);
 				}
 
+				/* Update mutedUser status */
+				for (var x = 0, tweet; tweet = panel.model.items[x]; x++) {
+					if(mutedUsers && mutedUsers.length > 0){
+						for (var m = 0, mutedUser; mutedUser = mutedUsers[m]; m++) {
+							if (tweet.user.screen_name.indexOf(mutedUser.user) > -1) {
+								tweet.hideTweet_class = 'hide';
+								break;
+							} else if (tweet.retweeter && (tweet.retweeter.screen_name.indexOf(mutedUser.user) > -1)) {
+								tweet.hideTweet_class = 'hide';
+								break;								
+							} else {
+								delete tweet.hideTweet_class;
+							}
+						}
+					} else {
+						delete tweet.hideTweet_class;
+					}
+				}
+
 				panel.tab = tab;
 
 				if (!panel.title) {
@@ -358,7 +377,11 @@ MainAssistant.prototype = {
 					{
 						label: 'Manage Filters',
 						command: 'cmdManageFilters'
-					}
+					},
+					{
+						label: 'Manage Muted Users',
+						command: 'cmdManageMutedUsers'
+					}					
 				]
 			},
 			{
@@ -605,13 +628,6 @@ MainAssistant.prototype = {
 			if (this.toasters.items.length > 0) {
 				if (this.imagePreview) {
 					this.toasters.items[this.toasters.items.length - 1].closePreview();
-				} else if (this.favStatusChanged) {
-					if (refresh) {
-						this.refresh();
-					}
-					this.favStatusChanged = false;
-
-					this.toasters.back();
 				} else {
 					this.toasters.back();
 				}
@@ -675,6 +691,8 @@ MainAssistant.prototype = {
 				this.toasters.add(new ManageTabsToaster(this));
 			} else if (event.command === 'cmdManageFilters') {
 				this.toasters.add(new ManageFiltersToaster(this));
+			} else if (event.command === 'cmdManageMutedUsers') {
+				this.toasters.add(new ManageMutedUsersToaster(this));
 			} else if (event.command === 'cmdChangelog') {
 				this.toasters.add(new ChangelogToaster(this));
 			} else if (event.command === 'cmdRemoveAccount') {
@@ -1236,6 +1254,7 @@ MainAssistant.prototype = {
 		var user		= this.getAccount(panel.tab.account);
 		var prefs = new LocalStorage();
 		var processVine = prefs.read('showVine');
+		var mutedUsers = prefs.read('mutedUsers');
 
 		//Mojo.Log.error('xCount: ' + xCount); //Twitter doesn't always return the number of tweets you are expecting, which is VERY annoying.
 		for (var i = 0, tweet; tweet = tweets[i]; i++) {
@@ -1243,9 +1262,10 @@ MainAssistant.prototype = {
 			tweet.owner = user.id;
 
 			if (tweet.dm || !th.filter(tweet, filters)) {
-				tweets[i] = th.process(tweet,panel.model,this.controller,processVine);
+				tweets[i] = th.process(tweet,panel.model,this.controller,processVine,mutedUsers);
 			} else {
 				tweets.splice(i, 1);
+				i--;
 			}
 		}
 
@@ -1455,6 +1475,21 @@ MainAssistant.prototype = {
 				var tweet = model.items[i];
 
 				tweet.time_str = this.timeSince(tweet.created_at);
+				if(mutedUsers && mutedUsers.length > 0){
+					for (var m = 0, mutedUser; mutedUser = mutedUsers[m]; m++) {
+						if (tweet.user.screen_name.indexOf(mutedUser.user) > -1) {
+							tweet.hideTweet_class = 'hide';
+							break;
+						} else if (tweet.retweeter && (tweet.retweeter.screen_name.indexOf(mutedUser.user) > -1)) {
+							tweet.hideTweet_class = 'hide';
+							break;
+						}	else {
+							delete tweet.hideTweet_class;
+						}
+					}
+				} else {
+					delete tweet.hideTweet_class;
+				}
 				if (tweet.in_reply_to_status_id_str !== null && tweet.in_reply_to_status_id_str) {
 					tweet.convo_class = 'show';
 				}
@@ -2005,6 +2040,7 @@ MainAssistant.prototype = {
 		global.setShowThumbs(body,	prefs.read('showThumbs'));
 		global.setFullWidthThumbs(body, prefs.read('fullWidthThumbs'));
 		global.setShowEmoji(body,	prefs.read('showEmoji'));
+		global.setMuteSelectedUsers(body, prefs.read('muteSelectedUsers'));
 		global.setAbsTimeStamp(body, prefs.read('absoluteTimeStamps'));
 		global.setFadeShim(body, prefs.read('fadeShim'));
 		global.setFontSize(body,	prefs.read('fontSize'));
