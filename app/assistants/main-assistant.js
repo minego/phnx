@@ -1255,7 +1255,7 @@ MainAssistant.prototype = {
 		var prefs = new LocalStorage();
 		var processVine = prefs.read('showVine');
 		var mutedUsers = prefs.read('mutedUsers');
-
+		var muteSelectedUsers = prefs.read('muteSelectedUsers');
 		//Mojo.Log.error('xCount: ' + xCount); //Twitter doesn't always return the number of tweets you are expecting, which is VERY annoying.
 		for (var i = 0, tweet; tweet = tweets[i]; i++) {
 			/* Store a reference to the account that loaded this tweet */
@@ -1378,6 +1378,13 @@ MainAssistant.prototype = {
 			//hasGap = false; // ignore gap detection in this release
 
 			var j;
+			var dividerTweet ={
+				index: 0,
+				mutedCount: 0,
+				tweetCount: 0,
+				noun: ''
+			};
+			
 			for (j = loopCount; j >= 0; j--) {
 				//doing a backwards (upwards?) loop to get the items in the right order
 
@@ -1395,8 +1402,13 @@ MainAssistant.prototype = {
 						msg += '<br /><span>Tap to load missing tweets</span>';
 						tweets[j].cssClass = 'are-gaps';
 					}
-
 					tweets[j].dividerMessage = msg;
+					dividerTweet.index = j;
+					dividerTweet.tweetCount = tweetCount;
+					dividerTweet.noun = this.nouns[panel.id];
+				}
+				if (tweets[j].hideTweet_class) {
+					dividerTweet.mutedCount++;
 				}
 				model.items.splice(0,0,tweets[j]);
 			}
@@ -1404,6 +1416,19 @@ MainAssistant.prototype = {
 			if(tweetCount !== 0){
 				scrollId = tweetCount; // set the index of the new tweet to auto-scroll to
 				panel.scrollId= scrollId;
+				if((dividerTweet.mutedCount > 0) && muteSelectedUsers === true) {
+					var msg = dividerTweet.tweetCount-dividerTweet.mutedCount + ' (+' + dividerTweet.mutedCount + ')' + ' New ' + (dividerTweet.noun || "Tweet");
+
+					if (dividerTweet.tweetCount > 1) {
+						msg += 's'; //pluralize
+					}
+
+					if (hasGap) {
+						msg += '<br /><span>Tap to load missing tweets</span>';
+						model.items[dividerTweet.index].cssClass = 'are-gaps';
+					}
+					model.items[dividerTweet.index].dividerMessage = msg;
+				}
 			}
 		} else {
 			// the timeline was empty so do a 1:1 mirror of the tweets response
@@ -1428,12 +1453,19 @@ MainAssistant.prototype = {
 			store.write(user.id + '_' + panel.id, tweets[0].id_str);
 		}
 
+		var dividerTweet ={
+			index: 0,
+			mutedCount: 0,
+			tweetCount: 0,
+			noun: ''
+		};
+
 		//Block added by DC - allows new tweet marker to work after refresh and flush
 		//if (panel.update) {
 		if (panel.refresh) {
 			if(model.myLastId) {
 				for(k=0; k < model.items.length; k++){
-					if(model.items[k].id_str === model.myLastId) {
+					if(model.items[k].id_str === model.myLastId) {						
 						if(k > 0) {
 							// TODO: Make this message tappable to load gaps
 							var msg = k + ' New ' + (this.nouns[panel.id] || "Tweet");
@@ -1448,6 +1480,9 @@ MainAssistant.prototype = {
 							if (panel.index < 6 || this.largedevice) {
 								this.controller.get('beacon-' + panel.index).addClassName('show');
 							}
+							dividerTweet.index = k-1;
+							dividerTweet.tweetCount = k;
+							dividerTweet.noun = this.nouns[panel.id];
 						} else {
 							if (panel.index < 6 || this.largedevice) {
 								this.controller.get('beacon-' + panel.index).removeClassName('show');
@@ -1456,6 +1491,9 @@ MainAssistant.prototype = {
 						scrollId = k; // set the index of the new tweet to auto-scroll to
 						panel.scrollId = scrollId;
 						break; //no need to keep on iterating if we've found our match
+					}
+					if (model.items[k].hideTweet_class) {
+						dividerTweet.mutedCount++;
 					}
 				}
 				model.myLastId = undefined;
@@ -1469,6 +1507,21 @@ MainAssistant.prototype = {
 				model.items = tweets.slice(0,scrollId+1);
 			}
 		}	//end block
+
+		if((dividerTweet.mutedCount > 0) && muteSelectedUsers === true) {
+			var msg = dividerTweet.tweetCount-dividerTweet.mutedCount + ' (+' + dividerTweet.mutedCount + ')' + ' New ' + (dividerTweet.noun || "Tweet");
+	
+			if (dividerTweet.tweetCount > 1) {
+				msg += 's'; //pluralize
+			}
+
+			if (hasGap) {
+				msg += '<br /><span>Tap to load missing tweets</span>';
+				model.items[dividerTweet.index].cssClass = 'are-gaps';
+			}
+			model.items[dividerTweet.index].dividerMessage = msg;
+		}
+
 
 		if (panel.update) {
 			for (i = 0; i < model.items.length; i++) {

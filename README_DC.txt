@@ -160,3 +160,5 @@ Modified main-assistant.js and tweet.js so fav's redraw timeline lists without r
 Modified main-assistant.js so that the tweet after a filtered tweet is processed properly.
 Modified phnx.css, preferences-assistant.js, profile-assistant.js, tweet.js, status-list.js, search.js, convo.js, status-assistant.js, main-assistant.js, item.html and item-one-column.html to support mutedUsers.
 Modified local.js, main-assistant.js, sources.json. Added mutedusers.js, mutedusers.html and muteduser-item.html.  Added menu option under Prefs to show toaster with currently muted users.  Allows for swipe to unmute.
+Modified muteduser-item.html to include the '@' symbol.
+Modified main-assistant.js to count number of muted tweets.
