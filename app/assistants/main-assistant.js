@@ -1315,6 +1315,13 @@ MainAssistant.prototype = {
 				}
 			}
 
+			var dividerTweet ={
+				index: 0,
+				mutedCount: 0,
+				tweetCount: 0,
+				noun: '',
+				hasGap: false
+			};
 			//Mojo.Log.error('xCount: ' + xCount);
 			if(xCount !== 0) {
 				//Mojo.Log.error('Splicing in ' + xCount + ' tweets at index ' + gapIndex);
@@ -1329,21 +1336,41 @@ MainAssistant.prototype = {
 
 				if(tweets[tweets.length - 1].id_str !== model.items[gapIndex].gapEnd){
 					msg += '<br /><span>Tap to load missing tweets</span>';
+					dividerTweet.hasGap = true;
 				}
 
 				tweets[tweets.length-1].dividerMessage = msg;
 				tweets[tweets.length-1].gapStart = tweets[tweets.length-1].id_str;
 				tweets[tweets.length-1].gapEnd = model.items[gapIndex].id_str;
+				dividerTweet.index = tweets.length-1;
+				dividerTweet.tweetCount = xCount-1;
+				dividerTweet.noun = this.nouns[panel.id];
 				//maybe clear out model.items[gapIndex].gapStart and .gapEnd here
 
 				for (var i = 1, tweet; tweet = tweets[i]; i++) {
 					model.items.splice((gapIndex-1) + i, 0, tweet);
+					if (tweet.hideTweet_class) {
+						dividerTweet.mutedCount++;
+					}
 				}
 
 				if(!panel.scrollId){
 					panel.scrollId = 0;
 				}	else {
 					panel.scrollId+=xCount-1;
+				}
+
+				if((dividerTweet.mutedCount > 0) && muteSelectedUsers === true) {
+					var msg = dividerTweet.tweetCount-dividerTweet.mutedCount + ' (+' + dividerTweet.mutedCount + ')' + ' Revealed ' + (dividerTweet.noun || "Tweet");
+					if (dividerTweet.tweetCount > 1) {
+						msg += 's'; //pluralize
+					}
+					if (dividerTweet.hasGap) {
+						msg += '<br /><span>Tap to load missing tweets</span>';
+						//model.items[dividerTweet.index].cssClass = 'are-gaps';
+						model.items[(gapIndex-1) + dividerTweet.index].cssClass = 'are-gaps';
+					}
+					model.items[(gapIndex-1) + dividerTweet.index].dividerMessage = msg;
 				}
 			} else {
 				panel.scrollId = 0;
