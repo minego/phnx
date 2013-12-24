@@ -131,7 +131,7 @@ var TweetToaster = Class.create(Toaster, {
 			}.bind(this));
 		}
 
-		//Retrieve justsayin and audioboo mp3 links
+		//Retrieve justsayin and audioboo mp3 links and instagram mp4 links
 		var links = tweet.entities.urls;
 		for (var i = links.length - 1; i >= 0; i--){
 			if (links[i].expanded_url !== null) {
@@ -1145,10 +1145,10 @@ transport.responseText);
 		if (url.indexOf('http://yfrog.com') > -1) {
 			this.showPreview(url + ':iphone', url);
 		// Commented out as large images can no longer be seen from twitpic.  Need to go to their site.
-		//} 
-		//else if (url.indexOf('http://twitpic.com') > -1) {
-		//	img = url.substr(url.indexOf('/', 8) + 1);
-		//	this.showPreview('http://twitpic.com/show/large/' + img, url);
+		} 
+		else if (url.indexOf('http://twitpic.com') > -1) {
+			img = url.substr(url.indexOf('/', 8) + 1);
+			this.showPreview('http://twitpic.com/show/large/' + img, url);
 		} else if (url.indexOf('plixi') > -1 || url.indexOf('http://lockerz.com/s/') > -1) {
 			this.showPreview('http://api.plixi.com/api/tpapi.svc/imagefromurl?size=large&url=' + url, url);
 		} else if (url.indexOf('img.ly') > -1) {

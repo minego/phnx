@@ -1,6 +1,7 @@
 var ChangelogToaster = Class.create(Toaster, {
 	items: [
 		{ version: '1.4.9' },
+		{ item: 'Previews are once again available for twitpic images'},
 		{ item: 'Un/mute user in profile options. See list of muted users (and swipe to un-mute) using "Preferences & Account" menu. Prefs option in Appearance globally mutes specified users from timelines.'},
 		{ item: 'Favoriting now updates timeline lists immediately without requiring a refresh'},
 		{ item: 'Fixed bug where tweet after a removed filtered tweet is processed correctly'},

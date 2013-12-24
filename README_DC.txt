@@ -162,3 +162,4 @@ Modified phnx.css, preferences-assistant.js, profile-assistant.js, tweet.js, sta
 Modified local.js, main-assistant.js, sources.json. Added mutedusers.js, mutedusers.html and muteduser-item.html.  Added menu option under Prefs to show toaster with currently muted users.  Allows for swipe to unmute.
 Modified muteduser-item.html to include the '@' symbol.
 Modified main-assistant.js to count number of muted tweets.
+Uncommented out twitpic stuff in tweet.js as large previews are available again.

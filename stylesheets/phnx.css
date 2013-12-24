@@ -1244,7 +1244,8 @@ span.link{
 	background: url('../images/trans9.png');
 }
 .convo-list{
-	padding-bottom: 20px 15px;
+	/*padding-bottom: 20px 15px;*/
+	padding-bottom: 20px;
 }
 .convo-item{
 	width: 0px;

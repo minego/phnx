@@ -80,6 +80,7 @@ TweetHelper.prototype = {
 					} else if (links[i].expanded_url.indexOf('http://twitpic.com') > -1){
 						var img = links[i].expanded_url.substr(links[i].expanded_url.indexOf('/', 8) + 1);
 						tweet.mediaUrl = links[i].expanded_url;
+						//tweet.mediaUrl = "http://twitpic.com/show/large/" + img;
 						if(i === 0){
 							tweet.thumbnail = "http://twitpic.com/show/thumb/" + img;
 						} else {
