@@ -163,3 +163,4 @@ Modified local.js, main-assistant.js, sources.json. Added mutedusers.js, mutedus
 Modified muteduser-item.html to include the '@' symbol.
 Modified main-assistant.js to count number of muted tweets.
 Uncommented out twitpic stuff in tweet.js as large previews are available again.
+Modified tweet.js to check for existing thumbnail in slot 1 when passing tweet entities.

@@ -192,6 +192,7 @@ TweetHelper.prototype = {
 				}
 			}
 		}
+		
 		//media_url parsing added by DC
 		if (tweet.entities && tweet.entities.media) {
 			var media_links = tweet.entities.media;
@@ -199,7 +200,7 @@ TweetHelper.prototype = {
 				if (media_links[i].media_url !== null) {
 					tweet.text = tweet.text.replace(new RegExp(media_links[i].url, 'g'), media_links[i].media_url);	
 					tweet.mediaUrl = media_links[i].media_url;
-					if(i === 0){
+					if(i === 0 && !tweet.thumbnail){
 						tweet.thumbnail = media_links[i].media_url+":small";  // using small instead of thumb to keep aspect ratio
 					} else {
 						tweet.thumbnail2 = media_links[i].media_url+":small";  // using small instead of thumb to keep aspect ratio
@@ -210,7 +211,6 @@ TweetHelper.prototype = {
 				}
 			}
 		} //end block
-
 		var d = new Date(tweet.created_at);
 		tweet.time_tweeted = (d.toTimeString(d)).slice(0,8);
 		tweet.time_str = d.toRelativeTime(1500);
