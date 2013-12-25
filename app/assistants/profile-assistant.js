@@ -39,7 +39,8 @@ ProfileAssistant.prototype = {
 			});
 			if(mutedUsers){
 				for (var m = 0, mutedUser; mutedUser = mutedUsers[m]; m++) {
-					if (this.user.screen_name.indexOf(mutedUser.user) > -1) {
+					//if (this.user.screen_name.indexOf(mutedUser.user) > -1) {
+					if (this.user.id === mutedUser.id) {
 						this.menuItems[1] = {label: 'Unmute User', command: 'cmdUnmuteUser'};
 						break;
 					}
@@ -670,11 +671,13 @@ ProfileAssistant.prototype = {
 			for (var i = 0, m; m = mutedUsers[i]; i++) {
 				//items.push({ text: m });
 				//items.push({user: m});
-				items.push(m);
+				if(m.id && m.user) {
+					items.push(m);
+				}
 			}
 		}
 		//items.push({text: this.user.screen_name});
-		items.push({user: this.user.screen_name});
+		items.push({user: this.user.screen_name,id: this.user.id});
 		prefs.write('mutedUsers',items);
 		banner('Muting @' + this.user.screen_name);
 		this.menuItems[1] = {label: 'Unmute User', command: 'cmdUnmuteUser'};
@@ -686,9 +689,12 @@ ProfileAssistant.prototype = {
 		
 		if(mutedUsers){
 			for (var i = 0, m; m = mutedUsers[i]; i++) {
-				if(-1 == m.user.indexOf(this.user.screen_name)){
+				//if(-1 == m.user.indexOf(this.user.screen_name)){
+				if(m.id !== this.user.id){
 					//items.push({ text: m });
-					items.push(m);
+					if(m.id && m.user) {
+						items.push(m);
+					}
 				}
 			}
 		}

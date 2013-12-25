@@ -533,6 +533,9 @@ body.no-gesture {  /* touchpad/emulator */
 	display: inline-block;
 	width: 320px;
 }
+.user-row.muteduser-row {
+	width: 100%;
+}
 .status-row.last {
 	background: transparent;
 }

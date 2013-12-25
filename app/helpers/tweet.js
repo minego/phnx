@@ -19,7 +19,8 @@ TweetHelper.prototype = {
 				tweet.footer = "<br />Retweeted by " + retweeter.screen_name;
 				if(mutedUsers){
 					for (var m = 0, mutedUser; mutedUser = mutedUsers[m]; m++) {
-						if (retweeter.screen_name.indexOf(mutedUser.user) > -1) {
+						//if (retweeter.screen_name.indexOf(mutedUser.user) > -1) {
+						if (retweeter.id === mutedUser.id) {
 							tweet.hideTweet_class = 'hide';
 							break;
 						} else {
@@ -32,7 +33,8 @@ TweetHelper.prototype = {
 				tweet.is_rt = false;
 				if(mutedUsers){
 					for (var m = 0, mutedUser; mutedUser = mutedUsers[m]; m++) {
-						if (tweet.user.screen_name.indexOf(mutedUser.user) > -1) {
+						//if (tweet.user.screen_name.indexOf(mutedUser.user) > -1) {
+						if (tweet.user.id === mutedUser.id) {
 							tweet.hideTweet_class = 'hide';
 							break;
 						} else {
@@ -313,7 +315,8 @@ TweetHelper.prototype = {
 
 		if(mutedUsers){
 			for (var m = 0, mutedUser; mutedUser = mutedUsers[m]; m++) {
-				if (tweet.user.screen_name.indexOf(mutedUser.user) > -1) {
+				//if (tweet.user.screen_name.indexOf(mutedUser.user) > -1) {
+				if (tweet.user.id === mutedUser.id) {
 					tweet.hideTweet_class = 'hide';
 					break;
 				} else {

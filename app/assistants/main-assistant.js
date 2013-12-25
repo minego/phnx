@@ -225,10 +225,12 @@ MainAssistant.prototype = {
 				for (var x = 0, tweet; tweet = panel.model.items[x]; x++) {
 					if(mutedUsers && mutedUsers.length > 0){
 						for (var m = 0, mutedUser; mutedUser = mutedUsers[m]; m++) {
-							if (tweet.user.screen_name.indexOf(mutedUser.user) > -1) {
+							//if (tweet.user.screen_name.indexOf(mutedUser.user) > -1) {
+							if (tweet.user.id === mutedUser.id) {
 								tweet.hideTweet_class = 'hide';
 								break;
-							} else if (tweet.retweeter && (tweet.retweeter.screen_name.indexOf(mutedUser.user) > -1)) {
+							} else if (tweet.retweeter && (tweet.retweeter.id === mutedUser.id)) {
+								//(tweet.retweeter.screen_name.indexOf(mutedUser.user) > -1)) {
 								tweet.hideTweet_class = 'hide';
 								break;								
 							} else {
@@ -692,7 +694,25 @@ MainAssistant.prototype = {
 			} else if (event.command === 'cmdManageFilters') {
 				this.toasters.add(new ManageFiltersToaster(this));
 			} else if (event.command === 'cmdManageMutedUsers') {
-				this.toasters.add(new ManageMutedUsersToaster(this));
+				var prefs	= new LocalStorage();
+				var mutedUsers	= prefs.read('mutedUsers');
+				var ids	= [];
+
+				if(mutedUsers){
+					var count = 0;
+					for (var i = 0, m; m = mutedUsers[i]; i++) {
+						ids.push(m.id);
+						count++;
+					}
+					if(count > 0) {
+						var Twitter = new TwitterAPI(this.user);
+						Twitter.getUsersById(ids.join(','), function(r){
+							this.toasters.add(new ManageMutedUsersToaster("Muted Users",r.responseJSON,this));
+						}.bind(this));	
+					} else {
+						banner('Muted User list is empty');
+					}
+				}
 			} else if (event.command === 'cmdChangelog') {
 				this.toasters.add(new ChangelogToaster(this));
 			} else if (event.command === 'cmdRemoveAccount') {
@@ -1557,10 +1577,12 @@ MainAssistant.prototype = {
 				tweet.time_str = this.timeSince(tweet.created_at);
 				if(mutedUsers && mutedUsers.length > 0){
 					for (var m = 0, mutedUser; mutedUser = mutedUsers[m]; m++) {
-						if (tweet.user.screen_name.indexOf(mutedUser.user) > -1) {
+						//if (tweet.user.screen_name.indexOf(mutedUser.user) > -1) {
+						if (tweet.user.id === mutedUser.id) {
 							tweet.hideTweet_class = 'hide';
 							break;
-						} else if (tweet.retweeter && (tweet.retweeter.screen_name.indexOf(mutedUser.user) > -1)) {
+						} else if (tweet.retweeter && (tweet.retweeter.id === mutedUser.id)) {
+							//(tweet.retweeter.screen_name.indexOf(mutedUser.user) > -1)) {	
 							tweet.hideTweet_class = 'hide';
 							break;
 						}	else {

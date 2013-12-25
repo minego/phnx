@@ -280,11 +280,13 @@ TwitterAPI.prototype = {
 			default:
 			case 'GET':
 				this.request(OAuth.addToURL(url, args), opts);
+				//Mojo.Log.error(OAuth.addToURL(url, args), opts);
 				break;
 
 			case 'POST':
 				opts.postBody = OAuth.formEncode(args);
 				this.request(url, opts);
+				//Mojo.Log.error(url, opts);
 				break;
 		}
 	},
