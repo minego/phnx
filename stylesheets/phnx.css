@@ -1358,12 +1358,12 @@ span.link{
 	display: block;
 	height: 44px;
 	width: 44px;
-	background: url(../images/low/profile-opts.png) center center no-repeat;
+	background: url(../images/low/save.png) center center no-repeat;
 	margin-top: 7px;
 	margin-right: 3px;
 }
 #save-button.selected {
-	background: url(../images/low/profile-opts-tapped.png) center center no-repeat;
+	background: url(../images/low/save-tapped.png) center center no-repeat;
 }
 .save-image-wrapper {
 	float: right;
