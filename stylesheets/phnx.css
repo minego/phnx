@@ -1353,7 +1353,24 @@ span.link{
 	padding-right: 12px;
 	position:relative;
 	z-index: 5;
-
+}
+#save-button {
+	display: block;
+	height: 44px;
+	width: 44px;
+	background: url(../images/low/profile-opts.png) center center no-repeat;
+	margin-top: 7px;
+	margin-right: 3px;
+}
+#save-button.selected {
+	background: url(../images/low/profile-opts-tapped.png) center center no-repeat;
+}
+.save-image-wrapper {
+	float: right;
+	position:fixed;
+	z-index: 5;
+	right: 56px;
+	/*top: 15px;*/
 }
 #options {
 	display: block;

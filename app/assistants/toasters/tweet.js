@@ -1144,7 +1144,6 @@ transport.responseText);
 
 		if (url.indexOf('http://yfrog.com') > -1) {
 			this.showPreview(url + ':iphone', url);
-		// Commented out as large images can no longer be seen from twitpic.  Need to go to their site.
 		} 
 		else if (url.indexOf('http://twitpic.com') > -1) {
 			img = url.substr(url.indexOf('/', 8) + 1);
@@ -1281,7 +1280,33 @@ transport.responseText);
 		// this.controller.get('image-preview').show();
 		// //try to preload the image
 		// img.onLoad = this.showImage(src, url);
-		this.controller.stageController.pushScene('pictureView', src);
+		var index = 0;
+		var matchId = -1;
+		var links;
+		var img_uid;
+
+		if (this.tweet.entities && this.tweet.entities.urls) {
+			links = this.tweet.entities.urls;
+			for (var i = 0, link; link = links[i]; i++) {
+				if(src.indexOf(link.expanded_url) !== -1) {
+					matchId = index;
+					break;
+				}
+				index++;
+			};
+		}
+		if (this.tweet.entities && this.tweet.entities.media) {
+			links = this.tweet.entities.media;
+			for (var i = 0, link; link = links[i]; i++) {
+				if(src.indexOf(link.media_url) !== -1) {
+					matchId = index;
+					break;
+				}
+				index++;
+			};
+		}
+		img_uid = this.tweet.id + '_' + matchId;
+		this.controller.stageController.pushScene('pictureView', src, this.tweet.user.screen_name,img_uid);
 	},
 	showImage: function(src, url) {
 		this.controller.get('preview').src = src;

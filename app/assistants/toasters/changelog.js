@@ -1,5 +1,7 @@
 var ChangelogToaster = Class.create(Toaster, {
 	items: [
+		{ version: '1.5.0' },
+		{ item: 'Saving of images from preview scene'},
 		{ version: '1.4.9' },
 		{ item: 'Previews are once again available for twitpic images'},
 		{ item: 'Un/mute user in profile options. See list of muted users (and swipe to un-mute) using "Preferences & Account" menu. Prefs option in Appearance globally mutes specified users from timelines.'},

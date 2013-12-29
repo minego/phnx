@@ -785,12 +785,17 @@ ProfileAssistant.prototype = {
 	},
 	avatarTapped: function(event) {
 		var img;
+		var img_uid;
+		var tmp;
+		
 		if (Mojo.Environment.DeviceInfo.modelNameAscii == "Pre3"){
 			img = this.user.profile_image_url.replace('_bigger', '');
 		} else {
 			img = this.user.profile_image_url.replace('_normal', '');
 		}
-		this.controller.stageController.pushScene('pictureView', img);
+		tmp = img.substring(img.lastIndexOf('/')+1);
+		img_uid = tmp.split('.');
+		this.controller.stageController.pushScene('pictureView', img, this.user.screen_name,img_uid);
 	},
 	followingTapped: function(event) {
 		var Twitter = new TwitterAPI(this.account);
