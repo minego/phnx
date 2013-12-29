@@ -795,7 +795,7 @@ ProfileAssistant.prototype = {
 		}
 		tmp = img.substring(img.lastIndexOf('/')+1);
 		img_uid = tmp.split('.');
-		this.controller.stageController.pushScene('pictureView', img, this.user.screen_name,img_uid);
+		this.controller.stageController.pushScene('pictureView', img, this.user.screen_name,img_uid[0]);
 	},
 	followingTapped: function(event) {
 		var Twitter = new TwitterAPI(this.account);
