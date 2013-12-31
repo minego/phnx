@@ -1276,6 +1276,7 @@ MainAssistant.prototype = {
 		var processVine = prefs.read('showVine');
 		var mutedUsers = prefs.read('mutedUsers');
 		var muteSelectedUsers = prefs.read('muteSelectedUsers');
+		var hideNewMutedTweets = prefs.read('hideNewMutedTweets');
 		//Mojo.Log.error('xCount: ' + xCount); //Twitter doesn't always return the number of tweets you are expecting, which is VERY annoying.
 		for (var i = 0, tweet; tweet = tweets[i]; i++) {
 			/* Store a reference to the account that loaded this tweet */
@@ -1381,10 +1382,24 @@ MainAssistant.prototype = {
 				}
 
 				if((dividerTweet.mutedCount > 0) && muteSelectedUsers === true) {
-					var msg = dividerTweet.tweetCount-dividerTweet.mutedCount + ' (+' + dividerTweet.mutedCount + ')' + ' Revealed ' + (dividerTweet.noun || "Tweet");
-					if (dividerTweet.tweetCount > 1) {
-						msg += 's'; //pluralize
+					var msg = "";
+					var unMutedTweetCount = dividerTweet.tweetCount-dividerTweet.mutedCount;
+					if(hideNewMutedTweets){
+						if(unMutedTweetCount > 0){
+							msg = unMutedTweetCount + ' Revealed ' + (dividerTweet.noun || "Tweet");
+							if (unMutedTweetCount > 1) {
+								msg += 's'; //pluralize
+							}
+						} else {
+							model.items[(gapIndex-1) + dividerTweet.index].cssClass = 'old-tweet';
+						}
+					} else {
+						msg = unMutedTweetCount + ' (+' + dividerTweet.mutedCount + ')' + ' Revealed ' + (dividerTweet.noun || "Tweet");
+						if (dividerTweet.tweetCount > 1) {
+							msg += 's'; //pluralize
+						}
 					}
+
 					if (dividerTweet.hasGap) {
 						msg += '<br /><span>Tap to load missing tweets</span>';
 						//model.items[dividerTweet.index].cssClass = 'are-gaps';
@@ -1464,10 +1479,22 @@ MainAssistant.prototype = {
 				scrollId = tweetCount; // set the index of the new tweet to auto-scroll to
 				panel.scrollId= scrollId;
 				if((dividerTweet.mutedCount > 0) && muteSelectedUsers === true) {
-					var msg = dividerTweet.tweetCount-dividerTweet.mutedCount + ' (+' + dividerTweet.mutedCount + ')' + ' New ' + (dividerTweet.noun || "Tweet");
-
-					if (dividerTweet.tweetCount > 1) {
-						msg += 's'; //pluralize
+					var msg = "";
+					var unMutedTweetCount = dividerTweet.tweetCount-dividerTweet.mutedCount;
+					if(hideNewMutedTweets){
+						if(unMutedTweetCount > 0){
+							msg = dividerTweet.tweetCount-dividerTweet.mutedCount + ' New ' + (dividerTweet.noun || "Tweet");
+							if (unMutedTweetCount > 1) {
+								msg += 's'; //pluralize
+							}
+						} else {
+							model.items[dividerTweet.index].cssClass = 'old-tweet';
+						}
+					} else {
+						msg = dividerTweet.tweetCount-dividerTweet.mutedCount + ' (+' + dividerTweet.mutedCount + ')' + ' New ' + (dividerTweet.noun || "Tweet");
+						if (dividerTweet.tweetCount > 1) {
+							msg += 's'; //pluralize
+						}
 					}
 
 					if (hasGap) {
@@ -1556,12 +1583,24 @@ MainAssistant.prototype = {
 		}	//end block
 
 		if((dividerTweet.mutedCount > 0) && muteSelectedUsers === true) {
-			var msg = dividerTweet.tweetCount-dividerTweet.mutedCount + ' (+' + dividerTweet.mutedCount + ')' + ' New ' + (dividerTweet.noun || "Tweet");
-	
-			if (dividerTweet.tweetCount > 1) {
-				msg += 's'; //pluralize
+			var msg = "";
+			var unMutedTweetCount = dividerTweet.tweetCount-dividerTweet.mutedCount;
+			if(hideNewMutedTweets){
+				if(unMutedTweetCount > 0){
+					msg = dividerTweet.tweetCount-dividerTweet.mutedCount + ' (+' + dividerTweet.mutedCount + ')' + ' New ' + (dividerTweet.noun || "Tweet");
+					if (unMutedTweetCount > 1) {
+						msg += 's'; //pluralize
+					}
+				} else {
+					model.items[dividerTweet.index].cssClass = 'old-tweet';
+				}
+			} else {
+				msg = unMutedTweetCount + ' (+' + dividerTweet.mutedCount + ')' + ' Revealed ' + (dividerTweet.noun || "Tweet");
+				if (dividerTweet.tweetCount > 1) {
+					msg += 's'; //pluralize
+				}
 			}
-
+	
 			if (hasGap) {
 				msg += '<br /><span>Tap to load missing tweets</span>';
 				model.items[dividerTweet.index].cssClass = 'are-gaps';
@@ -2154,6 +2193,7 @@ MainAssistant.prototype = {
 		);
 
 		global.setHide(body,
+			prefs.read('hideNewMutedTweets'),
 			prefs.read('hideAvatar'),
 			prefs.read('hideUsername'),
 			prefs.read('hideScreenname'),

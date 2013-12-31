@@ -168,3 +168,5 @@ Modified muteduser.js, mutedusers.html, muteduser-item.html, profile-assistant.j
 Modified both tweet.js, pictureView-assistant.js, pictureView-scene.html, phnx.css, profile-assistant.js to allow for saving of images from preview scene.
 Modified preferences-scene.html, section.html, ash.css, phnx.css and rebirth.css to force preferences section header to be fixed and non-transparent.
 Modified profile-assistant.js and mutedusers.js to only save "id" in the db.  "user" was not needed.
+Modified preferences-assistant.js, main-assistant.js, profile-assistant.js, status-assistant.js, app-globals.js and local.js to give option to hide count of muted new tweets.
+Modified section.html, ash.css, rebirth.css and phnx.css to force solid section header only in preferences.

@@ -51,6 +51,7 @@ StatusAssistant.prototype = {
 			global.setShowEmoji(body,	prefs.read('showEmoji'));
 
 			global.setHide(body,
+				prefs.read('hideNewMutedTweets'),
 				prefs.read('hideAvatar'),
 				prefs.read('hideUsername'),
 				prefs.read('hideScreenname'),
@@ -496,6 +497,7 @@ StatusAssistant.prototype = {
 		);
 
 		global.setHide(body,
+			prefs.read('hideNewMutedTweets'),
 			prefs.read('hideAvatar'),
 			prefs.read('hideUsername'),
 			prefs.read('hideScreenname'),

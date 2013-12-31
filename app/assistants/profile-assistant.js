@@ -121,6 +121,7 @@ ProfileAssistant.prototype = {
 			global.setFadeShim(body, prefs.read('fadeShim'));
 						
 			global.setHide(body,
+				prefs.read('hideNewMutedTweets'),
 				prefs.read('hideAvatar'),
 				prefs.read('hideUsername'),
 				prefs.read('hideScreenname'),

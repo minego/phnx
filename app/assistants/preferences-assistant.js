@@ -97,8 +97,9 @@ function PreferencesAssistant(section) {
 				{label: 'Details Only', value: 'detailsEmoji'},
 				{label: 'Always Show', value: 'showEmoji'}
 			]},
-			{key: 'muteSelectedUsers', type: 'toggle', label: 'Mute Selected Users'},
 			{key: 'absoluteTimeStamps', type: 'toggle', label: 'Absolute TimeStamps'},
+			{key: 'muteSelectedUsers', type: 'toggle', label: 'Mute Selected Users'},
+			{key: 'hideNewMutedTweets',		type: 'toggle', label: 'Hide New Muted Tweets Message'},
 			{key: 'hideAvatar',		type: 'toggle', label: 'Hide Avatars'},
 			{key: 'hideUsername',	type: 'toggle', label: 'Hide Name'},
 			{key: 'hideScreenname',	type: 'toggle', label: 'Hide Username'},
@@ -454,6 +455,7 @@ PreferencesAssistant.prototype = {
 		global.setFontSize(body,	prefs.read('fontSize'));
 		
 		global.setHide(body,
+			prefs.read('hideNewMutedTweets'),
 			prefs.read('hideAvatar'),
 			prefs.read('hideUsername'),
 			prefs.read('hideScreenname'),

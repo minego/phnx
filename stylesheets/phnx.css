@@ -1958,6 +1958,9 @@ span.link{
 	background: url('../images/low/header-bg.png') left top repeat-x;
 	position: fixed;
 }
+.section-header.prefs {
+	background-color: #111;
+}
 .section-header span {
 	font-family: "Prelude";
 	font-size: 16px;

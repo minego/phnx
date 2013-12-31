@@ -202,7 +202,7 @@ var global = {
 		}
 		Element.addClassName(body, 'font-' + font);
 	},
-	setHide: function(body, hideAvatar, hideUsername, hideScreenname, hideTime, hideVia, hideTweetBorder, hideSearchTimelineThumbs) {
+	setHide: function(body, hideNewMutedTweets, hideAvatar, hideUsername, hideScreenname, hideTime, hideVia, hideTweetBorder, hideSearchTimelineThumbs) {
 		if (hideAvatar) {
 			Element.removeClassName(body, 'showAvatar');
 		} else {

@@ -1,6 +1,7 @@
 var ChangelogToaster = Class.create(Toaster, {
 	items: [
 		{ version: '1.5.0' },
+		{ itrm: 'Prefs option to hide New count of muted tweets'},
 		{ item: 'Prefs section header now fixed at top of scene'},
 		{ item: 'Saving of images from preview scene'},
 		{ version: '1.4.9' },

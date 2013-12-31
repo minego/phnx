@@ -22,6 +22,7 @@ function LocalStorage() {
 		delReceivedDM: false,
 		muteSelectedUsers: false,
 		absoluteTimeStamps: false,
+		hideNewMutedTweets: false,
 		hideAvatar: false,
 		hideToolbar: false,
 		hideTabs: false,
