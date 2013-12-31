@@ -669,15 +669,14 @@ ProfileAssistant.prototype = {
 		
 		if(mutedUsers){
 			for (var i = 0, m; m = mutedUsers[i]; i++) {
-				//items.push({ text: m });
-				//items.push({user: m});
-				if(m.id && m.user) {
+				//if(m.id && m.user) {
+				if(m.id) {
 					items.push(m);
 				}
 			}
 		}
 		//items.push({text: this.user.screen_name});
-		items.push({user: this.user.screen_name,id: this.user.id});
+		items.push({id: this.user.id});
 		prefs.write('mutedUsers',items);
 		banner('Muting @' + this.user.screen_name);
 		this.menuItems[1] = {label: 'Unmute User', command: 'cmdUnmuteUser'};
@@ -692,8 +691,9 @@ ProfileAssistant.prototype = {
 				//if(-1 == m.user.indexOf(this.user.screen_name)){
 				if(m.id !== this.user.id){
 					//items.push({ text: m });
-					if(m.id && m.user) {
-						items.push(m);
+					//if(m.id && m.user) {
+					if(m.id) {
+						items.push({id: m.id});
 					}
 				}
 			}

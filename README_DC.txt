@@ -166,3 +166,5 @@ Uncommented out twitpic stuff in tweet.js as large previews are available again.
 Modified tweet.js to check for existing thumbnail in slot 1 when passing tweet entities.
 Modified muteduser.js, mutedusers.html, muteduser-item.html, profile-assistant.js, tweet.js, main-assistant.js, twitter.js and phnx.css to save id's of muted users and to allow mini-profile to show in mutedusers toaster.
 Modified both tweet.js, pictureView-assistant.js, pictureView-scene.html, phnx.css, profile-assistant.js to allow for saving of images from preview scene.
+Modified preferences-scene.html, section.html, ash.css, phnx.css and rebirth.css to force preferences section header to be fixed and non-transparent.
+Modified profile-assistant.js and mutedusers.js to only save "id" in the db.  "user" was not needed.
