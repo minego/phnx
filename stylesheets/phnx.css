@@ -1894,6 +1894,24 @@ span.link{
 	margin: 0px;
 }
 
+#pref-spacer {
+	display: block;
+	height: 44px;
+	width: 44px;
+	margin-top: 7px;
+	margin-right: 3px;
+}
+
+.close-button-wrapper.prefs {
+	position: fixed;
+	right: 5px;
+	top: 0px;
+}
+
+.close-button-wrapper.prefs #close-button {
+	margin: 0px;
+}
+
 .dashboard-icon-phnx {
 	background: url(../dash-icon.png) center center no-repeat;
 }
@@ -1938,6 +1956,7 @@ span.link{
 .section-header {
 	width: 100%;
 	background: url('../images/low/header-bg.png') left top repeat-x;
+	position: fixed;
 }
 .section-header span {
 	font-family: "Prelude";

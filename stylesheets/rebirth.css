@@ -90,3 +90,7 @@ body.default {
 #verified span{
 	color: #d2d2d2;
 }
+#profile-header,
+.section-header {
+	background-color: #111;
+}
