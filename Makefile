@@ -49,6 +49,7 @@ Packages: filename
 	@echo "Section: Social Networks"								>> Packages
 	@echo "Description: Project Macaw"								>> Packages
 	@echo "Architecture: all"										>> Packages
+	@echo "Depends: ca.canucksoftware.filemgr"						>> Packages
 	@echo "Maintainer: "													\
 			"Micah N Gorrell <macaw@minego.net>, "							\
 			"Owen Swerkstrom, "												\
