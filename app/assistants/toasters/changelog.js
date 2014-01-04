@@ -1,7 +1,9 @@
 var ChangelogToaster = Class.create(Toaster, {
 	items: [
 		{ version: '1.5.1' },
-		{ item: 'Fixed Vine videos'},
+		{ item: 'Fixed display of final autthorization panel'},
+		{ item: 'Fixed Vine videos from playing in the background'},
+		{ item: 'Fav hearts now show in Profile view'},
 		{ version: '1.5.0' },
 		{ item: 'ProjectMacaw now requires FileMgr service'},
 		{ item: 'Prefs option to hide New count of muted tweets'},

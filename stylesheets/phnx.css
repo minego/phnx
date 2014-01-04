@@ -1019,6 +1019,7 @@ span.link{
 	margin: 10px 0px;
 	padding: 0px 10px;
 }
+
 .panel-list-wrapper.single .search-list-item {
 	background: transparent;
 	margin: -8px;
@@ -1861,7 +1862,7 @@ span.link{
 }
 
 .myaccount-button-wrapper {
-	padding-top: 50px;
+	padding-top: 10px;
 	padding-bottom: 10px;
 	width: 100%;
 	text-align: center;
@@ -1950,15 +1951,17 @@ span.link{
 	font-size: 18px;
 	width: 100%;
 	background: url('../images/low/header-bg.png') left top repeat-x;
-	position: fixed;
 }
 
+.scene-title.prefs {
+	position: fixed;
+}
 .section-header {
 	width: 100%;
 	background: url('../images/low/header-bg.png') left top repeat-x;
-	position: fixed;
 }
 .section-header.prefs {
+	position: fixed;
 	background-color: #111;
 }
 .section-header span {

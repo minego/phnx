@@ -170,3 +170,8 @@ Modified preferences-scene.html, section.html, ash.css, phnx.css and rebirth.css
 Modified profile-assistant.js and mutedusers.js to only save "id" in the db.  "user" was not needed.
 Modified preferences-assistant.js, main-assistant.js, profile-assistant.js, status-assistant.js, app-globals.js and local.js to give option to hide count of muted new tweets.
 Modified section.html, ash.css, rebirth.css and phnx.css to force solid section header only in preferences.
+Discovered that modifications to finishAuth-scene.html don't necessarily show up til a luna restart!  Makes it hard to debug.  Don't know why its kept in memory.
+Modified phnx.css and finishAuth-scene.html to fix issues introduced with the Prefs section-header change.
+Modified tweet.js to account for change in Vine code.
+Modified main-assistant.js to check properly for newMutedTweets on launch.
+Modified profile-assistant.js to allow for Fav hearts to showup.
