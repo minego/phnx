@@ -1,5 +1,7 @@
 var ChangelogToaster = Class.create(Toaster, {
 	items: [
+		{ version: '1.5.2' },
+		{ item: 'Fixed Details toaster cleanup'},
 		{ version: '1.5.1' },
 		{ item: 'Fixed display of final autthorization panel'},
 		{ item: 'Fixed Vine videos from playing in the background'},
