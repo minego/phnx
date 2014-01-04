@@ -1,6 +1,7 @@
 var TweetToaster = Class.create(Toaster, {
 	initialize: function(tweet, assistant, savedSearchesModel) {
 		this.toasterId			= toasterIndex++;
+		this.id				= this.toasterId;
 		this.nodeId				= 'toaster-' + this.toasterId;
 		this.visible			= false;
 		this.shim				= true;

@@ -1557,7 +1557,7 @@ span.link{
 .toaster {
 	display: block;
 	position: fixed;
-	bottom: -600px;
+	bottom: -700px;
 	left: 0px;
 	width: 100%;
 	-webkit-transition: bottom .5s;
@@ -1566,6 +1566,7 @@ span.link{
 	color: #d2d2d2;
 	max-height: 1024px;
 }
+
 .toaster.show {
 	bottom: 0px;
 }
