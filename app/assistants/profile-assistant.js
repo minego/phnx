@@ -371,12 +371,30 @@ ProfileAssistant.prototype = {
 				var tweet;
 				for (var i=0; i < response.responseJSON.length; i++) {
 					tweet = th.process(response.responseJSON[i],this.historyModel,this.controller,processVine,mutedUsers);
+					if(tweet.favorited) {
+						if (!tweet.favSet){
+							tweet.favSet = true;
+						}
+						tweet.fav_class = 'show';
+					} else {
+						tweet.favSet = false;
+						tweet.fav_class = 'hide';
+					}
 					this.historyModel.items[i] = tweet;
 				}
 			}	else {
 				var tweet;
 				for (var i = response.responseJSON.length - 1; i >= 0; i--){
 					tweet = th.process(response.responseJSON[i],this.historyModel,this.controller,processVine,mutedUsers);
+					if(tweet.favorited) {
+						if (!tweet.favSet){
+							tweet.favSet = true;
+						}
+						tweet.fav_class = 'show';
+					} else {
+						tweet.favSet = false;
+						tweet.fav_class = 'hide';
+					}
 					this.historyModel.items.splice(0, 0, tweet);
 				}
 			}
@@ -411,6 +429,15 @@ ProfileAssistant.prototype = {
 				if(items[i].is_rt === true){
 					items.splice(i,1);
 					i--;
+				}
+				if(items[i].favorited) {
+					if (!items[i].favSet){
+						items[i].favSet = true;
+					}
+					items[i].fav_class = 'show';
+				} else {
+					items[i].favSet = false;
+					items[i].fav_class = 'hide';
 				}
 			}
 			if (this.mentionsModel.items.length === 0) {
@@ -451,12 +478,30 @@ ProfileAssistant.prototype = {
 				var tweet;
 				for (var i=0; i < response.responseJSON.length; i++) {
 					tweet = th.process(response.responseJSON[i],this.favoritesModel,this.controller,processVine,mutedUsers);
+					if(tweet.favorited) {
+						if (!tweet.favSet){
+							tweet.favSet = true;
+						}
+						tweet.fav_class = 'show';
+					} else {
+						tweet.favSet = false;
+						tweet.fav_class = 'hide';
+					}					
 					this.favoritesModel.items[i] = tweet;
 				}
 			} else {
 				var tweet;
 				for (var i = response.responseJSON.length - 1; i >= 0; i--){
 					tweet = th.process(response.responseJSON[i],this.favoritesModel,this.controller,processVine,mutedUsers);
+					if(tweet.favorited) {
+						if (!tweet.favSet){
+							tweet.favSet = true;
+						}
+						tweet.fav_class = 'show';
+					} else {
+						tweet.favSet = false;
+						tweet.fav_class = 'hide';
+					}					
 					this.favoritesModel.items.splice(0, 0, tweet);
 				}
 			}

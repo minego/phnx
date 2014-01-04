@@ -1587,7 +1587,7 @@ MainAssistant.prototype = {
 			var unMutedTweetCount = dividerTweet.tweetCount-dividerTweet.mutedCount;
 			if(hideNewMutedTweets){
 				if(unMutedTweetCount > 0){
-					msg = dividerTweet.tweetCount-dividerTweet.mutedCount + ' (+' + dividerTweet.mutedCount + ')' + ' New ' + (dividerTweet.noun || "Tweet");
+					msg = unMutedTweetCount + ' New ' + (dividerTweet.noun || "Tweet");
 					if (unMutedTweetCount > 1) {
 						msg += 's'; //pluralize
 					}
@@ -1595,7 +1595,7 @@ MainAssistant.prototype = {
 					model.items[dividerTweet.index].cssClass = 'old-tweet';
 				}
 			} else {
-				msg = unMutedTweetCount + ' (+' + dividerTweet.mutedCount + ')' + ' Revealed ' + (dividerTweet.noun || "Tweet");
+				msg = unMutedTweetCount + ' (+' + dividerTweet.mutedCount + ')' + ' New ' + (dividerTweet.noun || "Tweet");
 				if (dividerTweet.tweetCount > 1) {
 					msg += 's'; //pluralize
 				}

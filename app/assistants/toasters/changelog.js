@@ -1,5 +1,7 @@
 var ChangelogToaster = Class.create(Toaster, {
 	items: [
+		{ version: '1.5.1' },
+		{ item: 'Fixed Vine videos'},
 		{ version: '1.5.0' },
 		{ item: 'ProjectMacaw now requires FileMgr service'},
 		{ item: 'Prefs option to hide New count of muted tweets'},

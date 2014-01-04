@@ -253,12 +253,32 @@ TweetHelper.prototype = {
 				//Mojo.Log.error('activeRequest: ' + Ajax.activeRequestCount);
 
 				var myNode = document.createElement('div');
-				myNode.innerHTML = response.responseText;
-				var myVideo = myNode.getElementsByTagName("video");
-				var mySource = myNode.getElementsByTagName("source");
+				var doc = document.implementation.createHTMLDocument('');
+				doc.open();
+				myHtml = response.responseText;
+				doc.write(myHtml);
+				doc.close();
+				var myVideoLink;
+				var myStillLink;
+				var metaValues = doc.getElementsByTagName("meta");
+				for(var i=0; i<metaValues.length; i++){
+					if(metaValues[i].content.indexOf('/videos/') > -1){
+						if(metaValues[i].content.indexOf('.mp4') > -1){
+							myVideoLink = metaValues[i].content;
+							//Mojo.Log.error('myVideo: ' + myVideoLink);						
+						}
+					}
+					if(metaValues[i].content.indexOf('/thumbs/') > -1){
+						if(metaValues[i].content.indexOf('.jpg') > -1){
+							myStillLink = metaValues[i].content;
+							//Mojo.Log.error('myStill: ' + myStillLink);
+						}
+					}
+				}				
+
 				if(index === 0) {
-					tweet.myStillLink = String((myVideo[0].getAttribute("poster")).match(/.*.jpg/));
-					tweet.myVideoLink = String((mySource[0].getAttribute("src")).match(/.*.mp4/));
+					tweet.myStillLink = myStillLink;
+					tweet.myVideoLink = myVideoLink;
 					if(tweet.myVideoLink.indexOf('http') == -1) {
 						tweet.myVideoLink = 'https:' + tweet.myVideoLink;
 					}
@@ -267,8 +287,8 @@ TweetHelper.prototype = {
 					Mojo.Log.info('vine thumb: ' + tweet.myStillLink);
 					Mojo.Log.info('vine video: ' + tweet.myVideoLink);
 				} else {
-					tweet.myStillLink2 = String((myVideo[0].getAttribute("poster")).match(/.*.jpg/));
-					tweet.myVideoLink2 = String((mySource[0].getAttribute("src")).match(/.*.mp4/));
+					tweet.myStillLink2 = myStillLink;
+					tweet.myVideoLink2 = myVideoLink;
 					if(tweet.myVideoLink2.indexOf('http') == -1) {
 						tweet.myVideoLink2 = 'https:' + tweet.myVideoLink2;
 					}
@@ -278,7 +298,8 @@ TweetHelper.prototype = {
 					Mojo.Log.info('vine video2: ' + tweet.myVideoLink2);
 				}
 				controller.modelChanged(model);
-				myNode = NULL; 
+				myNode = NULL;
+				doc = NULL;
 			}.bind(this),
 			onFailure: function(response) {
 				if (Ajax.activeRequestCount === 1) {
