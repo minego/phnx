@@ -24,9 +24,16 @@ var Toaster = {
 			get('shim').removeClassName('show');
 		}
         this.setup();
+		var toasterHeight = get(this.nodeId).offsetHeight;
+		var newBottom = 0-(toasterHeight);
+		get(this.nodeId).setStyle({'-webkit-transition-duration': (toasterHeight/800) + 's' });
 		this.animateShow();
 	},
 	hide: function() {
+		var toasterHeight = get(this.nodeId).offsetHeight;
+		var newBottom = 0-(toasterHeight);
+		get(this.nodeId).setStyle({'bottom': newBottom + 'px'});
+		get(this.nodeId).setStyle({'-webkit-transition-duration': (toasterHeight/800) + 's' });
 		this.animateHide();
 		this.cleanup(); // kill those evil listeners!
 	},
@@ -52,7 +59,7 @@ var Toaster = {
 			if ((toaster = get('toaster-' + id))) {
 				toaster.remove();
 			}
-		}, 1000);
+		}, 1300);
 	},
 	setup: function() {
 

@@ -429,15 +429,16 @@ ProfileAssistant.prototype = {
 				if(items[i].is_rt === true){
 					items.splice(i,1);
 					i--;
-				}
-				if(items[i].favorited) {
-					if (!items[i].favSet){
-						items[i].favSet = true;
-					}
-					items[i].fav_class = 'show';
 				} else {
-					items[i].favSet = false;
-					items[i].fav_class = 'hide';
+					if(items[i].favorited) {
+						if (!items[i].favSet){
+							items[i].favSet = true;
+						}
+						items[i].fav_class = 'show';
+					} else {
+						items[i].favSet = false;
+						items[i].fav_class = 'hide';
+					}
 				}
 			}
 			if (this.mentionsModel.items.length === 0) {

@@ -1,6 +1,8 @@
 var ChangelogToaster = Class.create(Toaster, {
 	items: [
 		{ version: '1.5.2' },
+		{ item: 'Profile Mentions work now if first returned entry was a RT'},
+		{ item: 'Improved toaster pop-up/down animations'},
 		{ item: 'Fixed Details toaster cleanup'},
 		{ version: '1.5.1' },
 		{ item: 'Fixed display of final autthorization panel'},

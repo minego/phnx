@@ -37,9 +37,6 @@ var UserListToaster = Class.create(Toaster, {
 		}.bind(this));
 	},
 	backTapped: function(event) {
-		var screenHeight = this.controller.window.innerHeight;
-		var newBottom = 0-(screenHeight - 45);
-		get(this.nodeId).setStyle({'bottom': newBottom + 'px'});
 		this.assistant.toasters.back();
 	},
 	cleanup: function() {

@@ -177,3 +177,5 @@ Modified main-assistant.js to check properly for newMutedTweets on launch.
 Modified profile-assistant.js to allow for Fav hearts to showup.
 Modified phnx.css and user-list.js to fix toaster issues (didnt always clear bottom of screen when hiding from a full user list)
 Modified tweet.js (TweetToaster) to set this.id.  Previously only this.toastId was set, but for the toaster to be able to be completely removed, it needed this.id.  could have caused big memory bloat if user opened heaps of details toasters.
+Modified user-list.js, phnx.css, toaster.js to improve toaster popup and popdown. Now moves the proper number of pixels based on the toaster height, as well as varying the transition duration.
+Modified profile-assistant.js to work properly in mentions if first entry is a RT.
