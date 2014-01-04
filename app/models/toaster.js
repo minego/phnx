@@ -23,10 +23,11 @@ var Toaster = {
 			get('shim').addClassName('ignore');
 			get('shim').removeClassName('show');
 		}
-        this.setup();
+		this.setup();
 		var toasterHeight = get(this.nodeId).offsetHeight;
 		var newBottom = 0-(toasterHeight);
 		get(this.nodeId).setStyle({'-webkit-transition-duration': (toasterHeight/800) + 's' });
+		get(this.nodeId).setStyle({'bottom': 0 + 'px'});
 		this.animateShow();
 	},
 	hide: function() {
