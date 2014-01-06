@@ -1,6 +1,7 @@
 var ChangelogToaster = Class.create(Toaster, {
 	items: [
 		{ version: '1.5.2' },
+		{ item: 'Work-around for first entry in list toaster not being able to be selected (like Filters, Panel Order etc)'},
 		{ item: 'Profile Mentions work now if first returned entry was a RT'},
 		{ item: 'Improved toaster pop-up/down animations'},
 		{ item: 'Fixed Details toaster cleanup'},
@@ -248,7 +249,7 @@ var ChangelogToaster = Class.create(Toaster, {
 			itemTemplate:		"templates/changelog-item",
 			listTemplate:		"templates/list",
 			// Below added by DC as changeLog display was maxing out
-			renderLimit: 200
+			renderLimit: 250
 		}, this);
 	},
 	backTapped: function(event) {

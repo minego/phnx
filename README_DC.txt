@@ -179,3 +179,4 @@ Modified phnx.css and user-list.js to fix toaster issues (didnt always clear bot
 Modified tweet.js (TweetToaster) to set this.id.  Previously only this.toastId was set, but for the toaster to be able to be completely removed, it needed this.id.  could have caused big memory bloat if user opened heaps of details toasters.
 Modified user-list.js, phnx.css, toaster.js to improve toaster popup and popdown. Now moves the proper number of pixels based on the toaster height, as well as varying the transition duration.
 Modified profile-assistant.js to work properly in mentions if first entry is a RT.
+Modified phnx.css by adding padding-top to .convo-list to help alleviate problem with first entry not being able to be selected. Still unsure what is preventing it. I know its the width of a panel though, as on the TP you can selected it if you move to the right one panel width and then select the item.

@@ -1250,6 +1250,8 @@ span.link{
 .convo-list{
 	/*padding-bottom: 20px 15px;*/
 	padding-bottom: 20px;
+	/* Added padding-top to overcome problem selecting first entry in convo-list. Still not sure of cause */
+	padding-top: 35px;
 }
 .convo-item{
 	width: 0px;
