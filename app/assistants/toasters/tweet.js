@@ -134,6 +134,8 @@ var TweetToaster = Class.create(Toaster, {
 
 		//Retrieve justsayin and audioboo mp3 links and instagram mp4 links
 		var links = tweet.entities.urls;
+		var prefs = new LocalStorage();
+		var processVine = prefs.read('showVine');
 		for (var i = links.length - 1; i >= 0; i--){
 			if (links[i].expanded_url !== null) {
 				if (links[i].expanded_url.indexOf('http://www.justsayinapp.com/post/') > -1 ){
@@ -144,6 +146,15 @@ var TweetToaster = Class.create(Toaster, {
 				}
 				if ((links[i].expanded_url.indexOf('http://instagram.com/p/') > -1) || (links[i].expanded_url.indexOf('http://instagr.am/p/') > -1)){
 					this.getInstagramVideoHTML(links[i].expanded_url,this.tweet);
+				}
+				if(processVine === false){
+					if (links[i].expanded_url.indexOf('http://vine.co/v/') > -1 || links[i].expanded_url.indexOf('https://vine.co/v/') > -1){
+						th.getVineHTML(links[i].expanded_url,this.tweet,i,null,this.controller.get('details-' + this.toasterId),false);
+						if(i > 0){
+							tweet.thumb2_class = 'show';
+						}
+						tweet.thumb_class = 'show';
+					}
 				}
 			}
 		}

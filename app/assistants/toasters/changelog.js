@@ -1,12 +1,13 @@
 var ChangelogToaster = Class.create(Toaster, {
 	items: [
 		{ version: '1.5.2' },
+		{ item: 'Vine option in Advanced Prefs now relates to Timelines.  If it is "off" tweets with Vine links are processed on tap.  This means that Vine thumbs will not show in timelines'},
 		{ item: 'Work-around for first entry in list toaster not being able to be selected (like Filters, Panel Order etc)'},
 		{ item: 'Profile Mentions work now if first returned entry was a RT'},
 		{ item: 'Improved toaster pop-up/down animations'},
 		{ item: 'Fixed Details toaster cleanup'},
 		{ version: '1.5.1' },
-		{ item: 'Fixed display of final autthorization panel'},
+		{ item: 'Fixed display of final authorization panel'},
 		{ item: 'Fixed Vine videos from playing in the background'},
 		{ item: 'Fav hearts now show in Profile view'},
 		{ version: '1.5.0' },

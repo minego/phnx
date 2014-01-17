@@ -183,8 +183,8 @@ TweetHelper.prototype = {
 						//tweet.cssClass = 'new-tweet';
 						tweet.thumb_class = 'show';
 					} else if (links[i].expanded_url.indexOf('http://vine.co/v/') > -1 || links[i].expanded_url.indexOf('https://vine.co/v/') > -1){
-						if(processVine === true) {
-							this.getVineHTML(links[i].expanded_url,tweet,i,model,controller);
+						if(processVine === true){
+							this.getVineHTML(links[i].expanded_url,tweet,i,model,controller,processVine);
 							if(i > 0){
 								tweet.thumb2_class = 'show';
 							}
@@ -240,10 +240,9 @@ TweetHelper.prototype = {
 
 		return tweet;
 	},
-	
-	getVineHTML: function(url, tweet, index, model, controller, callback) {
-		//Mojo.Log.info('src url: ' + url);
-		
+
+	getVineHTML: function(url, tweet, index, model, controller, processVine, callback) {
+
 		var req = new Ajax.Request(url, {
 			method: 'GET',
 			onSuccess: function(response) {
@@ -297,7 +296,16 @@ TweetHelper.prototype = {
 					Mojo.Log.info('vine thumb2: ' + tweet.myStillLink2);
 					Mojo.Log.info('vine video2: ' + tweet.myVideoLink2);
 				}
-				controller.modelChanged(model);
+				if(processVine === true){
+					controller.modelChanged(model);
+				} else {
+						//re-render the tweet HTML
+					var tweetHtml = Mojo.View.render({
+						object: tweet,
+						template: 'templates/tweets/details'
+					});
+					controller.update(tweetHtml);
+				}
 				myNode = NULL;
 				doc = NULL;
 			}.bind(this),
@@ -470,8 +478,8 @@ TweetHelper.prototype = {
 						//tweet.cssClass = 'new-tweet';
 						tweet.thumb_class = 'show';
 					}	else if (links[i].expanded_url.indexOf('http://vine.co/v/') > -1 || links[i].expanded_url.indexOf('https://vine.co/v/') > -1){
-						if(processVine === true) {
-							this.getVineHTML(links[i].expanded_url,tweet,i,model,controller);
+						if(processVine === true){
+							this.getVineHTML(links[i].expanded_url,tweet,i,model,controller,processVine);
 							if(i > 0){
 								tweet.thumb2_class = 'show';
 							}
