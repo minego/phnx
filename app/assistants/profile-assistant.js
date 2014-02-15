@@ -11,6 +11,7 @@ ProfileAssistant.prototype = {
 		this.menuItems = [];
 	
 		this.account = this.controller.stageController.user;
+		this.getNoUserRetweets();
 		if (this.user.id_str === this.account.id) {
 			// Testing code for profile image upload - not ready - DC
 			//this.menuItems.push({
@@ -46,6 +47,20 @@ ProfileAssistant.prototype = {
 					}
 				}
 			}
+			if (this.account.noUserRetweets.indexOf(this.user.id) > -1) {
+				this.menuItems.push({
+					label: 'Show User Retweets',
+					command: 'cmdUserRetweetsOk'
+				});
+			} else {
+				this.menuItems.push({
+					label: 'Hide User Retweets',
+					command: 'cmdUserRetweetsNo'
+				});
+			}
+			if (!this.user.following){
+				this.menuItems[2].disabled = true;
+			}	
 			this.menuItems.push({
 				label: 'Public Mention',
 				command: 'cmdMention'
@@ -231,6 +246,7 @@ ProfileAssistant.prototype = {
 		this.controller.listen(this.controller.get('tweets'), Mojo.Event.tap, this.tweetsTapped.bind(this));
 		this.controller.listen(this.controller.get('following'), Mojo.Event.tap, this.followingTapped.bind(this));
 		this.controller.listen(this.controller.get('followers'), Mojo.Event.tap, this.followersTapped.bind(this));
+		this.controller.listen(this.controller.get('no-user-retweets'), Mojo.Event.tap, this.noUserRetweetsTapped.bind(this));
 		this.controller.listen(this.controller.get('location'), Mojo.Event.tap, this.locationTapped.bind(this));
 		this.controller.listen(this.controller.get('url'), Mojo.Event.tap, this.urlTapped.bind(this));
 		this.controller.listen(this.controller.get('profile-avatar'), Mojo.Event.tap, this.avatarTapped.bind(this));
@@ -243,6 +259,7 @@ ProfileAssistant.prototype = {
 			this.controller.get('options').setStyle({'display':'none'});
 		}
 
+		this.controller.get('no-user-retweets').hide();
 		// Holy eager loading, Batman!
 		// Timeout so the scene can be fully set up before requests are made
 		// (helps with the Request triggering the loading bar)
@@ -286,7 +303,7 @@ ProfileAssistant.prototype = {
 				this.controller.get('follows-verb').update('follows');
 			} else {
 				this.controller.get('follows-verb').update('does not follow');
-				this.menuItems[3].disabled = true;
+				this.menuItems[4].disabled = true;
 			}
 		}.bind(this));
 	},
@@ -649,6 +666,12 @@ ProfileAssistant.prototype = {
 			case 'cmdUnfollow':
 				this.unfollow();
 				break;
+			case 'cmdUserRetweetsOk':
+				this.userRetweetsOk(this.user);
+				break;
+			case 'cmdUserRetweetsNo':
+				this.userRetweetsNo(this.user);
+				break;
 			case 'cmdMuteUser':
 				this.muteUser();
 				break;
@@ -692,6 +715,7 @@ ProfileAssistant.prototype = {
 		Twitter.followUser(this.user.id_str, function(response){
 			banner('Now following @' + this.user.screen_name);
 			this.menuItems[0] = {label: 'Unfollow', command: 'cmdUnfollow'};
+			this.menuItems[2].disabled = false;
 		}.bind(this));
 	},
 	unfollow: function() {
@@ -702,6 +726,7 @@ ProfileAssistant.prototype = {
 				Twitter.unfollowUser(this.user.id_str, function(response){
 					banner('Unfollowed @' + this.user.screen_name);
 					this.menuItems[0] = {label: 'Follow', command: 'cmdFollow'};
+					this.menuItems[2].disabled = true;
 					this.toasters.back();
 				}.bind(this));
 			}.bind(this)
@@ -709,6 +734,49 @@ ProfileAssistant.prototype = {
 
 		this.toasters.add(new ConfirmToaster(opts, this));
 	},
+	userRetweetsOk: function(user) {
+		var Twitter = new TwitterAPI(this.account);
+		Twitter.userRetweetStatus(true, user.id_str, function(response){
+			banner('Showing retweets from @' + user.screen_name);
+			this.menuItems[2] = {label: 'Hide User Retweets', command: 'cmdUserRetweetsNo'};
+			if (this.user.id_str === this.account.id) {
+				this.getNoUserRetweets()
+			}
+		}.bind(this));
+	},
+	userRetweetsNo: function(user) {
+		var Twitter = new TwitterAPI(this.account);
+		Twitter.userRetweetStatus(false, user.id_str, function(response){
+			banner('Hiding retweets from @' + user.screen_name);
+			this.menuItems[2] = {label: 'Show User Retweets', command: 'cmdUserRetweetsOk'};
+		}.bind(this));
+	},
+	getNoUserRetweets: function() {
+		var Twitter = new TwitterAPI(this.account);
+		Twitter.noUserRetweets(function(r){
+			this.account.noUserRetweets = r.responseJSON;
+			this.account.noUserRetweets_count = this.account.noUserRetweets.length;
+			if (this.user.id_str === this.account.id) {
+				this.user.noUserRetweets_count = this.account.noUserRetweets_count;
+				if(this.user.noUserRetweets_count > 0) {
+					//Dirty hack to update count value as for some reason setting the variable normally just leaves value blank. Probably something obvious.
+					this.controller.get('no-user-retweets-count').update(this.user.noUserRetweets_count);
+					this.controller.get('no-user-retweets').show();
+				} else {
+					this.controller.get('no-user-retweets').hide();
+				}
+			} else {
+				if (this.account.noUserRetweets.indexOf(this.user.id) > -1) {
+					this.menuItems[2] = {label: 'Show User Retweets', command: 'cmdUserRetweetsOk'};
+				} else {
+					this.menuItems[2] = {label: 'Hide User Retweets', command: 'cmdUserRetweetsNo'};
+				}
+			}
+			if (!this.user.following){
+				this.menuItems[2].disabled = true;
+			}	
+		}.bind(this));
+	},	
 	muteUser: function() {
 		var prefs	= new LocalStorage();
 		var mutedUsers = prefs.read('mutedUsers');
@@ -858,6 +926,12 @@ ProfileAssistant.prototype = {
 			this.toasters.add(new UserListToaster('@' + this.user.screen_name + '\'s followers', r, this));
 		}.bind(this));
 	},
+	noUserRetweetsTapped: function(event){
+		var Twitter = new TwitterAPI(this.user);
+		Twitter.getUsersById(this.account.noUserRetweets.join(','), function(r){
+			this.toasters.add(new ManageNoUserRetweetsToaster("No Retweet Users",r.responseJSON,this));
+		}.bind(this));	
+	},
 	deactivate: function(event) {
 		// this.controller.get(this.controller.document).stopObserving('keyup');
 	},
@@ -876,6 +950,7 @@ ProfileAssistant.prototype = {
 		this.controller.stopListening(this.controller.get('tweets'), Mojo.Event.tap, this.tweetsTapped);
 		this.controller.stopListening(this.controller.get('following'), Mojo.Event.tap, this.followingTapped);
 		this.controller.stopListening(this.controller.get('followers'), Mojo.Event.tap, this.followersTapped);
+		this.controller.stopListening(this.controller.get('no-user-retweets'), Mojo.Event.tap, this.noUserRetweetsTapped);
 		this.controller.stopListening(this.controller.get('url'), Mojo.Event.tap, this.urlTapped);
 		this.controller.stopListening(this.controller.get('profile-avatar'), Mojo.Event.tap, this.avatarTapped);
 		this.controller.stopListening(this.controller.get("close-button"), Mojo.Event.tap, this.closeTapped);

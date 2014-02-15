@@ -54,6 +54,7 @@ MainAssistant.prototype = {
 		global.setTimer();
 
 		this.user	= this.controller.stageController.user;
+		this.user.noUserRetweets = [];
 		this.users	= this.controller.stageController.users || [ this.user ];
 		var prefs	= new LocalStorage();
 		var mutedUsers = prefs.read('mutedUsers');

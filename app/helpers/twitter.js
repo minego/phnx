@@ -35,6 +35,8 @@ var TwitterAPI = function(user, stageController) {
 		userFavorites:		'favorites/list',
 		followUser:			'friendships/create',
 		unfollowUser:		'friendships/destroy',
+		userRetweetStatus:	'friendships/update',
+		noUserRetweets:			'friendships/no_retweets/ids',
 		rateLimit:			'application/rate_limit_status',
 		trends:				'trends/place',
 		savedSearches:		'saved_searches/list',
@@ -101,6 +103,12 @@ TwitterAPI.prototype = {
 	},
 	unfollowUser: function(id, callback) {
 		this.sign('POST', this.url(this.endpoints.unfollowUser), callback, {'user_id':id}, {});
+	},
+	userRetweetStatus: function(status, id, callback) {
+		this.sign('POST', this.url(this.endpoints.userRetweetStatus), callback, {'user_id':id, 'retweets':status}, {});
+	},
+	noUserRetweets: function(callback) {
+		this.sign('GET', this.url(this.endpoints.noUserRetweets), callback, {'stringify_ids':true}, {});
 	},
 	checkFollow: function(userA, userB, callback) {
 		this.sign('GET', this.url(this.endpoints.friendshipExists), callback, {
