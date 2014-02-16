@@ -1,7 +1,7 @@
 var ChangelogToaster = Class.create(Toaster, {
 	items: [
 		{ version: '1.5.2' },
-		{ item: 'Possible to now hide/show retweets from a specificed user. Configure in Profile view'},
+		{ item: 'Possible to now hide/show retweets of a specified user. Configure in Profile view'},
 		{ item: 'Vine option in Advanced Prefs now relates to Timelines.  If it is "off" tweets with Vine links are processed on tap.  This means that Vine thumbs will not show in timelines'},
 		{ item: 'Work-around for first entry in list toaster not being able to be selected (like Filters, Panel Order etc)'},
 		{ item: 'Profile Mentions work now if first returned entry was a RT'},
