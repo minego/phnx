@@ -1,6 +1,7 @@
 var ChangelogToaster = Class.create(Toaster, {
 	items: [
 		{ version: '1.5.3' },
+		{ item: 'Added Trending Location to General Settings preference page.  If your country is not listed, please tweet @baldric555 and it will be added'},
 		{ item: 'Added option to use YouTube app from webOS2.1.2 on webOS2.2.4 devices if installed'},
 		{ item: 'Helped youtu.be shortened links work a bit better on webOS2.2.4'},
 		{ version: '1.5.2' },

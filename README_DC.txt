@@ -184,3 +184,4 @@ Modified both tweet.js files and preferences-assistant.js to allow for processin
 Modified main-assistant.js, profile-assistant.js, twitter.js, content.html and added nouserretweets.js to allow for option to hide/show specific user's retweets
 Modified tweet.js to help with youtu.be shortened links
 Modified preferences-assistant.js, tweet.js, local.js and added misc folder with readme and a patch file to allow use of webOS2.1.2 version of the youtube app to be used on webOS2.2.4 devices.  Advanced Settings has option to select app (if running webOS2.2.2)
+Modified main-assistant.js, preferences-assistant.js, twitter.js and local.js to allow for selection of Trending Topics region. Adjust in General Settings.

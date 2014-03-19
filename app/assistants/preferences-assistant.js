@@ -65,7 +65,28 @@ function PreferencesAssistant(section) {
 			{key: 'refreshFlushAtLaunch', type: 'toggle', label: 'Refresh & flush at launch'},
 			{key: 'enterToSubmit', type: 'toggle', label: 'Enter to submit'},
 			{key: 'autoCorrect', type: 'toggle', label: 'Auto Correct'},
-			{key: 'composeCard', type: 'toggle', label: 'Compose in new Card'}
+			{key: 'composeCard', type: 'toggle', label: 'Compose in new Card'},
+			{key: 'trendLocation', type: 'select', label: 'Trending Location', items: [
+				{label: 'World', value: '1'},
+				{label: 'Africa', value: '24865670'},
+				{label: 'Asia', value: '24865671'},
+				{label: 'Australia', value: '23424748'},
+				{label: 'Europe', value: '24865675'},
+				{label: 'North America', value: '24865672'},
+				{label: 'South America', value: '24865673'},
+				{label: 'Canada', value: '23424775'},
+				{label: 'China', value: '23424781'},
+				{label: 'France', value: '23424819'},
+				{label: 'Germany', value: '23424829'},
+				{label: 'Italy', value: '23424853'},
+				{label: 'Japan', value: '23424856'},
+				{label: 'Mexico', value: '23424900'},
+				{label: 'Netherlands', value: '23424909'},
+				{label: 'New Zealand', value: '23424916'},
+				{label: 'Spain', value: '23424950'},
+				{label: 'United Kingdom', value: '23424975'},
+				{label: 'USA', value: '23424977'}
+			]},
 		],
 		'Appearance': [
 			{key: 'theme', type: 'select', label: 'Theme', items: [

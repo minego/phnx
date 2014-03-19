@@ -126,8 +126,8 @@ TwitterAPI.prototype = {
 			//Mojo.Log.error("Rate_Limits: " + status);
 		}, {}, {});
 	},
-	trends: function(callback) {
-		this.sign('GET', this.url(this.endpoints.trends), callback, { id: 1 }, {});
+	trends: function(location, callback) {
+		this.sign('GET', this.url(this.endpoints.trends), callback, { id: location }, {});
 	},
 	getSavedSearches: function(callback) {
 		this.sign('GET', this.url(this.endpoints.savedSearches), callback, {}, {});

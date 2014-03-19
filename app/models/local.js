@@ -45,6 +45,7 @@ function LocalStorage() {
 		showVine: false,
 		useFoursquareApp: false,
 		youTubeApp: 'com.palm.app.youtube',
+		trendLocation: '1',
 		refreshOnMaximize: false,
 		autoCorrect: true,
 		mutedUsers: [],

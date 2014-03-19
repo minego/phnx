@@ -589,7 +589,7 @@ MainAssistant.prototype = {
 				this.refreshAll();
 			} else {
 				for (var j = 0, panel; panel = this.panels[j]; j++) {
-					if (panel.type === "timeline") {
+					if (panel.type === "timeline" || panel.type === "search") {
 						this.refreshPanelFlush(panel);
 					}
 				}
@@ -677,7 +677,7 @@ MainAssistant.prototype = {
 						this.refreshPanelFlush(this.panels[this.timeline]);
 					} else {
 						for (var j = 0, panel; panel = this.panels[j]; j++) {
-							if(panel.type === "timeline") {
+							if(panel.type === "timeline" || panel.type === "search") {
 								this.refreshPanelFlush(panel);
 							}
 						}
@@ -931,8 +931,10 @@ MainAssistant.prototype = {
 	loadSearch: function() {
 		// Loads saved searches and trending topics
 		var Twitter = new TwitterAPI(this.user);
+		var prefs = new LocalStorage();
+		var trendLocation = prefs.read('trendLocation');
 
-		Twitter.trends(function(response){
+		Twitter.trends(trendLocation, function(response){
 			var resp = response.responseJSON;
 			var trends = resp[0].trends;
 			this.trendingTopicsModel.items = trends;
@@ -958,7 +960,7 @@ MainAssistant.prototype = {
 	},
 	refreshAll: function() {
 		for (var j=0; j < this.panels.length; j++) {
-			if (this.panels[j].type === "timeline") {
+			if (this.panels[j].type === "timeline" || this.panels[j].type === "search") {
 				this.refreshPanel(this.panels[j]);
 			}
 		}
