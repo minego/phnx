@@ -37,6 +37,14 @@ function PreferencesAssistant(section) {
 				{key: 'showVine', type: 'toggle', label: 'Process Vine links in Timelines - warning *resource hog*'},
 				{key: 'useFoursquareApp', type: 'toggle', label: 'Pass 4sq.com links to Foursquare app (requires v2.8.5)'}
 	);
+	if (Mojo.Environment.DeviceInfo.platformVersion == "2.2.4"){
+		advanced.push(
+			{key: 'youTubeApp', type: 'select', label: 'YouTube App', items: [
+				{label: 'com.palm.app.youtube', value: 'com.palm.app.youtube'},
+				{label: 'com.palm.app.youtube2', value: 'com.palm.app.youtube2'}
+			]}
+		);
+	}
 
 	this.sections = {
 		'General Settings': [

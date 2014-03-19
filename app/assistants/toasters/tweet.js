@@ -1180,7 +1180,9 @@ transport.responseText);
 			this.openYouTube(url);
 		} else if (url.indexOf('youtu.be') > 1) {
 			// YouTube app doesn't like the short URLs so let's convert it to a full URL
-			this.openYouTube('http://youtube.com/watch?v=' + url.substr(url.indexOf('.be/') + 4));
+			//this.openYouTube('http://youtube.com/watch?v=' + url.substr(url.indexOf('.be/') + 4));
+			var tail = url.substr(url.indexOf('.be/') + 4);
+			this.openYouTube('http://youtube.com/watch?v=' + tail.substr(0,tail.indexOf("?")));
 		} else if (url.indexOf('http://twitter.com/#!/' + this.twitterUsername + '/status/' + this.twitterId) > -1) {
 			this.assistant.toasters.add(new TweetToaster(url, this.assistant));
 			Mojo.Log.error("TweetToaster for http:// called");
@@ -1338,19 +1340,43 @@ transport.responseText);
 		this.closePreview();
 	},
 	openYouTube: function(url) {
-		if (Mojo.Environment.DeviceInfo.platformVersionMajor < 3) {
-			this.controller.serviceRequest("palm://com.palm.applicationManager", {
-				method: "launch",
-				parameters: {
-					id: "com.palm.app.youtube",
-					params: {
-						target: url
-					}
-				}
-			});
-		} else {
-			global.openBrowser(url);
+		var appIds = ["com.palm.app.youtube"];
+		var index = 0;
+		var tmpId;
+		
+		//Mojo.Log.error("osVers: " + Mojo.Environment.DeviceInfo.platformVersion);
+		if (Mojo.Environment.DeviceInfo.platformVersion == "2.2.4") {
+			var prefs = new LocalStorage();
+			tmpId = prefs.read('youTubeApp');
+			if(tmpId) {
+				appIds.unshift(tmpId);
+			}
 		}
+		function makeCall() {
+			if(index < appIds.length) {
+				if (Mojo.Environment.DeviceInfo.platformVersionMajor < 3) {
+					//this.controller.serviceRequest("palm://com.palm.applicationManager", {
+					var request = new Mojo.Service.Request("palm://com.palm.applicationManager", {
+						method: "launch",
+						parameters: {
+							id: appIds[index],
+							params: {
+								target: url
+							}
+						},
+						onFailure: function() {
+							index++;
+							makeCall();
+						}.bind(this)
+					});
+				} else {
+					global.openBrowser(url);
+				}
+			} else {
+				global.openBrowser(url);
+			}
+		}
+		makeCall();
 	},
 	rtTapped: function(event) {
 		var Twitter = new TwitterAPI(this.user);

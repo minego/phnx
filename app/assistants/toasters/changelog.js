@@ -1,5 +1,8 @@
 var ChangelogToaster = Class.create(Toaster, {
 	items: [
+		{ version: '1.5.3' },
+		{ item: 'Added option to use YouTube app from webOS2.1.2 on webOS2.2.4 devices if installed'}
+		{ item: 'Helped youtu.be shortened links work a bit better on webOS2.2.4'},
 		{ version: '1.5.2' },
 		{ item: 'Possible to now hide/show retweets of a specified user. Configure in Profile view'},
 		{ item: 'Vine option in Advanced Prefs now relates to Timelines.  If it is "off" tweets with Vine links are processed on tap.  This means that Vine thumbs will not show in timelines'},

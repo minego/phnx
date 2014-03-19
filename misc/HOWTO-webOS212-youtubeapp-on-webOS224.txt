@@ -1,0 +1,45 @@
+===============================================================================================================
+Steps to use the YouTube app from webOS2.1.2 (as found on Veer) on a device running webOS2.2.4 in hires mode (such as a Pre3)
+===============================================================================================================
+
+Obtain webOS Doctors for a 2.1.2 device (such as a Veer) and a 2.2.4 device (such as a Pre3).  You can find these yourself from the relevant HP support site.
+
+Example Doctor filenames:
+webOS2.1.2: webosdoctorp160unaatt.jar
+webOS2.2.2: webosdoctorp224mantaverizon.jar
+
+On a PC, use an archive manage such as 7-Zip to extract the following directory from the webOS2.1.2 doctor:
+webosdoctorp160unaatt.jar\resources\webOS.tar\.\nova-cust-image-broadway.rootfs.tar.gz\nova-cust-image-broadway.rootfs.tar\.\usr\palm\applications\com.palm.app.youtube
+Rename this directory to com.palm.app.youtube2
+
+On a PC, use an archive manage such as 7-Zip to extract the following directory from the webOS2.2.4 doctor:
+webosdoctorp224mantaverizon.jar\resources\webOS.tar\.\nova-cust-image-mantaray.rootfs.tar.gz\nova-cust-image-mantaray.rootfs.tar\.\usr\palm\applications\com.palm.app.youtube
+Rename this director to com.palm.app.youtube.224
+
+Copy the following directories from the webOS2.2.4 version to the webOS2.1.2 version:
+com.palm.app.youtube.224/images/1.5 -> com.palm.app.youtube2/images 
+com.palm.app.youtube.224/images/framework/1.5 -> com.palm.app.youtube2/images/framework
+
+Edit com.palm.app.youtube2/appinfo.json.  Append '2' to all occurances of the word YouTube (including different cases)
+So:
+	"title": "YouTube2",
+	...
+	"id": "com.palm.app.youtube2",
+	...
+	"displayName": "YouTube2",
+	...
+	"url":"com.palm.app.youtube2",
+
+Make a new installable package (you'll need the webOS-SDK installed to do this):
+palm-package com.palm.app.youtube2
+
+Install package onto your webOS2.2.4 device:
+palm-install com.palm.app.youtube2_1.0.0_all.ipk
+
+Apply the youtube2.patch file found in patch folder of ProjectMacaw app (/media/cryptofs/apps/usr/palm/applications/net.minego.phnx/misc/youtube2.patch)
+
+Hopefully that all work and you now have a working webOS2.1.2 version of the YouTube app working on your webOS2.2.4 device.  You can now use the "Advanced Settings" preference page to select the YouTube app you want to load when clicking on YouTube links in ProjectMacaw.
+
+Good Luck!
+
+@baldric555
