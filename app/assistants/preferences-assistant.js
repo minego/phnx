@@ -68,12 +68,13 @@ function PreferencesAssistant(section) {
 			{key: 'composeCard', type: 'toggle', label: 'Compose in new Card'},
 			{key: 'trendLocation', type: 'select', label: 'Trending Location', items: [
 				{label: 'World', value: '1'},
-				{label: 'Africa', value: '24865670'},
-				{label: 'Asia', value: '24865671'},
+				//Most continents don't appear to return trends from twitter
+				//{label: 'Africa', value: '24865670'},
+				//{label: 'Asia', value: '24865671'},
 				{label: 'Australia', value: '23424748'},
-				{label: 'Europe', value: '24865675'},
-				{label: 'North America', value: '24865672'},
-				{label: 'South America', value: '24865673'},
+				//{label: 'Europe', value: '24865675'},
+				//{label: 'North America', value: '24865672'},
+				//{label: 'South America', value: '24865673'},
 				{label: 'Canada', value: '23424775'},
 				{label: 'China', value: '23424781'},
 				{label: 'France', value: '23424819'},
