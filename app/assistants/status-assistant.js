@@ -157,6 +157,11 @@ StatusAssistant.prototype = {
         
 		for (var i=0; i < items.length; i++) {
 			items[i] = th.process(items[i],this.itemsModel,this.controller,processVine,mutedUsers);
+			//Hide retweets
+			if(items[i].is_rt === true){
+				items.splice(i,1);
+				i--;
+			}
 		}
 		
 		var templates = {
