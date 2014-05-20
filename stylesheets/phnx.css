@@ -1490,6 +1490,9 @@ span.link{
 #verified.true {
 	display: block;
 }
+#verified.true.list {
+	display: inline;
+}
 #verified span {
 	font-weight: bold;
 	font-size: 15px;
