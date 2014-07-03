@@ -187,5 +187,5 @@ Modified preferences-assistant.js, tweet.js, local.js and added misc folder with
 Modified main-assistant.js, preferences-assistant.js, twitter.js and local.js to allow for selection of Trending Topics region. Adjust in General Settings.
 Modified status-assistant.js to not show retweets on searches
 Modified phnx.css, user-item.html and muteduser-item.html to show verified status next to user names in user lists (followers, following, muted-users)
-Modified preferences-assistant.js to added Honduras to trending locations
+Modified preferences-assistant.js to added Honduras to trending locations (but doesn't work so commented out)
 Modified tweet.js, main-assistant.js, preferences-assistant.js, profile-assistant.js, status-assistant.js, convo.js, search.js, status-list.js, local.js, item-one-column.html, search.html and item.html to hide gif's in timeline but still show in details (to help with animated gifs slowing everything down)

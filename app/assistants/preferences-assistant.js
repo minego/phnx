@@ -86,8 +86,8 @@ function PreferencesAssistant(section) {
 				{label: 'New Zealand', value: '23424916'},
 				{label: 'Spain', value: '23424950'},
 				{label: 'United Kingdom', value: '23424975'},
-				{label: 'USA', value: '23424977'},
-				{label: 'Honduras', value: '23424841'}
+				{label: 'USA', value: '23424977'}
+				//{label: 'Honduras', value: '23424841'}
 			]},
 		],
 		'Appearance': [
