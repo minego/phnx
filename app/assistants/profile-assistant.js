@@ -558,9 +558,23 @@ ProfileAssistant.prototype = {
 	},
 	navTapped: function(event) {
 		var id = event.srcElement.id.substr(event.srcElement.id.indexOf('-') + 1);
-		for (var i=0; i < this.panels.length; i++) {
-			if (this.panels[i] === id) {
-				this.scrollTo(i);
+		if(this.panels[this.currentPanel] === id) {
+			var scroller = this.controller.get(this.panels[this.currentPanel] + '-scroller');
+			if (scroller) {
+				var position = scroller.mojo.getScrollPosition();
+				var size = scroller.mojo.scrollerSize();
+				if (position.top === 0) {
+					// scroll to bottom
+					scroller.mojo.scrollTo(0, -99999999, true);
+				} else {
+					scroller.mojo.scrollTo(0, 0,true);
+				}
+			}
+		} else {
+			for (var i=0; i < this.panels.length; i++) {
+				if (this.panels[i] === id) {
+					this.scrollTo(i);
+				}
 			}
 		}
 	},
