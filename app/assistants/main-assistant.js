@@ -1278,6 +1278,7 @@ MainAssistant.prototype = {
 		var prefs = new LocalStorage();
 		var processVine = prefs.read('showVine');
 		var mutedUsers = prefs.read('mutedUsers');
+		var hideGifs = prefs.read('hideGifThumbsInTimeline');
 		var muteSelectedUsers = prefs.read('muteSelectedUsers');
 		var hideNewMutedTweets = prefs.read('hideNewMutedTweets');
 		//Mojo.Log.error('xCount: ' + xCount); //Twitter doesn't always return the number of tweets you are expecting, which is VERY annoying.
@@ -1286,7 +1287,7 @@ MainAssistant.prototype = {
 			tweet.owner = user.id;
 
 			if (tweet.dm || !th.filter(tweet, filters)) {
-				tweets[i] = th.process(tweet,panel.model,this.controller,processVine,mutedUsers);
+				tweets[i] = th.process(tweet,panel.model,this.controller,processVine,mutedUsers,hideGifs);
 			} else {
 				tweets.splice(i, 1);
 				i--;

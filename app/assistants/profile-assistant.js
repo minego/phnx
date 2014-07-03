@@ -383,11 +383,12 @@ ProfileAssistant.prototype = {
 			var prefs = new LocalStorage();
 			var processVine = prefs.read('showVine');
 			var mutedUsers = prefs.read('mutedUsers');
+			var hideGifs = prefs.read('hideGifThumbsInTimeline');
 
 			if (this.historyModel.items.length === 0) {
 				var tweet;
 				for (var i=0; i < response.responseJSON.length; i++) {
-					tweet = th.process(response.responseJSON[i],this.historyModel,this.controller,processVine,mutedUsers);
+					tweet = th.process(response.responseJSON[i],this.historyModel,this.controller,processVine,mutedUsers,hideGifs);
 					if(tweet.favorited) {
 						if (!tweet.favSet){
 							tweet.favSet = true;
@@ -402,7 +403,7 @@ ProfileAssistant.prototype = {
 			}	else {
 				var tweet;
 				for (var i = response.responseJSON.length - 1; i >= 0; i--){
-					tweet = th.process(response.responseJSON[i],this.historyModel,this.controller,processVine,mutedUsers);
+					tweet = th.process(response.responseJSON[i],this.historyModel,this.controller,processVine,mutedUsers,hideGifs);
 					if(tweet.favorited) {
 						if (!tweet.favSet){
 							tweet.favSet = true;
@@ -440,9 +441,10 @@ ProfileAssistant.prototype = {
 			var prefs = new LocalStorage();
 			var processVine = prefs.read('showVine');
 			var mutedUsers = prefs.read('mutedUsers');
+			var hideGifs = prefs.read('hideGifThumbsInTimeline');
 
 			for (var i=0; i < items.length; i++) {
-				items[i] = th.process(items[i],this.mentionsModel,this.controller,processVine,mutedUsers);
+				items[i] = th.process(items[i],this.mentionsModel,this.controller,processVine,mutedUsers,hideGifs);
 				if(items[i].is_rt === true){
 					items.splice(i,1);
 					i--;
@@ -491,11 +493,12 @@ ProfileAssistant.prototype = {
 			var prefs = new LocalStorage();
 			var processVine = prefs.read('showVine');
 			var mutedUsers = prefs.read('mutedUsers');
+			var hideGifs = prefs.read('hideGifThumbsInTimeline');
 
 			if (this.favoritesModel.items.length === 0) {
 				var tweet;
 				for (var i=0; i < response.responseJSON.length; i++) {
-					tweet = th.process(response.responseJSON[i],this.favoritesModel,this.controller,processVine,mutedUsers);
+					tweet = th.process(response.responseJSON[i],this.favoritesModel,this.controller,processVine,mutedUsers,hideGifs);
 					if(tweet.favorited) {
 						if (!tweet.favSet){
 							tweet.favSet = true;
@@ -510,7 +513,7 @@ ProfileAssistant.prototype = {
 			} else {
 				var tweet;
 				for (var i = response.responseJSON.length - 1; i >= 0; i--){
-					tweet = th.process(response.responseJSON[i],this.favoritesModel,this.controller,processVine,mutedUsers);
+					tweet = th.process(response.responseJSON[i],this.favoritesModel,this.controller,processVine,mutedUsers,hideGifs);
 					if(tweet.favorited) {
 						if (!tweet.favSet){
 							tweet.favSet = true;

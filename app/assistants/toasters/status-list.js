@@ -12,9 +12,10 @@ var StatusListToaster = Class.create(Toaster, {
 		var prefs = new LocalStorage();
 		var processVine = prefs.read('showVine');
 		var mutedUsers = prefs.read('mutedUsers');
+		var hideGifs = prefs.read('hideGifThumbsInTimeline');
 
 		for (var i=0; i < items.length; i++) {
-			items[i] = th.process(items[i],this.listModel,this.controller,processVine,mutedUsers);
+			items[i] = th.process(items[i],this.listModel,this.controller,processVine,mutedUsers,hideGifs);
 		}
 
 		//this.listModel = {"items": items};

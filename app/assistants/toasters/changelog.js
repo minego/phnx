@@ -1,5 +1,8 @@
 var ChangelogToaster = Class.create(Toaster, {
 	items: [
+		{ version: '1.5.4' },
+		{ item: 'Added Honduras to trending locations'},
+		{ item: 'Option to hide gifs from timeline views to help with reducing cpu load due to animations'},
 		{ version: '1.5.3' },
 		{ item: 'User lists show "verified" tick next to username'},
 		{ item: 'Searches no longer show retweets'},

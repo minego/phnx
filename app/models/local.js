@@ -35,6 +35,7 @@ function LocalStorage() {
 		hideSearchTimelineThumbs: true,
 		showThumbs: 'showThumbs',
 		showEmoji: 'showEmoji',
+		hideGifThumbsInTimeline: true,
 		fadeShim: false,
 		limitToLocale: false,
 		cardIcons: 'auto',

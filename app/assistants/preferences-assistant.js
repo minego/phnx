@@ -86,7 +86,8 @@ function PreferencesAssistant(section) {
 				{label: 'New Zealand', value: '23424916'},
 				{label: 'Spain', value: '23424950'},
 				{label: 'United Kingdom', value: '23424975'},
-				{label: 'USA', value: '23424977'}
+				{label: 'USA', value: '23424977'},
+				{label: 'Honduras', value: '23424841'}
 			]},
 		],
 		'Appearance': [
@@ -121,7 +122,8 @@ function PreferencesAssistant(section) {
 				{label: 'Always Show', value: 'showThumbs'}
 			]},
 			{key: 'fullWidthThumbs', type: 'toggle', label: 'Full Width Thumbnails'},
-			{key: 'hideSearchTimelineThumbs',		type: 'toggle', label: 'Hide Search Timeline Thumbnails'},
+			{key: 'hideSearchTimelineThumbs',	type: 'toggle', label: 'Hide Search Timeline Thumbnails'},
+			{key: 'hideGifThumbsInTimeline', type: 'toggle', label: 'Hide Gif Thumbnails in Timeline'},
 			{key: 'showEmoji', type: 'select', label: 'emoji', items: [
 				{label: 'Never Show', value: 'noEmoji'},
 				{label: 'Details Only', value: 'detailsEmoji'},

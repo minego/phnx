@@ -154,9 +154,10 @@ StatusAssistant.prototype = {
 		var prefs = new LocalStorage();
 		var processVine = prefs.read('showVine');
 		var mutedUsers = prefs.read('mutedUsers');
+		var hideGifs = prefs.read('hideGifThumbsInTimeline');
         
 		for (var i=0; i < items.length; i++) {
-			items[i] = th.process(items[i],this.itemsModel,this.controller,processVine,mutedUsers);
+			items[i] = th.process(items[i],this.itemsModel,this.controller,processVine,mutedUsers,hideGifs);
 			//Hide retweets
 			if(items[i].is_rt === true){
 				items.splice(i,1);
@@ -249,14 +250,15 @@ StatusAssistant.prototype = {
 		var prefs = new LocalStorage();
 		var processVine = prefs.read('showVine');
 		var mutedUsers = prefs.read('mutedUsers');
+		var hideGifs = prefs.read('hideGifThumbsInTimeline');
 
 		for (i=0; i < this.itemsModel.items.length; i++) {
 			var tweet = this.itemsModel.items[i];
 			if (type === 'search') {
-				tweet = th.processSearch(tweet,this.itemsModel,this.controller,processVine,mutedUsers);
+				tweet = th.processSearch(tweet,this.itemsModel,this.controller,processVine,mutedUsers,hideGifs);
 			}
 			else if (type === 'list'  || type === 'retweets') {
-				tweet = th.process(tweet,this.itemsModel,this.controller,processVine,mutedUsers);
+				tweet = th.process(tweet,this.itemsModel,this.controller,processVine,mutedUsers,hideGifs);
 			}
 
 			if (tweet.id_str !== newId) {
@@ -277,10 +279,11 @@ StatusAssistant.prototype = {
 				var prefs = new LocalStorage();
 				var processVine = prefs.read('showVine');
 				var mutedUsers = prefs.read('mutedUsers');
+				var hideGifs = prefs.read('hideGifThumbsInTimeline');
 				var Twitter = new TwitterAPI(this.opts.user, this.controller.stageController);
 				Twitter.getStatus(event.item.id_str, function(response){
 					var th = new TweetHelper();
-					var tweet = th.process(response.responseJSON,null,null,processVine,mutedUsers);
+					var tweet = th.process(response.responseJSON,null,null,processVine,mutedUsers,hideGifs);
 					tweet.thumbnail = tmpThumb;
 					tweet.mediaUrl = tmpMediaUrl;
 					tweet.thumbnail2 = tmpThumb2;
@@ -446,9 +449,10 @@ StatusAssistant.prototype = {
 		var prefs = new LocalStorage();
 		var processVine = prefs.read('showVine');
 		var mutedUsers = prefs.read('mutedUsers');
-
+		var hideGifs = prefs.read('hideGifThumbsInTimeline');
+		
 		for (i=0; i < model.items.length; i++) {
-			model.items[i] = th.process(model.items[i],model,this.controller,processVine,mutedUsers);
+			model.items[i] = th.process(model.items[i],model,this.controller,processVine,mutedUsers,hideGifs);
 		}
 
 		this.controller.modelChanged(model);

@@ -26,7 +26,8 @@ var ConvoToaster = Class.create(Toaster, {
 			var prefs = new LocalStorage();
 			var processVine = prefs.read('showVine');
 			var mutedUsers = prefs.read('mutedUsers');
-			tweet = th.process(tweet,this.convoModel,this.controller,processVine,mutedUsers);
+			var hideGifs = prefs.read('hideGifThumbsInTimeline');
+			tweet = th.process(tweet,this.convoModel,this.controller,processVine,mutedUsers,hideGifs);
 			this.convoModel.items.push(tweet);
 			get('convo-list-' + this.id).mojo.noticeUpdatedItems(0, this.convoModel.items);
 			if (tweet.in_reply_to_status_id_str !== null) {
