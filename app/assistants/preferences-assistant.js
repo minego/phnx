@@ -124,6 +124,7 @@ function PreferencesAssistant(section) {
 			{key: 'fullWidthThumbs', type: 'toggle', label: 'Full Width Thumbnails'},
 			{key: 'hideSearchTimelineThumbs',	type: 'toggle', label: 'Hide Search Timeline Thumbnails'},
 			{key: 'hideGifThumbsInTimeline', type: 'toggle', label: 'Hide Gif Thumbnails in Timeline'},
+			{key: 'scrollMoreToBottom', type: 'toggle', label: 'Scroll to Bottom on Load More tap'},
 			{key: 'showEmoji', type: 'select', label: 'emoji', items: [
 				{label: 'Never Show', value: 'noEmoji'},
 				{label: 'Details Only', value: 'detailsEmoji'},

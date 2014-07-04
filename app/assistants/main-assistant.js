@@ -1301,6 +1301,8 @@ MainAssistant.prototype = {
 		var hideGifs = prefs.read('hideGifThumbsInTimeline');
 		var muteSelectedUsers = prefs.read('muteSelectedUsers');
 		var hideNewMutedTweets = prefs.read('hideNewMutedTweets');
+		var showThumbs = prefs.read('showThumbs');
+		var scrollMoreToBottom = prefs.read('scrollMoreToBottom');
 		//Mojo.Log.error('xCount: ' + xCount); //Twitter doesn't always return the number of tweets you are expecting, which is VERY annoying.
 		for (var i = 0, tweet; tweet = tweets[i]; i++) {
 			/* Store a reference to the account that loaded this tweet */
@@ -1335,8 +1337,16 @@ MainAssistant.prototype = {
 			for (var i = 1, tweet; tweet = tweets[i]; i++) {
 				model.items.splice((model.items.length - 1) + i, 0, tweet);
 			}
-			if(!panel.scrollId){
-				panel.scrollId = 0;
+			//if(!panel.scrollId){
+			//	panel.scrollId = 0;
+			//} else {
+			if(scrollMoreToBottom){
+				panel.scrollId += xCount-1;
+				scrollId = panel.scrollId;
+			} else {
+				if(!panel.scrollId){
+					panel.scrollId = 0;
+				}
 			}
 		} else if (model.items.length > 0 && this.loadingGaps) {
 			//filling a gap
@@ -1679,7 +1689,19 @@ MainAssistant.prototype = {
 
 		this.controller.modelChanged(panel.model);
 		if (scrollId !== 0) {
-			this.controller.get('list-' + panel.index).mojo.revealItem(scrollId, true);
+			if(this.loadingMore){
+				setTimeout(function(){
+					this.controller.get('scroller-'+panel.index).mojo.scrollTo(0, -99999999, true);
+				}.bind(this), 1000);
+				// As thumbs load a little slower, add a second scroll to try and compensate
+				if(showThumbs === 'showThumbs') {
+					setTimeout(function(){
+						this.controller.get('scroller-'+panel.index).mojo.scrollTo(0, -99999999, true);
+					}.bind(this), 4000);
+				}
+			} else {
+				this.controller.get('list-' + panel.index).mojo.revealItem(scrollId, true);
+			}
 		}
 		if (model.items.length === 0 || (this.loadingMore && tweets.length === 0)) {
 			this.controller.get(more).hide();
