@@ -259,6 +259,10 @@ body.no-gesture {  /* touchpad/emulator */
 #refresh{
 	background: url(../images/low/icons/refresh.png) no-repeat center center;
 }
+#refresh.selected{
+	/*-webkit-border-radius: 2px;*/
+	background: url('../images/low/icons/refresh.png') no-repeat center center,url('../images/trans13.png');
+}
 #new-card{
 	background: url(../images/low/icons/new-card.png) no-repeat center center;
 }

@@ -192,3 +192,4 @@ Modified tweet.js, main-assistant.js, preferences-assistant.js, profile-assistan
 Modified profile-assistant.js to jump to top/bottom of panel when nav buttons are tapped in profile view
 Modified main-assistant.js to add prelim code for js garbage collect on refresh and flush.  Can't get it working yet.
 Modified preferences-assistant.js, local.js and main-assistant.js to add scroll to bottom on Load More tap.
+Modified phnx.css and main-scene.html to show highlight on refresh button when tapped.

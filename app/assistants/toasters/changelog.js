@@ -1,6 +1,7 @@
 var ChangelogToaster = Class.create(Toaster, {
 	items: [
 		{ version: '1.5.4' },
+		{ item: 'Refresh button highlights when tapped'},
 		{ item: 'Pref option to scroll to bottom of timeline on Load More tap'},
 		{ item: 'Nav icons in profile view will now scroll to top/bottom of panel'},
 		{ item: 'Option to hide gifs from timeline views to help with reducing cpu load due to animations'},
