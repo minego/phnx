@@ -624,6 +624,24 @@ MainAssistant.prototype = {
 			}
 		}.bind(this),10);
 	},
+	/* Command to garbage collect the heap - gc is unknown so commenting out*/
+	garbageCollect: function() {
+		/*Mojo.Log.error("GC'ing javascript heap");
+		// Do it twice to clear out dangling references (v8 oddity)
+		//var secondRound = function(){
+		this.controller.serviceRequest('palm://com.palm.lunastats',{
+			method: 'gc',
+			parameters: {}
+		});
+		//};
+		//secondRound = secondRound.bind(this);
+		//this.controller.serviceRequest('palm://com.palm.lunastats',{
+		//	method: 'gc',
+		//	parameters: {},
+		//	onComplete: secondRound
+		//});
+		*/
+	},
 	handleCommand: function(event) {
 		if (event.type === Mojo.Event.back) {
 			var prefs = new LocalStorage(); //added by DC
@@ -1073,9 +1091,11 @@ MainAssistant.prototype = {
 //			panel.model.items.length = 0;
 
 				this.getTweets(panel, lastId);
+				//this.garbageCollect();
 			}.bind(this), 200);
 		} else if (panel.id === 'search') {
 			this.loadSearch();
+			//this.garbageCollect();
 		}
 	},
 

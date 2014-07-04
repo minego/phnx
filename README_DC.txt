@@ -190,3 +190,4 @@ Modified phnx.css, user-item.html and muteduser-item.html to show verified statu
 Modified preferences-assistant.js to added Honduras to trending locations (but doesn't work so commented out)
 Modified tweet.js, main-assistant.js, preferences-assistant.js, profile-assistant.js, status-assistant.js, convo.js, search.js, status-list.js, local.js, item-one-column.html, search.html and item.html to hide gif's in timeline but still show in details (to help with animated gifs slowing everything down)
 Modified profile-assistant.js to jump to top/bottom of panel when nav buttons are tapped in profile view
+Modified main-assistant.js to add prelim code for js garbage collect on refresh and flush.  Can't get it working yet.
