@@ -1,5 +1,7 @@
 var ChangelogToaster = Class.create(Toaster, {
 	items: [
+		{ version: '1.5.5' },
+		{ item: 'Replaced emoji with EmojiOne graphics'},
 		{ version: '1.5.4' },
 		{ item: 'Refresh button highlights when tapped'},
 		{ item: 'Pref option to scroll to bottom of timeline on Load More tap'},

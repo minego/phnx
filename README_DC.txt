@@ -193,3 +193,4 @@ Modified profile-assistant.js to jump to top/bottom of panel when nav buttons ar
 Modified main-assistant.js to add prelim code for js garbage collect on refresh and flush.  Can't get it working yet.
 Modified preferences-assistant.js, local.js and main-assistant.js to add scroll to bottom on Load More tap.
 Modified phnx.css and main-scene.html to show highlight on refresh button when tapped.
+Changed emoji graphics over to freely distributable EmojiOne graphics and updated about-scene.html to attribute them. Only old graphics are: 1F508, 1F68B, 27BF & E50A.  Will replace when they become available.
