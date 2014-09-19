@@ -194,3 +194,4 @@ Modified main-assistant.js to add prelim code for js garbage collect on refresh 
 Modified preferences-assistant.js, local.js and main-assistant.js to add scroll to bottom on Load More tap.
 Modified phnx.css and main-scene.html to show highlight on refresh button when tapped.
 Changed emoji graphics over to freely distributable EmojiOne graphics and updated about-scene.html to attribute them. Only old graphics are: 1F508, 1F68B, 27BF & E50A.  Will replace when they become available.
+Updated emoji to now include 1F508, 1F68B and 27BF.  E50A is still old and may be removed in the future as the emojione team believes its not part of the unicode spec and apple dropped it in ios5
