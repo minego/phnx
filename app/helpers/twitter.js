@@ -29,6 +29,7 @@ var TwitterAPI = function(user, stageController) {
 		destroyDM:			'direct_messages/destroy',
 		statusShow:			'statuses/show',
 		statusUpdate:		'statuses/update',
+		statusUpdateMedia:	'statuses/update_with_media',
 		showUser:			'users/show',
 		lookupUsers:		'users/lookup',
 		userTimeline:		'statuses/user_timeline',
@@ -80,7 +81,12 @@ TwitterAPI.prototype = {
 		this.sign('GET', this.url(this.endpoints.statusShow + '/' + id), callback, {'include_entities': 'true'}, {'assistant': assistant});
 	},
 	postTweet: function(args, callback, assistant) {
-		this.sign('POST', this.url(this.endpoints.statusUpdate), callback, args, {'assistant':assistant});
+		if (!args.photo) {
+			this.sign('POST', this.url(this.endpoints.statusUpdate), callback, args, {'assistant':assistant});
+		} else {
+			this.sign('POST', this.url(this.endpoints.statusUpdateMedia), callback, args, {'assistant':assistant});
+			// this.sign('POST', 'http://sles/twittertest', callback, args, {'assistant':assistant});
+		}
 	},
 	getUser: function(screen_name, callback) {
 		this.sign('GET', this.url(this.endpoints.showUser), callback, {'screen_name': screen_name, include_entities: true}, {});
@@ -208,7 +214,7 @@ TwitterAPI.prototype = {
 			ids		= response.responseJSON.ids.slice(start, start + 100); // slice doesn't include the end number hence adding one more
 		}
 		var allIds = response.responseJSON.ids;
-		
+
 		if (!ids || ids.length <= 0) {
 			var lookup = {};
 			for (var i = 0, len = meta.results.length; i < len; i++) {
@@ -240,7 +246,7 @@ TwitterAPI.prototype = {
 		}.bind(this));
 	},
 	sign: function(httpMethod, url, callback, args, meta) {
-		var silent = false; // if true, errors are not reported on the screen.
+		var silent	= false; // if true, errors are not reported on the screen.
 
 		if (meta.user) {
 			silent = true;
@@ -253,10 +259,14 @@ TwitterAPI.prototype = {
 		// args is an object literal of URL parameters to be included
 		// meta is an object literal with data that needs to be passed through to the callback
 
+		/*
+			If a photo is being posted then do NOT include the args in the oauth
+			signature. It should only include the query strings.
+		*/
 		var message = {
 			method:		httpMethod,
 			action:		url,
-			parameters:	args
+			parameters:	args.photo ? {} : args
 		};
 
 		console.log(httpMethod + ' ' + url + '?' + Object.toJSON(args));
@@ -284,18 +294,28 @@ TwitterAPI.prototype = {
 			opts.meta = meta;
 		}
 
-		switch (httpMethod.toUpperCase()) {
-			default:
-			case 'GET':
-				this.request(OAuth.addToURL(url, args), opts);
-				//Mojo.Log.error(OAuth.addToURL(url, args), opts);
-				break;
+		if (args.photo) {
+			opts.photo = args.photo;
+			delete args.photo;
 
-			case 'POST':
-				opts.postBody = OAuth.formEncode(args);
-				this.request(url, opts);
-				//Mojo.Log.error(url, opts);
-				break;
+			/* The args get sent as part of the post body */
+			opts.postParameters = args;
+
+			this.request(url, opts);
+		} else {
+			switch (httpMethod.toUpperCase()) {
+				default:
+				case 'GET':
+					this.request(OAuth.addToURL(url, args), opts);
+					//Mojo.Log.error(OAuth.addToURL(url, args), opts);
+					break;
+
+				case 'POST':
+					opts.postBody = OAuth.formEncode(args);
+					this.request(url, opts);
+					//Mojo.Log.error(url, opts);
+					break;
+			}
 		}
 	},
 	plain: function(httpMethod, url, args, callback, silent) {
@@ -374,7 +394,65 @@ TwitterAPI.prototype = {
 				}
 			}.bind(this);
 
-			new Ajax.Request(url, opts);
+			if (!opts.photo) {
+				new Ajax.Request(url, opts);
+			} else {
+				var headers	= [];
+				var params	= [];
+
+				if (opts.requestHeaders) {
+					var keys = Object.keys(opts.requestHeaders);
+
+					for (var i = 0, key; key = keys[i]; i++) {
+						if ('string' === typeof opts.requestHeaders[key]) {
+							headers.push(key + ': ' + opts.requestHeaders[key]);
+						}
+					}
+				}
+
+				if (opts.postParameters) {
+					var keys = Object.keys(opts.postParameters);
+
+					for (var i = 0, key; key = keys[i]; i++) {
+						if ('string' === typeof opts.postParameters[key]) {
+							params.push({
+								"key":	key,
+								"data":	opts.postParameters[key]
+							});
+						}
+					}
+				}
+				// Mojo.Log.error('headers: ' + Object.toJSON(headers));
+				// Mojo.Log.error('params: ' + Object.toJSON(params));
+				// Mojo.Log.error('opts: ' + Object.toJSON(opts));
+
+				var req = new Mojo.Service.Request('palm://com.palm.downloadmanager/', {
+					method:					'upload',
+					parameters: {
+						url:				url,
+						fileLabel:			'media',
+						fileName:			opts.photo,
+						subscribe:			true,
+						postParameters:		params,
+						customHttpHeaders:	headers
+					},
+
+					onSuccess: function(response) {
+						if (!response.completed) {
+							return;
+						}
+						// Mojo.Log.error(Object.toJSON(response));
+
+						if (!response.responseJSON) {
+							response.responseJSON = Mojo.parseJSON(response.responseString);
+						}
+
+						opts.onSuccess(response);
+					}.bind(this),
+
+					onFailure: opts.onFailure
+				});
+			}
 		}.bind(this);
 
 		var service = new Mojo.Service.Request('palm://com.palm.connectionmanager', {

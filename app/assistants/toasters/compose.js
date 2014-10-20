@@ -250,7 +250,7 @@ var ComposeToaster = Class.create(Toaster, {
 		var bar		= get(this.completebar);
 		var ta		= get(this.textarea);
 
-		if (!this.pos || !button.className || 0 != button.className.indexOf('compose-match')) {
+		if (!this.pos || !button.className || 0 !== button.className.indexOf('compose-match')) {
 			return;
 		}
 
@@ -316,10 +316,10 @@ var ComposeToaster = Class.create(Toaster, {
 		*/
 		if (!this.dm) {
 			for (var i = 0, word; word = words[i]; i++) {
-				if (0 == word.indexOf('.@') || 0 == word.indexOf('"@')) {
+				if (0 === word.indexOf('.@') || 0 === word.indexOf('"@')) {
 					todone = true;
 					word = word.slice(1);
-				} else if (0 == word.indexOf('@')) {
+				} else if (0 === word.indexOf('@')) {
 					;
 				} else {
 					todone = true;
@@ -327,7 +327,7 @@ var ComposeToaster = Class.create(Toaster, {
 					if (length) {
 						length++;
 					}
-					length += word.length;					
+					length += word.length;
 					continue;
 				}
 
@@ -397,9 +397,9 @@ var ComposeToaster = Class.create(Toaster, {
 			var left	= this.availableChars - info.needed + 1;
 			var msg		= [];
 			while (info.words.length && left > 0) {
-				if (0 == info.words[0].indexOf('@') ||
-					0 == info.words[0].indexOf('.@') ||
-					0 == info.words[0].indexOf('".@')
+				if (0 === info.words[0].indexOf('@') ||
+					0 === info.words[0].indexOf('.@') ||
+					0 === info.words[0].indexOf('".@')
 				) {
 					/*
 						This is a mention, so it's length is already
@@ -458,11 +458,14 @@ var ComposeToaster = Class.create(Toaster, {
 				if (reply_id){
 					args.in_reply_to_status_id = reply_id;
 				}
-					
 
 				if (this.geo) {
 					args['lat'] = this.lat;
 					args['long'] = this.lng;
+				}
+
+				if (this.photo) {
+					args.photo = this.photo;
 				}
 
 				Twitter.postTweet(args, cb);
@@ -523,7 +526,7 @@ var ComposeToaster = Class.create(Toaster, {
 						if(response){
 							reply_id = response.responseJSON.id_str;
 						}
-						
+
 						var msg = messages.shift();
 
 						if (!msg) {
@@ -542,7 +545,7 @@ var ComposeToaster = Class.create(Toaster, {
 							}
 							return;
 						}
-						sendfunc(msg, sendnext,reply_id);
+						sendfunc(msg, sendnext, reply_id);
 					}.bind(this);
 
 					/* kick it off */
@@ -638,67 +641,20 @@ var ComposeToaster = Class.create(Toaster, {
 			kinds:				['image'],
 
 			onSelect: function(file){
-				var path = file.fullPath;
-
-				this.upload(path);
+				// TODO	Add a visual indication that an image has been selected
+				//		and add a mechanism to allow removing it.
+				//
+				//		Easiest option would probably be to show a checkbox on
+				//		the image icon if one is set. Selecting it again would
+				//		show a dialog asking if the user wants to remove the
+				//		image they have selected.
+				this.photo = file.fullPath;
 			}.bind(this)
 		};
 
 		Mojo.FilePicker.pickFile(params, this.controller.stageController);
 	},
-	upload: function(path) {
-		this.uploading = true;
-		get('submit-' + this.id).setStyle({'opacity': '.4'});
-		get('loading').addClassName('show');
 
-		var args = [
-			{ key:"key",				data: Config.twitpicKey	},
-			{ key:"consumer_token",		data: Config.key		},
-			{ key:"consumer_secret",	data: Config.secret		},
-			{ key:"oauth_token",		data: this.user.token	},
-			{ key:"oauth_secret",		data: this.user.secret	},
-
-			{ key:"message",			data: ""				}
-		];
-
-		this.controller.serviceRequest('palm://com.palm.downloadmanager/', {
-			method:				'upload',
-			parameters: {
-				url:			'http://api.twitpic.com/1/upload.json',
-				fileLabel:		'media',
-				fileName:		path,
-				postParameters:	args,
-				subscribe:		true
-			},
-
-			onSuccess: function(response) {
-				var ta = get(this.textarea);
-
-				if (response.completed) {
-					var result = Mojo.parseJSON(response.responseString);
-
-					this.uploading = false;
-					get('submit-' + this.id).setStyle({'opacity': '1'});
-					get('loading').removeClassName('show');
-
-					if (ta.value.length > 0) {
-						ta.value = ta.value + ' ';
-					}
-
-					ta.value = ta.value + result.url;
-					this.updateCounter();
-				}
-			}.bind(this),
-
-			onFailure: function() {
-				this.uploading = false;
-
-				get('submit-' + this.id).setStyle({'opacity': '1'});
-				get('loading').removeClassName('loading');
-				ex('Error uploading image.');
-			}
-		});
-	},
 	linkTapped: function(event) {
 		var txt = this.controller.get(this.textarea).value;
 		var urls = txt.extractUrls();
@@ -711,7 +667,7 @@ var ComposeToaster = Class.create(Toaster, {
 		var callback = function(shrt, lng){
 			//Below line won't shorten if the link has a '?' in it.  As we are just replacing and really don't need a regexp, just do a simple replace
 			//this.controller.get(this.textarea).value = this.controller.get(this.textarea).value.replace(new RegExp(lng, 'g'), shrt);
-			this.controller.get(this.textarea).value = this.controller.get(this.textarea).value.split(lng).join(shrt)
+			this.controller.get(this.textarea).value = this.controller.get(this.textarea).value.split(lng).join(shrt);
 		};
 
 		for (var i=0; i < urls.length; i++) {
@@ -729,7 +685,7 @@ var ComposeToaster = Class.create(Toaster, {
 		var scrollTop = txtArea.scrollTop;
 
 		var callback = function(result) {
-			if (result && result.selectedEmoji != null) {
+			if (result && result.selectedEmoji !== null) {
 				//var txtArea = this.controller.get(this.textarea);
 				var emojiChars;
 
@@ -743,13 +699,13 @@ var ComposeToaster = Class.create(Toaster, {
 					//var startPos = txtArea.selectionStart;
 					//var endPos = txtArea.selectionEnd;
 					//var scrollTop = txtArea.scrollTop;
-					
+
 					txtArea.value = txtArea.value.substring(0, startPos) + emojiChars + txtArea.value.substring(endPos, txtArea.value.length);
 					//txtArea.focus();
 					setTimeout(function(){
 						txtArea.focus();
 						txtArea.setSelectionRange(startPos + emojiChars.length,startPos + emojiChars.length); //focus the cursor at current pos
-					}, 200);					
+					}, 200);
 					txtArea.selectionStart = startPos + emojiChars.length;
 					txtArea.selectionEnd = startPos + emojiChars.length;
 				} else {
@@ -819,7 +775,7 @@ var ComposeToaster = Class.create(Toaster, {
 				this.showKeyboard();
 				try {
 					get(this.textarea).focus();
-				} catch (e) {
+				} catch (ex) {
 				}
 
 				// Reset each time
