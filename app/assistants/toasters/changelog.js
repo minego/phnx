@@ -1,5 +1,7 @@
 var ChangelogToaster = Class.create(Toaster, {
 	items: [
+		{ version: '1.5.6' },
+		{ item: 'Upload images directly to twitter to remove dependency on twitpic'},
 		{ version: '1.5.5' },
 		{ item: 'Replaced emoji with EmojiOne graphics'},
 		{ version: '1.5.4' },
