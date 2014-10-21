@@ -1741,6 +1741,9 @@ span.link{
 .compose-button.photo {
 	background: url('../images/low/icons/camera.png')			center center no-repeat;
 }
+.compose-button.photo-checked {
+	background: url('../images/low/icons/camera-checked.png')	center center no-repeat;
+}
 .compose-button.link {
 	background: url('../images/low/icons/link.png')				center center no-repeat;
 }

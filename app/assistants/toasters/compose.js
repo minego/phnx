@@ -636,19 +636,45 @@ var ComposeToaster = Class.create(Toaster, {
 		banner('Found you!');
 	},
 	photoTapped: function(event) {
+		if (this.photo) {
+			var opts = {
+				title: 'You already have a photo attached. Would you like to remove it?',
+				callback: function() {
+					this.assistant.toasters.back();
+
+					/* Clear the photo */
+					delete this.photo;
+
+					get('photo-' + this.id).addClassName('photo');
+					get('photo-' + this.id).removeClassName('photo-checked');
+
+					this.photoTapped();
+				}.bind(this),
+
+				cancel: function() {
+					this.assistant.toasters.back();
+				}.bind(this)
+			};
+
+			this.hideKeyboard();
+			this.assistant.toasters.add(new ConfirmToaster(opts, this.assistant));
+
+			return;
+		}
+
 		var params = {
 			defaultKind:		'image',
 			kinds:				['image'],
 
 			onSelect: function(file){
-				// TODO	Add a visual indication that an image has been selected
-				//		and add a mechanism to allow removing it.
-				//
-				//		Easiest option would probably be to show a checkbox on
-				//		the image icon if one is set. Selecting it again would
-				//		show a dialog asking if the user wants to remove the
-				//		image they have selected.
+				/*
+					Save the path to the photo, and change the icon to show that
+					a photo has been selected.
+				*/
 				this.photo = file.fullPath;
+
+				get('photo-' + this.id).removeClassName('photo');
+				get('photo-' + this.id).addClassName('photo-checked');
 			}.bind(this)
 		};
 
