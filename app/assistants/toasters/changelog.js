@@ -1,5 +1,9 @@
 var ChangelogToaster = Class.create(Toaster, {
 	items: [
+		{ version: '1.5.7' },
+		{ item: 'HTML links referencing other tweets now display in their own details toaster rather than as a webpage. Tap holding will still allow to show as webpage'},
+		{ item: 'HTML links referencing other users now display in a profile panel rather than as a webpage. Tap holding will still allow to show as webpage'},
+		{ item: 'Search textfield doesnt automatically move the cursor to the end of line anymore'},
 		{ version: '1.5.6' },
 		{ item: 'Upload images directly to twitter to remove dependency on twitpic'},
 		{ version: '1.5.5' },

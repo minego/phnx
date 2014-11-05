@@ -2182,7 +2182,7 @@ MainAssistant.prototype = {
 						}
 
 						var len = search.value.length;
-						search.setSelectionRange(len,len); //focus the cursor at the end
+						//search.setSelectionRange(len,len); //focus the cursor at the end // Not sure why this was needed - it was very annoying. Removed DC
 						search.focus();
 					}
 				}

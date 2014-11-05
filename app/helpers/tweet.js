@@ -228,6 +228,10 @@ TweetHelper.prototype = {
 							tweet.thumb_class = 'show';
 							tweet.thumb_class_timeline = 'show';
 						}
+					} else if (links[i].expanded_url.indexOf('https://twitter.com') > -1 && links[i].expanded_url.indexOf('/status/') > -1){
+						tweet.referencedTweet = links[i].expanded_url.substr((links[i].expanded_url.indexOf('/status/') + 8));
+					} else if (links[i].expanded_url.indexOf('https://twitter.com/') > -1){
+						tweet.referencedUser = links[i].expanded_url.substr((links[i].expanded_url.indexOf('/twitter.com/') + 13));
 					}
 				}
 			}

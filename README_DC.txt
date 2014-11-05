@@ -195,3 +195,6 @@ Modified preferences-assistant.js, local.js and main-assistant.js to add scroll 
 Modified phnx.css and main-scene.html to show highlight on refresh button when tapped.
 Changed emoji graphics over to freely distributable EmojiOne graphics and updated about-scene.html to attribute them. Only old graphics are: 1F508, 1F68B, 27BF & E50A.  Will replace when they become available.
 Updated emoji to now include 1F508, 1F68B and 27BF.  E50A is still old and may be removed in the future as the emojione team believes its not part of the unicode spec and apple dropped it in ios5
+Modified both tweet.js files to allow for twitter.com links referencing other tweets to display in its own toaster instead of loading the webpage.
+Modified both tweet.js files to allow for twitter.com links referencing other twitter users to show the profile panel instead of loading the webpage.
+Modified main-assistant.js to stop search text field from automatically jumping to the end.

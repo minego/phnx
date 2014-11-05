@@ -444,6 +444,22 @@ var TweetToaster = Class.create(Toaster, {
 	showConvo: function() {
 		this.assistant.toasters.add(new ConvoToaster(this.tweet, this.assistant));
 	},
+	showReferencedTweet: function() {
+		var Twitter = new TwitterAPI(this.user);
+		var prefs = new LocalStorage();
+		var processVine = prefs.read('showVine');
+		Twitter.getStatus(this.tweet.referencedTweet, function(response){
+			var th = new TweetHelper();
+			var tweet = th.process(response.responseJSON,null,null,processVine);
+			this.assistant.toasters.add(new TweetToaster(tweet, this.assistant));
+		}.bind(this));
+	},
+	showReferencedUser: function() {
+		var Twitter = new TwitterAPI(this.user);
+		Twitter.getUser(this.tweet.referencedUser, function(response) {
+			this.controller.stageController.pushScene({name:'profile', disableSceneScroller: true}, response.responseJSON);
+		}.bind(this));
+	},	
 	showOpts: function() {
 		this.controller.popupSubmenu({
 			onChoose: this.popupHandler.bind(this),
@@ -1226,7 +1242,11 @@ transport.responseText);
 					}
 				});
 			}
-		} 
+		} else if(url.indexOf('https://twitter.com') > -1 && url.indexOf('/status/') > -1) {
+			this.showReferencedTweet();
+		} else if(url.indexOf('https://twitter.com/') > -1) {
+			this.showReferencedUser();
+		}
 		 
  //Potential support for @zhephree's foursquare app
 		else if((url.indexOf('http://4sq.com/') > -1) && useFoursquareApp) {
