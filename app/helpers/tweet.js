@@ -305,12 +305,21 @@ TweetHelper.prototype = {
 				var myStillLink;
 				var metaValues = doc.getElementsByTagName("meta");
 				for(var i=0; i<metaValues.length; i++){
+					//if(metaValues[i].property.indexOf('twitter:player:stream') > -1){
 					if(metaValues[i].content.indexOf('/videos/') > -1){
 						if(metaValues[i].content.indexOf('.mp4') > -1){
-							myVideoLink = metaValues[i].content;
+							myVideoLink = metaValues[i].content.slice(0,metaValues[i].content.indexOf('.mp4')+4);
 							//Mojo.Log.error('myVideo: ' + myVideoLink);						
 						}
+						//New style vines
+						if(metaValues[i].content.indexOf('.jpg') > -1){
+							myStillLink = metaValues[i].content.slice(0,metaValues[i].content.indexOf('.jpg')+4);
+							//Mojo.Log.error('myStill: ' + myStillLink);						
+						}
 					}
+					//Mojo.Log.error('property' + metaValues[i].property);
+					//if(metaValues[i].property.indexOf('twitter:image') > -1){
+					//Old style vines
 					if(metaValues[i].content.indexOf('/thumbs/') > -1){
 						if(metaValues[i].content.indexOf('.jpg') > -1){
 							myStillLink = metaValues[i].content;

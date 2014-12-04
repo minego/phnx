@@ -198,3 +198,4 @@ Updated emoji to now include 1F508, 1F68B and 27BF.  E50A is still old and may b
 Modified both tweet.js files to allow for twitter.com links referencing other tweets to display in its own toaster instead of loading the webpage.
 Modified both tweet.js files to allow for twitter.com links referencing other twitter users to show the profile panel instead of loading the webpage.
 Modified main-assistant.js to stop search text field from automatically jumping to the end.
+Modified tweet.js to fix newer style vine links in parsed vine webpage
