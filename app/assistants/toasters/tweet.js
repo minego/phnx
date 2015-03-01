@@ -138,17 +138,17 @@ var TweetToaster = Class.create(Toaster, {
 		var processVine = prefs.read('showVine');
 		for (var i = links.length - 1; i >= 0; i--){
 			if (links[i].expanded_url !== null) {
-				if (links[i].expanded_url.indexOf('http://www.justsayinapp.com/post/') > -1 ){
+				if (links[i].expanded_url.indexOf('://www.justsayinapp.com/post/') > -1 ){
 					this.getJustSayinHTML(links[i].expanded_url,this.tweet);
 				}
-				if ((links[i].expanded_url.indexOf('http://boo.fm/') > -1) || (links[i].expanded_url.indexOf('http://audioboo.fm/') > -1)){
+				if ((links[i].expanded_url.indexOf('://boo.fm/') > -1) || (links[i].expanded_url.indexOf('://audioboo.fm/') > -1)){
 					this.getAudioBooHTML(links[i].expanded_url,this.tweet);
 				}
-				if ((links[i].expanded_url.indexOf('http://instagram.com/p/') > -1) || (links[i].expanded_url.indexOf('http://instagr.am/p/') > -1)){
+				if ((links[i].expanded_url.indexOf('://instagram.com/p/') > -1) || (links[i].expanded_url.indexOf('://instagr.am/p/') > -1)){
 					this.getInstagramVideoHTML(links[i].expanded_url,this.tweet);
 				}
 				if(processVine === false){
-					if (links[i].expanded_url.indexOf('http://vine.co/v/') > -1 || links[i].expanded_url.indexOf('https://vine.co/v/') > -1){
+					if (links[i].expanded_url.indexOf('://vine.co/v/') > -1) {
 						th.getVineHTML(links[i].expanded_url,this.tweet,i,null,this.controller.get('details-' + this.toasterId),false);
 						if(i > 0){
 							tweet.thumb2_class = 'show';
@@ -1170,27 +1170,27 @@ transport.responseText);
 		var useFoursquareApp = prefs.read('useFoursquareApp');
 
 
-		if (url.indexOf('http://yfrog.com') > -1) {
+		if (url.indexOf('://yfrog.com') > -1) {
 			this.showPreview(url + ':iphone', url);
 		} 
-		else if (url.indexOf('http://twitpic.com') > -1) {
+		else if (url.indexOf('://twitpic.com') > -1) {
 			img = url.substr(url.indexOf('/', 8) + 1);
 			this.showPreview('http://twitpic.com/show/large/' + img, url);
-		} else if (url.indexOf('plixi') > -1 || url.indexOf('http://lockerz.com/s/') > -1) {
+		} else if (url.indexOf('plixi') > -1 || url.indexOf('://lockerz.com/s/') > -1) {
 			this.showPreview('http://api.plixi.com/api/tpapi.svc/imagefromurl?size=large&url=' + url, url);
 		} else if (url.indexOf('img.ly') > -1) {
 			img = 'http://img.ly/show/full/' + url.substr(url.indexOf('.ly/') + 4);
 			this.showPreview(img, url);
-		} else if (url.indexOf('http://instagr.am/p/') > -1 || url.indexOf('http://instagram.com/p/') > -1) {
+		} else if (url.indexOf('://instagr.am/p/') > -1 || url.indexOf('://instagram.com/p/') > -1) {
 			this.showPreview(url + 'media/?size=l', url);
-		} else if (url.indexOf('http://mlkshk.com/p/') > -1) {
+		} else if (url.indexOf('://mlkshk.com/p/') > -1) {
 			img = url.replace('/p/', '/r/');
 			this.showPreview(img, url);
 		} else if (url.indexOf('campl.us') > -1) {
 			this.showPreview('http://phnxapp.com/services/preview.php?u=' + url);
 		} else if (url.indexOf('.jpg') > -1 || url.indexOf('.png') > -1 || url.indexOf('.gif') > -1 || url.indexOf('.jpeg') > -1) {
 			this.showPreview(url);
-		} else if (url.indexOf('http://phnx.ws/') > -1) {
+		} else if (url.indexOf('://phnx.ws/') > -1) {
 			this.showPreview(url + '/normal');
 		} else if (url.indexOf('youtube.com/watch') > -1) {
 			this.openYouTube(url);
@@ -1199,7 +1199,7 @@ transport.responseText);
 			//this.openYouTube('http://youtube.com/watch?v=' + url.substr(url.indexOf('.be/') + 4));
 			var tail = url.substr(url.indexOf('.be/') + 4);
 			this.openYouTube('http://youtube.com/watch?v=' + tail.substr(0,tail.indexOf("?")));
-		} else if (url.indexOf('http://twitter.com/#!/' + this.twitterUsername + '/status/' + this.twitterId) > -1) {
+		} else if (url.indexOf('://twitter.com/#!/' + this.twitterUsername + '/status/' + this.twitterId) > -1) {
 			this.assistant.toasters.add(new TweetToaster(url, this.assistant));
 			Mojo.Log.error("TweetToaster for http:// called");
 		} else if (url.indexOf('https://twitter.com/#!/' + this.twitterUsername + '/status/' + this.twitterId) > -1) {
@@ -1216,7 +1216,7 @@ transport.responseText);
 					}
 				}
 			});
-		} else if((url.indexOf('http://www.justsayinapp.com/post/') > -1) && mediaUrl) {
+		} else if((url.indexOf('://www.justsayinapp.com/post/') > -1) && mediaUrl) {
 			if(mediaUrl.indexOf('audio.mp3') > -1 ) {
 				Mojo.Log.info('Streaming ' + mediaUrl);
 				this.controller.serviceRequest("palm://com.palm.applicationManager", {
@@ -1229,7 +1229,7 @@ transport.responseText);
 					}
 				});
 			}
-		} else if(((url.indexOf('http://audioboo.fm/boos/') > -1) || (url.indexOf('http://boo.fm/') > -1)) && mediaUrl) {
+		} else if(((url.indexOf('://audioboo.fm/boos/') > -1) || (url.indexOf('://boo.fm/') > -1)) && mediaUrl) {
 			if(mediaUrl.indexOf('.mp3') > -1 ) {
 				Mojo.Log.info('Streaming ' + mediaUrl);
 				this.controller.serviceRequest("palm://com.palm.applicationManager", {
@@ -1247,9 +1247,9 @@ transport.responseText);
 		} else if(url.indexOf('https://twitter.com/') > -1) {
 			this.showReferencedUser();
 		}
-		 
+
  //Potential support for @zhephree's foursquare app
-		else if((url.indexOf('http://4sq.com/') > -1) && useFoursquareApp) {
+		else if((url.indexOf('://4sq.com/') > -1) && useFoursquareApp) {
 			this.controller.serviceRequest("palm://com.palm.applicationManager", {
 				method: 'launch',
 					parameters: {
@@ -1268,23 +1268,23 @@ transport.responseText);
 	},
 	canShowPreview: function(url) {
 		// Return true if we can show a preview for this url
-		if (url.indexOf('http://yfrog.com') > -1) {
+		if (url.indexOf('://yfrog.com') > -1) {
 			return(true);
-		} else if (url.indexOf('http://twitpic.com') > -1) {
+		} else if (url.indexOf('://twitpic.com') > -1) {
 			return(true);
-		} else if (url.indexOf('plixi') > -1 || url.indexOf('http://lockerz.com/s/') > -1) {
+		} else if (url.indexOf('plixi') > -1 || url.indexOf('://lockerz.com/s/') > -1) {
 			return(true);
 		} else if (url.indexOf('img.ly') > -1) {
 			return(true);
-		} else if (url.indexOf('http://instagr.am/p/') > -1 || url.indexOf('http://instagram.com/p/') > -1) {
+		} else if (url.indexOf('://instagr.am/p/') > -1 || url.indexOf('://instagram.com/p/') > -1) {
 			return(true);
-		} else if (url.indexOf('http://mlkshk.com/p/') > -1) {
+		} else if (url.indexOf('://mlkshk.com/p/') > -1) {
 			return(true);
 		} else if (url.indexOf('campl.us') > -1) {
 			return(true);
 		} else if (url.indexOf('.jpg') > -1 || url.indexOf('.png') > -1 || url.indexOf('.gif') > -1 || url.indexOf('.jpeg') > -1) {
 			return(true);
-		} else if (url.indexOf('http://phnx.ws/') > -1) {
+		} else if (url.indexOf('://phnx.ws/') > -1) {
 			return(true);
 		} else{
 			return(false);

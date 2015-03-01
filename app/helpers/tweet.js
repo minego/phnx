@@ -64,10 +64,10 @@ TweetHelper.prototype = {
 			var links = tweet.entities.urls;
 			for (var i = links.length - 1; i >= 0; i--){
 				if (links[i].expanded_url !== null) {
-					tweet.text = tweet.text.replace(new RegExp(links[i].url, 'g'), links[i].expanded_url);	
+					tweet.text = tweet.text.replace(new RegExp(links[i].url, 'g'), links[i].expanded_url);
 					//tweet.dividerMessage = links[i].expanded_url;
 					//tweet.cssClass = 'new-tweet';
-					if (links[i].expanded_url.indexOf('http://instagr.am/p/') > -1 || links[i].expanded_url.indexOf('http://instagram.com/p/') > -1){
+					if (links[i].expanded_url.indexOf('://instagr.am/p/') > -1 || links[i].expanded_url.indexOf('://instagram.com/p/') > -1){
 						tweet.mediaUrl = links[i].expanded_url;
 						if(i === 0){
 							tweet.thumbnail = links[i].expanded_url+"media/?size=m"; //Changed from ?size=t so Touchpad details looks better
@@ -81,7 +81,7 @@ TweetHelper.prototype = {
 						//tweet.cssClass = 'new-tweet';
 						tweet.thumb_class = 'show';
 						tweet.thumb_class_timeline = 'show';
-					} else if (links[i].expanded_url.indexOf('http://twitpic.com') > -1){
+					} else if (links[i].expanded_url.indexOf('://twitpic.com') > -1){
 						var img = links[i].expanded_url.substr(links[i].expanded_url.indexOf('/', 8) + 1);
 						tweet.mediaUrl = links[i].expanded_url;
 						//tweet.mediaUrl = "http://twitpic.com/show/large/" + img;
@@ -96,7 +96,7 @@ TweetHelper.prototype = {
 						tweet.thumb_class = 'show';
 						tweet.thumb_class_timeline = 'show';
 						tweet.thumb_type = 'small';
-					} else if (links[i].expanded_url.indexOf('http://youtu.be') > -1){
+					} else if (links[i].expanded_url.indexOf('://youtu.be') > -1){
 						var img = links[i].expanded_url.substr(links[i].expanded_url.indexOf("/", 8)+1);
 						if(img.indexOf('&',0) > -1) {
 							img = img.slice(0,img.indexOf('&',0));
@@ -143,7 +143,7 @@ TweetHelper.prototype = {
 						//tweet.cssClass = 'new-tweet';
 						tweet.thumb_class = 'show';
 						tweet.thumb_class_timeline = 'show';
-					} else if (links[i].expanded_url.indexOf('http://yfrog.com') > -1) {
+					} else if (links[i].expanded_url.indexOf('://yfrog.com') > -1) {
 						tweet.mediaUrl = links[i].expanded_url;
 						if(i === 0){
 							tweet.thumbnail =  links[i].expanded_url + ":iphone"; //changed from :small so Touchpad details looks better
@@ -170,7 +170,7 @@ TweetHelper.prototype = {
 						//tweet.dividerMessage = tweet.thumbnail;
 						tweet.thumb_class = 'show';
 						tweet.thumb_class_timeline = 'show';
-					} else if (links[i].expanded_url.indexOf('http://phnx.ws/') > -1) {
+					} else if (links[i].expanded_url.indexOf('://phnx.ws/') > -1) {
 						tweet.mediaUrl = links[i].expanded_url;
 						if(i === 0){
 							tweet.thumbnail =  links[i].expanded_url + "/thumb";
@@ -218,7 +218,7 @@ TweetHelper.prototype = {
 						if(hideGifs === true) {
 							tweet.thumb_class_timeline = 'hide';
 						}
-					} else if (links[i].expanded_url.indexOf('http://vine.co/v/') > -1 || links[i].expanded_url.indexOf('https://vine.co/v/') > -1){
+					} else if (links[i].expanded_url.indexOf('://vine.co/v/') > -1) {
 						if(processVine === true){
 							this.getVineHTML(links[i].expanded_url,tweet,i,model,controller,processVine);
 							if(i > 0){
@@ -429,7 +429,7 @@ TweetHelper.prototype = {
 						//tweet.cssClass = 'new-tweet';
 						tweet.thumb_class = 'show';
 						tweet.thumb_class_timeline = 'show';
-					} else if (links[i].expanded_url.indexOf('http://twitpic.com') > -1){
+					} else if (links[i].expanded_url.indexOf('://twitpic.com') > -1){
 						var img = links[i].expanded_url.substr(links[i].expanded_url.indexOf('/', 8) + 1);
 						tweet.mediaUrl = links[i].expanded_url;
 						if(i === 0){
@@ -443,7 +443,7 @@ TweetHelper.prototype = {
 						tweet.thumb_class = 'show';
 						tweet.thumb_class_timeline = 'show';
 						tweet.thumb_type = 'small';
-					} else if (links[i].expanded_url.indexOf('http://youtu.be') > -1){
+					} else if (links[i].expanded_url.indexOf('://youtu.be') > -1){
 						var img = links[i].expanded_url.substr(links[i].expanded_url.indexOf("/", 8)+1);
 						if(img.indexOf('&',0) > -1) {
 							img = img.slice(0,img.indexOf('&',0));
@@ -490,7 +490,7 @@ TweetHelper.prototype = {
 						//tweet.cssClass = 'new-tweet';
 						tweet.thumb_class = 'show';
 						tweet.thumb_class_timeline = 'show';
-					} else if (links[i].expanded_url.indexOf('http://yfrog.com') > -1) {
+					} else if (links[i].expanded_url.indexOf('://yfrog.com') > -1) {
 						tweet.mediaUrl = links[i].expanded_url;
 						if(i === 0){
 							tweet.thumbnail =  links[i].expanded_url + ":iphone"; //changed from :small so Touchpad details looks better
@@ -517,7 +517,7 @@ TweetHelper.prototype = {
 						//tweet.dividerMessage = tweet.thumbnail;
 						tweet.thumb_class = 'show';
 						tweet.thumb_class_timeline = 'show';
-					} else if (links[i].expanded_url.indexOf('http://phnx.ws/') > -1) {
+					} else if (links[i].expanded_url.indexOf('://phnx.ws/') > -1) {
 						tweet.mediaUrl = links[i].expanded_url;
 						if(i === 0){
 							tweet.thumbnail =  links[i].expanded_url + "/thumb";
@@ -545,7 +545,7 @@ TweetHelper.prototype = {
 						//tweet.cssClass = 'new-tweet';
 						tweet.thumb_class = 'show';
 						tweet.thumb_class_timeline = 'show';
-					}	else if (links[i].expanded_url.indexOf('http://vine.co/v/') > -1 || links[i].expanded_url.indexOf('https://vine.co/v/') > -1){
+					} else if (links[i].expanded_url.indexOf('://vine.co/v/') > -1) {
 						if(processVine === true){
 							this.getVineHTML(links[i].expanded_url,tweet,i,model,controller,processVine);
 							if(i > 0){
