@@ -306,7 +306,7 @@ TweetHelper.prototype = {
 				var metaValues = doc.getElementsByTagName("meta");
 				for(var i=0; i<metaValues.length; i++){
 					//if(metaValues[i].property.indexOf('twitter:player:stream') > -1){
-					if(metaValues[i].content.indexOf('/videos/') > -1){
+					if((metaValues[i].content.indexOf('/videos/') > -1) || (metaValues[i].content.indexOf('/videos_h264high/') > -1)){
 						if(metaValues[i].content.indexOf('.mp4') > -1){
 							myVideoLink = metaValues[i].content.slice(0,metaValues[i].content.indexOf('.mp4')+4);
 							//Mojo.Log.error('myVideo: ' + myVideoLink);						
