@@ -200,3 +200,4 @@ Modified both tweet.js files to allow for twitter.com links referencing other tw
 Modified main-assistant.js to stop search text field from automatically jumping to the end.
 Modified tweet.js to fix newer style vine links in parsed vine webpage.
 Modified tweet.js to allow /videos_h264high/ field in vine links.
+Modified both tweet.js files to allow for twitter videos (hires only) to play when clicking on the thumbnail in details.

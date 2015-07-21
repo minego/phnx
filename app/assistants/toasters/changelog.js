@@ -2,6 +2,7 @@ var ChangelogToaster = Class.create(Toaster, {
 	items: [
 		{ version: '1.5.8' },
 		{ item: 'Fixed vine links'},
+		{ item: 'Clicking on thumbs of twitter videos will play video (preliminary support)'},
 		{ version: '1.5.7' },
 		{ item: 'Fixed vine links'},
 		{ item: 'HTML links referencing other tweets now display in their own details toaster rather than as a webpage. Tap holding will still allow to show as webpage'},

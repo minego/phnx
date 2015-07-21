@@ -1075,6 +1075,9 @@ transport.responseText);
 			}
 		}	else if (e.id === 'thumb') {
 			var url = this.tweet.mediaUrl;
+			if(this.tweet.mediaVidUrl){
+				url = this.tweet.mediaVidUrl;
+			}
 			var prefs = new LocalStorage();
 
 			if (held || prefs.read('browserSelection') === 'ask') {
@@ -1084,6 +1087,9 @@ transport.responseText);
 			}
 		}	else if (e.id === 'thumb2') {
 			var url = this.tweet.mediaUrl2;
+			if(this.tweet.mediaVidUrl2){
+				url = this.tweet.mediaVidUrl2;
+			}
 			var prefs = new LocalStorage();
 
 			if (held || prefs.read('browserSelection') === 'ask') {
@@ -1169,7 +1175,7 @@ transport.responseText);
 		var prefs = new LocalStorage();
 		var useFoursquareApp = prefs.read('useFoursquareApp');
 
-
+		//Mojo.Log.error('url: ' + url);
 		if (url.indexOf('://yfrog.com') > -1) {
 			this.showPreview(url + ':iphone', url);
 		} 
@@ -1188,6 +1194,16 @@ transport.responseText);
 			this.showPreview(img, url);
 		} else if (url.indexOf('campl.us') > -1) {
 			this.showPreview('http://phnxapp.com/services/preview.php?u=' + url);
+		}	else if(url.indexOf('.mp4') > -1) {
+			this.controller.serviceRequest("palm://com.palm.applicationManager", {
+				method: "launch",
+				parameters: {
+					id: "com.palm.app.videoplayer",
+					params: {
+						target: url
+					}
+				}
+			});		
 		} else if (url.indexOf('.jpg') > -1 || url.indexOf('.png') > -1 || url.indexOf('.gif') > -1 || url.indexOf('.jpeg') > -1) {
 			this.showPreview(url);
 		} else if (url.indexOf('://phnx.ws/') > -1) {
@@ -1215,7 +1231,7 @@ transport.responseText);
 						target: url
 					}
 				}
-			});
+			});		
 		} else if((url.indexOf('://www.justsayinapp.com/post/') > -1) && mediaUrl) {
 			if(mediaUrl.indexOf('audio.mp3') > -1 ) {
 				Mojo.Log.info('Streaming ' + mediaUrl);

@@ -257,6 +257,23 @@ TweetHelper.prototype = {
 				}
 			}
 		} //end block
+		
+		//extended_entitities parsing added by DC
+		if (tweet.extended_entities && tweet.extended_entities.media) {
+			var media_links = tweet.extended_entities.media;
+			for (var i = media_links.length - 1; i >= 0; i--){
+				if (media_links[i].video_info){ // && tweet.entities.media[i].media_url !== null) {
+					if(media_links[i].video_info.variants){
+						if(i === 0){ // && (tweet.entities.media[i].media_url == tweet.extended_entities.media[i].media_url)){
+							tweet.mediaVidUrl = media_links[i].video_info.variants[0].url;
+						} else {
+							tweet.mediaVidUrl2 = media_links[i].video_info.variants[0].url;
+						}
+					}	
+				}
+			}
+		} //end block
+		
 		var d = new Date(tweet.created_at);
 		tweet.time_tweeted = (d.toTimeString(d)).slice(0,8);
 		tweet.time_str = d.toRelativeTime(1500);
