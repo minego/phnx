@@ -527,7 +527,7 @@ MainAssistant.prototype = {
 		//this.savedSearchesModel = {items: []};
 		this.trendingTopicsModel = {items: []};
 
-		this.controller.setupWidget('trending-topics-list',{itemTemplate: "templates/search-list-item",listTemplate: "templates/list-noptr", renderLimit: 10}, this.trendingTopicsModel);
+		this.controller.setupWidget('trending-topics-list',{itemTemplate: "templates/search-list-item",listTemplate: "templates/list-noptr", renderLimit: 50}, this.trendingTopicsModel);
 		this.controller.setupWidget('saved-searches-list',{itemTemplate: "templates/search-list-item",listTemplate: "templates/list-noptr", renderLimit: 30}, this.savedSearchesModel);
 
 		this.listsModel = {items: []};
@@ -1216,7 +1216,8 @@ MainAssistant.prototype = {
 		var args	= {
 			//'count':			this.count,
 			//'count':			homeMaxResults,
-			'include_entities':	'true'
+			'include_entities':	'true',
+			'full_text': 'true'
 		};
 
 		switch(panel.resource){

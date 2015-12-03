@@ -201,3 +201,4 @@ Modified main-assistant.js to stop search text field from automatically jumping 
 Modified tweet.js to fix newer style vine links in parsed vine webpage.
 Modified tweet.js to allow /videos_h264high/ field in vine links.
 Modified both tweet.js files to allow for twitter videos (hires only) to play when clicking on the thumbnail in details.
+Modified main-assistant.js to add more entries to the trending list and to allow display of long DMs.

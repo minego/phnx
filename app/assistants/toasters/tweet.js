@@ -56,6 +56,8 @@ var TweetToaster = Class.create(Toaster, {
 		this.content.tweetHtml = tweetHtml;
 		this.render(this.content, 'templates/toasters/tweet');
 
+		//Mojo.Log.error(this.tweet.text);
+
 		// Stuff to do after the element is added to the DOM
 		var me = this.user.id;
 

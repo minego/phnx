@@ -1,5 +1,8 @@
 var ChangelogToaster = Class.create(Toaster, {
 	items: [
+		{ version: '1.5.9' },
+		{ item: 'Fixed display of Trending Topics panel.  Now shows more topics'},
+		{ item: 'DMs longer than 140 characters are now displayed. Warning: Details toaster does not scroll so large DMs will be unreadable in that toaster'}, 
 		{ version: '1.5.8' },
 		{ item: 'Fixed vine links'},
 		{ item: 'Clicking on thumbs of twitter videos will play video (preliminary support)'},
