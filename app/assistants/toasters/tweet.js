@@ -568,7 +568,8 @@ var TweetToaster = Class.create(Toaster, {
 				this.controller.stageController.pushScene('webview', this.url);
 				break;
 			case 'cmdMobilizeStockBrowser':
-				parsedLink = 'http://www.instapaper.com/m?u=' + encodeURIComponent(this.url);
+				//parsedLink = 'http://www.instapaper.com/m?u=' + encodeURIComponent(this.url);
+				parsedLink = 'http://google.com/gwt/x?u=' + encodeURIComponent(this.url);
 				global.openBrowser(parsedLink);
 				break;
 			// Mobilized InAppBrowser doesn't really work nicely
@@ -1318,7 +1319,8 @@ transport.responseText);
 			Mojo.Log.info("Launching In App Browser");
 		} else {
 			if (prefs.read('mobilizeWebLinks')) {
-				parsedLink = 'http://www.instapaper.com/m?u=' + encodeURIComponent(src);
+				//parsedLink = 'http://www.instapaper.com/m?u=' + encodeURIComponent(src);
+				parsedLink = 'http://google.com/gwt/x?u=' + encodeURIComponent(src);
 			}
 			global.openBrowser(parsedLink);
 			Mojo.Log.info("Launching Stock Browser");

@@ -1,5 +1,7 @@
 var ChangelogToaster = Class.create(Toaster, {
 	items: [
+		{ version: '1.6.0' },
+		{ item: 'Changed Mobilizer from Instapaper to Google'},
 		{ version: '1.5.9' },
 		{ item: 'Fixed display of Trending Topics panel.  Now shows more topics'},
 		{ item: 'DMs longer than 140 characters are now displayed. Warning: Details toaster does not scroll so large DMs will be unreadable in that toaster'}, 
