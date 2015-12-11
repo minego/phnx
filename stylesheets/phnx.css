@@ -990,7 +990,7 @@ body.no-gesture {  /* touchpad/emulator */
 	padding: 12px 0px;
 }
 .load-more.selected{
-
+	background: url(../images/low/tweet-highlight.png) center top repeat-x, url(../images/low/tweet-highlight-bottom.png) center bottom repeat-x,url('../images/trans13.png');
 }
 .no-tweets {
 	display: none;

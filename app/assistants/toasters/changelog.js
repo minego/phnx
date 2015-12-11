@@ -1,5 +1,8 @@
 var ChangelogToaster = Class.create(Toaster, {
 	items: [
+		{ version: '1.6.1' },
+		{ item: 'Additional Instagram link type support for thumbs'},
+		{ item: 'Load More Tweets button highlights when tapped'},
 		{ version: '1.6.0' },
 		{ item: 'Changed Mobilizer from Instapaper to Google'},
 		{ version: '1.5.9' },

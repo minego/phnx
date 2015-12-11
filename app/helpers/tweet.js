@@ -67,7 +67,7 @@ TweetHelper.prototype = {
 					tweet.text = tweet.text.replace(new RegExp(links[i].url, 'g'), links[i].expanded_url);
 					//tweet.dividerMessage = links[i].expanded_url;
 					//tweet.cssClass = 'new-tweet';
-					if (links[i].expanded_url.indexOf('://instagr.am/p/') > -1 || links[i].expanded_url.indexOf('://instagram.com/p/') > -1){
+					if (links[i].expanded_url.indexOf('://instagr.am/p/') > -1 || links[i].expanded_url.indexOf('://instagram.com/p/') > -1 || links[i].expanded_url.indexOf('://www.instagram.com/p/') > -1){
 						tweet.mediaUrl = links[i].expanded_url;
 						if(i === 0){
 							tweet.thumbnail = links[i].expanded_url+"media/?size=m"; //Changed from ?size=t so Touchpad details looks better
@@ -433,7 +433,7 @@ TweetHelper.prototype = {
 					tweet.text = tweet.text.replace(new RegExp(links[i].url, 'g'), links[i].expanded_url);	
 					//tweet.dividerMessage = links[i].expanded_url;
 					//tweet.cssClass = 'new-tweet';
-					if (links[i].expanded_url.indexOf('http://instagr.am/p/') > -1 || links[i].expanded_url.indexOf('http://instagram.com/p/') > -1){
+					if (links[i].expanded_url.indexOf('://instagr.am/p/') > -1 || links[i].expanded_url.indexOf('://instagram.com/p/') > -1 || links[i].expanded_url.indexOf('://www.instagram.com/p/') > -1){
 						tweet.mediaUrl = links[i].expanded_url;
 						if(i === 0){
 							tweet.thumbnail = links[i].expanded_url+"media/?size=m"; //Changed from ?size=t so Touchpad details looks better

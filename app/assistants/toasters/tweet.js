@@ -146,7 +146,7 @@ var TweetToaster = Class.create(Toaster, {
 				if ((links[i].expanded_url.indexOf('://boo.fm/') > -1) || (links[i].expanded_url.indexOf('://audioboo.fm/') > -1)){
 					this.getAudioBooHTML(links[i].expanded_url,this.tweet);
 				}
-				if ((links[i].expanded_url.indexOf('://instagram.com/p/') > -1) || (links[i].expanded_url.indexOf('://instagr.am/p/') > -1)){
+				if ((links[i].expanded_url.indexOf('://instagram.com/p/') > -1) || (links[i].expanded_url.indexOf('://instagr.am/p/') > -1) || (links[i].expanded_url.indexOf('://www.instagram/p/') > -1)){
 					this.getInstagramVideoHTML(links[i].expanded_url,this.tweet);
 				}
 				if(processVine === false){
@@ -1190,7 +1190,7 @@ transport.responseText);
 		} else if (url.indexOf('img.ly') > -1) {
 			img = 'http://img.ly/show/full/' + url.substr(url.indexOf('.ly/') + 4);
 			this.showPreview(img, url);
-		} else if (url.indexOf('://instagr.am/p/') > -1 || url.indexOf('://instagram.com/p/') > -1) {
+		} else if (url.indexOf('://instagr.am/p/') > -1 || url.indexOf('://instagram.com/p/') > -1 || url.indexOf('://www.instagram.com/p/') > -1) {
 			this.showPreview(url + 'media/?size=l', url);
 		} else if (url.indexOf('://mlkshk.com/p/') > -1) {
 			img = url.replace('/p/', '/r/');
@@ -1295,7 +1295,7 @@ transport.responseText);
 			return(true);
 		} else if (url.indexOf('img.ly') > -1) {
 			return(true);
-		} else if (url.indexOf('://instagr.am/p/') > -1 || url.indexOf('://instagram.com/p/') > -1) {
+		} else if (url.indexOf('://instagr.am/p/') > -1 || url.indexOf('://instagram.com/p/') > -1 || url.indexOf('://www.instagram.com/p/') > -1) {
 			return(true);
 		} else if (url.indexOf('://mlkshk.com/p/') > -1) {
 			return(true);

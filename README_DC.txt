@@ -203,3 +203,5 @@ Modified tweet.js to allow /videos_h264high/ field in vine links.
 Modified both tweet.js files to allow for twitter videos (hires only) to play when clicking on the thumbnail in details.
 Modified main-assistant.js to add more entries to the trending list and to allow display of long DMs.
 Modified tweet.js to mobilize links using Google rather than expired Instapaper Mobilizer.
+Modified both tweet.js files to support additional links to instagram.
+Modified phnx.css to highlight 'Load More Tweets' on tap.
