@@ -2,7 +2,7 @@ var _emojiSelectedGroup = 'people';
 
 function EmojiDialogAssistant(callBackFunc) {
     this.callBackFunc = callBackFunc;
-    this.maxRenderEmoji = 240;
+    this.maxRenderEmoji = 600;
     this.emojiListModel = {
         items : []
     };
@@ -37,11 +37,11 @@ EmojiDialogAssistant.prototype.setup = function(widget) {
                 icon : "events-emoji",
                 command : "events"
             }, {
-                icon : "places-emoji",
-                command : "places"
-            }, {
                 icon : "symbols-emoji",
                 command : "symbols"
+            }, {
+                icon : "flags-emoji",
+                command : "flags"
             }]
         }, {}, {
             icon : "back",
@@ -64,23 +64,28 @@ EmojiDialogAssistant.prototype.handleCommand = function(event) {
                 break;
             case 'people':
                 //this.loadEmoji(0, 189)
-                this.loadEmojiUnicode(0, 189)
+                //this.loadEmojiUnicode(0, 221)
+                this.loadEmojiUnicode(0, 504)
                 break;
             case 'nature':
                 //this.loadEmoji(189, 305)
-                this.loadEmojiUnicode(189, 305)
+                //this.loadEmojiUnicode(221, 494)
+                this.loadEmojiUnicode(504, 806)
                 break;
             case 'events':
                 //this.loadEmoji(305, 535)
-                this.loadEmojiUnicode(305, 535)
-                break;
-            case 'places':
-								//this.loadEmoji(535, 637)
-								this.loadEmojiUnicode(535, 637)            
+                //this.loadEmojiUnicode(494, 767)
+                this.loadEmojiUnicode(806, 1140)
                 break;
             case 'symbols':
+								//this.loadEmoji(535, 637)
+								//this.loadEmojiUnicode(767, 950)            
+								this.loadEmojiUnicode(1140, 1343)            
+                break;
+            case 'flags':
                 //this.loadEmoji(637, 846)
-                this.loadEmojiUnicode(637, 846)
+                //this.loadEmojiUnicode(950, 1168)
+                this.loadEmojiUnicode(1343, 1600)
                 break;
         }
         

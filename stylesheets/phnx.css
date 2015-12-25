@@ -2081,6 +2081,10 @@ a:link {
 	background: url(../images/emoji-E04A.png) center center no-repeat;
 }
 
+.flags-emoji {
+	background: url(../images/emoji-flags.png) center center no-repeat;
+}
+
 .events-emoji {
 	background: url(../images/emoji-E325.png) center center no-repeat;
 }

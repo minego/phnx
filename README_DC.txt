@@ -205,3 +205,4 @@ Modified main-assistant.js to add more entries to the trending list and to allow
 Modified tweet.js to mobilize links using Google rather than expired Instapaper Mobilizer.
 Modified both tweet.js files to support additional links to instagram.
 Modified phnx.css to highlight 'Load More Tweets' on tap.
+Modified emoji.js and emoji-dialog-assistant.js and added new V2.0 emojione pngs.
