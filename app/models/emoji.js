@@ -167,7 +167,7 @@ function emojify(stringInput, size) {
 					}
 				}
 				return res;
-			} else if((res === "1F1E6" | res === "1F1E7" | res === "1F1E8" | res ===  "1F1E9" | res === "1F1EA" | res === "1F1EB" | res === "1F1EC" | res === "1F1ED" | res === "1F1EE" | res === "1F1EF"
+			} else if(pass === 1 && (res === "1F1E6" | res === "1F1E7" | res === "1F1E8" | res ===  "1F1E9" | res === "1F1EA" | res === "1F1EB" | res === "1F1EC" | res === "1F1ED" | res === "1F1EE" | res === "1F1EF"
 	  	| res === "1F1F0" | res === "1F1F1" | res === "1F1F2" | res === "1F1F3" | res === "1F1F4" | res === "1F1F5" | res === "1F1F6" | res === "1F1F7" | res === "1F1F8" | res === "1F1F9" | res === "1F1FA" | res === "1F1FB" | res === "1F1FC" | res === "1F1FD" | res === "1F1FE" | res === "1F1FF" |	res === "1F441")){
 	  		pass = 2;
 	  		resHit = 1;
