@@ -1,7 +1,7 @@
 var ChangelogToaster = Class.create(Toaster, {
 	items: [
 		{ version: '1.6.1' },
-		{ item: 'Initial support for extended unicode emoji using emojione V2.0'},
+		{ item: 'Initial support for extended unicode emoji using emojione V2.0. Displays all emoji, but not all combined emoji can be sent yet'},
 		{ item: 'Additional Instagram link type support for thumbs'},
 		{ item: 'Load More Tweets button highlights when tapped'},
 		{ version: '1.6.0' },

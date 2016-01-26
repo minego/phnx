@@ -68,6 +68,7 @@ body.no-gesture {  /* touchpad/emulator */
 }
 
 /*Block added by DC*/
+
 .emoji {
 	display: none;
 	position:relative;
@@ -1701,6 +1702,8 @@ span.link{
 	left: 1px;
 	top: -3px;
 	right: 45px;
+	font-family: "Noto Emoji", "Prelude";
+	/*word-spacing: -15px;*/ /* If the NotoEmoji font is used this helps the big space issue - not sure how to make it conditional on the font though*/
 }
 
 .compose-card .compose-txt,

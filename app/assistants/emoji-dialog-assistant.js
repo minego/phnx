@@ -65,27 +65,27 @@ EmojiDialogAssistant.prototype.handleCommand = function(event) {
             case 'people':
                 //this.loadEmoji(0, 189)
                 //this.loadEmojiUnicode(0, 221)
-                this.loadEmojiUnicode(0, 504)
+                this.loadEmojiUnicode(0, 524)
                 break;
             case 'nature':
                 //this.loadEmoji(189, 305)
                 //this.loadEmojiUnicode(221, 494)
-                this.loadEmojiUnicode(504, 806)
+                this.loadEmojiUnicode(524, 826)
                 break;
             case 'events':
                 //this.loadEmoji(305, 535)
                 //this.loadEmojiUnicode(494, 767)
-                this.loadEmojiUnicode(806, 1140)
+                this.loadEmojiUnicode(826, 1160)
                 break;
             case 'symbols':
 								//this.loadEmoji(535, 637)
 								//this.loadEmojiUnicode(767, 950)            
-								this.loadEmojiUnicode(1140, 1343)            
+								this.loadEmojiUnicode(1160, 1364)            
                 break;
             case 'flags':
                 //this.loadEmoji(637, 846)
                 //this.loadEmojiUnicode(950, 1168)
-                this.loadEmojiUnicode(1343, 1600)
+                this.loadEmojiUnicode(1364, 1620)
                 break;
         }
         
