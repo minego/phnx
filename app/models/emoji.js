@@ -122,7 +122,7 @@ function emojify(stringInput, size) {
 	replacedText = replacedText.replace(regx, function(str, p1) {
 		var hi = p1.charCodeAt(0);
 		var lo = p1.charCodeAt(1);
-
+		
 		if(hi === 0x200D){
 			//Mojo.Log.error("zwj !!!!");
 			zeroWidthJoiner = 1;
@@ -141,8 +141,8 @@ function emojify(stringInput, size) {
 | 			res === "1F44E" | res === "1F44B" | res === "1F44F" | res === "1F450" | res === "270D" | res === "1F485" | res === "1F442" | res === "1F443" | res === "1F6A3" | res === "1F6C0" | res === "1F3C4" | res === "1F3CA" | res === "26F9" | res === "1F3CB" | res === "1F6B4" | res === "1F6B5")){
 				if (skinHit === 1) {
 					if(pass === 2){
-						skinHit = 0;
-						if(zeroWidthJoiner === 1) {
+						//skinHit = 0;
+						if(zeroWidthJoiner === 1 | res.match(/1F1[E-F][\dA-F]/)) {
 							zeroWidthJoiner = 0;
 							res = res.replace(/^([\da-f]+)$/i, '_$1.png" />');
 						} else {
