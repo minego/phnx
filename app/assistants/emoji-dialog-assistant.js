@@ -136,7 +136,7 @@ EmojiDialogAssistant.prototype.listTapHandler = function(event) {
     } else{
     	myEmojiCode1 = myEmojiCode;
     }
-    
+
     //Mojo.Log.info("code1: " + myEmojiCode1);
     //Mojo.Log.info("code2: " + myEmojiCode2);
     
