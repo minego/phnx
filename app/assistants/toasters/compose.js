@@ -170,6 +170,19 @@ var ComposeToaster = Class.create(Toaster, {
 			(this.availableChars - 1 - msgs[msgs.length - 1].length) +
 			'x' + msgs.length);
 	},
+	composeTxtWithEmoji: function() {
+		var bar		= get(this.completebar);
+		var ta		= get(this.textarea);
+		var value	= ta.value;
+
+		//bar.innerHTML = '';
+		this.pos	= null;
+
+		bar.innerHTML = emojify(ta.value,16);
+		if(bar.innerHTML.indexOf('<img class="emoji" src=') === -1){
+			bar.innerHTML = '';
+		}
+	},
 	autoComplete: function() {
 		var bar		= get(this.completebar);
 		var ta		= get(this.textarea);
@@ -177,7 +190,7 @@ var ComposeToaster = Class.create(Toaster, {
 		var end		= ta.selectionStart - 1;
 		var start;
 
-		bar.innerHTML = '';
+		//bar.innerHTML = '';
 		this.pos	= null;
 
 		for (start = end; start >= 0; start--) {
@@ -738,6 +751,7 @@ var ComposeToaster = Class.create(Toaster, {
 					txtArea.value += emojiChars;
 				}
 				this.updateCounter();
+				this.composeTxtWithEmoji();
 			}
 		}.bind(this);
 
@@ -775,6 +789,7 @@ var ComposeToaster = Class.create(Toaster, {
 
 		get(this.textarea).observe('keyup', function(e){
 			this.updateCounter();
+			this.composeTxtWithEmoji();
 			this.autoComplete();
 		}.bind(this));
 

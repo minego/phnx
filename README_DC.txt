@@ -206,3 +206,5 @@ Modified tweet.js to mobilize links using Google rather than expired Instapaper 
 Modified both tweet.js files to support additional links to instagram.
 Modified phnx.css to highlight 'Load More Tweets' on tap.
 Modified emoji.js and emoji-dialog-assistant.js and added new V2.0 emojione pngs.
+Modified phnx.css to scale emoji in details toaster a little larger.
+Modified compose.js and phnx.css to have preview of tweet including emoji

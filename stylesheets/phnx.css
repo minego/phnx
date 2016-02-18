@@ -72,7 +72,7 @@ body.no-gesture {  /* touchpad/emulator */
 .emoji {
 	display: none;
 	position:relative;
-	top:2px;
+	top:1px;
 }
 
 .showEmoji .timeline .emoji {
@@ -90,6 +90,8 @@ body.no-gesture {  /* touchpad/emulator */
 .showEmoji .details .emoji {
 	display: inline;
 }
+
+
 
 .font-tiny .timeline .emoji, .font-tiny .content-wrapper .emoji {
 	height: 12px;
@@ -114,9 +116,17 @@ body.no-gesture {  /* touchpad/emulator */
 .font-magoo .timeline .emoji, .font-magoo .content-wrapper .emoji {
 	height: 26px;
 }
+.complete-bar .emoji{
+		display: inline;
+		height: 16px;
+}
+.complete-bar {
+	font-size: 20px;
+}
 .details .emoji{
 	height: 18px;
 }
+
 /*end block DC*/
 
 #launch-scene{
@@ -546,6 +556,9 @@ body.no-gesture {  /* touchpad/emulator */
 }
 .status-row.details{
 	font-size: 18px;
+}
+.status-row.details .emoji{
+	height: 18px;
 }
 .status-row.selected, .user-row.selected{
 	background: url(../images/low/tweet-highlight.png) center top repeat-x, url(../images/low/tweet-highlight-bottom.png) center bottom repeat-x;
@@ -1704,6 +1717,14 @@ span.link{
 	right: 45px;
 	font-family: "Noto Emoji", "Prelude";
 	/*word-spacing: -15px;*/ /* If the NotoEmoji font is used this helps the big space issue - not sure how to make it conditional on the font though*/
+}
+
+.compose-card .complete-bar .emoji{
+	display: inline;
+	height: 16px;
+}
+.compose-card .complete-bar{
+	font-size: 20px;
 }
 
 .compose-card .compose-txt,
