@@ -29,6 +29,7 @@ MainAssistant.prototype = {
 		console.log(Mojo.Environment.DeviceInfo.modelNameAscii);
 
 		createEmojiHash();
+		createSpecialMultiEmojiHash();
 
 		if (Mojo.Environment.DeviceInfo.modelNameAscii == "Pixi" ||
 			Mojo.Environment.DeviceInfo.modelNameAscii == "Veer") {

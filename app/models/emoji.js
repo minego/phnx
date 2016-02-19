@@ -28,6 +28,7 @@
 
 var prevCode = 0;
 var emojiHashTable = new HashTable(); //Added by DC
+var emojiSpecialMultiHashTable = new HashTable();  //Added by DC
 
 
 function decimalToHex(d, padding) {
@@ -237,7 +238,7 @@ function emojify(stringInput, size) {
 				return res;	
 			} 
 			else {
-				pass = 2;
+				//pass = 2;
 				if(res != "") {
 					res = res.replace(/^([\da-f]+)$/i, '<img class="emoji" src="images/emoji/$1.png" />');
 				} else {
@@ -425,6 +426,15 @@ function createEmojiHash() {
 		emojiHashTable.setItem(emoji_sb[i],emoji_uc[i]);
 	}
 }
+
+function createSpecialMultiEmojiHash() {
+	var emoji_one = ['1F469_2764_1F48B_1F468','1F468_2764_1F48B_1F468','1F469_2764_1F48B_1F469','1F469_2764_1F468','1F468_2764_1F468','1F469_2764_1F469','1F468_1F469_1F466','1F468_1F469_1F467','1F468_1F469_1F467_1F466','1F468_1F469_1F466_1F466','1F468_1F469_1F467_1F467','1F468_1F468_1F466','1F468_1F468_1F467','1F468_1F468_1F467_1F466','1F468_1F468_1F466_1F466','1F468_1F468_1F467_1F467','1F469_1F469_1F466','1F469_1F469_1F467','1F469_1F469_1F467_1F466','1F469_1F469_1F466_1F466','1F469_1F469_1F467_1F467','1F441_1F5E8'];
+	var emoji_uc = ['1F469_200D_2764_FE0F_200D_1F48B_200D_1F468','1F468_200D_2764_FE0F_200D_1F48B_200D_1F468','1F469_200D_2764_FE0F_200D_1F48B_200D_1F469','1F469_200D_2764_FE0F_200D_1F468','1F468_200D_2764_FE0F_200D_1F468','1F469_200D_2764_FE0F_200D_1F469','1F468_200D_1F469_200D_1F466','1F468_200D_1F469_200D_1F467','1F468_200D_1F469_200D_1F467_200D_1F466','1F468_200D_1F469_200D_1F466_200D_1F466','1F468_200D_1F469_200D_1F467_200D_1F467','1F468_200D_1F468_200D_1F466','1F468_200D_1F468_200D_1F467','1F468_200D_1F468_200D_1F467_200D_1F466','1F468_200D_1F468_200D_1F466_200D_1F466','1F468_200D_1F468_200D_1F467_200D_1F467','1F469_200D_1F469_200D_1F466','1F469_200D_1F469_200D_1F467','1F469_200D_1F469_200D_1F467_200D_1F466','1F469_200D_1F469_200D_1F466_200D_1F466','1F469_200D_1F469_200D_1F467_200D_1F467','1F441_200D_1F5E8'];
+	for(var i=0; i<emoji_one.length; i++){
+		emojiSpecialMultiHashTable.setItem(emoji_one[i],emoji_uc[i]);
+	}
+}
+//
 
 function newlinefy(inputText) {
 	var replacedText, replacePattern1;

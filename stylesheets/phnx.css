@@ -1732,6 +1732,11 @@ span.link{
 	height: 200px;
 }
 
+.small-device .compose-card .compose-txt,
+.small-device .compose-card .compose-txt textarea {
+	height: 150px;
+}
+
 .compose-txt .counter {
 	position: absolute;
 	right: 13px;

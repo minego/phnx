@@ -127,6 +127,10 @@ EmojiDialogAssistant.prototype.listTapHandler = function(event) {
     var myEmojiCode = event.item.emojiCode;
     var myEmojiCode1;
     var myEmojiCode2;
+    var myEmojiString;
+		var myEmojiStringFinal ="";
+		var myEmojiStringElems = [];
+		
     
     if(myEmojiCode.indexOf('_') > -1){
 //    	myEmojiCode1 = myEmojiCode.replace(/([\da-f]+)_000([\da-f]+)/i, '$1');
@@ -136,17 +140,33 @@ EmojiDialogAssistant.prototype.listTapHandler = function(event) {
     } else{
     	myEmojiCode1 = myEmojiCode;
     }
-
+    if(emojiSpecialMultiHashTable.getItem(myEmojiCode)){
+    	myEmojiString = emojiSpecialMultiHashTable.getItem(myEmojiCode);
+    } else {
+    	myEmojiString = myEmojiCode;
+    }
+    
+		myEmojiStringElems = myEmojiString.split("_");
+	 for(var i=0; i<myEmojiStringElems.length; i++){
+     myEmojiStringFinal = myEmojiStringFinal + convertUnicodeCodePointsToString(['0x' + myEmojiStringElems[i]]);
+   }
+ 
+    //Mojo.Log.error("myEmojiCode: " + myEmojiCode);
+    //Mojo.Log.error("myEmojiCodeUC: " + emojiSpecialMultiHashTable.getItem(myEmojiCode));
     //Mojo.Log.info("code1: " + myEmojiCode1);
     //Mojo.Log.info("code2: " + myEmojiCode2);
     
     if (this.callBackFunc) {
         this.callBackFunc({ selectedEmoji : myEmojiCode1,
-        										selectedEmoji2 : myEmojiCode2 });
+        										selectedEmoji2 : myEmojiCode2,
+        										emojiString : myEmojiString,
+        										emojiStringFinal : myEmojiStringFinal });
     }
     this.controller.stageController.popScene({
         selectedEmoji : myEmojiCode1,
-        selectedEmoji2 : myEmojiCode2
+        selectedEmoji2 : myEmojiCode2,
+        emojiString : myEmojiString,
+        emojiStringFinal : myEmojiStringFinal
     });
 }
 

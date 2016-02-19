@@ -728,12 +728,14 @@ var ComposeToaster = Class.create(Toaster, {
 				//var txtArea = this.controller.get(this.textarea);
 				var emojiChars;
 
-				if(result.selectedEmoji2){
-					emojiChars = convertUnicodeCodePointsToString(['0x' + result.selectedEmoji]) + convertUnicodeCodePointsToString(['0x' + result.selectedEmoji2]);
-				} else{
-					emojiChars = convertUnicodeCodePointsToString(['0x' + result.selectedEmoji]);
-				}
+				//if(result.selectedEmoji2){
+				//	emojiChars = convertUnicodeCodePointsToString(['0x' + result.selectedEmoji]) + convertUnicodeCodePointsToString(['0x' + result.selectedEmoji2]);
+				//} else{
+				//	emojiChars = convertUnicodeCodePointsToString(['0x' + result.selectedEmoji]);
+				//}
 
+				emojiChars = result.emojiStringFinal;
+				//Mojo.Log.error("emojiString: " + result.emojiString);
 				if (txtArea.selectionStart || txtArea.selectionStart == '0') {
 					//var startPos = txtArea.selectionStart;
 					//var endPos = txtArea.selectionEnd;
