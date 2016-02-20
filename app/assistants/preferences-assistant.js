@@ -41,7 +41,8 @@ function PreferencesAssistant(section) {
 		advanced.push(
 			{key: 'youTubeApp', type: 'select', label: 'YouTube App', items: [
 				{label: 'com.palm.app.youtube', value: 'com.palm.app.youtube'},
-				{label: 'com.palm.app.youtube2', value: 'com.palm.app.youtube2'}
+				{label: 'com.palm.app.youtube2', value: 'com.palm.app.youtube2'},
+				{label: 'LuneTube/Browser', value: 'browser'}
 			]}
 		);
 	}

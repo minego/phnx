@@ -1392,23 +1392,28 @@ transport.responseText);
 				appIds.unshift(tmpId);
 			}
 		}
+
 		function makeCall() {
 			if(index < appIds.length) {
 				if (Mojo.Environment.DeviceInfo.platformVersionMajor < 3) {
 					//this.controller.serviceRequest("palm://com.palm.applicationManager", {
-					var request = new Mojo.Service.Request("palm://com.palm.applicationManager", {
-						method: "launch",
-						parameters: {
-							id: appIds[index],
-							params: {
-								target: url
-							}
-						},
-						onFailure: function() {
-							index++;
-							makeCall();
-						}.bind(this)
-					});
+					if(appIds[index]==='browser'){
+						global.openBrowser(url);
+					} else {
+						var request = new Mojo.Service.Request("palm://com.palm.applicationManager", {
+							method: "launch",
+							parameters: {
+								id: appIds[index],
+								params: {
+									target: url
+								}
+							},
+							onFailure: function() {
+								index++;
+								makeCall();
+							}.bind(this)
+						});
+					}
 				} else {
 					global.openBrowser(url);
 				}
