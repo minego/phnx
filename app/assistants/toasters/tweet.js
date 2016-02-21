@@ -1425,10 +1425,30 @@ transport.responseText);
 						});
 					}
 				} else {
-					global.openBrowser(url);
+					//global.openBrowser(url);
+					var request = new Mojo.Service.Request("palm://com.palm.applicationManager", {
+						method: "open",
+						parameters: {
+							target: url
+						},
+						onFailure: function() {
+							index++;
+							makeCall();
+						}.bind(this)
+					});
 				}
 			} else {
-				global.openBrowser(url);
+				//global.openBrowser(url);
+				var request = new Mojo.Service.Request("palm://com.palm.applicationManager", {
+					method: "open",
+					parameters: {
+						target: url
+					},
+					onFailure: function() {
+						index++;
+						makeCall();
+					}.bind(this)
+				});						
 			}
 		}
 		makeCall();
