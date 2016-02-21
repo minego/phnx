@@ -1397,9 +1397,20 @@ transport.responseText);
 			if(index < appIds.length) {
 				if (Mojo.Environment.DeviceInfo.platformVersionMajor < 3) {
 					//this.controller.serviceRequest("palm://com.palm.applicationManager", {
-					if(appIds[index]==='browser'){
-						global.openBrowser(url);
+					if(appIds[index]==='com.palm.app.browser'){
+						//global.openBrowser(url);
+						var request = new Mojo.Service.Request("palm://com.palm.applicationManager", {
+							method: "open",
+							parameters: {
+									target: url
+							},
+							onFailure: function() {
+								index++;
+								makeCall();
+							}.bind(this)
+						});						
 					} else {
+					Mojo.Log.error('appid: ' + appIds[index]);
 						var request = new Mojo.Service.Request("palm://com.palm.applicationManager", {
 							method: "launch",
 							parameters: {

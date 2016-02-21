@@ -72,9 +72,12 @@ var global = {
 	},
 	openBrowser: function(src, url) {
 		var service = new Mojo.Service.Request("palm://com.palm.applicationManager", {
-			method: "open",
+			method: "launch",
 			parameters: {
-				"target": src
+				id: "com.palm.app.browser",
+				params: {
+					target: src
+				}
 			},
 			onSuccess : function (e){ Mojo.Log.info("Open success, results="+JSON.stringify(e)); },
       		onFailure : function (e){ Mojo.Log.info("Open failure, results="+JSON.stringify(e)); }    

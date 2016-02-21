@@ -208,3 +208,4 @@ Modified phnx.css to highlight 'Load More Tweets' on tap.
 Modified emoji.js and emoji-dialog-assistant.js and added new V2.0 emojione pngs.
 Modified phnx.css to scale emoji in details toaster a little larger.
 Modified compose.js and phnx.css to have preview of tweet including emoji
+Modified tweet.js, preferences-assistant.js and app-globals.js to allow use of LuneTube on phones (non-TP devices)
