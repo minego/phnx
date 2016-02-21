@@ -1410,7 +1410,6 @@ transport.responseText);
 							}.bind(this)
 						});						
 					} else {
-					Mojo.Log.error('appid: ' + appIds[index]);
 						var request = new Mojo.Service.Request("palm://com.palm.applicationManager", {
 							method: "launch",
 							parameters: {
