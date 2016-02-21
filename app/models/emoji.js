@@ -176,6 +176,7 @@ function emojify(stringInput, size) {
 			} else if(skinHit ===1){
 				if(res === "1F3FB" | res === "1F3FC" | res === "1F3FD" | res === "1F3FE" | res === "1F3FF"){
 					skinHitSingle = 0;
+					skinHit = 0;
 					pass = 1;
 					res = res.replace(/^([\da-f]+)$/i, '_$1.png" />');
 				} else {

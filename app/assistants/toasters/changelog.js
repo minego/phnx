@@ -1,5 +1,7 @@
 var ChangelogToaster = Class.create(Toaster, {
 	items: [
+		{ version: '1.6.2' },
+		{ item: 'Emoji bug fix'},
 		{ version: '1.6.1' },
 		{ item: 'Support for LuneTube(0.2.0+) on non-TP devices - TP already covered as browser already used for YouTube'},
 		{ item: 'Preview when composing tweet containing emoji'},
