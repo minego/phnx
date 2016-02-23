@@ -1,5 +1,9 @@
 var ChangelogToaster = Class.create(Toaster, {
 	items: [
+		{ version: '1.6.3' },
+		{ item: 'Fixed replying to your own DM - now sends to proper recipient'},
+		{ item: 'Notification dashboard now shows emoji (banners unfortunately cannot)'},
+		{ item: 'Compose toaster card view shows account sending tweet'},
 		{ version: '1.6.2' },
 		{ item: 'Emoji bug fix'},
 		{ version: '1.6.1' },

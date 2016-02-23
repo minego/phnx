@@ -46,8 +46,9 @@ DashboardAssistant.prototype = {
 		}
 		else{
 			this.message = items[0].text;
-            this.message = emojify(this.message,16);
 			var bannerMessage = '@' + from + ': ' + this.message;
+      this.message = emojify(this.message,16);
+      //var bannerMessage = '@' + from + ': ' + this.message;
 		}
 		this.count += items.length;
 

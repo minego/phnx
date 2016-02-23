@@ -80,6 +80,7 @@ var ComposeToaster = Class.create(Toaster, {
 		this.lat			= 0;
 		this.lng			= 0;
 		this.to				= {};
+		this.from			= {};
 		this.rt				= false;
 		this.availableChars	= 140;
 		this.count			= 140;
@@ -116,6 +117,8 @@ var ComposeToaster = Class.create(Toaster, {
 			this.to = opts.user;
 			toasterObj.to = opts.user.screen_name;
 		}
+
+		toasterObj.from = this.user.username
 
 		this.render(toasterObj, 'templates/toasters/compose');
 
@@ -154,6 +157,7 @@ var ComposeToaster = Class.create(Toaster, {
 			get('submit-' + this.id).update('Send Message');
 		}
 
+		get('compose-' + this.id).addClassName('show');
 		// Need a timeout because sometimes the tapend event cancels the focus()
 		setTimeout(function(){
 			get(this.textarea).focus();
@@ -485,7 +489,11 @@ var ComposeToaster = Class.create(Toaster, {
 			}.bind(this);
 		} else {
 			sendfunc = function sendDM(txt, cb) {
-				args = {'text': txt, 'user_id': this.to.id_str};
+				//Mojo.Log.error('sendingDM to screen_name: ' + this.to.screen_name);
+				//Mojo.Log.error('sendingDM to id: ' + this.to.id_str);
+				//args = {'text': txt, 'user_id': this.to.id_str};
+				//Line above gives 'from' id_str (instead of 'to' id_str) if you DM from a DM you previously tweeted (ie, you replied to your own DM). Screen_name holds the proper 'to' name
+				args = {'text': txt, 'screen_name': this.to.screen_name};
 
 				Twitter.newDM(args, cb);
 			}.bind(this);

@@ -1693,6 +1693,17 @@ span.link{
 .dm-title.show {
 	display: block;
 }
+.compose-title {
+	font-weight: bold;
+	font-size: 12px;
+	color: #d2d2d2;
+	padding-bottom: 7px;
+	padding-left: 2px;
+	display: none;
+}
+.compose-card .compose-title.show {
+	display: block;
+}
 .compose-txt {
 	border-width: 12px;
 	-webkit-border-image: url('../images/low/textarea-border.png') 12 stretch;
@@ -1960,6 +1971,11 @@ span.link{
 
 .dashboard-icon-phnx {
 	background: url(../dash-icon.png) center center no-repeat;
+}
+
+.dashboard-text-phnx .emoji{
+	display: inline;
+	height: 16px;
 }
 
 /* User List */

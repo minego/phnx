@@ -209,3 +209,6 @@ Modified emoji.js and emoji-dialog-assistant.js and added new V2.0 emojione pngs
 Modified phnx.css to scale emoji in details toaster a little larger.
 Modified compose.js and phnx.css to have preview of tweet including emoji
 Modified tweet.js, preferences-assistant.js and app-globals.js to allow use of LuneTube on phones (non-TP devices)
+Modifified compose.js and compose.html to show sending account in card view
+Modified item-info.html and phnx.css to show emoji in dashboard notifications
+Modified compose.js to fix replying to your own DM.  Would DM yourself instead of the previous recipient.
