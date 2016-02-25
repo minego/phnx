@@ -101,16 +101,18 @@ function emojify(stringInput, size) {
 		heart = 1;
 		return '_2764';
 	}); //end block DC
-		
+	
 	regx = this.getRegxSingles();
 	replacedText = replacedText.replace(regx, function(s, eChar) {
 		var res = eChar.charCodeAt(0).toString(16).toUpperCase();
 		if(res === "261D" | res === "270D" | res === "270C" | res === "270A" | res === "270B" | res === "26F9"){
-			skinHit = 1;
-			skinHitSingle = 1;
-			pass = 2;
+		//	skinHit = 1;
+		//	skinHitSingle = 1;
+		//	pass = 2;
+			return eChar;
+		} else {
+			return '<img class="emoji" src="images/emoji/' + eChar.charCodeAt(0).toString(16).toUpperCase() + '.png" />';
 		}
-		return '<img class="emoji" src="images/emoji/' + eChar.charCodeAt(0).toString(16).toUpperCase() + '.png" />';	
 	});
 
 	//Added by DC
@@ -119,10 +121,17 @@ function emojify(stringInput, size) {
 		return '<img class="emoji" src="images/emoji/' + eChar.charCodeAt(0).toString(16).toUpperCase() + '_20E3.png" />';
 	}); //end block DC
 
-	regx = /(\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|\uD83E[\uDC00-\uDFFF]|\u200D)/g;
+	regx = /(\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|\uD83E[\uDC00-\uDFFF]|\u200D|\u261D|\u270D|\u270C|\u270A|\u270B|\u26F9)/g;
 	replacedText = replacedText.replace(regx, function(str, p1) {
 		var hi = p1.charCodeAt(0);
 		var lo = p1.charCodeAt(1);
+		
+		if(hi === 0x261D | hi === 0x270D | hi === 0x270C | hi === 0x270A | hi === 0x270B | hi === 0x26F9){
+			skinHit = 1;
+			skinHitSingle = 1;
+			pass = 2;
+			return '<img class="emoji" src="images/emoji/' + hi.toString(16).toUpperCase() + '.png" />';
+		}
 		
 		if(hi === 0x200D){
 			//Mojo.Log.error("zwj !!!!");
