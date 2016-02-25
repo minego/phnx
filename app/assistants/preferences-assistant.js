@@ -37,15 +37,33 @@ function PreferencesAssistant(section) {
 				{key: 'showVine', type: 'toggle', label: 'Process Vine links in Timelines - warning *resource hog*'},
 				{key: 'useFoursquareApp', type: 'toggle', label: 'Pass 4sq.com links to Foursquare app (requires v2.8.5)'}
 	);
-	if (Mojo.Environment.DeviceInfo.platformVersion == "2.2.4"){
+	if (Mojo.Environment.DeviceInfo.platformVersionMajor < 3){
+		if (Mojo.Environment.DeviceInfo.platformVersion == "2.2.4"){
+			advanced.push(
+				{key: 'youTubeApp', type: 'select', label: 'YouTube App', items: [
+					{label: 'com.palm.app.youtube', value: 'com.palm.app.youtube'},
+					{label: 'com.palm.app.youtube2', value: 'com.palm.app.youtube2'},
+					{label: 'LuneTube', value: 'com.emsoft.lunetube'},
+					{label: 'Browser', value: 'com.palm.app.browser'}
+				]}
+			);
+		} /*else {
+			advanced.push(
+				{key: 'youTubeApp', type: 'select', label: 'YouTube App', items: [
+					{label: 'com.palm.app.youtube', value: 'com.palm.app.youtube'},
+					{label: 'LuneTube', value: 'com.emsoft.lunetube'},
+					{label: 'Browser', value: 'com.palm.app.browser'}
+				]}
+			);
+		}*/
+	} else {
 		advanced.push(
 			{key: 'youTubeApp', type: 'select', label: 'YouTube App', items: [
-				{label: 'com.palm.app.youtube', value: 'com.palm.app.youtube'},
-				{label: 'com.palm.app.youtube2', value: 'com.palm.app.youtube2'},
-				{label: 'LuneTube/Browser', value: 'com.palm.app.browser'}
+				{label: 'LuneTube', value: 'com.emsoft.lunetube'},
+				{label: 'Browser', value: 'com.palm.app.browser'}
 			]}
 		);
-	}
+	} 
 
 	this.sections = {
 		'General Settings': [

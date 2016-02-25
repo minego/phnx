@@ -1385,21 +1385,21 @@ transport.responseText);
 		var tmpId;
 		
 		//Mojo.Log.error("osVers: " + Mojo.Environment.DeviceInfo.platformVersion);
-		if (Mojo.Environment.DeviceInfo.platformVersion == "2.2.4") {
+		//if (Mojo.Environment.DeviceInfo.platformVersion == "2.2.4") {
 			var prefs = new LocalStorage();
 			tmpId = prefs.read('youTubeApp');
 			if(tmpId) {
 				appIds.unshift(tmpId);
 			}
-		}
+		//}
 
 		function makeCall() {
 			if(index < appIds.length) {
 				if (Mojo.Environment.DeviceInfo.platformVersionMajor < 3) {
 					//this.controller.serviceRequest("palm://com.palm.applicationManager", {
 					if(appIds[index]==='com.palm.app.browser'){
-						//global.openBrowser(url);
-						var request = new Mojo.Service.Request("palm://com.palm.applicationManager", {
+						global.openBrowser(url);
+						/*var request = new Mojo.Service.Request("palm://com.palm.applicationManager", {
 							method: "open",
 							parameters: {
 									target: url
@@ -1408,7 +1408,7 @@ transport.responseText);
 								index++;
 								makeCall();
 							}.bind(this)
-						});						
+						});*/						
 					} else {
 						var request = new Mojo.Service.Request("palm://com.palm.applicationManager", {
 							method: "launch",
@@ -1425,17 +1425,20 @@ transport.responseText);
 						});
 					}
 				} else {
-					//global.openBrowser(url);
-					var request = new Mojo.Service.Request("palm://com.palm.applicationManager", {
-						method: "open",
-						parameters: {
-							target: url
-						},
-						onFailure: function() {
-							index++;
-							makeCall();
-						}.bind(this)
-					});
+					if(appIds[index]==='com.palm.app.browser'){
+						global.openBrowser(url);
+					} else {
+						var request = new Mojo.Service.Request("palm://com.palm.applicationManager", {
+							method: "open",
+							parameters: {
+								target: url
+							},
+							onFailure: function() {
+								index++;
+								makeCall();
+							}.bind(this)
+						});
+					}
 				}
 			} else {
 				//global.openBrowser(url);

@@ -135,6 +135,10 @@ function emojify(stringInput, size) {
 			var p =  ((hi - 0xD800) * 0x400) + (lo - 0xDC00) + 0x10000;
 			var res = decimalToHex(p).toString().toUpperCase();
 
+			//Mojo.Log.error('res: ' +res);
+			//Mojo.Log.error('skinhit: ' +skinHit);
+			//Mojo.Log.error('skinHitSingle: ' + skinHitSingle);
+			//Mojo.Log.error('pass: ' + pass);
 			//Skin adjustments
 			if(pass !== 3 && (res === "1F466" | res === "1F467" | res === "1F468" | res === "1F469" | res === "1F474" | res === "1F475" | res === "1F476" | res === "1F471" | res === "1F46E" | res === "1F472" | res === "1F473" | res === "1F477" | res === "1F478" | res === "1F482" | res === "1F575" | res === "1F385"
 			 | res === "1F47C" | res === "1F486" | res === "1F487" | res === "1F470" | res === "1F64D" | res === "1F64E" | res === "1F645" | res === "1F646" | res === "1F481" | res === "1F64B" | res === "1F647" | res === "1F64C" | res === "1F64F" | res === "1F6B6" | res === "1F3C3" | res === "1F483"
@@ -257,6 +261,7 @@ function emojify(stringInput, size) {
 		replacedText = replacedText.replace(/'\s+.png'/,'.png'); 
 		pass = 1;
 	}
+	//Mojo.Log.error('replacedText: ' + replacedText);
 	return replacedText;
 }
 

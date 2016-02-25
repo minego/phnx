@@ -1,6 +1,7 @@
 var ChangelogToaster = Class.create(Toaster, {
 	items: [
 		{ version: '1.6.3' },
+		{ item: 'Pref for LuneTube and Browser launching for YouTube separated to own options'},
 		{ item: 'Fixed replying to your own DM - now sends to proper recipient'},
 		{ item: 'Notification dashboard now shows emoji (banners unfortunately cannot)'},
 		{ item: 'Compose toaster card view shows account sending tweet'},
