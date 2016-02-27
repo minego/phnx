@@ -725,6 +725,17 @@ var ComposeToaster = Class.create(Toaster, {
 		}
 	},
 	emojiTapped: function(event) {
+		Mojo.Log.info("emojiTapped");
+		this.emojiAction(event, false);
+	},
+	emojiHeld: function(event) {
+		Mojo.Log.info("emojiHeld");
+		this.emojiAction(event, true);
+
+		/* Prevent the tap event */
+		event.preventDefault();
+	},
+	emojiAction: function(event,held) {
 		//Moved outside of callback as on webOS 1.4.5 values defaulted to 0 and weren't reading current cursor value
 		var txtArea = this.controller.get(this.textarea);
 		var startPos = txtArea.selectionStart;
@@ -765,7 +776,10 @@ var ComposeToaster = Class.create(Toaster, {
 			}
 		}.bind(this);
 
-		this.controller.stageController.pushScene("emoji-dialog", callback);
+		var opts = {
+			held: held
+		};
+		this.controller.stageController.pushScene("emoji-dialog", callback,opts);
 	},
 	newCardTapped: function(event) {
 		this.opts.text = get(this.textarea).value;
@@ -839,6 +853,7 @@ var ComposeToaster = Class.create(Toaster, {
 		Mojo.Event.listen(get('geotag-' + this.id), Mojo.Event.tap, this.geotagTapped.bind(this));
 		Mojo.Event.listen(get('link-' + this.id), Mojo.Event.tap, this.linkTapped.bind(this));
 		Mojo.Event.listen(get('emoji-' + this.id), Mojo.Event.tap, this.emojiTapped.bind(this));
+		Mojo.Event.listen(get('emoji-' + this.id), Mojo.Event.hold, this.emojiHeld.bind(this));
 		Mojo.Event.listen(get('newcard-' + this.id), Mojo.Event.tap, this.newCardTapped.bind(this));
 		Mojo.Event.listen(get('cancel-' + this.id), Mojo.Event.tap, this.cancelTapped.bind(this));
 		Mojo.Event.listen(get('complete-bar-' + this.id), Mojo.Event.tap, this.addUser.bind(this));
@@ -866,6 +881,7 @@ var ComposeToaster = Class.create(Toaster, {
 		Mojo.Event.stopListening(get('geotag-' + this.id), Mojo.Event.tap, this.geotagTapped);
 		Mojo.Event.stopListening(get('link-' + this.id), Mojo.Event.tap, this.linkTapped);
 		Mojo.Event.stopListening(get('emoji-' + this.id), Mojo.Event.tap, this.emojiTapped);
+		Mojo.Event.stopListening(get('emoji-' + this.id), Mojo.Event.hold, this.emojiHeld);
 		Mojo.Event.stopListening(get('newcard-' + this.id), Mojo.Event.tap, this.newCardTapped);
 		Mojo.Event.stopListening(get('cancel-' + this.id), Mojo.Event.tap, this.cancelTapped);
 		Mojo.Event.stopListening(get('complete-bar-' + this.id), Mojo.Event.tap, this.addUser);

@@ -213,3 +213,4 @@ Modifified compose.js and compose.html to show sending account in card view
 Modified item-info.html and phnx.css to show emoji in dashboard notifications
 Modified compose.js to fix replying to your own DM.  Would DM yourself instead of the previous recipient.
 Modified preferences-assistant.js and tweet.js to separate browser and lunetube launching. LuneTube is now directly called.
+Modified emoji-dialog-assistant.js and compose.js to allow adding multiple emoji at once.

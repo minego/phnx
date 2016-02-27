@@ -1,6 +1,7 @@
 var ChangelogToaster = Class.create(Toaster, {
 	items: [
 		{ version: '1.6.3' },
+		{ item: 'Holding the emoji icon in the compose toaster allows multiple emoji to be entered at once. Hit the "back" button to return when finished'},
 		{ item: 'Pref for LuneTube and Browser launching for YouTube separated to own options'},
 		{ item: 'Fixed replying to your own DM - now sends to proper recipient'},
 		{ item: 'Notification dashboard now shows emoji (banners unfortunately cannot)'},

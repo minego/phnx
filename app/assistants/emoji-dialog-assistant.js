@@ -1,8 +1,10 @@
 var _emojiSelectedGroup = 'people';
+var myEmojiStringFinal ="";
 
-function EmojiDialogAssistant(callBackFunc) {
+function EmojiDialogAssistant(callBackFunc,opts) {
     this.callBackFunc = callBackFunc;
     this.maxRenderEmoji = 600;
+    this.opts = opts;
     this.emojiListModel = {
         items : []
     };
@@ -58,10 +60,25 @@ EmojiDialogAssistant.prototype.handleCommand = function(event) {
             _emojiSelectedGroup = event.command;
         switch(event.command) {
             case 'close':
+            	if(this.opts.held == false){
                 this.controller.stageController.popScene({
                     selectedEmoji : null
                 });
-                break;
+              } else {
+                var tmpFinalString = myEmojiStringFinal;
+                myEmojiStringFinal = "";
+                if (this.callBackFunc) {
+					    	   this.callBackFunc({ 
+        							emojiStringFinal : tmpFinalString });
+    						}
+								this.controller.stageController.popScene({
+									//selectedEmoji : myEmojiCode1,
+									//selectedEmoji2 : myEmojiCode2,
+									//emojiString : myEmojiString,
+									emojiStringFinal : tmpFinalString
+								});
+							}
+              break;
             case 'people':
                 //this.loadEmoji(0, 189)
                 //this.loadEmojiUnicode(0, 221)
@@ -128,7 +145,7 @@ EmojiDialogAssistant.prototype.listTapHandler = function(event) {
     var myEmojiCode1;
     var myEmojiCode2;
     var myEmojiString;
-		var myEmojiStringFinal ="";
+		//var myEmojiStringFinal ="";
 		var myEmojiStringElems = [];
 		
     
@@ -150,24 +167,27 @@ EmojiDialogAssistant.prototype.listTapHandler = function(event) {
 	 for(var i=0; i<myEmojiStringElems.length; i++){
      myEmojiStringFinal = myEmojiStringFinal + convertUnicodeCodePointsToString(['0x' + myEmojiStringElems[i]]);
    }
- 
     //Mojo.Log.error("myEmojiCode: " + myEmojiCode);
     //Mojo.Log.error("myEmojiCodeUC: " + emojiSpecialMultiHashTable.getItem(myEmojiCode));
     //Mojo.Log.info("code1: " + myEmojiCode1);
     //Mojo.Log.info("code2: " + myEmojiCode2);
     
-    if (this.callBackFunc) {
+    if(this.opts.held == false) {
+    	var tmpFinalString = myEmojiStringFinal;
+      myEmojiStringFinal = "";
+    	if (this.callBackFunc) {
         this.callBackFunc({ selectedEmoji : myEmojiCode1,
         										selectedEmoji2 : myEmojiCode2,
         										emojiString : myEmojiString,
-        										emojiStringFinal : myEmojiStringFinal });
-    }
-    this.controller.stageController.popScene({
+        										emojiStringFinal : tmpFinalString });
+    	}
+    	this.controller.stageController.popScene({
         selectedEmoji : myEmojiCode1,
         selectedEmoji2 : myEmojiCode2,
         emojiString : myEmojiString,
-        emojiStringFinal : myEmojiStringFinal
-    });
+        emojiStringFinal : tmpFinalString
+    	});
+  	}
 }
 
 EmojiDialogAssistant.prototype.cleanup = function() {
