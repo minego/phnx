@@ -1216,8 +1216,10 @@ transport.responseText);
 		} else if (url.indexOf('youtu.be') > 1) {
 			// YouTube app doesn't like the short URLs so let's convert it to a full URL
 			//this.openYouTube('http://youtube.com/watch?v=' + url.substr(url.indexOf('.be/') + 4));
-			var tail = url.substr(url.indexOf('.be/') + 4);
-			this.openYouTube('http://youtube.com/watch?v=' + tail.substr(0,tail.indexOf("?")));
+			// var tail = url.substr(url.indexOf('.be/') + 4);
+			// this.openYouTube('http://youtube.com/watch?v=' + tail.substr(0,tail.indexOf("?")));
+			
+			this.openYouTube('http://youtube.com/watch?v=' + this.getYoutubeID(url));
 		} else if (url.indexOf('://twitter.com/#!/' + this.twitterUsername + '/status/' + this.twitterId) > -1) {
 			this.assistant.toasters.add(new TweetToaster(url, this.assistant));
 			Mojo.Log.error("TweetToaster for http:// called");
@@ -1455,6 +1457,18 @@ transport.responseText);
 			}
 		}
 		makeCall();
+	},
+	getYoutubeID: function (url){
+		  var ID = '';
+		  url = url.replace(/(>|<)/gi,'').split(/(vi\/|v=|\/v\/|youtu\.be\/|\/embed\/)/);
+		  if(url[2] !== undefined) {
+		    ID = url[2].split(/[^0-9a-z_\-]/i);
+		    ID = ID[0];
+		  }
+		  else {
+		    ID = url;
+		  }
+		return ID;
 	},
 	rtTapped: function(event) {
 		var Twitter = new TwitterAPI(this.user);
