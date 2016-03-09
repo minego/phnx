@@ -2,6 +2,7 @@ var ChangelogToaster = Class.create(Toaster, {
 	items: [
 		{ version: '1.6.4' },
 		{ item: 'Short YouTube links fixed'},
+		{ item: 'Added support for MetaView\'s OfflineBrowswer'},
 		{ version: '1.6.3' },
 		{ item: 'Holding the emoji icon in the compose toaster allows multiple emoji to be entered at once. Hit the "back" button to return when finished'},
 		{ item: 'Pref for LuneTube and Browser launching for YouTube separated to own options'},

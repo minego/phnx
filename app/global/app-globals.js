@@ -70,18 +70,43 @@ var global = {
 			});
 		}
 	},
-	openBrowser: function(src, url) {
-		var service = new Mojo.Service.Request("palm://com.palm.applicationManager", {
-			method: "launch",
-			parameters: {
-				id: "com.palm.app.browser",
-				params: {
-					target: src
-				}
-			},
-			onSuccess : function (e){ Mojo.Log.info("Open success, results="+JSON.stringify(e)); },
-      		onFailure : function (e){ Mojo.Log.info("Open failure, results="+JSON.stringify(e)); }    
-		});
+	openBrowser: function(src,browser) {
+		var prefs = new LocalStorage();
+		var useBrowser = 'stockBrowser';
+
+		if(browser){
+			if(browser === 'offlineBrowser'){
+				useBrowser = 'offlineBrowser';
+			}
+		} else {
+			useBrowser = prefs.read('browserSelection');
+		}
+		
+		if (useBrowser === 'offlineBrowser') {
+			var service = new Mojo.Service.Request("palm://com.palm.applicationManager", {
+				method: "launch",
+				parameters: {
+					id: "de.metaviewsoft.offlinebrowser",
+					params: {
+						target: src
+					}
+				},
+				onSuccess : function (e){ Mojo.Log.info("Open success, results="+JSON.stringify(e)); },
+      	onFailure : function (e){ Mojo.Log.info("Open failure, results="+JSON.stringify(e)); }    
+			})
+		} else {
+			var service = new Mojo.Service.Request("palm://com.palm.applicationManager", {
+				method: "launch",
+				parameters: {
+					id: "com.palm.app.browser",
+					params: {
+						target: src
+					}
+				},
+				onSuccess : function (e){ Mojo.Log.info("Open success, results="+JSON.stringify(e)); },
+      	onFailure : function (e){ Mojo.Log.info("Open failure, results="+JSON.stringify(e)); }    
+			})
+		};
 		//this.stageController.pushScene('webview');
 	},
 	banner: function(message) {

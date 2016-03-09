@@ -562,10 +562,13 @@ var TweetToaster = Class.create(Toaster, {
 				this.handleLink(this.url);
 				break;
 			case 'cmdOpenStockBrowser':
-				global.openBrowser(this.url);
+				global.openBrowser(this.url,'stockBrowser');
 				break;
 			case 'cmdOpenInAppBrowser':
 				this.controller.stageController.pushScene('webview', this.url);
+				break;
+			case 'cmdOpenOfflineBrowser':
+				global.openBrowser(this.url,'offlineBrowser');
 				break;
 			case 'cmdMobilizeStockBrowser':
 				//parsedLink = 'http://www.instapaper.com/m?u=' + encodeURIComponent(this.url);
@@ -1570,6 +1573,10 @@ transport.responseText);
 			{
 				label:				$L('Open in In-App Browser'),
 				command:			'cmdOpenInAppBrowser'
+			},
+			{
+				label:				$L('Open in Offline Browser'),
+				command:			'cmdOpenOfflineBrowser'
 			},
 			{
 				label:				$L('Mobilize in System Browser'),

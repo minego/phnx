@@ -71,6 +71,7 @@ function PreferencesAssistant(section) {
 			{key: 'browserSelection', type: 'select', label: 'Browser', items: [
 				{label: 'In-App Browser', value: 'inAppBrowser'},
 				{label: 'Stock Browser', value: 'stockBrowser'},
+				{label: 'Offline Browser', value: 'offlineBrowser'},
 				{label: 'Ask', value: 'ask' }
 			]},
 			{key: 'mobilizeWebLinks', type: 'toggle', label: 'Mobilize Web Links'},
