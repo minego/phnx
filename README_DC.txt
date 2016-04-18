@@ -215,3 +215,4 @@ Modified compose.js to fix replying to your own DM.  Would DM yourself instead o
 Modified preferences-assistant.js and tweet.js to separate browser and lunetube launching. LuneTube is now directly called.
 Modified emoji-dialog-assistant.js and compose.js to allow adding multiple emoji at once.
 Modified preferences-assistant.js, tweet.js and app-globals.js to allow for use of MetaView's OfflineBrowswer
+Modified tweet.js so the OfflineBrowser doesn't check Mobilize option - always uses full web page link

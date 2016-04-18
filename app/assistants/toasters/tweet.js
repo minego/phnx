@@ -1323,9 +1323,13 @@ transport.responseText);
 			this.controller.stageController.pushScene('webview', src);
 			Mojo.Log.info("Launching In App Browser");
 		} else {
-			if (prefs.read('mobilizeWebLinks')) {
-				//parsedLink = 'http://www.instapaper.com/m?u=' + encodeURIComponent(src);
-				parsedLink = 'http://google.com/gwt/x?u=' + encodeURIComponent(src);
+			if(prefs.read('browserSelection') === 'stockBrowser'){
+				if (prefs.read('mobilizeWebLinks')) {
+					//parsedLink = 'http://www.instapaper.com/m?u=' + encodeURIComponent(src);
+					parsedLink = 'http://google.com/gwt/x?u=' + encodeURIComponent(src);
+				}
+			} else {
+				parsedLink = src;
 			}
 			global.openBrowser(parsedLink);
 			Mojo.Log.info("Launching Stock Browser");
