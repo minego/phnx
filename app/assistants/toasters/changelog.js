@@ -1,6 +1,7 @@
 var ChangelogToaster = Class.create(Toaster, {
 	items: [
 		{ version: '1.6.4' },
+		{ item: 'Fixed some missing users due to 53bit javascript limitation for friends, followers and mutedUsers'},
 		{ item: 'Short YouTube links fixed'},
 		{ item: 'Added support for MetaView\'s OfflineBrowswer'},
 		{ version: '1.6.3' },
