@@ -20,7 +20,7 @@ TweetHelper.prototype = {
 				if(mutedUsers){
 					for (var m = 0, mutedUser; mutedUser = mutedUsers[m]; m++) {
 						//if (retweeter.screen_name.indexOf(mutedUser.user) > -1) {
-						if (retweeter.id === mutedUser.id) {
+						if (retweeter.id_str === mutedUser.id_str) {
 							tweet.hideTweet_class = 'hide';
 							break;
 						} else {
@@ -34,7 +34,7 @@ TweetHelper.prototype = {
 				if(mutedUsers){
 					for (var m = 0, mutedUser; mutedUser = mutedUsers[m]; m++) {
 						//if (tweet.user.screen_name.indexOf(mutedUser.user) > -1) {
-						if (tweet.user.id === mutedUser.id) {
+						if (tweet.user.id_str === mutedUser.id_str) {
 							tweet.hideTweet_class = 'hide';
 							break;
 						} else {
@@ -416,7 +416,7 @@ TweetHelper.prototype = {
 		if(mutedUsers){
 			for (var m = 0, mutedUser; mutedUser = mutedUsers[m]; m++) {
 				//if (tweet.user.screen_name.indexOf(mutedUser.user) > -1) {
-				if (tweet.user.id === mutedUser.id) {
+				if (tweet.user.id_str === mutedUser.id_str) {
 					tweet.hideTweet_class = 'hide';
 					break;
 				} else {

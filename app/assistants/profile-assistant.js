@@ -41,7 +41,7 @@ ProfileAssistant.prototype = {
 			if(mutedUsers){
 				for (var m = 0, mutedUser; mutedUser = mutedUsers[m]; m++) {
 					//if (this.user.screen_name.indexOf(mutedUser.user) > -1) {
-					if (this.user.id === mutedUser.id) {
+					if (this.user.id_str === mutedUser.id_str) {
 						this.menuItems[1] = {label: 'Unmute User', command: 'cmdUnmuteUser'};
 						break;
 					}
@@ -802,13 +802,13 @@ ProfileAssistant.prototype = {
 		if(mutedUsers){
 			for (var i = 0, m; m = mutedUsers[i]; i++) {
 				//if(m.id && m.user) {
-				if(m.id) {
+				if(m.id_str) {
 					items.push(m);
 				}
 			}
 		}
 		//items.push({text: this.user.screen_name});
-		items.push({id: this.user.id});
+		items.push({id_str: this.user.id_str});
 		prefs.write('mutedUsers',items);
 		banner('Muting @' + this.user.screen_name);
 		this.menuItems[1] = {label: 'Unmute User', command: 'cmdUnmuteUser'};
@@ -821,11 +821,11 @@ ProfileAssistant.prototype = {
 		if(mutedUsers){
 			for (var i = 0, m; m = mutedUsers[i]; i++) {
 				//if(-1 == m.user.indexOf(this.user.screen_name)){
-				if(m.id !== this.user.id){
+				if(m.id_str !== this.user.id_str){
 					//items.push({ text: m });
 					//if(m.id && m.user) {
-					if(m.id) {
-						items.push({id: m.id});
+					if(m.id_str) {
+						items.push({id_str: m.id_str});
 					}
 				}
 			}
@@ -935,6 +935,13 @@ ProfileAssistant.prototype = {
 			global.following = r;
 
 			this.toasters.add(new UserListToaster('@' + this.user.screen_name + '\'s friends', r, this));
+				//Mojo.Log.error('--------------');
+				//var f;
+				//while ((f = r.shift())) {
+				//	for (var u, i = 0; (u = global.following[i]); i++) {
+				//		Mojo.Log.error('followings: ' + u.id_str);
+				//	}
+				//}
 		}.bind(this));
 	},
 	followersTapped: function(event) {

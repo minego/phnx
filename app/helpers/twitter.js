@@ -197,10 +197,10 @@ TwitterAPI.prototype = {
 		this.sign('POST', this.url(this.endpoints.report), callback, {'user_id': id}, {});
 	},
 	getFollowers: function(userId, callback) {
-		this.sign('GET', this.url(this.endpoints.followers), this.gotIds.bind(this), {'user_id': userId, 'cursor': '-1'}, {callback: callback});
+		this.sign('GET', this.url(this.endpoints.followers), this.gotIds.bind(this), {'user_id': userId, 'stringify_ids': true, 'cursor': '-1'}, {callback: callback});
 	},
 	getFriends: function(userId, callback) {
-		this.sign('GET', this.url(this.endpoints.friends), this.gotIds.bind(this), {'user_id': userId, 'cursor': '-1'}, {callback: callback});
+		this.sign('GET', this.url(this.endpoints.friends), this.gotIds.bind(this), {'user_id': userId, 'stringify_ids': true, 'cursor': '-1'}, {callback: callback});
 	},
 	// Testing code for profile image upload - not ready - DC
 	updateProfileImage: function(args, callback) {
@@ -218,7 +218,7 @@ TwitterAPI.prototype = {
 		if (!ids || ids.length <= 0) {
 			var lookup = {};
 			for (var i = 0, len = meta.results.length; i < len; i++) {
-				lookup[meta.results[i].id] = meta.results[i];
+				lookup[meta.results[i].id_str] = meta.results[i];
 			}
 			var j = 0;
 			for (var i = 0, len = meta.results.length; i < len; i++) {

@@ -73,7 +73,7 @@ var ManageMutedUsersToaster = Class.create(Toaster, {
 
 		for (var i = 0, m; m = this.listModel.items[i]; i++) {
 			if (!m.deleted) {
-				mutedUsers.push({id: m.id});
+				mutedUsers.push({id_str: m.id_str});
 			}
 		}
 		console.log(Object.toJSON(mutedUsers));
