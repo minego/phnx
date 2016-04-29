@@ -1,6 +1,7 @@
 var ChangelogToaster = Class.create(Toaster, {
 	items: [
 		{ version: '1.6.4' },
+		{ item: 'Tap-hold header toolbar to allow for quicker loading of other owned Twitter accounts'},
 		{ item: 'Fixed some missing users due to 53bit javascript limitation for friends, followers and mutedUsers'},
 		{ item: 'Short YouTube links fixed'},
 		{ item: 'Added support for MetaView\'s OfflineBrowswer'},

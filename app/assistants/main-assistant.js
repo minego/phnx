@@ -2149,6 +2149,50 @@ MainAssistant.prototype = {
 			}, response.responseJSON);
 		}.bind(this));
 	},
+	headerHeld: function(event) {
+		/* Prevent the tap event */
+		event.preventDefault();
+		
+		var am = new Account();
+		am.all(function(r){
+			this.users = r;
+		}.bind(this));
+
+		var accountMenuItems = [];
+		if (this.users) {
+			var chosen = false;
+			for (i=0; i < this.users.length; i++) {
+				if(this.users[i].id === this.user.id){
+					chosen = true;
+				} else{
+					chosen = false;
+				}
+				accountMenuItems.push({
+					label: '@' + this.users[i].username,
+					command: 'account-' + this.users[i].id,
+					chosen: chosen
+				});
+			}
+		} else {
+			var me = {
+				label: '@' + this.user.username,
+				command: 'account-' + this.user.id
+			};
+			this.users = [me];
+			accountMenuItems.push(me);
+		}
+		
+		this.controller.popupSubmenu({
+			placeNear:	this.controller.get('header-title'),
+			toggleCmd: true,
+			items: accountMenuItems,
+			onChoose: function(command) {
+				if(command){
+					this.openAccount(command.substr(command.indexOf('-') + 1));
+				}
+			}.bind(this)
+		});
+	},
 	stageActivate: function(event) {
 		var prefs = new LocalStorage();
 
@@ -2174,6 +2218,7 @@ MainAssistant.prototype = {
 			[ 'refresh',				Mojo.Event.tap,				this.refreshTapped		],
 			[ 'new-tweet',				Mojo.Event.tap,				this.newTweet			],
 			[ 'header-title',			Mojo.Event.tap,				this.headerTapped		],
+			[ 'header-title',			Mojo.Event.hold,				this.headerHeld		],
 			[ 'shim',					Mojo.Event.tap,				this.shimTapped			],
 			[ 'your-lists-list',		Mojo.Event.listTap,			this.listTapped			],
 			[ 'lists-you-follow-list',	Mojo.Event.listTap,			this.listTapped			],

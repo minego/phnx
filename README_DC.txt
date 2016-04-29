@@ -218,3 +218,4 @@ Modified preferences-assistant.js, tweet.js and app-globals.js to allow for use 
 Modified tweet.js so the OfflineBrowser doesn't check Mobilize option - always uses full web page link
 Modified tweet.js, twitter.js, mutedusers.js, profile-assistant.js and main-assistant.js to allow friends, followers and mutedusers to work properly with id's larger than 53 bits (javascript limitation)
 Modified main-assistant.js to update id's found in mutedUsers db to id_str on launch.
+Modified main-assistant.js to allow for account loading by tap-holding header bar.
