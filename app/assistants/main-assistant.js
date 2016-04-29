@@ -76,6 +76,34 @@ MainAssistant.prototype = {
 		var prefs	= new LocalStorage();
 		var mutedUsers = prefs.read('mutedUsers');
 		var tmp;
+		
+		
+		if(mutedUsers && mutedUsers.length > 0){
+			var flagWriteMutedUsers = 0;
+			for (var m = 0, mutedUser; mutedUser = mutedUsers[m]; m++) {
+				if(!mutedUser.id_str){
+					flagWriteMutedUsers = 1;
+					mutedUsers[m].id_str = mutedUser.id.toString();
+				}
+			}
+			if(flagWriteMutedUsers === 1){
+				var items	= [];
+		
+				if(mutedUsers){
+					//Mojo.Log.error('writing pref for mutedUsers');
+					for (var i = 0, m; m = mutedUsers[i]; i++) {
+						//if(m.id && m.user) {
+						if(m.id_str) {
+							items.push({id_str: m.id_str});
+							//Mojo.Log.error('id_str: ' + m.id_str);
+						}
+					}
+				}
+				
+				prefs.write('mutedUsers',items);
+				mutedUsers = prefs.read('mutedUsers');
+			}
+		}		
 
 		// These nouns are used in the "X New {Noun}" message
 		this.nouns = {
