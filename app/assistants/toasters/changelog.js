@@ -1,5 +1,7 @@
 var ChangelogToaster = Class.create(Toaster, {
 	items: [
+		{ version: '1.6.5' },
+		{ item: 'Fixed display of Heavy Black Heart emoji variant'},
 		{ version: '1.6.4' },
 		{ item: 'Notification icon size on webOS 1.x devices fixed'},
 		{ item: 'Tap-hold header toolbar to allow for quicker loading of other owned Twitter accounts'},

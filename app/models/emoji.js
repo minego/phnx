@@ -96,10 +96,23 @@ function emojify(stringInput, size) {
 	});
 
 	//Added by DC
+	//Sometimes there is a variant for heavy black heart so make sure this isn't it.  If joiner is found its not.
+	regx = /(\u200d\u2764\uFE0F)/g;
+	replacedText = replacedText.replace(regx, function(s, eChar){
+		heart = 1;
+		Mojo.Log.error(eChar.charCodeAt(0).toString(16).toUpperCase());
+		Mojo.Log.error(eChar.charCodeAt(1).toString(16).toUpperCase());
+		
+		return '\u200d_2764';
+	});
+	//and with no joiner, then it must be the varient so strip the FEOF variant delineator
 	regx = /(\u2764\uFE0F)/g;
 	replacedText = replacedText.replace(regx, function(s, eChar){
 		heart = 1;
-		return '_2764';
+		Mojo.Log.error(eChar.charCodeAt(0).toString(16).toUpperCase());
+		Mojo.Log.error(eChar.charCodeAt(1).toString(16).toUpperCase());
+		
+		return '\u2764';
 	}); //end block DC
 	
 	regx = this.getRegxSingles();
