@@ -220,3 +220,5 @@ Modified tweet.js, twitter.js, mutedusers.js, profile-assistant.js and main-assi
 Modified main-assistant.js to update id's found in mutedUsers db to id_str on launch.
 Modified main-assistant.js to allow for account loading by tap-holding header bar.
 Modified emoji.js to fix display of heavy black heart emoji variant.
+Modified emoji.js to add new emoji added in latest Unicode standard and emojione.
+Updated cnvtSBEmojiCodeToUnicode.pl to v2

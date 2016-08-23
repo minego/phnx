@@ -3,7 +3,7 @@ var myEmojiStringFinal ="";
 
 function EmojiDialogAssistant(callBackFunc,opts) {
     this.callBackFunc = callBackFunc;
-    this.maxRenderEmoji = 600;
+    this.maxRenderEmoji = 620;
     this.opts = opts;
     this.emojiListModel = {
         items : []
@@ -82,27 +82,32 @@ EmojiDialogAssistant.prototype.handleCommand = function(event) {
             case 'people':
                 //this.loadEmoji(0, 189)
                 //this.loadEmojiUnicode(0, 221)
-                this.loadEmojiUnicode(0, 524)
+                //this.loadEmojiUnicode(0, 524)
+                this.loadEmojiUnicode(0, 616)
                 break;
             case 'nature':
                 //this.loadEmoji(189, 305)
                 //this.loadEmojiUnicode(221, 494)
-                this.loadEmojiUnicode(524, 826)
+                //this.loadEmojiUnicode(524, 826)
+                this.loadEmojiUnicode(616, 812)
                 break;
             case 'events':
                 //this.loadEmoji(305, 535)
                 //this.loadEmojiUnicode(494, 767)
-                this.loadEmojiUnicode(826, 1160)
+                //this.loadEmojiUnicode(826, 1160)
+                this.loadEmojiUnicode(812, 1324)
                 break;
             case 'symbols':
 								//this.loadEmoji(535, 637)
 								//this.loadEmojiUnicode(767, 950)            
-								this.loadEmojiUnicode(1160, 1364)            
+								//this.loadEmojiUnicode(1160, 1364)
+								this.loadEmojiUnicode(1324, 1531)            
                 break;
             case 'flags':
                 //this.loadEmoji(637, 846)
                 //this.loadEmojiUnicode(950, 1168)
-                this.loadEmojiUnicode(1364, 1620)
+                //this.loadEmojiUnicode(1364, 1620)
+                this.loadEmojiUnicode(1531, 1788)
                 break;
         }
         

@@ -1,5 +1,7 @@
 var ChangelogToaster = Class.create(Toaster, {
 	items: [
+		{ version: '1.6.6' },
+		{ item: 'Added emoji from latest Unicode standard'},
 		{ version: '1.6.5' },
 		{ item: 'Fixed display of Heavy Black Heart emoji variant'},
 		{ version: '1.6.4' },

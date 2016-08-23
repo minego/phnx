@@ -1,0 +1,7 @@
+Notes:
+Filenaming:
+1) No leading zeros.
+2) Underscore seperating elements (not dashes)
+3) Uppercase
+
+Remember that all emoji with skin options should be added to the in the section around line 179 in emoji.js
