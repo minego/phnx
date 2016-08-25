@@ -46,6 +46,7 @@ MainAssistant.prototype = {
 
 		createEmojiHash();
 		createSpecialMultiEmojiHash();
+		createSkinnableEmojiHash();
 
 		if (Mojo.Environment.DeviceInfo.modelNameAscii == "Pixi" ||
 			Mojo.Environment.DeviceInfo.modelNameAscii == "Veer") {

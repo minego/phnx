@@ -65,9 +65,11 @@ my $orderedEmojiList = $ARGV[1];
 my %emojiCodeHash = ();
 my %emojiFileCodeHash = ();
 my @orderedList =();
-my $emojiCode;
+#my $emojiCode;
 my @unfoundEmojiCodeList = ();
 my $flag =0;
+my @finalOrderedEmojiList = ();
+my $index = 0;
 
 open EMOJICODELIST, "$srcEmojiList";
 open ORDEREDEMOJICODELIST, "$orderedEmojiList";
@@ -129,12 +131,22 @@ while (<EMOJICODELIST>){
 
 close EMOJICODELIST;
 
-foreach $emojiCode (@orderedList){
+#Full list
+print "//Full emoji list array\n";
+print "var emoji_code_unicode = [";
+foreach my $emojiCode (@orderedList){
 	#print "$emojiCode: ";
 	if($emojiFileCodeHash{$emojiCode}[0]){
 		#print "found\n";
-		print "'" . uc $emojiCode . "',";
+		if($flag == 0) {
+			$flag = 1;
+		}else{
+			print ",";
+		}
+		print "'" . uc $emojiCode . "'"; #uncomment for full emojilist
 		$emojiFileCodeHash{$emojiCode}[1] = 1;
+		#$finalOrderedEmojiList[$index][0] = $emojiCode;
+		$index++;
 	}
 	else{
 		#print "not found\n";
@@ -143,9 +155,17 @@ foreach $emojiCode (@orderedList){
 		$truncatedEmojiCode =~ s/_200d//g; 
 		$truncatedEmojiCode =~ s/_fe0f_20e3/_20e3/g;
 		if($emojiFileCodeHash{$truncatedEmojiCode}[0]){
-			print "'" . uc $truncatedEmojiCode . "',";
+			if($flag == 0) {
+				$flag = 1;
+			}else{
+				print ",";
+			}
+			print "'" . uc $truncatedEmojiCode . "'"; #uncomment for full emojilist
 			$emojiFileCodeHash{$truncatedEmojiCode}[1] = 1;
 			###print $emojiCode . " : " . $truncatedEmojiCode . "\n";
+			#$finalOrderedEmojiList[$index][0] = $truncatedEmojiCode;
+			#print "'" . uc $truncatedEmojiCode . "'"; #comment out for full emojilist
+			$index++;
 		} else {
 			###print "\n" . $emojiCode . " : " . $truncatedEmojiCode . "\n";
 			$emojiFileCodeHash{$emojiCode}[2] = 0;
@@ -154,7 +174,92 @@ foreach $emojiCode (@orderedList){
 		}
 	}
 }
+print "];\n\n";
 
+$flag = 0;
+#Skinned list
+print "//Skinned emoji list array\n";
+print "var emoji_code_unicode = [";
+foreach my $emojiCode (@orderedList){
+	#print "$emojiCode: ";
+	if($emojiFileCodeHash{$emojiCode}[0]){
+		#print "found\n";
+		####print "'" . uc $emojiCode . "',"; #uncomment for full emojilist
+		$emojiFileCodeHash{$emojiCode}[1] = 1;
+
+		$finalOrderedEmojiList[$index][0] = $emojiCode;
+		if($emojiCode =~ m/_1F3FB|_1F3FC|_1F3FD|_1F3FE|_1F3FF/i){
+			if($finalOrderedEmojiList[$index-1][1] == 0) {
+				$finalOrderedEmojiList[$index-1][1] = 1; #flag for skin changeable emoji
+			}
+			$finalOrderedEmojiList[$index][1] = 2; #flag for skinned changeable emoji
+		} else {
+			if($flag == 0) {
+				$flag = 1;
+			}else{
+				print ",";
+			}
+			$finalOrderedEmojiList[$index][1] = 0; #flag for skin changeable emoji
+			print "'" . uc $emojiCode . "'"; #comment out for full emojilist
+		}
+		$index++;
+	}
+	else{
+		#print "not found\n";
+		my $truncatedEmojiCode = $emojiCode;
+		$truncatedEmojiCode =~ s/_2764_fe0f/_2764/g; 
+		$truncatedEmojiCode =~ s/_200d//g; 
+		$truncatedEmojiCode =~ s/_fe0f_20e3/_20e3/g;
+		if($emojiFileCodeHash{$truncatedEmojiCode}[0]){
+			####print "'" . uc $truncatedEmojiCode . "',"; #uncomment for full emojilist
+			$emojiFileCodeHash{$truncatedEmojiCode}[1] = 1;
+			###print $emojiCode . " : " . $truncatedEmojiCode . "\n";
+			$finalOrderedEmojiList[$index][0] = $truncatedEmojiCode;
+			if($emojiCode =~ m/_1F3FB|_1F3FC|_1F3FD|_1F3FE|_1F3FF/i){
+				if($finalOrderedEmojiList[$index-1][1] == 0) {
+					$finalOrderedEmojiList[$index-1][1] = 1; #flag for skin changeable emoji
+				}
+				$finalOrderedEmojiList[$index][1] = 2; #flag for skinned version changeable emoji
+			} else {
+				$finalOrderedEmojiList[$index][1] = 0; #flag for skin changeable emoji
+				if($flag == 0) {
+					$flag = 1;
+				}else{
+					print ",";
+				}
+				print "'" . uc $truncatedEmojiCode . "'"; #comment out for full emojilist
+			}
+			$index++;
+		} else {
+			###print "\n" . $emojiCode . " : " . $truncatedEmojiCode . "\n";
+			$emojiFileCodeHash{$emojiCode}[2] = 0;
+			$emojiFileCodeHash{$emojiCode}[1] = 0;
+			#push(@unfoundEmojiCodeList,$emojiCode);
+		}
+	}
+}
+print "];\n\n";
+
+$flag = 0;
+print "\n\nSkinnable array\n";
+print "var skinnable_emoji_uc = [";
+foreach my $emojiCode (@finalOrderedEmojiList){
+	my $skinnable =  @$emojiCode[1];
+	if($skinnable == 1) {
+		if($flag == 0) {
+			$flag = 1;
+		}else{
+			print ",";
+		}
+		print "'" . uc @$emojiCode[0] . "'";
+	}	
+	if($skinnable == 2) {
+		#print "\tskinned: " . @$emojiCode[0] . "\n";
+	}	
+}
+print "];\n\n";
+
+$flag = 0;
 for my $unusedEmojiFileKey (sort keys %emojiFileCodeHash){
 	if($emojiFileCodeHash{$unusedEmojiFileKey}[1] == 0){
 		if($flag == 0) {

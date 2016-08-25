@@ -222,3 +222,4 @@ Modified main-assistant.js to allow for account loading by tap-holding header ba
 Modified emoji.js to fix display of heavy black heart emoji variant.
 Modified emoji.js to add new emoji added in latest Unicode standard and emojione.
 Updated cnvtSBEmojiCodeToUnicode.pl to v2
+Modified emoji.js, emoji-dialog-asisstant.js and main-assistant.js to only show default emoji and added support to tap-hold on emoji to show alt skin types.
