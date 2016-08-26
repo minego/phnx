@@ -140,11 +140,18 @@ EmojiDialogAssistant.prototype.loadEmoji = function(start, end) {
 
 EmojiDialogAssistant.prototype.loadEmojiUnicode = function(start, end) {
     var list = [];
+		var prefs	= new LocalStorage();
+		var emojiSkinTone = prefs.read('emojiSkinTone');
+
     for (var i = start; i < end; i++) {
+    		var tmpEmojiCode = emoji_code_unicode[i];
+    		if(skinnableEmojiHashTable.getItem(tmpEmojiCode)){
+    			tmpEmojiCode = tmpEmojiCode + emojiSkinTone;
+    		}
         list.push({
             //emojiPath : "images/emoji/" + emoji_code_unicode[i] + ".png",
-            emojiPath : "images/emoji/1.5/" + emoji_code_unicode[i] + ".png",
-            emojiCode : emoji_code_unicode[i]
+            emojiPath : "images/emoji/" + tmpEmojiCode + ".png",
+            emojiCode : tmpEmojiCode
         });
     }
 
@@ -220,18 +227,18 @@ EmojiDialogAssistant.prototype.listHoldHandler = function(event) {
     var myEmojiString;
 		//var myEmojiStringFinal ="";
 		var myEmojiStringElems = [];
+		var myEmojiStringElems2 = [];
 		var emojiSkinItems = [];
 		var emojiSkinList = ["","_1F3FB","_1F3FC","_1F3FD","_1F3FE","_1F3FF"];
 		var i;
 		
-		
-		if(skinnableEmojiHashTable.getItem(myEmojiCode)){
+		myEmojiStringElems2 = myEmojiCode.split("_");
+		if(skinnableEmojiHashTable.getItem(myEmojiStringElems2[0])){
 			for (i=0; i < emojiSkinList.length; i++) {
 				emojiSkinItems.push({
 					label: "",
-					command: myEmojiCode + emojiSkinList[i],
-					secondaryIconPath: "images/emoji/1.5/" + myEmojiCode+emojiSkinList[i] + ".png",
-					chosen: false
+					command: myEmojiStringElems2[0] + emojiSkinList[i],
+					secondaryIconPath: "images/emoji/" + myEmojiStringElems2[0]+emojiSkinList[i] + ".png"
 				});
 			}
 

@@ -145,10 +145,18 @@ function PreferencesAssistant(section) {
 			{key: 'hideSearchTimelineThumbs',	type: 'toggle', label: 'Hide Search Timeline Thumbnails'},
 			{key: 'hideGifThumbsInTimeline', type: 'toggle', label: 'Hide Gif Thumbnails in Timeline'},
 			{key: 'scrollMoreToBottom', type: 'toggle', label: 'Scroll to Bottom on Load More tap'},
-			{key: 'showEmoji', type: 'select', label: 'emoji', items: [
+			{key: 'showEmoji', type: 'select', label: 'Emoji', items: [
 				{label: 'Never Show', value: 'noEmoji'},
 				{label: 'Details Only', value: 'detailsEmoji'},
 				{label: 'Always Show', value: 'showEmoji'}
+			]},
+			{key: 'emojiSkinTone', type: 'select', label: 'Default Emoji Skin Tone', items: [
+				{label: 'Type 1', value: '', secondaryIconPath: "images/default_skintone.png"},
+				{label: 'Type 2', value: '_1F3FB', secondaryIconPath: "images/emoji/1F3FB.png"},
+				{label: 'Type 3', value: '_1F3FC', secondaryIconPath: "images/emoji/1F3FC.png"},
+				{label: 'Type 4', value: '_1F3FD', secondaryIconPath: "images/emoji/1F3FD.png"},
+				{label: 'Type 5', value: '_1F3FE', secondaryIconPath: "images/emoji/1F3FE.png"},
+				{label: 'Type 6', value: '_1F3FF', secondaryIconPath: "images/emoji/1F3FF.png"}
 			]},
 			{key: 'absoluteTimeStamps', type: 'toggle', label: 'Absolute TimeStamps'},
 			{key: 'muteSelectedUsers', type: 'toggle', label: 'Mute Selected Users'},

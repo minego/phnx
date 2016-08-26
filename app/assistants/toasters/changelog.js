@@ -3,6 +3,7 @@ var ChangelogToaster = Class.create(Toaster, {
 		{ version: '1.6.6' },
 		{ item: 'Added emoji from latest Unicode standard'},
 		{ item: 'Sped up emoji select scene by reducing number of emoji displayed (hiding alt skin choices) - tap-hold an emoji to display possible skin types'},
+		{ item: 'Added Appearance preference to select default emoji skin tone'},
 		{ version: '1.6.5' },
 		{ item: 'Fixed display of Heavy Black Heart emoji variant'},
 		{ version: '1.6.4' },
