@@ -142,6 +142,10 @@ EmojiDialogAssistant.prototype.loadEmojiUnicode = function(start, end) {
     var list = [];
 		var prefs	= new LocalStorage();
 		var emojiSkinTone = prefs.read('emojiSkinTone');
+		
+		if(!emojiSkinTone){
+			emojiSkinTone = "";
+		}
 
     for (var i = start; i < end; i++) {
     		var tmpEmojiCode = emoji_code_unicode[i];

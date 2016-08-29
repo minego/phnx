@@ -1,7 +1,12 @@
 Notes:
 Filenaming:
-1) No leading zeros.
+1) Include leading zeros.
 2) Underscore seperating elements (not dashes)
 3) Uppercase
+4) copy 1F46A.png 1F468_1F469_1F466.png
+	copy 1F491.png 1F469_2764_1F468.png
+	copy 1F48F.png 1F469_2764_1F48B_1F468.png
+
+2713 needs to be generated from 2714
 
 Remember that all emoji with skin options should be added to the in the section around line 179 in emoji.js

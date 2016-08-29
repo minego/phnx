@@ -98,7 +98,7 @@ body.no-gesture {  /* touchpad/emulator */
 }
 
 .font-small .timeline .emoji, .font-small .content-wrapper .emoji {
-	height: 14px;
+	height: 15px;
 }
 
 .font-medium .timeline .emoji, .font-medium .content-wrapper .emoji {

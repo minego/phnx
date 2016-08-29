@@ -1,0 +1,3 @@
+copy 1F46A.png 1F468_1F469_1F466.png
+copy 1F491.png 1F469_2764_1F468.png
+copy 1F48F.png 1F469_2764_1F48B_1F468.png

@@ -223,4 +223,5 @@ Modified emoji.js to fix display of heavy black heart emoji variant.
 Modified emoji.js to add new emoji added in latest Unicode standard and emojione.
 Updated cnvtSBEmojiCodeToUnicode.pl to v2
 Modified emoji.js, emoji-dialog-asisstant.js and main-assistant.js to only show default emoji and added support to tap-hold on emoji to show alt skin types.
-Modified preferences-assistant.js and emoji-dialog-assistant.js to allow for default skin tone.
+Modified preferences-assistant.js, local.js and emoji-dialog-assistant.js to allow for default skin tone.
+Updated emoji graphics from 48x48 and 32x32 to 60x60 and 40x40 for cleaner display in emoji dialog
