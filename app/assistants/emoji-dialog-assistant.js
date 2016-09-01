@@ -248,6 +248,7 @@ EmojiDialogAssistant.prototype.listHoldHandler = function(event) {
 
 			this.controller.popupSubmenu({
 				placeNear:	this.currTarget,
+				popupClass: "emoji-popup",
 				items: emojiSkinItems,
 				onChoose: function(command) {
 					if(command){

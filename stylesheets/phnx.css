@@ -2092,6 +2092,10 @@ a:link {
 
 /* emoji */
 
+.emoji-popup {
+	max-width: 84px;
+}
+
 .grid-layout .palm-list .palm-row {
 	clear: none;
 	float: left;
