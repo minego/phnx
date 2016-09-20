@@ -1,6 +1,12 @@
 var ChangelogToaster = Class.create(Toaster, {
 	items: [
 		{ version: '1.6.6' },
+		{ item: 'Tap-hold of refresh now performs a model refresh on current panel if tweets have not been fully re-constituted'},
+		{ item: 'Quoted tweets now show up in main timeline, profile, searches & convos and are clickable for detail view'},
+		{ item: '  - updated to support new Twitter payload with quote embedded'},
+		{ item: 'Absolute timestamps obey Hide Time in preferences now'},
+		{ item: 'Refresh and Flush now handles tweet divider properly for retweets'},
+		{ item: 'Load More now loads proper tweets if previous last tweet was a retweet'},
 		{ item: 'Added emoji from latest Unicode standard'},
 		{ item: 'Sped up emoji select scene by reducing number of emoji displayed (hiding alt skin choices) - tap-hold an emoji to display possible skin types'},
 		{ item: 'Added Appearance preference to select default emoji skin tone'},
@@ -306,7 +312,7 @@ var ChangelogToaster = Class.create(Toaster, {
 			itemTemplate:		"templates/changelog-item",
 			listTemplate:		"templates/list",
 			// Below added by DC as changeLog display was maxing out
-			renderLimit: 250
+			renderLimit: 275
 		}, this);
 	},
 	backTapped: function(event) {

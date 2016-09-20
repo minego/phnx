@@ -226,3 +226,5 @@ Modified emoji.js, emoji-dialog-asisstant.js and main-assistant.js to only show 
 Modified preferences-assistant.js, local.js and emoji-dialog-assistant.js to allow for default skin tone.
 Updated emoji graphics from 48x48 and 32x32 to 60x60 and 40x40 for cleaner display in emoji dialog
 Modified phnx.css and emoji-dialog-assistant.js to make emoji skin type popup be a better width
+Modified main-assistant.js to handle retweets properly on refresh and flush, and load more if last tweet was retweet
+Modified main-assistant.js, tweet.js, profile-assistant.js, status-assistant.js, convo.js, convo-item.html, item.html, search.html, phnx.css to support display of embedded quotes

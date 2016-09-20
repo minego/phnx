@@ -28,6 +28,7 @@ var ConvoToaster = Class.create(Toaster, {
 			var mutedUsers = prefs.read('mutedUsers');
 			var hideGifs = prefs.read('hideGifThumbsInTimeline');
 			tweet = th.process(tweet,this.convoModel,this.controller,processVine,mutedUsers,hideGifs);
+			//th.getQuotedTweets(this.convoModel,this.controller);
 			this.convoModel.items.push(tweet);
 			get('convo-list-' + this.id).mojo.noticeUpdatedItems(0, this.convoModel.items);
 			if (tweet.in_reply_to_status_id_str !== null) {
@@ -36,7 +37,23 @@ var ConvoToaster = Class.create(Toaster, {
 		}.bind(this));
 	},
 	tweetTapped: function(event) {
-		this.assistant.toasters.add(new TweetToaster(event.item, this.assistant));
+		if(event.originalEvent.srcElement.id === "quote-wrapper" | event.originalEvent.srcElement.id === "quote-avatar" | event.originalEvent.srcElement.id === "quote-screenname" |event.originalEvent.srcElement.id === "quote-username" |event.originalEvent.srcElement.id === "quote-text"| event.originalEvent.srcElement.id === "quote-thumbnail"| event.originalEvent.srcElement.id === "quote-thumbnail2"
+			| event.originalEvent.srcElement.id === "quote-time"| event.originalEvent.srcElement.id === "quote-time-abs"| event.originalEvent.srcElement.id === "quote-via"| event.originalEvent.srcElement.id === "quote-rt-avatar" | event.originalEvent.srcElement.id === "quote-footer" | event.originalEvent.srcElement.id === "via-link"){
+			//Check below is only really needed if the #via-link doesn't have a pointer-events: none.
+			if(typeof(event.item.quoted_status) != "undefined"){
+				//this.assistant.toasters.add(new TweetToaster(event.item.quoted_status, this.assistant, this.savedSearchesModel));
+				this.assistant.toasters.add(new TweetToaster(event.item.quoted_status, this.assistant));
+		  } else {
+				//this.assistant.toasters.add(new TweetToaster(event.item, this.assistant, this.savedSearchesModel));
+				this.assistant.toasters.add(new TweetToaster(event.item, this.assistant));
+		 	}
+		} else {
+			//Mojo.Log.error('dump: ' + JSON.stringify(event.originalEvent.srcElement));
+			//this.assistant.toasters.add(new TweetToaster(event.item, this.assistant, this.savedSearchesModel));
+			this.assistant.toasters.add(new TweetToaster(event.item, this.assistant));
+		}
+
+//		this.assistant.toasters.add(new TweetToaster(event.item, this.assistant));
 	},
 	backTapped: function(event) {
 		this.assistant.toasters.back();

@@ -164,7 +164,7 @@ StatusAssistant.prototype = {
 				i--;
 			}
 		}
-		
+		//th.getQuotedTweets(this.itemsModel,this.controller);
 		var templates = {
 			"search": "search",
 			"list": "item-one-column",
@@ -266,6 +266,7 @@ StatusAssistant.prototype = {
 			}
 		}
 		this.controller.modelChanged(this.itemsModel);
+		//th.getQuotedTweets(this.itemsModel,this.controller);
 		this.controller.get('list-items').mojo.revealItem(items.length, true);
 		this.updateCount();
 	},
@@ -283,12 +284,25 @@ StatusAssistant.prototype = {
 				var Twitter = new TwitterAPI(this.opts.user, this.controller.stageController);
 				Twitter.getStatus(event.item.id_str, function(response){
 					var th = new TweetHelper();
-					var tweet = th.process(response.responseJSON,null,null,processVine,mutedUsers,hideGifs);
+					//var tweet = th.process(response.responseJSON,null,null,processVine,mutedUsers,hideGifs);
+					var tweet = th.process(response.responseJSON,this.itemsModel,this.controller,processVine,mutedUsers,hideGifs);
 					tweet.thumbnail = tmpThumb;
 					tweet.mediaUrl = tmpMediaUrl;
 					tweet.thumbnail2 = tmpThumb2;
 					tweet.mediaUrl2 = tmpMediaUrl2;
-					this.toasters.add(new TweetToaster(tweet, this));
+					//this.toasters.add(new TweetToaster(tweet, this));
+					if(event.originalEvent.srcElement.id === "quote-wrapper" | event.originalEvent.srcElement.id === "quote-avatar" | event.originalEvent.srcElement.id === "quote-screenname" |event.originalEvent.srcElement.id === "quote-username" |event.originalEvent.srcElement.id === "quote-text"| event.originalEvent.srcElement.id === "quote-thumbnail"| event.originalEvent.srcElement.id === "quote-thumbnail2"
+						| event.originalEvent.srcElement.id === "quote-time"| event.originalEvent.srcElement.id === "quote-time-abs"| event.originalEvent.srcElement.id === "quote-via"| event.originalEvent.srcElement.id === "quote-rt-avatar" | event.originalEvent.srcElement.id === "quote-footer" | event.originalEvent.srcElement.id === "via-link"){
+						//Check below is only really needed if the #via-link doesn't have a pointer-events: none.
+						if(typeof(event.item.quoted_status) != "undefined"){
+							this.toasters.add(new TweetToaster(event.item.quoted_status, this, this.savedSearchesModel));
+					  } else {
+							this.toasters.add(new TweetToaster(event.item, this, this.savedSearchesModel));
+					 	}
+					} else {
+						//Mojo.Log.error('dump: ' + JSON.stringify(event.originalEvent.srcElement));
+						this.toasters.add(new TweetToaster(event.item, this, this.savedSearchesModel));
+					}					
 				}.bind(this));
 			} else if (this.opts.type === 'list' || this.opts.type === 'retweets') {
 				this.toasters.add(new TweetToaster(event.item, this));
@@ -454,7 +468,8 @@ StatusAssistant.prototype = {
 		for (i=0; i < model.items.length; i++) {
 			model.items[i] = th.process(model.items[i],model,this.controller,processVine,mutedUsers,hideGifs);
 		}
-
+		
+		//th.getQuotedTweets(model,this.controller);
 		this.controller.modelChanged(model);
 		this.updateCount();
 	},

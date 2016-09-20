@@ -589,10 +589,28 @@ body.no-gesture {  /* touchpad/emulator */
 	color: #bbb;
 }
 
+.tweet-quote-username {
+	display: inline-block;
+	float: right;
+	color: #aaa;
+}
+.tweet-quote-screenname {
+	display: none;
+	float: left;
+	font-weight: normal;
+	color: #aaa;
+}
+.tweet-quote-screenname.show{
+	display: inline-block;
+}
 .hideUsername .tweet-username,
 .hideScreenname .tweet-screenname,
+.hideUsername .tweet-quote-username,
+.hideScreenname .tweet-quote-screenname,
 .hideTime .tweet-time,
+.hideTime .tweet-time-abs,
 .hideVia .tweet-via,
+.hideVia .tweet-quote-via,
 .relTimeStamps .tweet-time-abs,
 .absTimeStamps .tweet-time {
 	display: none;
@@ -849,9 +867,46 @@ body.no-gesture {  /* touchpad/emulator */
 	display: inline-block;
 }
 
+.tweet-avatar.quote{
+	display: none;
+	width: 26px;
+	height: 26px;
+	margin-top: 0px;
+	background-size: 26px;
+}
+.showAvatar .tweet-avatar.quote.show{
+	display: inline-block;
+}
+
 .tweet-footer{
 	font-size: 11px;
 	color: #bbb;
+}
+
+.tweet-quote-footer{
+	font-size: 11px;
+	color: #999;
+}
+
+#via-link{
+	pointer-events: none;
+}
+
+.tweet-quote{
+	color: #eee;
+	margin-top: 0px;
+	/*width: 226px;*/
+	clear: right;
+	pointer-events: none; /* prevents any of the text from intercepting the click */
+}
+.tweet-quote-wrapper.show{
+	font-size: 11px;
+	color: #bbb;
+	background: rgba(5,5,5,.25);
+	/*border	: 1px solid;*/
+	padding: 6px 6px 6px 6px;
+	border-radius: 5px;
+	margin-top: 4px;
 }
 .rt-wrapper {
 	margin-right: 0px;
@@ -964,7 +1019,24 @@ body.no-gesture {  /* touchpad/emulator */
 	width: 236px;
 }
 
+.small-device .tweet-quote-no-avatar,
+.medium-device .tweet-quote-no-avatar {
+	/*Added by DC*/
+	max-width: 290px;
+	width: 290px;
+}
 
+.small-device .tweet-quote,
+.medium-device .tweet-quote {
+	max-width: 290px;
+	width: 290px;
+}
+
+.showAvatar.small-device .tweet-quote,
+.showAvatar.medium-device .tweet-quote {
+	max-width: 226px;
+	width: 232px;
+}
 
 .toaster .tweet-text {
 	max-width: none;

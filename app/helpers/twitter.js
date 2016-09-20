@@ -29,6 +29,7 @@ var TwitterAPI = function(user, stageController) {
 		destroyDM:			'direct_messages/destroy',
 		statusShow:			'statuses/show',
 		statusUpdate:		'statuses/update',
+		statusesLookup:		'statuses/lookup',
 		statusUpdateMedia:	'statuses/update_with_media',
 		showUser:			'users/show',
 		lookupUsers:		'users/lookup',
@@ -159,6 +160,9 @@ TwitterAPI.prototype = {
 	listStatuses: function(args, callback) {
 		this.sign('GET', this.url(this.endpoints.listStatuses), callback, args, {});
 	},
+	statusesLookup: function(ids, callback) {
+		this.sign('GET', this.url(this.endpoints.statusesLookup), callback, {'id':ids,'include_entities': 'true'}, {});
+	},	
 	search: function(passedArgs, callback) {
 		// Query (passedArgs) can be either a string or an object literal with named parameters in it
 		//var args = {"result_type":"mixed","count":"100","include_entities":"1"}; //DC Added include_entities for inline thumbs

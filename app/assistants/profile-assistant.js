@@ -204,6 +204,7 @@ ProfileAssistant.prototype = {
 		for (var i=0; i < this.panels.length; i++) {
 			this.controller.setupWidget(this.panels[i] + "-scroller",{mode: 'vertical'},{});
 			this.controller.listen(this.controller.get('btn-' + this.panels[i]), Mojo.Event.tap, this.navTapped.bind(this));
+			this.controller.listen(this.controller.get('btn-' + this.panels[i]), Mojo.Event.hold, this.navHeld.bind(this));
 		}
 
 		var screenWidth = this.controller.window.innerWidth;
@@ -418,6 +419,7 @@ ProfileAssistant.prototype = {
 			}
 			this.user.history = this.historyModel.items;
 			this.controller.modelChanged(this.historyModel);
+			//th.getQuotedTweets(this.historyModel,this.controller);
 		}.bind(this));
 	},
 	getMentions: function(opts) {
@@ -470,6 +472,7 @@ ProfileAssistant.prototype = {
 			}
 			this.user.mentions = this.mentionsModel.items;
 			this.controller.modelChanged(this.mentionsModel);
+			//th.getQuotedTweets(this.mentionsModel,this.controller);
 		}.bind(this));
 	},
 	getFavorites: function(opts) {
@@ -528,6 +531,7 @@ ProfileAssistant.prototype = {
 			}
 			this.user.favorites = this.favoritesModel.items;
 			this.controller.modelChanged(this.favoritesModel);
+			//th.getQuotedTweets(this.favoritesModel,this.controller);
 		}.bind(this));
 	},
 	setScrollerSizes: function() {
@@ -576,6 +580,15 @@ ProfileAssistant.prototype = {
 					this.scrollTo(i);
 				}
 			}
+		}
+	},
+	navHeld: function(event){
+		event.preventDefault();
+
+		var id = event.srcElement.id.substr(event.srcElement.id.indexOf('-') + 1);
+		if(this.panels[this.currentPanel] === id) {		
+			//Mojo.Log.error('panel.id: ' + this.panels[this.currentPanel]);
+			this.controller.modelChanged(this.panels[this.currentPanel].model);
 		}
 	},
 	scrollerChanged: function(event) {
@@ -653,7 +666,21 @@ ProfileAssistant.prototype = {
 			var currentToasterIndex = toasterIndex - 1;
 			controller.get('details-' + currentToasterIndex).update(tweetHtml);
 		}.bind(this));
-		this.toasters.add(new TweetToaster(event.item, this, this.savedSearchesModel));
+
+		if(event.originalEvent.srcElement.id === "quote-wrapper" | event.originalEvent.srcElement.id === "quote-avatar" | event.originalEvent.srcElement.id === "quote-screenname" |event.originalEvent.srcElement.id === "quote-username" |event.originalEvent.srcElement.id === "quote-text"| event.originalEvent.srcElement.id === "quote-thumbnail"| event.originalEvent.srcElement.id === "quote-thumbnail2"
+			| event.originalEvent.srcElement.id === "quote-time"| event.originalEvent.srcElement.id === "quote-time-abs"| event.originalEvent.srcElement.id === "quote-via"| event.originalEvent.srcElement.id === "quote-rt-avatar" | event.originalEvent.srcElement.id === "quote-footer" | event.originalEvent.srcElement.id === "via-link"){
+			//Check below is only really needed if the #via-link doesn't have a pointer-events: none.
+			if(typeof(event.item.quoted_status) != "undefined"){
+				this.toasters.add(new TweetToaster(event.item.quoted_status, this, this.savedSearchesModel));
+		  } else {
+				this.toasters.add(new TweetToaster(event.item, this, this.savedSearchesModel));
+		 	}
+		} else {
+			//Mojo.Log.error('dump: ' + JSON.stringify(event.originalEvent.srcElement));
+			this.toasters.add(new TweetToaster(event.item, this, this.savedSearchesModel));
+		}
+
+		//this.toasters.add(new TweetToaster(event.item, this, this.savedSearchesModel));
 	},
 	mentionTapped: function(event) {
 		var Twitter = new TwitterAPI(this.account);
@@ -962,6 +989,7 @@ ProfileAssistant.prototype = {
 	cleanup: function() {
 		for (var i=0; i < this.panels.length; i++) {
 			this.controller.stopListening(this.controller.get('btn-' + this.panels[i]), Mojo.Event.tap, this.navTapped);
+			this.controller.stopListening(this.controller.get('btn-' + this.panels[i]), Mojo.Event.hold, this.navHeld);
 		}
 		this.controller.get(this.controller.document).stopObserving('keyup');
 		this.controller.stopListening(this.controller.get('sideScroller'), Mojo.Event.propertyChange, this.scrollerChanged);

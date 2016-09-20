@@ -13,6 +13,7 @@ var global = {
 	multiCard:			false,
 	doc:				document,
 	composeStageCount:	0,
+	//quotedTweets: [],
 
 	fontSizes: [
 		{ label: 'Small',	command: 'font-small'	},

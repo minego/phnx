@@ -28,7 +28,30 @@
 							<div class='tweet-has-emoji #{-emoji_class}'>☺</div>
 							#{-footer}
 						</div>
-					</div>
+						<div style="clear:both"></div>				
+						<div id="quote-wrapper" class="tweet-quote-wrapper #{-quote_class}">
+							<div id="quote-avatar" class="tweet-avatar #{-quote_class} quote" style="background-image: url(#{-quoted_status.user.profile_image_url});"></div>
+							<div id="quote-username" class="tweet-quote-username">#{-quoted_status.user.name}</div>
+							<div id="quote-screenname" class="tweet-quote-screenname #{-quote_class}">@#{-quoted_status.user.screen_name}</div>
+							<div id="quote-text" class="tweet-quote timeline">#{-quoted_status.text}</div>
+							<div id="thumb-wrapper">
+								<div class="timeline #{-quoted_status.thumb_class_timeline}">
+									<div class="inline-thumb">
+										<img id="quote-thumbnail" src=#{-quoted_status.thumbnail} alt="..."/>
+										<img id="quote-thumbnail2" class="inline-thumb2 #{-quoted_status.thumb2_class_timeline}" src=#{-quoted_status.thumbnail2} alt="..."/>
+									</div>
+								</div>
+							</div>
+							<div class="tweet-quote-footer">
+								<span id="quote-time" class="tweet-time">#{-quoted_status.time_str}</span>
+								<span id="quote-time-abs" class="tweet-time-abs">#{-quoted_status.displayed_time_str}</span>
+								<span id="quote-via" class="tweet-quote-via">#{-quoted_status.via} #{-quoted_status.source}</span>
+								<div id="quote-has-emoji" class="tweet-has-emoji #{-quoted_status.emoji_class}">☺</div>
+								<div id="quote-rt-avatar" class="tweet-avatar #{-quoted_status.rt_class} retweet" style="background-image: url(#{-quoted_status.retweeter.profile_image_url});"></div>
+								#{-quote.footer}
+							</div>					
+						</div>						
+						</div>					
 					<div style="clear:both"></div>
 				</td>
 			</tr>

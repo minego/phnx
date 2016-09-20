@@ -1086,13 +1086,12 @@ MainAssistant.prototype = {
 
 					if (tweet) {
 						if (tweet.is_rt) {
-							lastId = tweet.original_id;
+								lastId = tweet.original_id;
 						} else {
 							lastId = tweet.id_str;
 						}
 					}
 				}
-
 				this.getTweets(panel, lastId);
 			}.bind(this), 200);
 		} else if (panel.id === 'search') {
@@ -1110,7 +1109,11 @@ MainAssistant.prototype = {
 
 			if (tweet) {
 				if (tweet.is_rt) {
-					panel.model.myLastId = tweet.original_id;
+					if (typeof(tweet.retweeted_status) !== "undefined") {
+						panel.model.myLastId = tweet.retweeted_status[0].id;
+					} else {
+						panel.model.myLastId = tweet.id_str;
+					}
 				} else {
 					panel.model.myLastId = tweet.id_str;
 				}
@@ -1128,7 +1131,9 @@ MainAssistant.prototype = {
 
 					if (tweet) {
 						if (tweet.is_rt) {
-							lastId = tweet.original_id;
+							if (typeof(tweet.retweeted_status) !== "undefined") {
+								lastId = tweet.original_id;
+							}
 						} else {
 							lastId = tweet.id_str;
 						}
@@ -1180,10 +1185,15 @@ MainAssistant.prototype = {
 	},
 	loadMore: function(timeline) {
 		var model = this.panels[this.timeline].model;
+		var maxId;
 
 		if (model && model.items && model.items.length > 0) {
 			this.loadingMore = true;
-			var maxId = model.items[model.items.length - 1].id_str;
+			if (model.items[model.items.length-1].is_rt) {
+				maxId = model.items[model.items.length-1].original_id;
+			} else {
+				maxId = model.items[model.items.length-1].id_str;
+			}
 			var panel = this.panels[this.timeline];
 
 			this.getTweets(panel, undefined, maxId);
@@ -1365,6 +1375,9 @@ MainAssistant.prototype = {
 			}
 		}
 
+		//Mojo.Log.error('panel: ' + panel.id);
+		//th.getQuotedTweets(panel.model,this.controller);
+
 		if (panel.index < 6 || this.largedevice) {
 			if (tweets.length > 1) {
 				if (!this.loadingMore) {
@@ -1383,6 +1396,7 @@ MainAssistant.prototype = {
 		if (model.items.length > 0 && this.loadingMore) {
 			// loading "more" items (not refreshing), so append to bottom
 			// start the loop at i = 1 so tweets aren't duplicated
+
 			for (var i = 1, tweet; tweet = tweets[i]; i++) {
 				model.items.splice((model.items.length - 1) + i, 0, tweet);
 			}
@@ -1401,6 +1415,7 @@ MainAssistant.prototype = {
 			//filling a gap
 			// loop through old tweets to find gap index
 			//Mojo.Log.error('loading gaps...' + model.items.length);
+
 			for (k=0; k < model.items.length; k++) {
 				if (model.items[k].cssClass === 'new-tweet'){
 					model.items[k].cssClass = "old-tweet";
@@ -1462,6 +1477,7 @@ MainAssistant.prototype = {
 					panel.scrollId = 0;
 				}	else {
 					panel.scrollId+=xCount-1;
+					scrollId = panel.scrollId; //new DC
 				}
 
 				if((dividerTweet.mutedCount > 0) && muteSelectedUsers === true) {
@@ -1622,7 +1638,8 @@ MainAssistant.prototype = {
 		if (panel.refresh) {
 			if(model.myLastId) {
 				for(k=0; k < model.items.length; k++){
-					if(model.items[k].id_str === model.myLastId) {						
+					//Mojo.Log.error('k: ' + k + ' model.items[k].id_str: ' + model.items[k].id_str + ' model.myLastId: ' + model.myLastId);
+					if(model.items[k].id_str === model.myLastId) {
 						if(k > 0) {
 							// TODO: Make this message tappable to load gaps
 							var msg = k + ' New ' + (this.nouns[panel.id] || "Tweet");
@@ -1826,6 +1843,11 @@ MainAssistant.prototype = {
 			this.refreshAll();
 		}
 	},
+	refreshHeld: function(event){
+		event.preventDefault();
+		//Mojo.Log.error('panel.id: ' + this.panels[this.timeline].id);
+		this.controller.modelChanged(this.panels[this.timeline].model);
+	},
 	moreButtonTapped: function(event) {
 		var id		= event.srcElement.id;
 		var index	= id.substr(id.indexOf('-') + 1);
@@ -1943,7 +1965,19 @@ MainAssistant.prototype = {
 				//Mojo.Log.error('event.item.gapStart:event.item.gapEnd : ' + event.item.gapStart + ' : ' + event.item.gapEnd);
 				this.fillGap(panel,event.item.gapStart,event.item.gapEnd,event.item.id_str);
 			} else {
-				this.toasters.add(new TweetToaster(event.item, this, this.savedSearchesModel));
+				if(event.originalEvent.srcElement.id === "quote-wrapper" | event.originalEvent.srcElement.id === "quote-avatar" | event.originalEvent.srcElement.id === "quote-screenname" |event.originalEvent.srcElement.id === "quote-username" |event.originalEvent.srcElement.id === "quote-text"| event.originalEvent.srcElement.id === "quote-thumbnail"| event.originalEvent.srcElement.id === "quote-thumbnail2"
+					| event.originalEvent.srcElement.id === "quote-time"| event.originalEvent.srcElement.id === "quote-time-abs"| event.originalEvent.srcElement.id === "quote-via"| event.originalEvent.srcElement.id === "quote-rt-avatar" | event.originalEvent.srcElement.id === "quote-footer" | event.originalEvent.srcElement.id === "via-link"){
+					//Check below is only really needed if the #via-link doesn't have a pointer-events: none.
+					if(typeof(event.item.quoted_status) != "undefined"){
+						//Mojo.Log.error('quote.text: ' + event.item.quoted_status.text);
+						this.toasters.add(new TweetToaster(event.item.quoted_status, this, this.savedSearchesModel));
+				  } else {
+						this.toasters.add(new TweetToaster(event.item, this, this.savedSearchesModel));
+				 	}
+				} else {
+					//Mojo.Log.error('dump: ' + JSON.stringify(event.originalEvent.srcElement));
+					this.toasters.add(new TweetToaster(event.item, this, this.savedSearchesModel));
+				}
 			}
 		}
 	},
@@ -2217,6 +2251,7 @@ MainAssistant.prototype = {
 			[ 'rt-yours',				Mojo.Event.tap,				this.rtTapped			],
 			[ 'rt-ofyou',				Mojo.Event.tap,				this.rtTapped			],
 			[ 'refresh',				Mojo.Event.tap,				this.refreshTapped		],
+			[ 'refresh',				Mojo.Event.hold,			this.refreshHeld		],
 			[ 'new-tweet',				Mojo.Event.tap,				this.newTweet			],
 			[ 'header-title',			Mojo.Event.tap,				this.headerTapped		],
 			[ 'header-title',			Mojo.Event.hold,				this.headerHeld		],

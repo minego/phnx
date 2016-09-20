@@ -17,7 +17,7 @@ var StatusListToaster = Class.create(Toaster, {
 		for (var i=0; i < items.length; i++) {
 			items[i] = th.process(items[i],this.listModel,this.controller,processVine,mutedUsers,hideGifs);
 		}
-
+		//th.getQuotedTweets(this.listModel,this.controller);
 		//this.listModel = {"items": items};
 		this.listModel.items = items;
 		this.render({'toasterId':this.id, title: this.title}, 'templates/toasters/status-list');

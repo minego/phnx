@@ -48,6 +48,7 @@ TweetHelper.prototype = {
 			}
 			//disable clickable source links
 			tweet.source = tweet.source.replace('href="', 'href="#');
+			tweet.source = tweet.source.replace('a href=', 'a id="via-link" href=');
 			tweet.via = 'via';
 			// Save the link to the tweet on Twitter.com for fun times
 			tweet.link = 'https://twitter.com/#!' + tweet.user.screen_name + '/status/' + tweet.id_str;
@@ -230,6 +231,14 @@ TweetHelper.prototype = {
 						}
 					} else if (links[i].expanded_url.indexOf('https://twitter.com') > -1 && links[i].expanded_url.indexOf('/status/') > -1){
 						tweet.referencedTweet = links[i].expanded_url.substr((links[i].expanded_url.indexOf('/status/') + 8));
+						if(this.isNumeric(tweet.referencedTweet)){
+							//Mojo.Log.error('referenced tweet: ' + tweet.referencedTweet + ' user: ' + controller.stageController.user.id);
+							//this.getQuotedTweet(tweet,model,controller);
+							//tweet.quote_class = 'show';
+							//global.quotedTweets.push({tweet: tweet, orig_id: tweet.id_str, quote_id: tweet.referencedTweet});						
+						} else {
+							tweet.referencedTweet = '';
+						}
 					} else if (links[i].expanded_url.indexOf('https://twitter.com/') > -1){
 						tweet.referencedUser = links[i].expanded_url.substr((links[i].expanded_url.indexOf('/twitter.com/') + 13));
 					}
@@ -300,9 +309,81 @@ TweetHelper.prototype = {
 
 		//Mojo.Log.info(tweet.emojify);
 
+		if(tweet.is_quote_status && typeof(tweet.quoted_status_id_str) != "undefined"){
+			tweet.quoted_status = this.process(tweet.quoted_status,this.model,this.controller,false);
+			tweet.quote_class = 'show';
+		}
+
 		return tweet;
 	},
 
+	joinObj: function(a, attr) {
+  	var out = []; 
+  	for (var i=0; i<a.length; i++) {  
+   		out.push(a[i][attr]); 
+  	} 
+ 		return out.join(",");
+	},
+	
+	isNumeric: function isNumeric(n) {
+  	return !isNaN(parseFloat(n)) && isFinite(n);
+	},
+
+	getQuotedTweet: function(tweet,model,controller,callback){
+
+		//Mojo.Log.error('referenced tweet2: ' + tweet.referencedTweet);
+		//global.quotedTweets.push({tweet: tweet, orig_id: tweet.id_str, quote_id: tweet.referencedTweet});
+		//tweet.quote_class = 'show';
+		/*var tmpTwitter = new TwitterAPI(controller.stageController.user.id);
+		tmpTwitter.getStatus(tweet.referencedTweet, function(tmpResponse, meta){
+			var tmpTweet = this.process(tmpResponse.responseJSON,model,controller,false);
+			tweet.quote = tmpTweet;
+			controller.modelChanged(model);
+		}	.bind(this));*/
+	},
+	
+	getQuotedTweets: function(model,controller){
+  //So just after I get all of this working, Twitter changes how it refers to quote. Ugghhh.
+  //It is cleaner now though with less calls to the server.
+
+/*
+		var quotedTweetsLength = global.quotedTweets.length;
+		var Twitter = new TwitterAPI(controller.stageController.user.id);
+		var quoteIds = this.joinObj(global.quotedTweets,'quote_id');
+
+		Twitter.statusesLookup(quoteIds, function(tmpResponse, meta){
+			var tmpTweets = tmpResponse.responseJSON;
+			for(var j =0, tmpTweet; tmpTweet = tmpTweets[j]; j++){
+				tmpTweets[j] = this.process(tmpTweet,model,controller,false);
+				if(tmpTweets[j].id_str === global.quotedTweets[j].quote_id){			
+					global.quotedTweets[j].tweet.quote = tmpTweets[j];
+					global.quotedTweets[j].removeFlag = 1;
+					global.quotedTweets[j].tweet.quote_class = 'show';
+				} else {
+					var quotedTweetsLength = global.quotedTweets.length;
+					for(var k =0; k < quotedTweetsLength; k++){
+						if(tmpTweets[j].id_str === global.quotedTweets[k].quote_id){			
+							global.quotedTweets[k].tweet.quote = tmpTweets[j];
+							global.quotedTweets[k].removeFlag = 1;
+							global.quotedTweets[k].tweet.quote_class = 'show';
+							//break; //commented out as there might be more than one tweet referring to the same quote
+						}
+					}
+				}
+			}
+				
+			var i = global.quotedTweets.length;
+
+			while (i--){
+				if(global.quotedTweets[i].removeFlag === 1){
+					global.quotedTweets.splice(i,1);
+				}
+			}
+			
+			controller.modelChanged(model);
+		}	.bind(this));		
+*/
+	},
 	getVineHTML: function(url, tweet, index, model, controller, processVine, callback) {
 
 		var req = new Ajax.Request(url, {
@@ -411,6 +492,7 @@ TweetHelper.prototype = {
 		//disable clickable source links
 		tweet.source = tweet.source.replace(/&quot;/g, '"');
 		tweet.source = tweet.source.replace('href="', 'href="#');
+		tweet.source = tweet.source.replace('a href=', 'a id="via-link" href=');
 		tweet.via = "via";
 
 		if(mutedUsers){
