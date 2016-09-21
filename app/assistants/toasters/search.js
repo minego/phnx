@@ -17,6 +17,10 @@ var SearchToaster = Class.create(Toaster, {
 
 		for (var i=0; i < items.length; i++) {
 			items[i] = th.process(items[i],this.listModel,this.controller,processVine,mutedUsers,hideGifs);
+			if(items[i].is_quote_status && typeof(items[i].quoted_status_id_str) != "undefined"){
+				items[i].quoted_status = th.process(items[i].quoted_status,this.listModel,this.controller,false);
+				items[i].quote_class = 'show';
+			}
 		}
 		//th.getQuotedTweets(this.listModel,this.controller);
 		//this.listModel = {"items": items};

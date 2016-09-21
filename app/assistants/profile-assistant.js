@@ -405,6 +405,10 @@ ProfileAssistant.prototype = {
 				var tweet;
 				for (var i = response.responseJSON.length - 1; i >= 0; i--){
 					tweet = th.process(response.responseJSON[i],this.historyModel,this.controller,processVine,mutedUsers,hideGifs);
+					if(tweet.is_quote_status && typeof(tweet.quoted_status_id_str) != "undefined"){
+						tweet.quoted_status = th.process(tweet.quoted_status,this.historyModel,this.controller,false);
+						tweet.quote_class = 'show';
+					}
 					if(tweet.favorited) {
 						if (!tweet.favSet){
 							tweet.favSet = true;
@@ -447,6 +451,10 @@ ProfileAssistant.prototype = {
 
 			for (var i=0; i < items.length; i++) {
 				items[i] = th.process(items[i],this.mentionsModel,this.controller,processVine,mutedUsers,hideGifs);
+				if(items[i].is_quote_status && typeof(items[i].quoted_status_id_str) != "undefined"){
+					items[i].quoted_status = th.process(items[i].quoted_status,this.mentionsModel,this.controller,false);
+					items[i].quote_class = 'show';
+				}
 				if(items[i].is_rt === true){
 					items.splice(i,1);
 					i--;
@@ -517,6 +525,10 @@ ProfileAssistant.prototype = {
 				var tweet;
 				for (var i = response.responseJSON.length - 1; i >= 0; i--){
 					tweet = th.process(response.responseJSON[i],this.favoritesModel,this.controller,processVine,mutedUsers,hideGifs);
+					if(tweet.is_quote_status && typeof(tweet.quoted_status_id_str) != "undefined"){
+						tweet.quoted_status = th.process(tweet.quoted_status,this.favoritesModel,this.controller,false);
+						tweet.quote_class = 'show';
+					}
 					if(tweet.favorited) {
 						if (!tweet.favSet){
 							tweet.favSet = true;
@@ -686,6 +698,7 @@ ProfileAssistant.prototype = {
 		var Twitter = new TwitterAPI(this.account);
 		var prefs = new LocalStorage();
 		var processVine = prefs.read('showVine');
+		Mojo.Log.error('event.originalEvent.srcElement.id: ' + event.originalEvent.srcElement.id);
 		Twitter.getStatus(event.item.id_str, function(response){
 			var th = new TweetHelper();
 			var tweet = th.process(response.responseJSON,null,null,processVine);

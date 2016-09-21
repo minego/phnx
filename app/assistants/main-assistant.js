@@ -1369,6 +1369,10 @@ MainAssistant.prototype = {
 
 			if (tweet.dm || !th.filter(tweet, filters)) {
 				tweets[i] = th.process(tweet,panel.model,this.controller,processVine,mutedUsers,hideGifs);
+				if(tweets[i].is_quote_status && typeof(tweets[i].quoted_status_id_str) != "undefined"){
+					tweets[i].quoted_status = th.process(tweets[i].quoted_status,panel.model,this.controller,false);
+					tweets[i].quote_class = 'show';
+				}
 			} else {
 				tweets.splice(i, 1);
 				i--;

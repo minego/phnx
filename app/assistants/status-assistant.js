@@ -158,6 +158,10 @@ StatusAssistant.prototype = {
         
 		for (var i=0; i < items.length; i++) {
 			items[i] = th.process(items[i],this.itemsModel,this.controller,processVine,mutedUsers,hideGifs);
+			if(items[i].is_quote_status && typeof(items[i].quoted_status_id_str) != "undefined"){
+				items[i].quoted_status = th.process(items[i].quoted_status,this.itemsModel,this.controller,false);
+				items[i].quote_class = 'show';
+			}
 			//Hide retweets
 			if(items[i].is_rt === true){
 				items.splice(i,1);
@@ -256,9 +260,17 @@ StatusAssistant.prototype = {
 			var tweet = this.itemsModel.items[i];
 			if (type === 'search') {
 				tweet = th.processSearch(tweet,this.itemsModel,this.controller,processVine,mutedUsers,hideGifs);
+				if(tweet.is_quote_status && typeof(tweet.quoted_status_id_str) != "undefined"){
+					tweet.quoted_status = th.processSearch(tweet.quoted_status,this.itemsModel,this.controller,false);
+					tweet.quote_class = 'show';
+				}
 			}
 			else if (type === 'list'  || type === 'retweets') {
 				tweet = th.process(tweet,this.itemsModel,this.controller,processVine,mutedUsers,hideGifs);
+				if(tweet.is_quote_status && typeof(tweet.quoted_status_id_str) != "undefined"){
+					tweet.quoted_status = th.process(tweet.quoted_status,this.itemsModel,this.controller,false);
+					tweet.quote_class = 'show';
+				}
 			}
 
 			if (tweet.id_str !== newId) {
@@ -467,6 +479,10 @@ StatusAssistant.prototype = {
 		
 		for (i=0; i < model.items.length; i++) {
 			model.items[i] = th.process(model.items[i],model,this.controller,processVine,mutedUsers,hideGifs);
+			if(model.items[i].is_quote_status && typeof(model.items[i].quoted_status_id_str) != "undefined"){
+				model.items[i].quoted_status = th.process(model.items[i].quoted_status,model,this.controller,false);
+				model.items[i].quote_class = 'show';
+			}
 		}
 		
 		//th.getQuotedTweets(model,this.controller);

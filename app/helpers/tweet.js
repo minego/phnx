@@ -3,7 +3,6 @@ var TweetHelper = function() {};
 TweetHelper.prototype = {
 	process: function(tweet,model,controller,processVine,mutedUsers,hideGifs) {
 		// takes a tweet and does all sorts of stuff to it
-
 		// Save the created_at property for all tweets
 		tweet.timestamp = tweet.created_at;
 
@@ -308,11 +307,6 @@ TweetHelper.prototype = {
 		}
 
 		//Mojo.Log.info(tweet.emojify);
-
-		if(tweet.is_quote_status && typeof(tweet.quoted_status_id_str) != "undefined"){
-			tweet.quoted_status = this.process(tweet.quoted_status,this.model,this.controller,false);
-			tweet.quote_class = 'show';
-		}
 
 		return tweet;
 	},

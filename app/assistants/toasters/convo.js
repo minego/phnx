@@ -28,6 +28,10 @@ var ConvoToaster = Class.create(Toaster, {
 			var mutedUsers = prefs.read('mutedUsers');
 			var hideGifs = prefs.read('hideGifThumbsInTimeline');
 			tweet = th.process(tweet,this.convoModel,this.controller,processVine,mutedUsers,hideGifs);
+			if(tweet.is_quote_status && typeof(tweet.quoted_status_id_str) != "undefined"){
+				tweet.quoted_status = th.process(tweet.quoted_status,this.convoModel,this.controller,false);
+				tweet.quote_class = 'show';
+			}
 			//th.getQuotedTweets(this.convoModel,this.controller);
 			this.convoModel.items.push(tweet);
 			get('convo-list-' + this.id).mojo.noticeUpdatedItems(0, this.convoModel.items);
