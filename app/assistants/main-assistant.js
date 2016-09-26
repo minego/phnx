@@ -1110,7 +1110,7 @@ MainAssistant.prototype = {
 			if (tweet) {
 				if (tweet.is_rt) {
 					if (typeof(tweet.retweeted_status) !== "undefined") {
-						panel.model.myLastId = tweet.retweeted_status[0].id;
+						panel.model.myLastId = tweed.tweet.retweeted_status[0].id;
 					} else {
 						panel.model.myLastId = tweet.id_str;
 					}
@@ -1316,7 +1316,7 @@ MainAssistant.prototype = {
 		if (panel.resource === 'messages') {
 			/*
 				Loading DMs requires 2 requests in order to get both sent and
-				recieved messages.
+				received messages.
 			*/
 			this.getDMs(Twitter, args, panel);
 			return;
@@ -1369,7 +1369,7 @@ MainAssistant.prototype = {
 
 			if (tweet.dm || !th.filter(tweet, filters)) {
 				tweets[i] = th.process(tweet,panel.model,this.controller,processVine,mutedUsers,hideGifs);
-				if(tweets[i].is_quote_status && typeof(tweets[i].quoted_status_id_str) != "undefined"){
+				if(tweets[i].is_quote_status && typeof(tweets[i].quoted_status_id_str) != "undefined" && typeof(tweets[i].quoted_status) != "undefined"){
 					tweets[i].quoted_status = th.process(tweets[i].quoted_status,panel.model,this.controller,false);
 					tweets[i].quote_class = 'show';
 				}
@@ -1379,7 +1379,6 @@ MainAssistant.prototype = {
 			}
 		}
 
-		//Mojo.Log.error('panel: ' + panel.id);
 		//th.getQuotedTweets(panel.model,this.controller);
 
 		if (panel.index < 6 || this.largedevice) {
@@ -1549,10 +1548,9 @@ MainAssistant.prototype = {
 				tweetCount: 0,
 				noun: ''
 			};
-			
+
 			for (j = loopCount; j >= 0; j--) {
 				//doing a backwards (upwards?) loop to get the items in the right order
-
 				if (j === loopCount) {
 					tweets[j].cssClass = 'new-tweet';
 

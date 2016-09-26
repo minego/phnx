@@ -64,7 +64,11 @@ TweetHelper.prototype = {
 			var links = tweet.entities.urls;
 			for (var i = links.length - 1; i >= 0; i--){
 				if (links[i].expanded_url !== null) {
-					tweet.text = tweet.text.replace(new RegExp(links[i].url, 'g'), links[i].expanded_url);
+					if(typeof(tweet.text) !== "undefined"){
+						tweet.text = tweet.text.replace(new RegExp(links[i].url, 'g'), links[i].expanded_url);
+					} else {
+						tweet.full_text = tweet.full_text.replace(new RegExp(links[i].url, 'g'), links[i].expanded_url);
+					}
 					//tweet.dividerMessage = links[i].expanded_url;
 					//tweet.cssClass = 'new-tweet';
 					if (links[i].expanded_url.indexOf('://instagr.am/p/') > -1 || links[i].expanded_url.indexOf('://instagram.com/p/') > -1 || links[i].expanded_url.indexOf('://www.instagram.com/p/') > -1){
@@ -250,7 +254,11 @@ TweetHelper.prototype = {
 			var media_links = tweet.entities.media;
 			for (var i = media_links.length - 1; i >= 0; i--){
 				if (media_links[i].media_url !== null) {
-					tweet.text = tweet.text.replace(new RegExp(media_links[i].url, 'g'), media_links[i].media_url);	
+					if(typeof(tweet.text) !== "undefined"){
+						tweet.text = tweet.text.replace(new RegExp(media_links[i].url, 'g'), media_links[i].media_url);
+					} else {
+						tweet.full_text = tweet.full_text.replace(new RegExp(media_links[i].url, 'g'), media_links[i].media_url);	
+					}
 					if(i === 0 && !tweet.thumbnail){
 						tweet.mediaUrl = media_links[i].media_url;
 						tweet.thumbnail = media_links[i].media_url+":small";  // using small instead of thumb to keep aspect ratio
@@ -296,15 +304,26 @@ TweetHelper.prototype = {
 		tweet.displayed_time_str = (d.toTimeString(d)).slice(0,8) + ' ' + d.toDateString(d);
 
 		//keep the plaintext version for quote-style RTs (so HTML doesn't get tossed in there)
-		tweet.stripped = tweet.text;
-		tweet.text = tweet.text.parseLinks();
-
-		// Emojify - added by DC
-		tweet.text = emojify(tweet.text,16);
-		if(tweet.text.indexOf('<img class="emoji" src=') > -1){
-			tweet.emoji_class = 'show';
-				//Mojo.Log.error('emoji: ' + tweet.text);
+		if(typeof(tweet.text) !== "undefined"){
+			tweet.stripped = tweet.text;
+			tweet.text = tweet.text.parseLinks();
+			// Emojify - added by DC
+			tweet.text = emojify(tweet.text,16);
+			if(tweet.text.indexOf('<img class="emoji" src=') > -1){
+				tweet.emoji_class = 'show';
+					//Mojo.Log.error('emoji: ' + tweet.full_text);
+			}
+		} else {
+			tweet.stripped = tweet.full_text;
+			tweet.full_text = tweet.full_text.parseLinks();
+			// Emojify - added by DC
+			tweet.full_text = emojify(tweet.full_text,16);
+			if(tweet.full_text.indexOf('<img class="emoji" src=') > -1){
+				tweet.emoji_class = 'show';
+					//Mojo.Log.error('emoji: ' + tweet.full_text);
+			}
 		}
+
 
 		//Mojo.Log.info(tweet.emojify);
 
@@ -464,11 +483,17 @@ TweetHelper.prototype = {
 		});
 	},
 	filter: function(tweet, filters) {
+		var words;
+		
 		if (!filters || !filters.length) {
 			return(null);
 		}
 
-		var words = tweet.text.toLowerCase().match(/[^"'\s]+/g);
+		if(typeof(tweet.text) !== "undefined"){
+			words = tweet.text.toLowerCase().match(/[^"'\s]+/g);
+		} else {
+			words = tweet.full_text.toLowerCase().match(/[^"'\s]+/g);
+		}
 
 		for (var f = 0, filter; filter = filters[f]; f++) {
 			if (-1 != words.indexOf(filter)) {
@@ -507,7 +532,11 @@ TweetHelper.prototype = {
 			var links = tweet.entities.urls;
 			for (var i = links.length - 1; i >= 0; i--){
 				if (links[i].expanded_url !== null) {
-					tweet.text = tweet.text.replace(new RegExp(links[i].url, 'g'), links[i].expanded_url);	
+					if(typeof(tweet.text) !== "undefined"){
+						tweet.text = tweet.text.replace(new RegExp(links[i].url, 'g'), links[i].expanded_url);
+					} else {
+						tweet.full_text = tweet.full_text.replace(new RegExp(links[i].url, 'g'), links[i].expanded_url);	
+					}
 					//tweet.dividerMessage = links[i].expanded_url;
 					//tweet.cssClass = 'new-tweet';
 					if (links[i].expanded_url.indexOf('://instagr.am/p/') > -1 || links[i].expanded_url.indexOf('://instagram.com/p/') > -1 || links[i].expanded_url.indexOf('://www.instagram.com/p/') > -1){
@@ -658,7 +687,11 @@ TweetHelper.prototype = {
 			var media_links = tweet.entities.media;
 			for (var i = media_links.length - 1; i >= 0; i--){
 				if (media_links[i].media_url !== null) {
-					tweet.text = tweet.text.replace(new RegExp(media_links[i].url, 'g'), media_links[i].media_url);	
+					if(typeof(tweet.text) !== "undefined"){
+						tweet.text = tweet.text.replace(new RegExp(media_links[i].url, 'g'), media_links[i].media_url);
+					} else{
+						tweet.full_text = tweet.full_text.replace(new RegExp(media_links[i].url, 'g'), media_links[i].media_url);	
+					}
 					tweet.mediaUrl = media_links[i].media_url;
 					if(i === 0){
 						tweet.thumbnail = media_links[i].media_url+":small";  // using small instead of thumb to keep aspect ratio
@@ -686,15 +719,25 @@ TweetHelper.prototype = {
 			tweet.convo_class = 'show';
 		}
 		//keep the plaintext version for quote-style RTs (so HTML doesn't get tossed in there)
-		tweet.stripped = tweet.text;
-		tweet.text = tweet.text.parseLinks();
+		if(typeof(tweet.text) !== "undefined"){
+			tweet.stripped = tweet.text;
+			tweet.text = tweet.text.parseLinks();
 
-		// Emojify - added by DC
-		tweet.text = emojify(tweet.text,16);
-		if(tweet.text.indexOf('<img class="emoji" src=') > -1){
-			tweet.emoji_class = 'show';
+			// Emojify - added by DC
+			tweet.text = emojify(tweet.text,16);
+			if(tweet.text.indexOf('<img class="emoji" src=') > -1){
+				tweet.emoji_class = 'show';
+			}
+		} else {
+			tweet.stripped = tweet.full_text;
+			tweet.full_text = tweet.full_text.parseLinks();
+
+			// Emojify - added by DC
+			tweet.full_text = emojify(tweet.full_text,16);
+			if(tweet.full_text.indexOf('<img class="emoji" src=') > -1){
+				tweet.emoji_class = 'show';
+			}
 		}
-
 		return tweet;
 	},
 	isRetweeted: function(tweet, user) {

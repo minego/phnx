@@ -560,7 +560,7 @@ body.no-gesture {  /* touchpad/emulator */
 .status-row.details .emoji{
 	height: 18px;
 }
-.status-row.selected, .user-row.selected{
+.status-row.selected, .user-row.selected {
 	background: url(../images/low/tweet-highlight.png) center top repeat-x, url(../images/low/tweet-highlight-bottom.png) center bottom repeat-x;
 }
 .highlight {
@@ -907,6 +907,9 @@ body.no-gesture {  /* touchpad/emulator */
 	padding: 6px 6px 6px 6px;
 	border-radius: 5px;
 	margin-top: 4px;
+}
+.tweet-quote-wrapper.selected {
+	background: url(../images/low/tweet-highlight.png) center top repeat-x, url(../images/low/tweet-highlight-bottom.png) center bottom repeat-x;
 }
 .rt-wrapper {
 	margin-right: 0px;

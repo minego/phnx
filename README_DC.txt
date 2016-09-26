@@ -228,3 +228,4 @@ Updated emoji graphics from 48x48 and 32x32 to 60x60 and 40x40 for cleaner displ
 Modified phnx.css and emoji-dialog-assistant.js to make emoji skin type popup be a better width
 Modified main-assistant.js to handle retweets properly on refresh and flush, and load more if last tweet was retweet
 Modified main-assistant.js, tweet.js, profile-assistant.js, status-assistant.js, convo.js, convo-item.html, item.html, search.html, phnx.css to support display of embedded quotes
+Modified main-assistant.js, profile-assistant.js, status-assistant.js, convo.js, search.js, status-list.js, tweet.js, twitter.js, tweet-item.html, convo-item.html, convo.html, details.html, item-one-column.html, item.html, search.html and phnx.css to accommodate new extended tweets.  Only for reading at the moment.

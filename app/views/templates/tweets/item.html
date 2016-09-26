@@ -13,6 +13,7 @@
 				</div>
 				<div class="tweet-favstar #{-fav_class}">♥</div>
 				<div class="tweet-text timeline">#{-text}</div>
+				<div class="tweet-text timeline">#{-full_text}</div>
 				<div id="thumb-wrapper">
 					<!--div class='inline-thumb #{-thumb_class}' style="background-image: url(#{-thumbnail});"></div-->
 					<!--div class="inline-thumb timeline #{-thumb_class}"><img src=#{-thumbnail} alt="..."/></div-->
@@ -33,11 +34,11 @@
 					#{-footer}
 				</div>
 				<div style="clear:both"></div>				
-				<div id="quote-wrapper" class="tweet-quote-wrapper #{-quote_class}">
+				<div id="quote-wrapper" x-mojo-tap-highlight='immediate' class="tweet-quote-wrapper #{-quote_class}">
 					<div id="quote-avatar" class="tweet-avatar #{-quote_class} quote" style="background-image: url(#{-quoted_status.user.profile_image_url});"></div>
 					<div id="quote-username" class="tweet-quote-username">#{-quoted_status.user.name}</div>
 					<div id="quote-screenname" class="tweet-quote-screenname #{-quote_class}">@#{-quoted_status.user.screen_name}</div>
-					<div id="quote-text" class="tweet-quote timeline">#{-quoted_status.text}</div>
+					<div id="quote-text" class="tweet-quote timeline">#{-quoted_status.full_text}</div>
 					<div id="thumb-wrapper">
 						<div class="timeline #{-quoted_status.thumb_class_timeline}">
 							<div class="inline-thumb">

@@ -12,7 +12,7 @@
 						<div class='tweet-screenname'>@#{-user.screen_name}
 							<img class="locked #{-user.protected}" src="images/low/icons/locked_darker.png" alt="..." width="12" height="12"/>
 						</div>
-						<div class='tweet-text'>#{-text}</div>
+						<div class='tweet-text'>#{-full_text}</div>
 						<div id="thumb-wrapper">
 							<div class="timeline conversation #{-thumb_class}">
 								<div class="inline-thumb">
@@ -29,11 +29,11 @@
 							#{-footer}
 						</div>
 						<div style="clear:both"></div>				
-						<div id="quote-wrapper" class="tweet-quote-wrapper #{-quote_class}">
+						<div id="quote-wrapper" x-mojo-tap-highlight='immediate' class="tweet-quote-wrapper #{-quote_class}">
 							<div id="quote-avatar" class="tweet-avatar #{-quote_class} quote" style="background-image: url(#{-quoted_status.user.profile_image_url});"></div>
 							<div id="quote-username" class="tweet-quote-username">#{-quoted_status.user.name}</div>
 							<div id="quote-screenname" class="tweet-quote-screenname #{-quote_class}">@#{-quoted_status.user.screen_name}</div>
-							<div id="quote-text" class="tweet-quote timeline">#{-quoted_status.text}</div>
+							<div id="quote-text" class="tweet-quote timeline">#{-quoted_status.full_text}</div>
 							<div id="thumb-wrapper">
 								<div class="timeline #{-quoted_status.thumb_class_timeline}">
 									<div class="inline-thumb">

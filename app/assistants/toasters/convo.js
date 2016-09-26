@@ -28,7 +28,7 @@ var ConvoToaster = Class.create(Toaster, {
 			var mutedUsers = prefs.read('mutedUsers');
 			var hideGifs = prefs.read('hideGifThumbsInTimeline');
 			tweet = th.process(tweet,this.convoModel,this.controller,processVine,mutedUsers,hideGifs);
-			if(tweet.is_quote_status && typeof(tweet.quoted_status_id_str) != "undefined"){
+			if(tweet.is_quote_status && typeof(tweet.quoted_status_id_str) != "undefined" && typeof(tweet.quoted_status) != "undefined"){
 				tweet.quoted_status = th.process(tweet.quoted_status,this.convoModel,this.controller,false);
 				tweet.quote_class = 'show';
 			}

@@ -158,7 +158,8 @@ StatusAssistant.prototype = {
         
 		for (var i=0; i < items.length; i++) {
 			items[i] = th.process(items[i],this.itemsModel,this.controller,processVine,mutedUsers,hideGifs);
-			if(items[i].is_quote_status && typeof(items[i].quoted_status_id_str) != "undefined"){
+			//Mojo.Log.error('items.full_text: ' + items[i].full_text);
+			if(items[i].is_quote_status && typeof(items[i].quoted_status_id_str) != "undefined" && typeof(items[i].quoted_status) != "undefined"){
 				items[i].quoted_status = th.process(items[i].quoted_status,this.itemsModel,this.controller,false);
 				items[i].quote_class = 'show';
 			}
@@ -260,14 +261,14 @@ StatusAssistant.prototype = {
 			var tweet = this.itemsModel.items[i];
 			if (type === 'search') {
 				tweet = th.processSearch(tweet,this.itemsModel,this.controller,processVine,mutedUsers,hideGifs);
-				if(tweet.is_quote_status && typeof(tweet.quoted_status_id_str) != "undefined"){
+				if(tweet.is_quote_status && typeof(tweet.quoted_status_id_str) != "undefined" && typeof(tweet.quoted_status) != "undefined"){
 					tweet.quoted_status = th.processSearch(tweet.quoted_status,this.itemsModel,this.controller,false);
 					tweet.quote_class = 'show';
 				}
 			}
 			else if (type === 'list'  || type === 'retweets') {
 				tweet = th.process(tweet,this.itemsModel,this.controller,processVine,mutedUsers,hideGifs);
-				if(tweet.is_quote_status && typeof(tweet.quoted_status_id_str) != "undefined"){
+				if(tweet.is_quote_status && typeof(tweet.quoted_status_id_str) != "undefined" && typeof(tweet.quoted_status) != "undefined"){
 					tweet.quoted_status = th.process(tweet.quoted_status,this.itemsModel,this.controller,false);
 					tweet.quote_class = 'show';
 				}
@@ -317,7 +318,18 @@ StatusAssistant.prototype = {
 					}					
 				}.bind(this));
 			} else if (this.opts.type === 'list' || this.opts.type === 'retweets') {
-				this.toasters.add(new TweetToaster(event.item, this));
+				if(event.originalEvent.srcElement.id === "quote-wrapper" | event.originalEvent.srcElement.id === "quote-avatar" | event.originalEvent.srcElement.id === "quote-screenname" |event.originalEvent.srcElement.id === "quote-username" |event.originalEvent.srcElement.id === "quote-text"| event.originalEvent.srcElement.id === "quote-thumbnail"| event.originalEvent.srcElement.id === "quote-thumbnail2"
+					| event.originalEvent.srcElement.id === "quote-time"| event.originalEvent.srcElement.id === "quote-time-abs"| event.originalEvent.srcElement.id === "quote-via"| event.originalEvent.srcElement.id === "quote-rt-avatar" | event.originalEvent.srcElement.id === "quote-footer" | event.originalEvent.srcElement.id === "via-link"){
+					//Check below is only really needed if the #via-link doesn't have a pointer-events: none.
+					if(typeof(event.item.quoted_status) != "undefined"){
+						this.toasters.add(new TweetToaster(event.item.quoted_status, this, this.savedSearchesModel));
+				  } else {
+						this.toasters.add(new TweetToaster(event.item, this, this.savedSearchesModel));
+				 	}
+				} else {
+					//Mojo.Log.error('dump: ' + JSON.stringify(event.originalEvent.srcElement));
+					this.toasters.add(new TweetToaster(event.item, this, this.savedSearchesModel));
+				}					
 			}
 		} else {
 			// This is a bit of a hack because shimTapped isn't being hit..
@@ -479,7 +491,7 @@ StatusAssistant.prototype = {
 		
 		for (i=0; i < model.items.length; i++) {
 			model.items[i] = th.process(model.items[i],model,this.controller,processVine,mutedUsers,hideGifs);
-			if(model.items[i].is_quote_status && typeof(model.items[i].quoted_status_id_str) != "undefined"){
+			if(model.items[i].is_quote_status && typeof(model.items[i].quoted_status_id_str) != "undefined" && typeof(model.items[i].quoted_status) != "undefined"){
 				model.items[i].quoted_status = th.process(model.items[i].quoted_status,model,this.controller,false);
 				model.items[i].quote_class = 'show';
 			}

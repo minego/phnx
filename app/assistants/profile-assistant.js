@@ -390,6 +390,10 @@ ProfileAssistant.prototype = {
 				var tweet;
 				for (var i=0; i < response.responseJSON.length; i++) {
 					tweet = th.process(response.responseJSON[i],this.historyModel,this.controller,processVine,mutedUsers,hideGifs);
+					if(tweet.is_quote_status && typeof(tweet.quoted_status_id_str) != "undefined" && typeof(tweet.quoted_status) != "undefined"){
+						tweet.quoted_status = th.process(tweet.quoted_status,this.historyModel,this.controller,false);
+						tweet.quote_class = 'show';
+					}
 					if(tweet.favorited) {
 						if (!tweet.favSet){
 							tweet.favSet = true;
@@ -405,7 +409,7 @@ ProfileAssistant.prototype = {
 				var tweet;
 				for (var i = response.responseJSON.length - 1; i >= 0; i--){
 					tweet = th.process(response.responseJSON[i],this.historyModel,this.controller,processVine,mutedUsers,hideGifs);
-					if(tweet.is_quote_status && typeof(tweet.quoted_status_id_str) != "undefined"){
+					if(tweet.is_quote_status && typeof(tweet.quoted_status_id_str) != "undefined" && typeof(tweet.quoted_status) != "undefined"){
 						tweet.quoted_status = th.process(tweet.quoted_status,this.historyModel,this.controller,false);
 						tweet.quote_class = 'show';
 					}
@@ -451,7 +455,7 @@ ProfileAssistant.prototype = {
 
 			for (var i=0; i < items.length; i++) {
 				items[i] = th.process(items[i],this.mentionsModel,this.controller,processVine,mutedUsers,hideGifs);
-				if(items[i].is_quote_status && typeof(items[i].quoted_status_id_str) != "undefined"){
+				if(items[i].is_quote_status && typeof(items[i].quoted_status_id_str) != "undefined" && typeof(items[i].quoted_status) != "undefined"){
 					items[i].quoted_status = th.process(items[i].quoted_status,this.mentionsModel,this.controller,false);
 					items[i].quote_class = 'show';
 				}
@@ -510,6 +514,10 @@ ProfileAssistant.prototype = {
 				var tweet;
 				for (var i=0; i < response.responseJSON.length; i++) {
 					tweet = th.process(response.responseJSON[i],this.favoritesModel,this.controller,processVine,mutedUsers,hideGifs);
+					if(tweet.is_quote_status && typeof(tweet.quoted_status_id_str) != "undefined" && typeof(tweet.quoted_status) != "undefined"){
+						tweet.quoted_status = th.process(tweet.quoted_status,this.favoritesModel,this.controller,false);
+						tweet.quote_class = 'show';
+					}
 					if(tweet.favorited) {
 						if (!tweet.favSet){
 							tweet.favSet = true;
@@ -525,7 +533,7 @@ ProfileAssistant.prototype = {
 				var tweet;
 				for (var i = response.responseJSON.length - 1; i >= 0; i--){
 					tweet = th.process(response.responseJSON[i],this.favoritesModel,this.controller,processVine,mutedUsers,hideGifs);
-					if(tweet.is_quote_status && typeof(tweet.quoted_status_id_str) != "undefined"){
+					if(tweet.is_quote_status && typeof(tweet.quoted_status_id_str) != "undefined" && typeof(tweet.quoted_status) != "undefined"){
 						tweet.quoted_status = th.process(tweet.quoted_status,this.favoritesModel,this.controller,false);
 						tweet.quote_class = 'show';
 					}
@@ -652,7 +660,8 @@ ProfileAssistant.prototype = {
 	tweetTapped: function(event) {
 		//var tweet = event.item;
 	
-		var Twitter = new TwitterAPI(this.account);
+		// Not needed. Done in tweet toaster
+		/*var Twitter = new TwitterAPI(this.account);
 		//Update retweet/favourite counter
 		Twitter.getStatus(event.item.id_str, function(response, meta) {
 			var tweet = response.responseJSON;
@@ -678,6 +687,7 @@ ProfileAssistant.prototype = {
 			var currentToasterIndex = toasterIndex - 1;
 			controller.get('details-' + currentToasterIndex).update(tweetHtml);
 		}.bind(this));
+		*/
 
 		if(event.originalEvent.srcElement.id === "quote-wrapper" | event.originalEvent.srcElement.id === "quote-avatar" | event.originalEvent.srcElement.id === "quote-screenname" |event.originalEvent.srcElement.id === "quote-username" |event.originalEvent.srcElement.id === "quote-text"| event.originalEvent.srcElement.id === "quote-thumbnail"| event.originalEvent.srcElement.id === "quote-thumbnail2"
 			| event.originalEvent.srcElement.id === "quote-time"| event.originalEvent.srcElement.id === "quote-time-abs"| event.originalEvent.srcElement.id === "quote-via"| event.originalEvent.srcElement.id === "quote-rt-avatar" | event.originalEvent.srcElement.id === "quote-footer" | event.originalEvent.srcElement.id === "via-link"){
@@ -702,8 +712,21 @@ ProfileAssistant.prototype = {
 		Twitter.getStatus(event.item.id_str, function(response){
 			var th = new TweetHelper();
 			var tweet = th.process(response.responseJSON,null,null,processVine);
-			this.toasters.add(new TweetToaster(tweet, this));
+			//this.toasters.add(new TweetToaster(tweet, this));
 		}.bind(this));
+		
+		if(event.originalEvent.srcElement.id === "quote-wrapper" | event.originalEvent.srcElement.id === "quote-avatar" | event.originalEvent.srcElement.id === "quote-screenname" |event.originalEvent.srcElement.id === "quote-username" |event.originalEvent.srcElement.id === "quote-text"| event.originalEvent.srcElement.id === "quote-thumbnail"| event.originalEvent.srcElement.id === "quote-thumbnail2"
+			| event.originalEvent.srcElement.id === "quote-time"| event.originalEvent.srcElement.id === "quote-time-abs"| event.originalEvent.srcElement.id === "quote-via"| event.originalEvent.srcElement.id === "quote-rt-avatar" | event.originalEvent.srcElement.id === "quote-footer" | event.originalEvent.srcElement.id === "via-link"){
+			//Check below is only really needed if the #via-link doesn't have a pointer-events: none.
+			if(typeof(event.item.quoted_status) != "undefined"){
+				this.toasters.add(new TweetToaster(event.item.quoted_status, this, this.savedSearchesModel));
+		  } else {
+				this.toasters.add(new TweetToaster(event.item, this, this.savedSearchesModel));
+		 	}
+		} else {
+			//Mojo.Log.error('dump: ' + JSON.stringify(event.originalEvent.srcElement));
+			this.toasters.add(new TweetToaster(event.item, this, this.savedSearchesModel));
+		}		
 	},
 	shimTapped: function(event) {
 		this.toasters.nuke();
