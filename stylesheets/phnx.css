@@ -67,6 +67,24 @@ body.no-gesture {  /* touchpad/emulator */
 	font-size: 26px;
 }
 
+.font-tiny .tweet-quote-wrapper {
+	font-size: 9px;
+}
+.font-small .tweet-quote-wrapper {
+	font-size: 11px;
+}
+.font-medium .tweet-quote-wrapper {
+	font-size: 13px;
+}
+.font-large .tweet-quote-wrapper {
+	font-size: 15px;
+}
+.font-huge .tweet-quote-wrapper {
+	font-size: 19px;
+}
+.font-magoo .tweet-quote-wrapper {
+	font-size: 23px;
+}
 /*Block added by DC*/
 
 .emoji {
@@ -900,7 +918,7 @@ body.no-gesture {  /* touchpad/emulator */
 	pointer-events: none; /* prevents any of the text from intercepting the click */
 }
 .tweet-quote-wrapper.show{
-	font-size: 11px;
+	/*font-size: 11px;*/
 	color: #bbb;
 	background: rgba(5,5,5,.25);
 	/*border	: 1px solid;*/
