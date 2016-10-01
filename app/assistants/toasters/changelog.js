@@ -2,7 +2,7 @@ var ChangelogToaster = Class.create(Toaster, {
 	items: [
 		{ version: '1.6.7' },
 		{ item: 'Reading (not composing) of new extended-tweets now possible'},
-		( item: 'Tapping quoted tweets gives gui feedback of tap'},
+		{ item: 'Tapping quoted tweets gives gui feedback of tap'},
 		{ item: 'Profile lists no longer double load the tweet from server on tweet tap'},
 		{ version: '1.6.6' },
 		{ item: 'Tap-hold of refresh now performs a model refresh on current panel if tweets have not been fully re-constituted'},
