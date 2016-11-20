@@ -230,3 +230,4 @@ Modified main-assistant.js to handle retweets properly on refresh and flush, and
 Modified main-assistant.js, tweet.js, profile-assistant.js, status-assistant.js, convo.js, convo-item.html, item.html, search.html, phnx.css to support display of embedded quotes
 Modified main-assistant.js, profile-assistant.js, status-assistant.js, convo.js, search.js, status-list.js, tweet.js, twitter.js, tweet-item.html, convo-item.html, convo.html, details.html, item-one-column.html, item.html, search.html and phnx.css to accommodate new extended tweets.  Only for reading at the moment.
 Modified phnx.css so that quote text scales with Appearance preferece change of font size
+Modified tweet.js to remove #! before user name on CopyURL function

@@ -39,7 +39,8 @@ var TweetToaster = Class.create(Toaster, {
 
 		this.twitterId			= this.tweet.id_str;
 		this.twitterUsername	= this.tweet.user.screen_name;
-		this.twitterLink		= "https://twitter.com/#!" +
+		//this.twitterLink		= "https://twitter.com/#!" +
+		this.twitterLink		= "https://twitter.com/" +
 									this.twitterUsername + "/" +
 									"status/" + this.twitterId;
 		this.twitterLinkIp		= "https://twitter.com/" +
