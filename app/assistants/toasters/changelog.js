@@ -1,6 +1,7 @@
 var ChangelogToaster = Class.create(Toaster, {
 	items: [
 		{ version: '1.6.8' },
+		{ item: 'Can now re-tweet your own tweets'},
 		{ item: 'CopyURL no longer adds #! before user name'},
 		{ version: '1.6.7' },
 		{ item: 'Reading (not composing) of new extended-tweets now possible'},

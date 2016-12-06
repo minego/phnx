@@ -231,3 +231,4 @@ Modified main-assistant.js, tweet.js, profile-assistant.js, status-assistant.js,
 Modified main-assistant.js, profile-assistant.js, status-assistant.js, convo.js, search.js, status-list.js, tweet.js, twitter.js, tweet-item.html, convo-item.html, convo.html, details.html, item-one-column.html, item.html, search.html and phnx.css to accommodate new extended tweets.  Only for reading at the moment.
 Modified phnx.css so that quote text scales with Appearance preferece change of font size
 Modified tweet.js to remove #! before user name on CopyURL function
+Modified phnx.css so you can now re-tweet yourself (but if you delete the re-tweet (ie, trash it not un-retweet, it will delete the original retweeted tweet, not your edited or retweet tweet - need to fix that)

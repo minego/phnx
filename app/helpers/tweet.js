@@ -50,7 +50,7 @@ TweetHelper.prototype = {
 			tweet.source = tweet.source.replace('a href=', 'a id="via-link" href=');
 			tweet.via = 'via';
 			// Save the link to the tweet on Twitter.com for fun times
-			tweet.link = 'https://twitter.com/#!' + tweet.user.screen_name + '/status/' + tweet.id_str;
+			tweet.link = 'https://twitter.com/#!' + tweet.user.screen_name + '/status/' + tweet.id_str;  //Might need to remove the #! here too but we'll see
 			if (Mojo.Environment.DeviceInfo.modelNameAscii == "Pre3"){ 
 				tweet.user.profile_image_url	= tweet.user.profile_image_url.replace('_normal', '_bigger'); // Use higher res avatar for Pre3
 			}
