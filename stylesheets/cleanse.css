@@ -14,3 +14,9 @@ body.default.large-device {
 	background: url(../images/low/tweet-border-light.png) center bottom repeat-x;
 }
 
+.tweet-footer,
+.tweet-footer-thumb,
+.tweet-username,
+.tweet-screenname {
+	color: #999;
+}

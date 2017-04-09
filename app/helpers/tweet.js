@@ -80,6 +80,7 @@ TweetHelper.prototype = {
 							tweet.thumb2_class = 'show';
 							tweet.thumb2_class_timeline = 'show';
 							tweet.mediaUrl2 = links[i].expanded_url;
+							//tweet.thumb_type = 'small';
 						}
 						//tweet.dividerMessage = tweet.mediaUrl;
 						//tweet.cssClass = 'new-tweet';
@@ -119,6 +120,7 @@ TweetHelper.prototype = {
 							tweet.thumb2_class = 'show';
 							tweet.thumb2_class_timeline = 'show';
 							tweet.mediaUrl2 = links[i].expanded_url;
+							//tweet.thumb_type = 'small';
 						}
 						//tweet.dividerMessage = tweet.thumbnail;
 						tweet.thumb_class = 'show';
@@ -142,6 +144,7 @@ TweetHelper.prototype = {
 							tweet.thumb2_class = 'show';
 							tweet.thumb2_class_timeline = 'show';
 							tweet.mediaUrl2 = links[i].expanded_url;
+							//tweet.thumb_type = 'small';
 						}
 						//tweet.dividerMessage = links[i].expanded_url + " : " + tweet.thumbnail;
 						//tweet.cssClass = 'new-tweet';
@@ -156,6 +159,7 @@ TweetHelper.prototype = {
 							tweet.thumb2_class = 'show';
 							tweet.thumb2_class_timeline = 'show';
 							tweet.mediaUrl2 = links[i].expanded_url;
+							//tweet.thumb_type = 'small';
 						}
 						//tweet.dividerMessage = tweet.thumbnail;
 						tweet.thumb_class = 'show';
@@ -170,6 +174,7 @@ TweetHelper.prototype = {
 							tweet.thumb2_class = 'show';
 							tweet.thumb2_class_timeline = 'show';
 							tweet.mediaUrl2 = links[i].expanded_url;
+							//tweet.thumb_type = 'small';
 						}
 						//tweet.dividerMessage = tweet.thumbnail;
 						tweet.thumb_class = 'show';
@@ -197,6 +202,7 @@ TweetHelper.prototype = {
 							tweet.thumb2_class = 'show';
 							tweet.thumb2_class_timeline = 'show';
 							tweet.mediaUrl2 = links[i].expanded_url;
+							//tweet.thumb_type = 'small';
 						}
 						//tweet.dividerMessage = tweet.mediaUrl;
 						//tweet.cssClass = 'new-tweet';
@@ -212,6 +218,8 @@ TweetHelper.prototype = {
 							tweet.thumb2_class_timeline = 'show';
 							if(hideGifs === true) {
 								tweet.thumb2_class_timeline = 'hide';
+							} else {
+								//tweet.thumb_type = 'small';
 							}
 							tweet.mediaUrl2 = links[i].expanded_url;
 						}
@@ -228,6 +236,7 @@ TweetHelper.prototype = {
 							if(i > 0){
 								tweet.thumb2_class = 'show';
 								tweet.thumb2_class_timeline = 'show';
+								//tweet.thumb_type = 'small';
 							}
 							tweet.thumb_class = 'show';
 							tweet.thumb_class_timeline = 'show';
@@ -267,6 +276,7 @@ TweetHelper.prototype = {
 						tweet.thumb2_class = 'show';
 						tweet.thumb2_class_timeline = 'show';
 						tweet.mediaUrl2 = media_links[i].media_url;
+						//tweet.thumb_type = 'small';
 					}
 					tweet.thumb_class = 'show';
 					tweet.thumb_class_timeline = 'show';
@@ -286,6 +296,33 @@ TweetHelper.prototype = {
 							tweet.mediaVidUrl2 = media_links[i].video_info.variants[0].url;
 						}
 					}	
+				}else if (media_links[i].type.indexOf('photo') > -1){
+					tweet.mediaUrl = media_links[i].media_url;
+					if(i === 0){
+						tweet.thumbnail = media_links[i].media_url;
+					} else if(i === 1){
+						tweet.thumbnail2 = media_links[i].media_url;
+						tweet.thumb2_class = 'show';
+						tweet.thumb2_class_timeline = 'show';
+						//tweet.thumb_type = 'small';
+						tweet.mediaUrl2 = media_links[i].media_url;
+					} else if(i === 2){
+						tweet.thumbnail3 = media_links[i].media_url;
+						tweet.thumb3_class = 'show';
+						tweet.thumb3_class_timeline = 'show';
+						//tweet.thumb_type = 'small';
+						tweet.mediaUrl3 = media_links[i].media_url;
+					} else if(i === 3){
+						tweet.thumbnail4 = media_links[i].media_url;
+						tweet.thumb4_class = 'show';
+						tweet.thumb4_class_timeline = 'show';
+						//tweet.thumb_type = 'small';
+						tweet.mediaUrl4 = media_links[i].media_url;
+					}
+					//tweet.dividerMessage = tweet.mediaUrl;
+					//tweet.cssClass = 'new-tweet';
+					tweet.thumb_class = 'show';
+					tweet.thumb_class_timeline = 'show';
 				}
 			}
 		} //end block
@@ -547,6 +584,7 @@ TweetHelper.prototype = {
 							tweet.thumbnail2 = links[i].expanded_url+"media/?size=m"; //Changed from ?size=t so Touchpad details looks better
 							tweet.thumb2_class = 'show';
 							tweet.mediaUrl2 = links[i].expanded_url;
+							//tweet.thumb_type = 'small';
 						}
 						//tweet.dividerMessage = tweet.mediaUrl;
 						//tweet.cssClass = 'new-tweet';
@@ -585,6 +623,7 @@ TweetHelper.prototype = {
 							tweet.thumb2_class = 'show';
 							tweet.thumb2_class_timeline = 'show';
 							tweet.mediaUrl2 = links[i].expanded_url;
+							//tweet.thumb_type = 'small';
 						}
 						//tweet.dividerMessage = tweet.thumbnail;
 						tweet.thumb_class = 'show';
@@ -608,6 +647,7 @@ TweetHelper.prototype = {
 							tweet.thumb2_class = 'show';
 							tweet.thumb2_class_timeline = 'show';
 							tweet.mediaUrl2 = links[i].expanded_url;
+							//tweet.thumb_type = 'small';
 						}
 						//tweet.dividerMessage = links[i].expanded_url + " : " + tweet.thumbnail;
 						//tweet.cssClass = 'new-tweet';
@@ -622,6 +662,7 @@ TweetHelper.prototype = {
 							tweet.thumb2_class = 'show';
 							tweet.thumb2_class_timeline = 'show';
 							tweet.mediaUrl2 = links[i].expanded_url;
+							//tweet.thumb_type = 'small';
 						}
 						//tweet.dividerMessage = tweet.thumbnail;
 						tweet.thumb_class = 'show';
@@ -636,6 +677,7 @@ TweetHelper.prototype = {
 							tweet.thumb2_class = 'show';
 							tweet.thumb2_class_timeline = 'show';
 							tweet.mediaUrl2 = links[i].expanded_url;
+							//tweet.thumb_type = 'small';
 						}
 						//tweet.dividerMessage = tweet.thumbnail;
 						tweet.thumb_class = 'show';
@@ -663,6 +705,7 @@ TweetHelper.prototype = {
 							tweet.thumb2_class = 'show';
 							tweet.thumb2_class_timeline = 'show';
 							tweet.mediaUrl2 = links[i].expanded_url;
+							//tweet.thumb_type = 'small';
 						}
 						//tweet.dividerMessage = tweet.mediaUrl;
 						//tweet.cssClass = 'new-tweet';
@@ -674,6 +717,7 @@ TweetHelper.prototype = {
 							if(i > 0){
 								tweet.thumb2_class = 'show';
 								tweet.thumb2_class_timeline = 'show';
+								//tweet.thumb_type = 'small';
 							}
 							tweet.thumb_class = 'show';
 							tweet.thumb_class_timeline = 'show';
@@ -700,6 +744,7 @@ TweetHelper.prototype = {
 						tweet.thumb2_class = 'show';
 						tweet.thumb2_class_timeline = 'show';
 						tweet.mediaUrl2 = media_links[i].media_url;
+						//tweet.thumb_type = 'small';
 					}
 					tweet.thumb_class = 'show';
 					tweet.thumb_class_timeline = 'show';

@@ -21,7 +21,15 @@
 					<div class="searchTimeline #{-thumb_class_timeline}">
 						<div class="inline-thumb">
 							<img src=#{-thumbnail} alt="..."/>
-							<img class="inline-thumb2 #{-thumb2_class_timeline}" src=#{-thumbnail2} alt="..."/>
+						</div>
+						<div class="inline-thumb2  #{-thumb2_class_timeline}">
+							<img src=#{-thumbnail2} alt="..."/>
+						</div>
+						<div class="inline-thumb3  #{-thumb3_class_timeline}">
+							<img src=#{-thumbnail3} alt="..."/>
+						</div>
+						<div class="inline-thumb4  #{-thumb4_class_timeline}">
+							<img src=#{-thumbnail4} alt="..."/>
 						</div>
 					</div>
 				</div>
@@ -41,11 +49,19 @@
 					<div id="quote-username" class="tweet-quote-username">#{-quoted_status.user.name}</div>
 					<div id="quote-screenname" class="tweet-quote-screenname #{-quote_class}">@#{-quoted_status.user.screen_name}</div>
 					<div id="quote-text" class="tweet-quote timeline">#{-quoted_status.full_text}</div>
-					<div id="thumb-wrapper">
-						<div class="timeline #{-quoted_status.thumb_class_timeline}">
-							<div class="inline-thumb">
+					<div id="quote-thumb-wrapper">
+						<div id="quote-thumb-timeline" class="timeline #{-quoted_status.thumb_class_timeline}">
+							<div id="quote-inline-thumb" class="inline-thumb">
 								<img id="quote-thumbnail" src=#{-quoted_status.thumbnail} alt="..."/>
-								<img id="quote-thumbnail2" class="inline-thumb2 #{-quoted_status.thumb2_class_timeline}" src=#{-quoted_status.thumbnail2} alt="..."/>
+							</div>
+							<div id="quote-inline-thumb2" class="inline-thumb2  #{-quoted_status.thumb2_class_timeline}">
+								<img id="quote-thumbnail2" src=#{-quoted_status.thumbnail2} alt="..."/>
+							</div>
+							<div id="quote-inline-thumb3" class="inline-thumb3  #{-quoted_status.thumb3_class_timeline}">
+								<img id="quote-thumbnail3" src=#{-quoted_status.thumbnail3} alt="..."/>
+							</div>
+							<div id="quote-inline-thumb4" class="inline-thumb4  #{-quoted_status.thumb4_class_timeline}">
+								<img id="quote-thumbnail4" src=#{-quoted_status.thumbnail4} alt="..."/>
 							</div>
 						</div>
 					</div>

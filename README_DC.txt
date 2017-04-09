@@ -232,3 +232,10 @@ Modified main-assistant.js, profile-assistant.js, status-assistant.js, convo.js,
 Modified phnx.css so that quote text scales with Appearance preferece change of font size
 Modified tweet.js to remove #! before user name on CopyURL function
 Modified phnx.css so you can now re-tweet yourself (but if you delete the re-tweet (ie, trash it not un-retweet, it will delete the original retweeted tweet, not your edited or retweet tweet - need to fix that)
+Modified main-assistant.js to allow tap-holding a tweet in the timeline to set the bookmark for the tweet (ie, where a new launch of the app will show new tweets from)
+Modified tweet.js, main-assistant.js, status-assistant.js, profile-assistant.js, item.html, item-one-column.html, phnx.css, search.html, convo-item.html to iterate through extended-entities media objects so tweets containing multi photos etc can be now show up to 4 images (instead of default entities 1)
+Modified phnx.css so that long tweet items in timelines have full background covered on tap
+Modified phnx.css, tweet.js and detail.html to show 4 thumbs (in a nicer way) in details toaster
+Modified details.html, tweet.js and phnx.css to allow details view to scroll when needed (AT LAST!!)
+Modified tweet.js to undo the .small adjustment I did 2 items above as we now have scrolling
+Modified cleanse.css to make username etc easier to read

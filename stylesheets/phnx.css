@@ -579,7 +579,8 @@ body.no-gesture {  /* touchpad/emulator */
 	height: 18px;
 }
 .status-row.selected, .user-row.selected {
-	background: url(../images/low/tweet-highlight.png) center top repeat-x, url(../images/low/tweet-highlight-bottom.png) center bottom repeat-x;
+	background: url(../images/low/tweet-highlight.png) center top, url(../images/low/tweet-highlight-bottom.png) center bottom repeat-x;
+	background-size: 100%;
 }
 .highlight {
 	background: url(../images/transwhite5.png);
@@ -779,13 +780,91 @@ body.no-gesture {  /* touchpad/emulator */
 	background-repeat: no-repeat;
 	background-position: center center;
 	-webkit-border-radius: 4px;
-	margin: 5px 8px 0px 0px;
+	margin: 0px 8px 0px 0px;
 	margin-left: auto;
 	margin-right: auto;
 }
 
+.inline-thumb2 {
+	display: none;
+}
+.inline-thumb2.show {
+	height: 64px;
+	text-align: center;
+	background-size: auto 64px;
+	background-repeat: no-repeat;
+	background-position: center center;
+	-webkit-border-radius: 4px;
+	margin: 0px 8px 0px 0px;
+	margin-left: auto;
+	margin-right: auto;
+	display: inline-block;
+}
+
+.details .inline-thumb2.show{
+	max-height: 128px;
+	max-width: 100%;
+	width: auto;
+	height: auto;
+	display: inline-block;
+}
+
+.inline-thumb3 {
+	display: none;
+}
+.inline-thumb3.show {
+	height: 64px;
+	text-align: center;
+	background-size: auto 64px;
+	background-repeat: no-repeat;
+	background-position: center center;
+	-webkit-border-radius: 4px;
+	margin: 0px 8px 0px 0px;
+	margin-left: auto;
+	margin-right: auto;
+	display: inline-block;
+}
+
+.details .inline-thumb3.show{
+	max-height: 128px;
+	max-width: 100%;
+	width: auto;
+	height: auto;
+	display: inline-block;
+}
+
+.inline-thumb4 {
+	display: none;
+}
+.inline-thumb4.show {
+	height: 64px;
+	text-align: center;
+	background-size: auto 64px;
+	background-repeat: no-repeat;
+	background-position: center center;
+	-webkit-border-radius: 4px;
+	margin: 0px 8px 0px 0px;
+	margin-left: auto;
+	margin-right: auto;
+	display: inline-block;
+}
+
+.details .inline-thumb4.show{
+	max-height: 128px;
+	max-width: 100%;
+	width: auto;
+	height: auto;
+	display: inline-block;
+}
+
 .fullWidthThumbs .searchTimeline .inline-thumb,
-.fullWidthThumbs .timeline .inline-thumb {
+.fullWidthThumbs .timeline .inline-thumb,
+.fullWidthThumbs .searchTimeline .inline-thumb2,
+.fullWidthThumbs .timeline .inline-thumb2,
+.fullWidthThumbs .searchTimeline .inline-thumb3,
+.fullWidthThumbs .timeline .inline-thumb3,
+.fullWidthThumbs .searchTimeline .inline-thumb4,
+.fullWidthThumbs .timeline .inline-thumb4 {
 	height: auto;
 	width: 100%;
 	background-size: 100% auto;
@@ -797,20 +876,16 @@ body.no-gesture {  /* touchpad/emulator */
 	background-size: auto 64px;
 }
 
-.inline-thumb2 {
-	display: none;
-}
-.inline-thumb2.show {
-	display: inline;
-}
-
 .showThumbs .timeline.show .inline-thumb{
-	display: block;
+	display: inline-block;
 	/*margin: 10px auto;*/
 }
 
-.showThumbs .searchTimeline.show .inline-thumb{
-	display: block;
+.showThumbs .searchTimeline.show .inline-thumb,
+.showThumbs .searchTimeline.show .inline-thumb2
+.showThumbs .searchTimeline.show .inline-thumb3
+.showThumbs .searchTimeline.show .inline-thumb4{
+	display: inline-block;
 	/*margin: 10px auto;*/
 }
 .detailsThumbs .details .inline-thumb.show{
@@ -838,11 +913,31 @@ body.no-gesture {  /* touchpad/emulator */
 	background-size: auto 128px;
 }
 
-/*.thumb-wrapper{
-	position: relative;
-}*/
+.small-device .inline-thumb-large.small,
+.medium-device .inline-thumb-large.small{
+	/*display: none;*/
+	height: 64px;
+	text-align: center;
+	background-size: auto 64px;
+	background-repeat: no-repeat;
+	background-position: center center;
+	-webkit-border-radius: 4px;
+	margin: 0px 8px 0px 0px;
+	margin-left: auto;
+	margin-right: auto;
+}
 
-#thumb-wrapper img
+#thumb-wrapper,
+#quote-thumb-wrapper{
+	height: auto;
+	width: 100%;
+	text-align: center;
+	margin-top: 5px;
+	/*position: relative;*/
+}
+
+#thumb-wrapper img,
+#quote-thumb-wrapper img
 {
 	max-width:100%; 
 	max-height:100%;
@@ -896,9 +991,22 @@ body.no-gesture {  /* touchpad/emulator */
 	display: inline-block;
 }
 
-.tweet-footer{
+.tweet-footer-thumb{
+	display: none;
 	font-size: 11px;
 	color: #bbb;
+}
+.tweet-footer-thumb.show{
+	display: block;
+}
+
+.tweet-footer{
+	display: block;
+	font-size: 11px;
+	color: #bbb;
+}
+.tweet-footer.show{
+	display: none;
 }
 
 .tweet-quote-footer{
@@ -1015,6 +1123,15 @@ body.no-gesture {  /* touchpad/emulator */
 	width: 100%;
 }
 
+.small-device .toaster .details-scroller {
+	max-height: 220px;
+}
+.small-device .toaster .details .content-wrapper{
+	max-height: 260px;
+}
+.medium-device .toaster .details .content-wrapper{
+	max-height: 360px;
+}
 .tweet-text{
 	clear: both;
 	word-wrap:break-word;
@@ -1353,6 +1470,10 @@ span.link{
 	height: 24px;
 }
 
+.details-scroller{
+	-webkit-transition-property: all;
+	-webkit-transition-duration: .3s;
+}
 .convo-scroller{
 	-webkit-transition-property: all;
 	-webkit-transition-duration: .3s;

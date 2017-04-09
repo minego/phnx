@@ -16,6 +16,7 @@ function MainAssistant(opts) {
 	this.switcher = false;
 
 	this.myLastId = undefined;
+	this.oldBookmarkIndex = undefined;
 	this.count = 300; //how many tweets to load each request
 	this.renderLimit = 1000; //umm...this scares me. used in list widgets to prevent flickering...
 	this.toasters = new ToasterChain();
@@ -617,6 +618,7 @@ MainAssistant.prototype = {
 			var el = timelineLists[i];
 
 			this.controller.listen(el, Mojo.Event.listTap, this.tweetTapped.bind(this));
+			this.controller.listen(el, Mojo.Event.hold, this.tweetHeld.bind(this));
 		}
 
 		// listen to the load more buttons
@@ -1847,6 +1849,15 @@ MainAssistant.prototype = {
 	},
 	refreshHeld: function(event){
 		event.preventDefault();
+		//Mojo.Controller.getAppController().playSoundNotification("vibrate", "");			
+		
+		// Only works if app is a com.palm.app and not net.minego :(
+		//this.controller.serviceRequest("palm://com.palm.vibrate", {
+		//	method: 'vibrate',
+		//	parameters: { 'period': 0, 'duration': 50 }
+		//	}
+		//);
+
 		//Mojo.Log.error('panel.id: ' + this.panels[this.timeline].id);
 		this.controller.modelChanged(this.panels[this.timeline].model);
 	},
@@ -1950,7 +1961,7 @@ MainAssistant.prototype = {
 	tweetTapped: function(event) {
 		if (this.toasters.items.length === 0) {
 			Mojo.Log.info(event.originalEvent.srcElement.id);
-
+			
 			if (event.originalEvent.srcElement.id === 'gap') {
 				// Load the gap if it's gappy
 				//Mojo.Log.error('gaptastic!');
@@ -1967,7 +1978,8 @@ MainAssistant.prototype = {
 				//Mojo.Log.error('event.item.gapStart:event.item.gapEnd : ' + event.item.gapStart + ' : ' + event.item.gapEnd);
 				this.fillGap(panel,event.item.gapStart,event.item.gapEnd,event.item.id_str);
 			} else {
-				if(event.originalEvent.srcElement.id === "quote-wrapper" | event.originalEvent.srcElement.id === "quote-avatar" | event.originalEvent.srcElement.id === "quote-screenname" |event.originalEvent.srcElement.id === "quote-username" |event.originalEvent.srcElement.id === "quote-text"| event.originalEvent.srcElement.id === "quote-thumbnail"| event.originalEvent.srcElement.id === "quote-thumbnail2"
+				if(event.originalEvent.srcElement.id === "quote-wrapper" | event.originalEvent.srcElement.id === "quote-avatar" | event.originalEvent.srcElement.id === "quote-screenname" |event.originalEvent.srcElement.id === "quote-username" |event.originalEvent.srcElement.id === "quote-text"| event.originalEvent.srcElement.id === "quote-thumb-timeline"| event.originalEvent.srcElement.id === "quote-thumb-wrapper"
+					| event.originalEvent.srcElement.id === "quote-inline-thumb" | event.originalEvent.srcElement.id === "quote-inline-thumb2" | event.originalEvent.srcElement.id === "quote-inline-thumb3" | event.originalEvent.srcElement.id === "quote-inline-thumb4" | event.originalEvent.srcElement.id === "quote-thumbnail"| event.originalEvent.srcElement.id === "quote-thumbnail2" | event.originalEvent.srcElement.id === "quote-thumbnail3"| event.originalEvent.srcElement.id === "quote-thumbnail4"
 					| event.originalEvent.srcElement.id === "quote-time"| event.originalEvent.srcElement.id === "quote-time-abs"| event.originalEvent.srcElement.id === "quote-via"| event.originalEvent.srcElement.id === "quote-rt-avatar" | event.originalEvent.srcElement.id === "quote-footer" | event.originalEvent.srcElement.id === "via-link"){
 					//Check below is only really needed if the #via-link doesn't have a pointer-events: none.
 					if(typeof(event.item.quoted_status) != "undefined"){
@@ -1982,6 +1994,56 @@ MainAssistant.prototype = {
 				}
 			}
 		}
+	},
+	tweetHeld: function(event) {
+		event.preventDefault();
+		//Mojo.Controller.getAppController().playSoundNotification("vibrate", "","50");	
+		
+		// Only works if app is a com.palm.app and not net.minego :(
+		//this.controller.serviceRequest("palm://com.palm.vibrate", {
+		//	method: 'vibrate',
+		//	parameters: { 'period': 0, 'duration': 50 }
+		//	}
+		//);				
+
+		// Write a few (10) of the latest tweets to the user's cache (async)
+		var panel	= this.panels[this.timeline];
+
+		var currTarget=event.target;		
+		var currItem = this.controller.get('list-' + panel.index).mojo.getItemByNode(currTarget);
+		var tweetIndex = panel.model.items.map(function (tweet) { return tweet.id_str; }).indexOf(currItem.id_str)
+
+		//Mojo.Log.error('tweets.length: ' + this.tweets.length);
+		this.user[panel.id] = panel.model.items.slice(tweetIndex, tweetIndex+10);
+
+		//for (var i = 1; tweetId = this.user[panel.id][i]; i++) {
+		//	Mojo.Log.error('tweetId: ' + tweetId.id_str);
+		//}
+		var account = new Account();
+		account.load(this.user);
+		account.save();
+
+		// Save the recent ids for notification checks
+		if (panel.model.items.length > 0 && !this.loadingMore) {
+			var store = new LocalStorage();
+
+			store.write(this.user.id + '_' + panel.id, panel.model.items[tweetIndex].id_str);
+		}
+		
+		if(this.oldBookmarkIndex){
+			Mojo.Log.error('this.oldBookmarkIndex: ' + this.oldBookmarkIndex);
+			if(this.oldBookmarkIndex>0){
+				panel.model.items[this.oldBookmarkIndex-1].cssClass = 'old-tweet';
+				panel.model.items[this.oldBookmarkIndex-1].dividerMessage = "";
+			}
+		}
+		if(tweetIndex>0){
+			panel.model.items[tweetIndex-1].dividerMessage = "Bookmark";
+			panel.model.items[tweetIndex-1].cssClass = 'new-tweet';
+		}
+		this.oldBookmarkIndex = tweetIndex;
+		this.controller.modelChanged(this.panels[this.timeline].model);
+		//banner('Bookmark set');
 	},
 	addCommas: function(nStr) {
 		//from http://www.mredkj.com/javascript/nfbasic.html
@@ -2063,6 +2125,14 @@ MainAssistant.prototype = {
 		}
 	},
 	navButtonHeld: function(event) {
+		//Mojo.Controller.getAppController().playSoundNotification("vibrate", "");			
+
+		// Only works if app is a com.palm.app and not net.minego :(
+		//this.controller.serviceRequest("palm://com.palm.vibrate", {
+		//	method: 'vibrate',
+		//	parameters: { 'period': 0, 'duration': 50 }
+		//	}
+		//);
 		var screenWidth = this.controller.window.innerWidth;
 		var src = event.srcElement;
 
@@ -2189,6 +2259,13 @@ MainAssistant.prototype = {
 	headerHeld: function(event) {
 		/* Prevent the tap event */
 		event.preventDefault();
+		// Only works if app is a com.palm.app and not net.minego :(
+		//this.controller.serviceRequest("palm://com.palm.vibrate", {
+		//	method: 'vibrate',
+		//	parameters: { 'period': 0, 'duration': 50 }
+		//	}
+		//);
+
 		
 		var am = new Account();
 		am.all(function(r){

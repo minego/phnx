@@ -56,6 +56,7 @@ var TweetToaster = Class.create(Toaster, {
 
 		this.content.tweetHtml = tweetHtml;
 		this.render(this.content, 'templates/toasters/tweet');
+		this.controller.setupWidget('details-scroller-' + this.id, {mode: 'vertical'},{});
 
 		//Mojo.Log.error(this.tweet.text);
 
@@ -99,6 +100,7 @@ var TweetToaster = Class.create(Toaster, {
 				template: 'templates/tweets/details'
 			});
 			this.controller.get('details-' + this.toasterId).update(tweetHtml);
+			this.controller.instantiateChildWidgets(get('toasters'));
 
 			Mojo.Event.listen(this.controller.get('rt-' + this.toasterId), Mojo.Event.tap, this.rtTapped.bind(this));
 			Mojo.Event.listen(this.controller.get('fav-' + this.toasterId), Mojo.Event.tap, this.favTapped.bind(this));
@@ -129,12 +131,13 @@ var TweetToaster = Class.create(Toaster, {
 					template: 'templates/tweets/details'
 				});
 				this.controller.get('details-' + this.toasterId).update(tweetHtml);
+				this.controller.instantiateChildWidgets(get('toasters'));
 
 				Mojo.Event.listen(this.controller.get('rt-' + this.toasterId), Mojo.Event.tap, this.rtTapped.bind(this));
 				Mojo.Event.listen(this.controller.get('fav-' + this.toasterId), Mojo.Event.tap, this.favTapped.bind(this));
 			}.bind(this));
 		}
-
+		
 		//Retrieve justsayin and audioboo mp3 links and instagram mp4 links
 		var links = tweet.entities.urls;
 		var prefs = new LocalStorage();
@@ -324,6 +327,7 @@ var TweetToaster = Class.create(Toaster, {
 					template: 'templates/tweets/details'
 				});
 				this.controller.get('details-' + this.toasterId).update(tweetHtml);
+				this.controller.instantiateChildWidgets(get('toasters'));
 				for (var i=0; i < this.assistant.panels.length; i++) {
 					var panel = this.assistant.panels[i];
 
@@ -370,7 +374,8 @@ var TweetToaster = Class.create(Toaster, {
 					object: this.tweet,
 					template: 'templates/tweets/details'
 				});
-				this.controller.get('details-' + this.toasterId).update(tweetHtml);								
+				this.controller.get('details-' + this.toasterId).update(tweetHtml);
+				this.controller.instantiateChildWidgets(get('toasters'));								
 				for (var i=0; i < this.assistant.panels.length; i++) {
 					var panel = this.assistant.panels[i];
 
@@ -1104,6 +1109,30 @@ transport.responseText);
 			} else {
 				this.handleLink(url);
 			}
+		}	else if (e.id === 'thumb3') {
+			var url = this.tweet.mediaUrl3;
+			if(this.tweet.mediaVidUrl3){
+				url = this.tweet.mediaVidUrl3;
+			}
+			var prefs = new LocalStorage();
+
+			if (held || prefs.read('browserSelection') === 'ask') {
+				this.showOptsUrl(url);
+			} else {
+				this.handleLink(url);
+			}			
+		}	else if (e.id === 'thumb4') {
+			var url = this.tweet.mediaUrl4;
+			if(this.tweet.mediaVidUrl4){
+				url = this.tweet.mediaVidUrl4;
+			}
+			var prefs = new LocalStorage();
+
+			if (held || prefs.read('browserSelection') === 'ask') {
+				this.showOptsUrl(url);
+			} else {
+				this.handleLink(url);
+			}			
 		} else if (e.id === 'hashtag') {
 			var hashtag = e.innerText;
 			var prefs = new LocalStorage();
@@ -1632,7 +1661,10 @@ transport.responseText);
 				]
 			}
 		];
-
+		this.controller.instantiateChildWidgets(get('toasters'));
+		var screenHeight = this.controller.window.innerHeight;
+		get('details-scroller-' + this.id).setStyle({'max-height': (screenHeight - 155) + 'px'});
+		//get(this.nodeId).setStyle({'max-height': (screenHeight - 65) + 'px'});
 		Mojo.Event.listen(this.controller.get('details-' + this.toasterId), Mojo.Event.tap, this.detailsTapped.bind(this));
 		Mojo.Event.listen(this.controller.get('details-' + this.toasterId), Mojo.Event.hold, this.detailsHeld.bind(this));
 		Mojo.Event.listen(this.controller.get('rt-' + this.toasterId), Mojo.Event.tap, this.rtTapped.bind(this));

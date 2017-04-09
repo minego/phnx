@@ -689,7 +689,8 @@ ProfileAssistant.prototype = {
 		}.bind(this));
 		*/
 
-		if(event.originalEvent.srcElement.id === "quote-wrapper" | event.originalEvent.srcElement.id === "quote-avatar" | event.originalEvent.srcElement.id === "quote-screenname" |event.originalEvent.srcElement.id === "quote-username" |event.originalEvent.srcElement.id === "quote-text"| event.originalEvent.srcElement.id === "quote-thumbnail"| event.originalEvent.srcElement.id === "quote-thumbnail2"
+		if(event.originalEvent.srcElement.id === "quote-wrapper" | event.originalEvent.srcElement.id === "quote-avatar" | event.originalEvent.srcElement.id === "quote-screenname" |event.originalEvent.srcElement.id === "quote-username" |event.originalEvent.srcElement.id === "quote-text"| event.originalEvent.srcElement.id === "quote-thumb-timeline"| event.originalEvent.srcElement.id === "quote-thumb-wrapper"
+			| event.originalEvent.srcElement.id === "quote-inline-thumb" | event.originalEvent.srcElement.id === "quote-inline-thumb2" | event.originalEvent.srcElement.id === "quote-inline-thumb3" | event.originalEvent.srcElement.id === "quote-inline-thumb4" | event.originalEvent.srcElement.id === "quote-thumbnail"| event.originalEvent.srcElement.id === "quote-thumbnail2" | event.originalEvent.srcElement.id === "quote-thumbnail3"| event.originalEvent.srcElement.id === "quote-thumbnail4"
 			| event.originalEvent.srcElement.id === "quote-time"| event.originalEvent.srcElement.id === "quote-time-abs"| event.originalEvent.srcElement.id === "quote-via"| event.originalEvent.srcElement.id === "quote-rt-avatar" | event.originalEvent.srcElement.id === "quote-footer" | event.originalEvent.srcElement.id === "via-link"){
 			//Check below is only really needed if the #via-link doesn't have a pointer-events: none.
 			if(typeof(event.item.quoted_status) != "undefined"){
@@ -714,8 +715,9 @@ ProfileAssistant.prototype = {
 			var tweet = th.process(response.responseJSON,null,null,processVine);
 			//this.toasters.add(new TweetToaster(tweet, this));
 		}.bind(this));
-		
-		if(event.originalEvent.srcElement.id === "quote-wrapper" | event.originalEvent.srcElement.id === "quote-avatar" | event.originalEvent.srcElement.id === "quote-screenname" |event.originalEvent.srcElement.id === "quote-username" |event.originalEvent.srcElement.id === "quote-text"| event.originalEvent.srcElement.id === "quote-thumbnail"| event.originalEvent.srcElement.id === "quote-thumbnail2"
+
+		if(event.originalEvent.srcElement.id === "quote-wrapper" | event.originalEvent.srcElement.id === "quote-avatar" | event.originalEvent.srcElement.id === "quote-screenname" |event.originalEvent.srcElement.id === "quote-username" |event.originalEvent.srcElement.id === "quote-text"| event.originalEvent.srcElement.id === "quote-thumb-timeline"| event.originalEvent.srcElement.id === "quote-thumb-wrapper"
+			| event.originalEvent.srcElement.id === "quote-inline-thumb" | event.originalEvent.srcElement.id === "quote-inline-thumb2" | event.originalEvent.srcElement.id === "quote-inline-thumb3" | event.originalEvent.srcElement.id === "quote-inline-thumb4" | event.originalEvent.srcElement.id === "quote-thumbnail"| event.originalEvent.srcElement.id === "quote-thumbnail2" | event.originalEvent.srcElement.id === "quote-thumbnail3"| event.originalEvent.srcElement.id === "quote-thumbnail4"
 			| event.originalEvent.srcElement.id === "quote-time"| event.originalEvent.srcElement.id === "quote-time-abs"| event.originalEvent.srcElement.id === "quote-via"| event.originalEvent.srcElement.id === "quote-rt-avatar" | event.originalEvent.srcElement.id === "quote-footer" | event.originalEvent.srcElement.id === "via-link"){
 			//Check below is only really needed if the #via-link doesn't have a pointer-events: none.
 			if(typeof(event.item.quoted_status) != "undefined"){
