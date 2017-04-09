@@ -1,6 +1,7 @@
 var ChangelogToaster = Class.create(Toaster, {
 	items: [
 		{ version: '1.6.8' },
+		{ item: 'Composing of DMs can be 10,000 characters in length'},
 		{ item: 'Details toasters can now be scrolled if needed'},
 		{ item: 'If multiple images are in the extended-entities payload, then up to 4 thumbs will now be displayed'},
 		{ item: 'Bookmark can be set by tap and holding a tweet in a timeline. As long as you do not refresh, PM will launch with this as the last read tweet.'},

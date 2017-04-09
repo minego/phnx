@@ -239,3 +239,4 @@ Modified phnx.css, tweet.js and detail.html to show 4 thumbs (in a nicer way) in
 Modified details.html, tweet.js and phnx.css to allow details view to scroll when needed (AT LAST!!)
 Modified tweet.js to undo the .small adjustment I did 2 items above as we now have scrolling
 Modified cleanse.css to make username etc easier to read
+Modified compose.js to allow composing of DMs to be 10000 characters long

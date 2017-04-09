@@ -83,6 +83,7 @@ var ComposeToaster = Class.create(Toaster, {
 		this.from			= {};
 		this.rt				= false;
 		this.availableChars	= 140;
+		this.availableDMChars = 10000;
 		this.count			= 140;
 		this.images			= []; //any images to be uploaded
 		this.uploading		= false;
@@ -121,6 +122,8 @@ var ComposeToaster = Class.create(Toaster, {
 		toasterObj.from = this.user.username
 
 		this.render(toasterObj, 'templates/toasters/compose');
+
+		this.updateCounter();
 
 		if (opts.text) {
 			var txt;
@@ -164,14 +167,21 @@ var ComposeToaster = Class.create(Toaster, {
 		}.bind(this), 0);
 	},
 	updateCounter: function() {
+		var maxChars;
+		
+		if(this.dm){
+			maxChars = this.availableDMChars;
+		} else {
+			maxChars = this.availableChars;
+		}
 		var txt		= get(this.textarea).value;
-		if (txt.length <= this.availableChars) {
-			get('count-' + this.id).update(this.availableChars - txt.length);
+		if (txt.length <= maxChars) {
+			get('count-' + this.id).update(maxChars - txt.length);
 			return;
 		}
 		var msgs	= this.split(txt);
 		get('count-' + this.id).update(
-			(this.availableChars - 1 - msgs[msgs.length - 1].length) +
+			(maxChars - 1 - msgs[msgs.length - 1].length) +
 			'x' + msgs.length);
 	},
 	composeTxtWithEmoji: function() {
@@ -324,6 +334,7 @@ var ComposeToaster = Class.create(Toaster, {
 		var mentions	= [];
 		var needed		= 0;
 		var length		= 0;
+		var maxChars;
 
 		/*
 			Find all mentions in the message. Each part should cc all of them.
@@ -332,6 +343,7 @@ var ComposeToaster = Class.create(Toaster, {
 			in each tweet.
 		*/
 		if (!this.dm) {
+			maxChars = this.availableChars;
 			for (var i = 0, word; word = words[i]; i++) {
 				if (0 === word.indexOf('.@') || 0 === word.indexOf('"@')) {
 					todone = true;
@@ -379,12 +391,14 @@ var ComposeToaster = Class.create(Toaster, {
 					mentions.push(word);
 				}
 			}
+		} else {
+			maxChars = this.availableDMChars;
 		}
 
 		for (var i = 0, word; word = words[i]; i++) {
-			if(word.length > (140-(needed+ (mentions.length ? 14 : 10)))){
+			if(word.length > (maxChars-(needed+ (mentions.length ? 14 : 10)))){
 				var chunks;
-				chunks = splitStringAtInterval(word,140-(needed+ (mentions.length ? 14 : 10)));
+				chunks = splitStringAtInterval(word,maxChars-(needed+ (mentions.length ? 14 : 10)));
 				words.splice(i,1);
 				words = words.concat(chunks).unique(); 
 			}
@@ -402,6 +416,13 @@ var ComposeToaster = Class.create(Toaster, {
 
 	split: function(txt, info) {
 		var messages = [];
+		var maxChars;
+		
+		if(this.dm){
+			maxChars = this.availableDMChars;
+		} else{
+			maxChars = this.availableChars;
+		}
 		if (!info) {
 			info = this.splitPrep(txt);
 		}
@@ -411,7 +432,7 @@ var ComposeToaster = Class.create(Toaster, {
 				Include 1 extra character when counting the length since the
 				check below will assume a space.
 			*/
-			var left	= this.availableChars - info.needed + 1;
+			var left	= maxChars - info.needed + 1;
 			var msg		= [];
 			while (info.words.length && left > 0) {
 				if (0 === info.words[0].indexOf('@') ||
@@ -462,10 +483,12 @@ var ComposeToaster = Class.create(Toaster, {
 		var txt		= get(this.textarea).value;
 		var Twitter	= new TwitterAPI(this.user);
 		var args;
+		var maxChars;
 
 		var sendfunc;
 
 		if (!this.dm) {
+			maxChars = this.availableChars;
 			sendfunc = function sendTweet(txt, cb, reply_id) {
 				args = {'status': txt};
 
@@ -488,6 +511,7 @@ var ComposeToaster = Class.create(Toaster, {
 				Twitter.postTweet(args, cb);
 			}.bind(this);
 		} else {
+			maxChars = this.availableDMChars;
 			sendfunc = function sendDM(txt, cb) {
 				//Mojo.Log.error('sendingDM to screen_name: ' + this.to.screen_name);
 				//Mojo.Log.error('sendingDM to id: ' + this.to.id_str);
@@ -517,7 +541,7 @@ var ComposeToaster = Class.create(Toaster, {
 			ex('An upload is in progress.');
 		} else if (this.sending) {
 			;
-		} else if (txt.length > this.availableChars) {
+		} else if (txt.length > maxChars) {
 			var messages	= [];
 			var info		= this.splitPrep(txt);
 
@@ -532,7 +556,7 @@ var ComposeToaster = Class.create(Toaster, {
 			console.log('Mentions require ' + info.needed + ' chars');
 
 			var opts = {
-				title: 'Your message is over 140 characters. Would you like to split it into multiple messages?',
+				title: 'Your message is over ' + maxChars + ' characters. Would you like to split it into multiple messages?',
 				callback: function() {
 					this.assistant.toasters.back();
 
