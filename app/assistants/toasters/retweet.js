@@ -24,9 +24,18 @@ var RetweetToaster = Class.create(Toaster, {
 		}.bind(this));
 	},
 	editTapped: function(event) {
+		var twitterUsername	= this.tweet.user.screen_name;
+		var twitterId			= this.tweet.id_str;
+		var twitterLink		= "https://twitter.com/" +
+									twitterUsername + "/" +
+									"status/" + twitterId;
+
 		// Show compose toaster
 		var args = {
-			text:	'RT @' + this.tweet.user.screen_name + ': ' + this.tweet.stripped,
+			//text:	'RT @' + this.tweet.user.screen_name + ': ' + this.tweet.stripped,
+			attachment_url: twitterLink,
+			quote: this.tweet.stripped,
+			//this.tweet.full_text,
 			rt:		true
 		};
 

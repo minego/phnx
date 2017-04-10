@@ -240,3 +240,4 @@ Modified details.html, tweet.js and phnx.css to allow details view to scroll whe
 Modified tweet.js to undo the .small adjustment I did 2 items above as we now have scrolling
 Modified cleanse.css to make username etc easier to read
 Modified compose.js to allow composing of DMs to be 10000 characters long
+Modified compose.js, compose.html, retweet.js and phnx.css to properly perform quote retweets

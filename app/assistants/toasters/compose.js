@@ -69,6 +69,7 @@ var ComposeToaster = Class.create(Toaster, {
 		this.nodeId			= 'toaster-' + this.id;
 		this.textarea		= 'txtCompose-' + this.id;
 		this.completebar	= 'complete-bar-' + this.id;
+		this.quotebar		= 'quote-bar-' + this.id;
 		this.assistant		= assistant;
 		this.controller		= assistant.controller;
 		this.user			= opts.from || this.controller.stageController.user;
@@ -197,6 +198,23 @@ var ComposeToaster = Class.create(Toaster, {
 			bar.innerHTML = '';
 		}
 	},
+	composeTxtWithQuote: function() {
+		var bar		= get(this.quotebar);
+		var ta		= get(this.textarea);
+		var value	= ta.value;
+
+		//bar.innerHTML = '';
+		this.pos	= null;
+
+		if(this.opts.quote){
+			get('quote-bar-' + this.id).addClassName('show');
+			bar.innerHTML = this.opts.quote;
+			if(bar.innerHTML.indexOf('') === 1){
+				bar.innerHTML = '';
+			}
+		}
+	},
+	
 	autoComplete: function() {
 		var bar		= get(this.completebar);
 		var ta		= get(this.textarea);
@@ -490,7 +508,7 @@ var ComposeToaster = Class.create(Toaster, {
 		if (!this.dm) {
 			maxChars = this.availableChars;
 			sendfunc = function sendTweet(txt, cb, reply_id) {
-				args = {'status': txt};
+				args = {'status': txt, 'attachment_url': this.opts.attachment_url};
 
 				if (this.reply) {
 					args.in_reply_to_status_id = this.reply_id;
@@ -830,6 +848,7 @@ var ComposeToaster = Class.create(Toaster, {
 		}
 
 		this.autoCorrect = prefs.read('autoCorrect');
+		this.composeTxtWithQuote();
 
 		get(this.textarea).observe('change', function(e) {
 			this.updateCounter();

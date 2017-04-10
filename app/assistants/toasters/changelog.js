@@ -1,6 +1,7 @@
 var ChangelogToaster = Class.create(Toaster, {
 	items: [
 		{ version: '1.6.8' },
+		{ item: 'Retweet with comment will now quote the tweet allowing 140 characters for comment'},
 		{ item: 'Composing of DMs can be 10,000 characters in length'},
 		{ item: 'Details toasters can now be scrolled if needed'},
 		{ item: 'If multiple images are in the extended-entities payload, then up to 4 thumbs will now be displayed'},
