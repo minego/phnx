@@ -69,7 +69,7 @@ var ComposeToaster = Class.create(Toaster, {
 		this.nodeId			= 'toaster-' + this.id;
 		this.textarea		= 'txtCompose-' + this.id;
 		this.completebar	= 'complete-bar-' + this.id;
-		this.quotebar		= 'quote-bar-' + this.id;
+		this.quotebartext		= 'quote-bar-text-' + this.id;
 		this.assistant		= assistant;
 		this.controller		= assistant.controller;
 		this.user			= opts.from || this.controller.stageController.user;
@@ -199,7 +199,7 @@ var ComposeToaster = Class.create(Toaster, {
 		}
 	},
 	composeTxtWithQuote: function() {
-		var bar		= get(this.quotebar);
+		var bar		= get(this.quotebartext);
 		var ta		= get(this.textarea);
 		var value	= ta.value;
 
@@ -208,10 +208,7 @@ var ComposeToaster = Class.create(Toaster, {
 
 		if(this.opts.quote){
 			get('quote-bar-' + this.id).addClassName('show');
-			bar.innerHTML = emojify(this.opts.quote,16);
-			if(bar.innerHTML.indexOf('<img class="emoji" src=') === -1){
-				bar.innerHTML = '';
-			}
+			bar.innerHTML = this.opts.quote;
 		}
 	},
 	
