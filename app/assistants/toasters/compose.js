@@ -208,8 +208,8 @@ var ComposeToaster = Class.create(Toaster, {
 
 		if(this.opts.quote){
 			get('quote-bar-' + this.id).addClassName('show');
-			bar.innerHTML = this.opts.quote;
-			if(bar.innerHTML.indexOf('') === 1){
+			bar.innerHTML = emojify(this.opts.quote,16);
+			if(bar.innerHTML.indexOf('<img class="emoji" src=') === -1){
 				bar.innerHTML = '';
 			}
 		}
@@ -508,8 +508,11 @@ var ComposeToaster = Class.create(Toaster, {
 		if (!this.dm) {
 			maxChars = this.availableChars;
 			sendfunc = function sendTweet(txt, cb, reply_id) {
-				args = {'status': txt, 'attachment_url': this.opts.attachment_url};
-
+				if(this.opts.attachment_url){
+					args = {'status': txt, 'attachment_url': this.opts.attachment_url};
+				} else {
+					args = {'status': txt};				
+				}
 				if (this.reply) {
 					args.in_reply_to_status_id = this.reply_id;
 				}

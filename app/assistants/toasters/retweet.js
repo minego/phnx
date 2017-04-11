@@ -34,8 +34,7 @@ var RetweetToaster = Class.create(Toaster, {
 		var args = {
 			//text:	'RT @' + this.tweet.user.screen_name + ': ' + this.tweet.stripped,
 			attachment_url: twitterLink,
-			quote: this.tweet.stripped,
-			//this.tweet.full_text,
+			quote: this.tweet.full_text,
 			rt:		true
 		};
 
