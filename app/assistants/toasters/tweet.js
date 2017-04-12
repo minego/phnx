@@ -192,7 +192,6 @@ var TweetToaster = Class.create(Toaster, {
 	try {
 		this.ippPass = cookie.get();
 	} catch (e) {Mojo.Log.error("this.ippPass");}
-
 	},
 	actionTapped: function(event) {
 		var action = event.srcElement.id.substr(0, event.srcElement.id.indexOf('-'));
