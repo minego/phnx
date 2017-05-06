@@ -128,6 +128,7 @@ ProfileAssistant.prototype = {
 			var font = prefs.read('fontSize');
 			global.setFontSize(body, font);
 
+			global.setBitrate(body, prefs.read('bitrate'));
 			global.setShowThumbs(body,	prefs.read('showThumbs'));
 			global.setFullWidthThumbs(body, prefs.read('fullWidthThumbs'));
 			global.setShowEmoji(body,	prefs.read('showEmoji'));

@@ -223,7 +223,11 @@ var global = {
 			Element.addClassName(body, 'layout-no-top');
 		}
 	},
-
+	setBitrate: function(body, bitrateOption){
+		if(bitrateOption >= 0 && bitrateOption <=2){
+			bitrate = bitrateOption;
+		}
+	},
 	setFontSize: function(body, font) {
 		var fonts = ['tiny','small', 'medium', 'large','huge'];
 		for (var i=0; i < fonts.length; i++) {
@@ -351,6 +355,9 @@ var global = {
 
 /* This is an auto-incremented number for toaster IDs */
 var toasterIndex = 0;
+
+/* This is an option for twitter encoded videos: 0: min, 1: med: 3: max bitrate */
+var bitrate = 0;
 
 /* Show a banner message */
 function banner(message){

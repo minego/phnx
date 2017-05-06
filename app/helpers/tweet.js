@@ -287,13 +287,64 @@ TweetHelper.prototype = {
 		//extended_entitities parsing added by DC
 		if (tweet.extended_entities && tweet.extended_entities.media) {
 			var media_links = tweet.extended_entities.media;
+			var mp4Array = [];
+			var mp4Index = 0;
+			//var bitrateFlag = 1; //0: min, 1: med, 2: max
+			
 			for (var i = media_links.length - 1; i >= 0; i--){
 				if (media_links[i].video_info){ // && tweet.entities.media[i].media_url !== null) {
 					if(media_links[i].video_info.variants){
+						for(var j = 0; j < media_links[i].video_info.variants.length; j++)
+						{
+							if(media_links[i].video_info.variants[j].content_type === "video/mp4"){
+								mp4Array.push({index: j,bitrate: media_links[i].video_info.variants[j].bitrate });
+								//mp4Index = j;
+								//break;
+							}	
+						}
+						if(mp4Array.length > 1){
+							mp4Array.sort(dynamicSort("bitrate"));
+							//for(var k = 0; k < mp4Array.length; k++){
+								//Mojo.Log.error('id: ' + tweet.id_str);
+								//Mojo.Log.error('index: ' + mp4Array[k].index);
+								//Mojo.Log.error('bitrate: ' + mp4Array[k].bitrate);
+							//}
+							//Mojo.Log.error('bitrateFlag: ' + bitrateFlag);
+							//Mojo.Log.error('bitrate(flag):_' + bitrate + "_");
+							//switch(bitrateFlag){
+							switch(bitrate){
+								case "0":
+									//min
+									//Mojo.Log.error('minBitrate');
+									//Mojo.Log.error('bitrate: ' + mp4Array[0].bitrate);
+									mp4Index = mp4Array[0].index;
+									break;
+								case "1":
+									//med - will always round DOWN to lower bitrate if even number of bitrate choices
+									//Mojo.Log.error('medBitrate');
+									//Mojo.Log.error('bitrate: ' + mp4Array[Math.floor((mp4Array.length-1)/2)].bitrate);
+									mp4Index = mp4Array[Math.floor((mp4Array.length-1)/2)].index;
+									break;
+								case "2":
+									//max
+									//Mojo.Log.error('maxBitrate');
+									//Mojo.Log.error('bitrate: ' + mp4Array[mp4Array.length-1].bitrate);
+									mp4Index = mp4Array[mp4Array.length-1].index;
+									break;
+								default:
+									//Mojo.Log.error('minBitrate (default)');
+									mp4Index = mp4Array[0].index;
+									break;
+							}
+						}
+						//Mojo.Log.error('final mp4Index: ' + mp4Index);
+						//Mojo.Log.error('final bitrate: ' + media_links[i].video_info.variants[mp4Index].bitrate);
+						//Mojo.Log.error('------');
 						if(i === 0){ // && (tweet.entities.media[i].media_url == tweet.extended_entities.media[i].media_url)){
-							tweet.mediaVidUrl = media_links[i].video_info.variants[0].url;
+							tweet.mediaVidUrl = media_links[i].video_info.variants[mp4Index].url; 
+							//Mojo.Log.error('vid link: ' + tweet.mediaVidUrl);
 						} else {
-							tweet.mediaVidUrl2 = media_links[i].video_info.variants[0].url;
+							tweet.mediaVidUrl2 = media_links[i].video_info.variants[mp4Index].url;
 						}
 					}	
 				}else if (media_links[i].type.indexOf('photo') > -1){

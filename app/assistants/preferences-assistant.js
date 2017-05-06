@@ -33,6 +33,13 @@ function PreferencesAssistant(section) {
 			{label: '20', value: '20'}
 		]}
 	);
+	advanced.push(
+		{key: 'bitrate', type: 'select', label: 'Preferred Bitrate of Videos', items: [
+			{label: 'Minimum', value: '0'},
+			{label: 'Medium', value: '1'},
+			{label: 'Maximum', value: '2'}
+		]}
+	);
 	advanced.push({key: 'delReceivedDM', type: 'toggle', label: 'Allow deletion of received DMs'},
 				{key: 'showVine', type: 'toggle', label: 'Process Vine links in Timelines - warning *resource hog*'},
 				{key: 'useFoursquareApp', type: 'toggle', label: 'Pass 4sq.com links to Foursquare app (requires v2.8.5)'}
@@ -507,6 +514,7 @@ PreferencesAssistant.prototype = {
 			prefs.read('hideToolbar'),
 			prefs.read('hideTabs')
 		);
+		global.setBitrate(body, prefs.read('bitrate'));
 		global.setShowThumbs(body,	prefs.read('showThumbs'));
 		global.setFullWidthThumbs(body, prefs.read('fullWidthThumbs'));
 		global.setShowEmoji(body,	prefs.read('showEmoji'));

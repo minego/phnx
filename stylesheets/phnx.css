@@ -151,6 +151,10 @@ body.no-gesture {  /* touchpad/emulator */
 	border-radius: 5px;
 	margin: 4px 4px 0px 4px;
 }
+.large-device .quote-bar{
+	font-size: 16px;
+	
+}
 .quote-bar.show{
 	display: block;
 }
@@ -158,6 +162,9 @@ body.no-gesture {  /* touchpad/emulator */
 	display: inline;
 	height: 10px;
 	font-size: 20px;
+}
+.large-device .quote-bar-text .emoji{
+	height: 14px;
 }
 .details .emoji{
 	height: 18px;
