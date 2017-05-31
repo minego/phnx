@@ -63,6 +63,10 @@ AppAssistant.prototype = {
 					//OpenComposeToaster(this.toasters,{'from':user,'text':params.msg} , this);
 					OpenComposeToaster(this.toasters,{'from':user,'text':params.msg} , this, true);
 				} else {
+					// Load the list of people being followed for auto complete
+					if (!global.following || !global.following.length) {
+						this.refreshFollowing(user);
+					}
 					OpenComposeToaster(this.toasters,{'from':user,'text':params.msg} , this, true);
 				}
 			}.bind(this));
@@ -209,6 +213,35 @@ AppAssistant.prototype = {
 					break;
 			}
 		};
+	},
+	refreshFollowing: function(user) {
+		//Same as main-assistant refreshFollowing - needed for JustType launch etc
+		global.following = [];
+
+		//Just load based on supplied user
+		//for (var i = 0, u; u = this.users[i]; i++) {
+			var Twitter = new TwitterAPI(user);
+
+			Twitter.getFriends(user.id, function(r) {
+				var		f;
+
+				while ((f = r.shift())) {
+					for (var u, i = 0; (u = global.following[i]); i++) {
+						//Mojo.Log.error('following: ' + global.following[i].screen_name);
+						if (u.screen_name.toLowerCase() ===
+							f.screen_name.toLowerCase()
+						) {
+							f = null;
+							break;
+						}
+					}
+
+					if (f) {
+						global.following.push(f);
+					}
+				}
+			});
+		//}
 	},
 	handleCommand: function(event) {
 		var stage = this.controller.getActiveStageController();
