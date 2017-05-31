@@ -242,4 +242,4 @@ Modified cleanse.css to make username etc easier to read
 Modified compose.js to allow composing of DMs to be 10000 characters long
 Modified compose.js, compose.html, retweet.js and phnx.css to properly perform quote retweets
 Modified tweet.js, main-assistant.js, preferences-assistant.js, profile-assistant.js, status-assistant.js, app-globals.js, local.js and added dynamicSort.js for video bitrate selection
-Modified pictureView-assistant.js and tweet.js to allow for side swiping in picture view
+Modified pictureView-assistant.js, profile-assistant.js and tweet.js to allow for side swiping in picture view

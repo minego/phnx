@@ -64,10 +64,19 @@ PictureViewAssistant.prototype = {
 		//download it
 		this.okToClose = false;
 		var that = this;
+		var imgUrl;
+		
+		if(this.linkUrl){
+			imgUrl = this.linkUrl[this.current].media_url;
+			imgFilename = this.username + '_' + this.tweetId + '_' + this.current;
+		} else {
+			imgUrl = this.url;
+			imgFilename = this.username + '_' + this.tweetId;
+		}
 		var saveParams = {
-			target: this.linkUrl[this.current].media_url,
+			target: imgUrl,
 			targetDir: '/media/internal/projectmacaw',
-			targetFilename: this.username + '_' + this.tweetId + '_' + this.current,
+			targetFilename: imgFilename,
 			keepFilenameOnRedirect: false,
 			subscribe: true
 		};
@@ -134,17 +143,22 @@ PictureViewAssistant.prototype = {
 			this.imageViewer.mojo.manualSize(this.controller.window.innerWidth, this.controller.window.innerHeight);
 		}
 	},
-		activate: function(event) {
+	activate: function(event) {
 		this.controller.enableFullScreenMode(true);
 		this.controller.stageController.setWindowOrientation('free');
 		
-		if(this.current > 0 && this.linkUrl[this.current - 1]){
-			this.imageViewer.mojo.leftUrlProvided(this.linkUrl[this.current-1].media_url);
-		}
-		//this.imageViewer.mojo.centerUrlProvided(this.url);
-		this.imageViewer.mojo.centerUrlProvided(this.linkUrl[this.current].media_url);
-		if (this.linkUrl[this.current + 1]){
-			this.imageViewer.mojo.rightUrlProvided(this.linkUrl[this.current+1].media_url);
+		if(this.linkUrl){
+			if(this.current > 0 && this.linkUrl[this.current - 1]){
+				this.imageViewer.mojo.leftUrlProvided(this.linkUrl[this.current-1].media_url);
+			}
+			//this.imageViewer.mojo.centerUrlProvided(this.url);
+			this.imageViewer.mojo.centerUrlProvided(this.linkUrl[this.current].media_url);
+			if (this.linkUrl[this.current + 1]){
+				this.imageViewer.mojo.rightUrlProvided(this.linkUrl[this.current+1].media_url);
+			}
+		} else {
+			//Profile picture
+			this.imageViewer.mojo.centerUrlProvided(this.url);
 		}
 		this.imageViewer.mojo.manualSize(Mojo.Environment.DeviceInfo.screenWidth, Mojo.Environment.DeviceInfo.screenHeight);
 	},
