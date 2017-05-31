@@ -1,8 +1,10 @@
-function PictureViewAssistant(url,username,img_uid) {
+function PictureViewAssistant(url,username,tweetId,matchId,link_url) {
 	this.url = url;
 	this.username = username;
-	this.img_uid = img_uid;
+	this.tweetId = tweetId;
 	this.okToClose = true;
+	this.linkUrl = link_url;
+	this.current = matchId;
 }
 
 PictureViewAssistant.prototype = {
@@ -10,25 +12,42 @@ PictureViewAssistant.prototype = {
 		this.handleWindowResizeHandler = this.handleWindowResize.bindAsEventListener(this);
 		this.controller.listen(this.controller.window, 'resize', this.handleWindowResizeHandler);
 		this.imageViewer = this.controller.get('divImageViewer');
-		this.controller.setupWidget('divImageViewer',
-			this.attributes = {
-				noExtractFS: true
-			},
-			this.model = {
-				onLeftFunction: function (){
-					//TODO: show other images in the tweet OR other images by that user
-				},
-				onRightFunction: function (){
-
-				}
-			}
-		);
+		this.model = {
+			onLeftFunction: this.wentLeft.bind(this),
+			onRightFunction: this.wentRight.bind(this)
+		}
+		this.controller.setupWidget('divImageViewer',{},this.model);
 
 		this.closeTapped = this.closeTapped.bind(this);
 		this.saveTapped = this.saveTapped.bind(this);	
 		//this.controller.listen(this.imageViewer, Mojo.Event.tap, this.closeTapped);
 		this.controller.listen(this.controller.get("close-button"), Mojo.Event.tap, this.closeTapped);
 		this.controller.listen(this.controller.get("save-button"), Mojo.Event.tap, this.saveTapped);
+	},
+	wentLeft: function(event){
+		if (this.current > 0) {
+			this.current--;
+		
+			if(this.current > 0 && this.linkUrl[this.current - 1]){
+				this.imageViewer.mojo.leftUrlProvided(this.linkUrl[this.current-1].media_url);
+			}
+			//this.imageViewer.mojo.centerUrlProvided(this.linkUrl[this.current].media_url);
+			if (this.linkUrl[this.current + 1]){
+				this.imageViewer.mojo.rightUrlProvided(this.linkUrl[this.current+1].media_url);
+			}
+		}
+	},
+	wentRight: function(event){
+		if (this.current < (this.linkUrl.length - 1)) {
+			this.current++;
+			if(this.current > 0 && this.linkUrl[this.current - 1]){
+				this.imageViewer.mojo.leftUrlProvided(this.linkUrl[this.current-1].media_url);
+			}
+			//this.imageViewer.mojo.centerUrlProvided(this.linkUrl[this.current].media_url);
+			if (this.linkUrl[this.current + 1]){
+				this.imageViewer.mojo.rightUrlProvided(this.linkUrl[this.current+1].media_url);
+			}
+		}
 	},
 	handleCommand: function(event) {
 		if (event.type === Mojo.Event.back) {
@@ -46,12 +65,13 @@ PictureViewAssistant.prototype = {
 		this.okToClose = false;
 		var that = this;
 		var saveParams = {
-			target: this.url,
+			target: this.linkUrl[this.current].media_url,
 			targetDir: '/media/internal/projectmacaw',
-			targetFilename: this.username + '_' + this.img_uid,
+			targetFilename: this.username + '_' + this.tweetId + '_' + this.current,
 			keepFilenameOnRedirect: false,
 			subscribe: true
 		};
+
 		this.controller.serviceRequest('palm://com.palm.downloadmanager/', {
 			method: 'download',
 			parameters: saveParams,
@@ -114,10 +134,18 @@ PictureViewAssistant.prototype = {
 			this.imageViewer.mojo.manualSize(this.controller.window.innerWidth, this.controller.window.innerHeight);
 		}
 	},
-	activate: function(event) {
+		activate: function(event) {
 		this.controller.enableFullScreenMode(true);
 		this.controller.stageController.setWindowOrientation('free');
-		this.imageViewer.mojo.centerUrlProvided(this.url);
+		
+		if(this.current > 0 && this.linkUrl[this.current - 1]){
+			this.imageViewer.mojo.leftUrlProvided(this.linkUrl[this.current-1].media_url);
+		}
+		//this.imageViewer.mojo.centerUrlProvided(this.url);
+		this.imageViewer.mojo.centerUrlProvided(this.linkUrl[this.current].media_url);
+		if (this.linkUrl[this.current + 1]){
+			this.imageViewer.mojo.rightUrlProvided(this.linkUrl[this.current+1].media_url);
+		}
 		this.imageViewer.mojo.manualSize(Mojo.Environment.DeviceInfo.screenWidth, Mojo.Environment.DeviceInfo.screenHeight);
 	},
 	deactivate: function(event) {

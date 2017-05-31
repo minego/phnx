@@ -1397,8 +1397,21 @@ transport.responseText);
 				index++;
 			};
 		}
-		img_uid = this.tweet.id + '_' + matchId;
-		this.controller.stageController.pushScene('pictureView', src, this.tweet.user.screen_name,img_uid);
+
+		if (this.tweet.extended_entities && this.tweet.extended_entities.media) {
+			links = this.tweet.extended_entities.media;
+			for (var i = 0, link; link = links[i]; i++) {
+				if(link.type.indexOf('photo') > -1){
+					if(src.indexOf(link.media_url) !== -1) {
+						matchId = i;
+					}
+				}
+			}
+		}
+
+		//img_uid = this.tweet.id + '_' + matchId;
+		//this.controller.stageController.pushScene('pictureView', src, this.tweet.user.screen_name,img_uid,matchId,this.tweet.extended_entities.media);
+		this.controller.stageController.pushScene('pictureView', src, this.tweet.user.screen_name,this.tweet.id,matchId,this.tweet.extended_entities.media);
 	},
 	showImage: function(src, url) {
 		this.controller.get('preview').src = src;

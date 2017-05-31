@@ -1,6 +1,7 @@
 var ChangelogToaster = Class.create(Toaster, {
 	items: [
 		{ version: '1.6.8' },
+		{ item: 'If multiple photos exist in tweet extended-entities payload, side swiping can be used to view other images'},
 		{ item: 'Added Advanced Preference option to select bitrate level for Twitter encoded video'},
 		{ item: 'Passes Twitter encoded videos properly and ignores non-mp4 links'},
 		{ item: 'Retweet with comment will now quote the tweet allowing 140 characters for comment and show the quoted tweet in the header of the toaster'},
