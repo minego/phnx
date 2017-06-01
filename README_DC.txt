@@ -244,3 +244,4 @@ Modified compose.js, compose.html, retweet.js and phnx.css to properly perform q
 Modified tweet.js, main-assistant.js, preferences-assistant.js, profile-assistant.js, status-assistant.js, app-globals.js, local.js and added dynamicSort.js for video bitrate selection
 Modified pictureView-assistant.js, profile-assistant.js and tweet.js to allow for side swiping in picture view
 Modified app-assistant.js to load following list for autocompletion on cross-app launch
+Added compose-bg.png and toast-bg.png to 1.5 folders (including themes) to allow compose toaster to display with header/quote/emoji/autocomplete correctly
