@@ -1857,9 +1857,38 @@ MainAssistant.prototype = {
 		//	parameters: { 'period': 0, 'duration': 50 }
 		//	}
 		//);
-
+		var that = this;
+		this.controller.serviceRequest('palm://ca.canucksoftware.systoolsmgr/', {
+			method: 'version',
+			onSuccess: function(ver){
+				//Mojo.Log.error('ver: ' + ver.version);
+				if(ver.version == '1.0.7'){
+					that.controller.serviceRequest('palm://ca.canucksoftware.systoolsmgr/', {
+						method: 'deviceVibrate',
+						parameters: { 'period': 0, 'duration': 40},
+						onSuccess: function(result) {
+							//yay! service request was successful
+							that.controller.modelChanged(that.panels[that.timeline].model);
+						},
+						onFailure: function(result) {
+							//Sorry, didn't work;
+							that.controller.modelChanged(that.panels[that.timeline].model);
+						}
+					});
+				} else {
+					// Older version of systoolsmgr
+					that.controller.modelChanged(that.panels[that.timeline].model);
+				}
+			},
+			onFailure: function(ver){
+				//Mojo.Log.error('Could not run systoolsmgr');
+				that.controller.modelChanged(that.panels[that.timeline].model);
+			}
+		});
+		
 		//Mojo.Log.error('panel.id: ' + this.panels[this.timeline].id);
-		this.controller.modelChanged(this.panels[this.timeline].model);
+		//this.controller.modelChanged(this.panels[this.timeline].model);
+		event.stop();
 	},
 	moreButtonTapped: function(event) {
 		var id		= event.srcElement.id;
@@ -1997,14 +2026,6 @@ MainAssistant.prototype = {
 	},
 	tweetHeld: function(event) {
 		event.preventDefault();
-		//Mojo.Controller.getAppController().playSoundNotification("vibrate", "","50");	
-		
-		// Only works if app is a com.palm.app and not net.minego :(
-		//this.controller.serviceRequest("palm://com.palm.vibrate", {
-		//	method: 'vibrate',
-		//	parameters: { 'period': 0, 'duration': 50 }
-		//	}
-		//);				
 
 		// Write a few (10) of the latest tweets to the user's cache (async)
 		var panel	= this.panels[this.timeline];
@@ -2031,7 +2052,7 @@ MainAssistant.prototype = {
 		}
 		
 		if(this.oldBookmarkIndex){
-			Mojo.Log.error('this.oldBookmarkIndex: ' + this.oldBookmarkIndex);
+			//Mojo.Log.error('this.oldBookmarkIndex: ' + this.oldBookmarkIndex);
 			if(this.oldBookmarkIndex>0){
 				panel.model.items[this.oldBookmarkIndex-1].cssClass = 'old-tweet';
 				panel.model.items[this.oldBookmarkIndex-1].dividerMessage = "";
@@ -2042,7 +2063,44 @@ MainAssistant.prototype = {
 			panel.model.items[tweetIndex-1].cssClass = 'new-tweet';
 		}
 		this.oldBookmarkIndex = tweetIndex;
-		this.controller.modelChanged(this.panels[this.timeline].model);
+
+		//Mojo.Controller.getAppController().playSoundNotification("vibrate", "","50");	
+		
+		// Only works if app is a com.palm.app and not net.minego :(
+		//this.controller.serviceRequest("palm://com.palm.vibrate", {
+		//	method: 'vibrate',
+		//	parameters: { 'period': 0, 'duration': 50 }
+		//	}
+		//);				
+		var that = this;
+		this.controller.serviceRequest('palm://ca.canucksoftware.systoolsmgr/', {
+			method: 'version',
+			onSuccess: function(ver){
+				//Mojo.Log.error('ver: ' + ver.version);
+				if(ver.version == '1.0.7'){
+					that.controller.serviceRequest('palm://ca.canucksoftware.systoolsmgr/', {
+						method: 'deviceVibrate',
+						parameters: { 'period': 0, 'duration': 40},
+						onSuccess: function(result) {
+							//yay! service request was successful
+								that.controller.modelChanged(that.panels[that.timeline].model);
+						},
+						onFailure: function(result) {
+							//Sorry, didn't work;
+							that.controller.modelChanged(that.panels[that.timeline].model);
+						}
+					});
+				} else {
+					// Older version of systoolsmgr
+					that.controller.modelChanged(that.panels[that.timeline].model);
+				}
+			},
+			onFailure: function(ver){
+				//Mojo.Log.error('Could not run systoolsmgr');
+				that.controller.modelChanged(that.panels[that.timeline].model);
+			}
+		});
+
 		//banner('Bookmark set');
 	},
 	addCommas: function(nStr) {
@@ -2133,6 +2191,30 @@ MainAssistant.prototype = {
 		//	parameters: { 'period': 0, 'duration': 50 }
 		//	}
 		//);
+		var that = this;
+		this.controller.serviceRequest('palm://ca.canucksoftware.systoolsmgr/', {
+			method: 'version',
+			onSuccess: function(ver){
+				//Mojo.Log.error('ver: ' + ver.version);
+				if(ver.version == '1.0.7'){
+					that.controller.serviceRequest('palm://ca.canucksoftware.systoolsmgr/', {
+						method: 'deviceVibrate',
+						parameters: { 'period': 0, 'duration': 40},
+						onSuccess: function(result) {
+							//yay! service request was successful
+						},
+						onFailure: function(result) {
+							//Sorry, didn't work;
+						}
+					});
+				} else{
+					// Older version of systoolsmgr
+				}
+			},
+			onFailure: function(ver){
+				//Mojo.Log.error('Could not run systoolsmgr');
+			}
+		});
 		var screenWidth = this.controller.window.innerWidth;
 		var src = event.srcElement;
 
@@ -2259,13 +2341,6 @@ MainAssistant.prototype = {
 	headerHeld: function(event) {
 		/* Prevent the tap event */
 		event.preventDefault();
-		// Only works if app is a com.palm.app and not net.minego :(
-		//this.controller.serviceRequest("palm://com.palm.vibrate", {
-		//	method: 'vibrate',
-		//	parameters: { 'period': 0, 'duration': 50 }
-		//	}
-		//);
-
 		
 		var am = new Account();
 		am.all(function(r){
@@ -2295,17 +2370,79 @@ MainAssistant.prototype = {
 			this.users = [me];
 			accountMenuItems.push(me);
 		}
-		
-		this.controller.popupSubmenu({
-			placeNear:	this.controller.get('header-title'),
-			toggleCmd: true,
-			items: accountMenuItems,
-			onChoose: function(command) {
-				if(command){
-					this.openAccount(command.substr(command.indexOf('-') + 1));
+				
+		// Only works if app is a com.palm.app and not net.minego :(
+		//this.controller.serviceRequest("palm://com.palm.vibrate", {
+		//	method: 'vibrate',
+		//	parameters: { 'period': 0, 'duration': 50 }
+		//	}
+		//);
+		var that = this;
+		this.controller.serviceRequest('palm://ca.canucksoftware.systoolsmgr/', {
+			method: 'version',
+			onSuccess: function(ver){
+				//Mojo.Log.error('ver: ' + ver.version);
+				if(ver.version == '1.0.7'){
+					that.controller.serviceRequest('palm://ca.canucksoftware.systoolsmgr/', {
+						method: 'deviceVibrate',
+						parameters: { 'period': 0, 'duration': 40},
+						onSuccess: function(result) {
+							//yay! service request was successful
+							that.controller.popupSubmenu({
+								placeNear:	that.controller.get('header-title'),
+								toggleCmd: true,
+								items: accountMenuItems,
+								onChoose: function(command) {
+									if(command){
+										that.openAccount(command.substr(command.indexOf('-') + 1));
+									}
+								}.bind(that)
+							});
+						},
+						onFailure: function(result) {
+							//Sorry, didn't work;
+							that.controller.popupSubmenu({
+								placeNear:	that.controller.get('header-title'),
+								toggleCmd: true,
+								items: accountMenuItems,
+								onChoose: function(command) {
+									if(command){
+										that.openAccount(command.substr(command.indexOf('-') + 1));
+									}
+								}.bind(that)
+							});
+						}
+					});
+				} else {
+					//Older version of systoolsmgr
+					that.controller.popupSubmenu({
+						placeNear:	that.controller.get('header-title'),
+						toggleCmd: true,
+						items: accountMenuItems,
+						onChoose: function(command) {
+							if(command){
+								that.openAccount(command.substr(command.indexOf('-') + 1));
+							}
+						}.bind(that)
+					});
 				}
-			}.bind(this)
+			},
+			onFailure: function(ver){
+				//Mojo.Log.error('Could not run systoolsmgr');
+				that.controller.popupSubmenu({
+					placeNear:	that.controller.get('header-title'),
+					toggleCmd: true,
+					items: accountMenuItems,
+					onChoose: function(command) {
+						if(command){
+							that.openAccount(command.substr(command.indexOf('-') + 1));
+						}
+					}.bind(that)
+				});
+			}
 		});
+		
+		event.stop();
 	},
 	stageActivate: function(event) {
 		var prefs = new LocalStorage();

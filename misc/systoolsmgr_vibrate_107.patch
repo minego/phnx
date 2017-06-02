@@ -1,0 +1,80 @@
+Name: SysToolsMgr Vibrate
+Version: 1.0.7
+Author: Baldric
+Description: Adds a deviceVibrate tool to systoolsmgr V1.0.6
+
+--- .orig/media/cryptofs/apps/usr/palm/applications/ca.canucksoftware.systoolsmgr/appinfo.json
++++ /media/cryptofs/apps/usr/palm/applications/ca.canucksoftware.systoolsmgr/appinfo.json
+@@ -1,7 +1,7 @@
+ {
+ 	"id": "ca.canucksoftware.systoolsmgr",
+ 	"serviceId": "ca.canucksoftware.systoolsmgr",
+-	"version": "1.0.6",
++	"version": "1.0.7",
+ 	"vendor": "Jason Robitaille",
+ 	"type": "web",
+ 	"main": "index.html",
+@@ -11,6 +11,12 @@
+ 	"donate": "https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=9500502",
+ 	"changelog": [
+ 		{
++			"version": "1.0.7",
++			"changes": [
++				"Added deviceVibrate"
++			]
++		},
++		{
+ 			"version": "1.0.6",
+ 			"changes": [
+ 				"Fixed SysToolsMgr ipkg feed download issue"
+
+--- .orig/media/cryptofs/apps/usr/palm/services/ca.canucksoftware.systoolsmgr/services.json
++++ /media/cryptofs/apps/usr/palm/services/ca.canucksoftware.systoolsmgr/services.json
+@@ -102,6 +102,11 @@
+ 					"public": true
+ 				},
+ 				{
++					"name": "deviceVibrate",
++					"assistant": "DeviceVibrateAssistant",
++					"public": true
++				},
++				{
+ 					"name": "flashOn",
+ 					"assistant": "FlashOnAssistant",
+ 					"public": true
+\ No newline at end of file
+
+--- .orig/media/cryptofs/apps/usr/palm/services/ca.canucksoftware.systoolsmgr/systoolsmgr-assistant.js
++++ /media/cryptofs/apps/usr/palm/services/ca.canucksoftware.systoolsmgr/systoolsmgr-assistant.js
+@@ -5,7 +5,7 @@
+ 
+ function VersionAssistant() {}; //version
+ VersionAssistant.prototype.run = function(future){
+-	future.result = {version:"1.0.6"};
++	future.result = {version:"1.0.7"};
+ };
+ 
+ function SetDisplayAssistant() {}; //setDisplay
+@@ -259,6 +259,22 @@
+ 	this.ls.run();
+ };
+ 
++function DeviceVibrateAssistant() {}; //deviceVibrate
++DeviceVibrateAssistant.prototype.run = function(future) {
++	this.future = future;
++	this.period = 0;
++	this.duration = 500;
++	if(this.controller.args.period) {
++		this.period = this.controller.args.period;
++	}
++	if(this.controller.args.duration) {
++		this.duration = this.controller.args.duration;
++	}
++	this.ls = new LunaSend("palm://com.palm.vibrate/vibrate",
++			{period:this.period,duration:this.duration}, this.future);
++	this.ls.run();
++};
++
+ function FlashOnAssistant() {}; //flashOn
+ FlashOnAssistant.prototype.run = function(future) {
+ 	this.controller.args.state = "on";

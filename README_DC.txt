@@ -245,3 +245,4 @@ Modified tweet.js, main-assistant.js, preferences-assistant.js, profile-assistan
 Modified pictureView-assistant.js, profile-assistant.js and tweet.js to allow for side swiping in picture view
 Modified app-assistant.js to load following list for autocompletion on cross-app launch
 Added compose-bg.png and toast-bg.png to 1.5 folders (including themes) to allow compose toaster to display with header/quote/emoji/autocomplete correctly
+Modified main-assistant.js to use 1.0.7 of systoolsmgr to allow for haptic feedback on long presses for header bar account select, bookmarking, jump to new break and list refresh (if 1.0.6 has been installed and then patched - patch is found in the PM install in the misc folder)
