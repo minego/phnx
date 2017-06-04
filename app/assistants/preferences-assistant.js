@@ -431,16 +431,20 @@ PreferencesAssistant.prototype = {
 			this.controller.get('tonePath').update(prefs.read('notificationSoundName'));
 		}
 		if (!this.section || this.section == "Advanced Settings") {
-			if (prefs.read('haptics') == true) {
-				this.controller.get('toggleRow-hapticsRefresh').show();
-				this.controller.get('toggleRow-hapticsAccount').show();
-				this.controller.get('toggleRow-hapticsBookmark').show();
-				this.controller.get('toggleRow-hapticsScroll').show();
-			} else {
-				this.controller.get('toggleRow-hapticsRefresh').hide();
-				this.controller.get('toggleRow-hapticsAccount').hide();
-				this.controller.get('toggleRow-hapticsBookmark').hide();
-				this.controller.get('toggleRow-hapticsScroll').hide();
+			if (Mojo.Environment.DeviceInfo.platformVersionMajor < 3){
+				if(global.sysToolsMgrVer == '1.0.7'){
+					if (prefs.read('haptics') == true) {
+						this.controller.get('toggleRow-hapticsRefresh').show();
+						this.controller.get('toggleRow-hapticsAccount').show();
+						this.controller.get('toggleRow-hapticsBookmark').show();
+						this.controller.get('toggleRow-hapticsScroll').show();
+					} else {
+						this.controller.get('toggleRow-hapticsRefresh').hide();
+						this.controller.get('toggleRow-hapticsAccount').hide();
+						this.controller.get('toggleRow-hapticsBookmark').hide();
+						this.controller.get('toggleRow-hapticsScroll').hide();
+					}
+				}
 			}
 		}
 
@@ -462,8 +466,12 @@ PreferencesAssistant.prototype = {
 		if(!this.section || this.section == "General Settings") {
 			this.controller.listen('select-browserSelection', Mojo.Event.propertyChange, this.browserChanged.bind(this));
 		}
-		if(!this.section || this.section == "Advanced Settings") {
-			this.controller.listen('toggle-haptics', Mojo.Event.propertyChange, this.hapticsChanged.bind(this));
+		if (Mojo.Environment.DeviceInfo.platformVersionMajor < 3){
+			if(global.sysToolsMgrVer == '1.0.7'){
+				if(!this.section || this.section == "Advanced Settings") {
+					this.controller.listen('toggle-haptics', Mojo.Event.propertyChange, this.hapticsChanged.bind(this));
+				}
+			}
 		}
 	},
 	closeTapped: function() {
@@ -609,8 +617,12 @@ PreferencesAssistant.prototype = {
 		if(!this.section || this.section == "General Settings") {
 			this.controller.stopListening('select-browserSelection', Mojo.Event.propertyChange, this.browserChanged);
 		}
-		if(!this.section || this.section == "Advanced Settings") {
-			this.controller.stopListening('toggle-haptics', Mojo.Event.propertyChange, this.hapticsChanged);
+		if (Mojo.Environment.DeviceInfo.platformVersionMajor < 3){
+			if(global.sysToolsMgrVer == '1.0.7'){
+				if(!this.section || this.section == "Advanced Settings") {
+					this.controller.stopListening('toggle-haptics', Mojo.Event.propertyChange, this.hapticsChanged);
+				}
+			}
 		}
 	}
 };
