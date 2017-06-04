@@ -62,6 +62,11 @@ function LocalStorage() {
 		listMaxResults: 100,
 		rtMaxResults: 100,
 		searchMaxResults: 100,
+		haptics: false,
+		hapticsRefresh: false,
+		hapticsAccount: false,
+		hapticsBookmark: false,
+		hapticsScroll: false,
 		
 		tabs: [
 			{ "type": "h" },

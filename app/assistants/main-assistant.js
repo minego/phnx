@@ -48,6 +48,18 @@ MainAssistant.prototype = {
 		createEmojiHash();
 		createSpecialMultiEmojiHash();
 		createSkinnableEmojiHash();
+		
+		this.controller.serviceRequest('palm://ca.canucksoftware.systoolsmgr/', {
+			method: 'version',
+			onSuccess: function(ver){
+				//Mojo.Log.error('ver: ' + ver.version);
+				global.sysToolsMgrVer = ver.version;
+			},
+			onFailure: function(ver){
+				//Mojo.Log.error('Could not run systoolsmgr');
+				global.sysToolsMgrVer = 0;
+			}
+		});
 
 		if (Mojo.Environment.DeviceInfo.modelNameAscii == "Pixi" ||
 			Mojo.Environment.DeviceInfo.modelNameAscii == "Veer") {
@@ -1857,34 +1869,24 @@ MainAssistant.prototype = {
 		//	parameters: { 'period': 0, 'duration': 50 }
 		//	}
 		//);
-		var that = this;
-		this.controller.serviceRequest('palm://ca.canucksoftware.systoolsmgr/', {
-			method: 'version',
-			onSuccess: function(ver){
-				//Mojo.Log.error('ver: ' + ver.version);
-				if(ver.version == '1.0.7'){
-					that.controller.serviceRequest('palm://ca.canucksoftware.systoolsmgr/', {
-						method: 'deviceVibrate',
-						parameters: { 'period': 0, 'duration': 40},
-						onSuccess: function(result) {
-							//yay! service request was successful
-							that.controller.modelChanged(that.panels[that.timeline].model);
-						},
-						onFailure: function(result) {
-							//Sorry, didn't work;
-							that.controller.modelChanged(that.panels[that.timeline].model);
-						}
-					});
-				} else {
-					// Older version of systoolsmgr
-					that.controller.modelChanged(that.panels[that.timeline].model);
-				}
-			},
-			onFailure: function(ver){
-				//Mojo.Log.error('Could not run systoolsmgr');
-				that.controller.modelChanged(that.panels[that.timeline].model);
-			}
-		});
+
+		if(global.sysToolsMgrVer == '1.0.7' && global.haptics == true && global.hapticsRefresh == true){
+			this.controller.serviceRequest('palm://ca.canucksoftware.systoolsmgr/', {
+				method: 'deviceVibrate',
+				parameters: { 'period': 0, 'duration': 40},
+				onSuccess: function(result) {
+					//yay! service request was successful
+					this.controller.modelChanged(this.panels[this.timeline].model);
+				}.bind(this),
+				onFailure: function(result) {
+					//Sorry, didn't work;
+					this.controller.modelChanged(this.panels[this.timeline].model);
+				}.bind(this)
+			});
+		} else {
+			// Older version of systoolsmgr
+			this.controller.modelChanged(this.panels[this.timeline].model);
+		}
 		
 		//Mojo.Log.error('panel.id: ' + this.panels[this.timeline].id);
 		//this.controller.modelChanged(this.panels[this.timeline].model);
@@ -2072,34 +2074,24 @@ MainAssistant.prototype = {
 		//	parameters: { 'period': 0, 'duration': 50 }
 		//	}
 		//);				
-		var that = this;
-		this.controller.serviceRequest('palm://ca.canucksoftware.systoolsmgr/', {
-			method: 'version',
-			onSuccess: function(ver){
-				//Mojo.Log.error('ver: ' + ver.version);
-				if(ver.version == '1.0.7'){
-					that.controller.serviceRequest('palm://ca.canucksoftware.systoolsmgr/', {
-						method: 'deviceVibrate',
-						parameters: { 'period': 0, 'duration': 40},
-						onSuccess: function(result) {
-							//yay! service request was successful
-								that.controller.modelChanged(that.panels[that.timeline].model);
-						},
-						onFailure: function(result) {
-							//Sorry, didn't work;
-							that.controller.modelChanged(that.panels[that.timeline].model);
-						}
-					});
-				} else {
-					// Older version of systoolsmgr
-					that.controller.modelChanged(that.panels[that.timeline].model);
-				}
-			},
-			onFailure: function(ver){
-				//Mojo.Log.error('Could not run systoolsmgr');
-				that.controller.modelChanged(that.panels[that.timeline].model);
-			}
-		});
+
+		if(global.sysToolsMgrVer == '1.0.7' && global.haptics == true && global.hapticsBookmark == true){
+			this.controller.serviceRequest('palm://ca.canucksoftware.systoolsmgr/', {
+				method: 'deviceVibrate',
+				parameters: { 'period': 0, 'duration': 40},
+				onSuccess: function(result) {
+					//yay! service request was successful
+						this.controller.modelChanged(this.panels[this.timeline].model);
+				}.bind(this),
+				onFailure: function(result) {
+					//Sorry, didn't work;
+					this.controller.modelChanged(this.panels[this.timeline].model);
+				}.bind(this)
+			});
+		} else {
+			// Older version of systoolsmgr
+			this.controller.modelChanged(this.panels[this.timeline].model);
+		}
 
 		//banner('Bookmark set');
 	},
@@ -2191,30 +2183,22 @@ MainAssistant.prototype = {
 		//	parameters: { 'period': 0, 'duration': 50 }
 		//	}
 		//);
-		var that = this;
-		this.controller.serviceRequest('palm://ca.canucksoftware.systoolsmgr/', {
-			method: 'version',
-			onSuccess: function(ver){
-				//Mojo.Log.error('ver: ' + ver.version);
-				if(ver.version == '1.0.7'){
-					that.controller.serviceRequest('palm://ca.canucksoftware.systoolsmgr/', {
-						method: 'deviceVibrate',
-						parameters: { 'period': 0, 'duration': 40},
-						onSuccess: function(result) {
-							//yay! service request was successful
-						},
-						onFailure: function(result) {
-							//Sorry, didn't work;
-						}
-					});
-				} else{
-					// Older version of systoolsmgr
-				}
-			},
-			onFailure: function(ver){
-				//Mojo.Log.error('Could not run systoolsmgr');
-			}
-		});
+
+		if(global.sysToolsMgrVer == '1.0.7' && global.haptics == true && global.hapticsScroll == true){
+			this.controller.serviceRequest('palm://ca.canucksoftware.systoolsmgr/', {
+				method: 'deviceVibrate',
+				parameters: { 'period': 0, 'duration': 40},
+				onSuccess: function(result) {
+					//yay! service request was successful
+				}.bind(this),
+				onFailure: function(result) {
+					//Sorry, didn't work;
+				}.bind(this)
+			});
+		} else{
+			// Older version of systoolsmgr
+		}
+
 		var screenWidth = this.controller.window.innerWidth;
 		var src = event.srcElement;
 
@@ -2377,70 +2361,51 @@ MainAssistant.prototype = {
 		//	parameters: { 'period': 0, 'duration': 50 }
 		//	}
 		//);
-		var that = this;
-		this.controller.serviceRequest('palm://ca.canucksoftware.systoolsmgr/', {
-			method: 'version',
-			onSuccess: function(ver){
-				//Mojo.Log.error('ver: ' + ver.version);
-				if(ver.version == '1.0.7'){
-					that.controller.serviceRequest('palm://ca.canucksoftware.systoolsmgr/', {
-						method: 'deviceVibrate',
-						parameters: { 'period': 0, 'duration': 40},
-						onSuccess: function(result) {
-							//yay! service request was successful
-							that.controller.popupSubmenu({
-								placeNear:	that.controller.get('header-title'),
-								toggleCmd: true,
-								items: accountMenuItems,
-								onChoose: function(command) {
-									if(command){
-										that.openAccount(command.substr(command.indexOf('-') + 1));
-									}
-								}.bind(that)
-							});
-						},
-						onFailure: function(result) {
-							//Sorry, didn't work;
-							that.controller.popupSubmenu({
-								placeNear:	that.controller.get('header-title'),
-								toggleCmd: true,
-								items: accountMenuItems,
-								onChoose: function(command) {
-									if(command){
-										that.openAccount(command.substr(command.indexOf('-') + 1));
-									}
-								}.bind(that)
-							});
-						}
-					});
-				} else {
-					//Older version of systoolsmgr
-					that.controller.popupSubmenu({
-						placeNear:	that.controller.get('header-title'),
+
+		if(global.sysToolsMgrVer == '1.0.7' && global.haptics == true && global.hapticsAccount == true){
+			this.controller.serviceRequest('palm://ca.canucksoftware.systoolsmgr/', {
+				method: 'deviceVibrate',
+				parameters: { 'period': 0, 'duration': 40},
+				onSuccess: function(result) {
+					//yay! service request was successful
+					this.controller.popupSubmenu({
+						placeNear:	this.controller.get('header-title'),
 						toggleCmd: true,
 						items: accountMenuItems,
 						onChoose: function(command) {
 							if(command){
-								that.openAccount(command.substr(command.indexOf('-') + 1));
+								this.openAccount(command.substr(command.indexOf('-') + 1));
 							}
-						}.bind(that)
+						}.bind(this)
 					});
-				}
-			},
-			onFailure: function(ver){
-				//Mojo.Log.error('Could not run systoolsmgr');
-				that.controller.popupSubmenu({
-					placeNear:	that.controller.get('header-title'),
-					toggleCmd: true,
-					items: accountMenuItems,
-					onChoose: function(command) {
-						if(command){
-							that.openAccount(command.substr(command.indexOf('-') + 1));
-						}
-					}.bind(that)
-				});
-			}
-		});
+				}.bind(this),
+				onFailure: function(result) {
+					//Sorry, didn't work;
+					this.controller.popupSubmenu({
+						placeNear:	this.controller.get('header-title'),
+						toggleCmd: true,
+						items: accountMenuItems,
+						onChoose: function(command) {
+							if(command){
+								this.openAccount(command.substr(command.indexOf('-') + 1));
+							}
+						}.bind(this)
+					});
+				}.bind(this)
+			});
+		} else {
+			//Older version of systoolsmgr
+			this.controller.popupSubmenu({
+				placeNear:	this.controller.get('header-title'),
+				toggleCmd: true,
+				items: accountMenuItems,
+				onChoose: function(command) {
+					if(command){
+						this.openAccount(command.substr(command.indexOf('-') + 1));
+					}
+				}.bind(this)
+			});
+		}
 		
 		event.stop();
 	},
@@ -2593,6 +2558,14 @@ MainAssistant.prototype = {
 			prefs.read('hideVia'),
 			prefs.read('hideTweetBorder'),
 			prefs.read('hideSearchTimelineThumbs')
+		);
+		
+		global.setHaptics(body,
+			prefs.read('haptics'),
+			prefs.read('hapticsRefresh'),
+			prefs.read('hapticsAccount'),
+			prefs.read('hapticsBookmark'),
+			prefs.read('hapticsScroll')
 		);
 
 		if (this.tabs) {

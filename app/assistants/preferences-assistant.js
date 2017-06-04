@@ -63,6 +63,15 @@ function PreferencesAssistant(section) {
 				]}
 			);
 		}*/
+		if(global.sysToolsMgrVer == '1.0.7') {
+			advanced.push(
+				{key: 'haptics', type: 'toggle', label: 'Haptic on press-hold'},
+				{key: 'hapticsRefresh', type: 'toggle', label: 'Haptic refresh model'},
+				{key: 'hapticsAccount', type: 'toggle', label: 'Haptic account select'},
+				{key: 'hapticsBookmark', type: 'toggle', label: 'Haptic bookmark'},
+				{key: 'hapticsScroll', type: 'toggle', label: 'Haptic scroll to new'}
+			);
+		}
 	} else {
 		advanced.push(
 			{key: 'youTubeApp', type: 'select', label: 'YouTube App', items: [
@@ -421,7 +430,20 @@ PreferencesAssistant.prototype = {
 			}
 			this.controller.get('tonePath').update(prefs.read('notificationSoundName'));
 		}
-		
+		if (!this.section || this.section == "Advanced Settings") {
+			if (prefs.read('haptics') == true) {
+				this.controller.get('toggleRow-hapticsRefresh').show();
+				this.controller.get('toggleRow-hapticsAccount').show();
+				this.controller.get('toggleRow-hapticsBookmark').show();
+				this.controller.get('toggleRow-hapticsScroll').show();
+			} else {
+				this.controller.get('toggleRow-hapticsRefresh').hide();
+				this.controller.get('toggleRow-hapticsAccount').hide();
+				this.controller.get('toggleRow-hapticsBookmark').hide();
+				this.controller.get('toggleRow-hapticsScroll').hide();
+			}
+		}
+
 		// Manually add listeners after the elements are on the DOM
 		this.closeTapped = this.closeTapped.bind(this);
 		this.controller.listen(this.controller.get("close-button"), Mojo.Event.tap, this.closeTapped);
@@ -439,6 +461,9 @@ PreferencesAssistant.prototype = {
 		}
 		if(!this.section || this.section == "General Settings") {
 			this.controller.listen('select-browserSelection', Mojo.Event.propertyChange, this.browserChanged.bind(this));
+		}
+		if(!this.section || this.section == "Advanced Settings") {
+			this.controller.listen('toggle-haptics', Mojo.Event.propertyChange, this.hapticsChanged.bind(this));
 		}
 	},
 	closeTapped: function() {
@@ -473,11 +498,37 @@ PreferencesAssistant.prototype = {
 		}
 	},
 	browserChanged: function(event) {
-		Mojo.Log.error('event: ' + event.value);
+		//Mojo.Log.error('event: ' + event.value);
 		if (event.value == "stockBrowser") {
 			this.controller.get('toggleRow-mobilizeWebLinks').show();
 		} else {
 			this.controller.get('toggleRow-mobilizeWebLinks').hide();
+		}
+	},
+	hapticsChanged: function(event) {
+		//Mojo.Log.error('event: ' + event.value);
+		if (event.value == true) {
+			this.controller.serviceRequest('palm://ca.canucksoftware.systoolsmgr/', {
+				method: 'deviceVibrate',
+				parameters: { 'period': 0, 'duration': 60},
+				onSuccess: function(result) {
+					//yay! service request was successful
+				}.bind(this),
+				onFailure: function(result) {
+					//Sorry, didn't work;
+				}.bind(this)
+			});
+		
+			
+			this.controller.get('toggleRow-hapticsRefresh').show();
+			this.controller.get('toggleRow-hapticsAccount').show();
+			this.controller.get('toggleRow-hapticsBookmark').show();
+			this.controller.get('toggleRow-hapticsScroll').show();
+		} else {
+			this.controller.get('toggleRow-hapticsRefresh').hide();
+			this.controller.get('toggleRow-hapticsAccount').hide();
+			this.controller.get('toggleRow-hapticsBookmark').hide();
+			this.controller.get('toggleRow-hapticsScroll').hide();
 		}
 	},
 	themeChanged: function(event) {
@@ -534,6 +585,13 @@ PreferencesAssistant.prototype = {
 			prefs.read('hideSearchTimelineThumbs')
 		);
 
+		global.setHaptics(body,
+			prefs.read('haptics'),
+			prefs.read('hapticsRefresh'),
+			prefs.read('hapticsAccount'),
+			prefs.read('hapticsBookmark'),
+			prefs.read('hapticsScroll')
+		);
 		// Start the background notifications timer
 		global.setTimer();
 
@@ -550,6 +608,9 @@ PreferencesAssistant.prototype = {
 		}
 		if(!this.section || this.section == "General Settings") {
 			this.controller.stopListening('select-browserSelection', Mojo.Event.propertyChange, this.browserChanged);
+		}
+		if(!this.section || this.section == "Advanced Settings") {
+			this.controller.stopListening('toggle-haptics', Mojo.Event.propertyChange, this.hapticsChanged);
 		}
 	}
 };

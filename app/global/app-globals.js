@@ -13,6 +13,7 @@ var global = {
 	multiCard:			false,
 	doc:				document,
 	composeStageCount:	0,
+	sysToolMgrVer: 0,
 	//quotedTweets: [],
 
 	fontSizes: [
@@ -278,6 +279,13 @@ var global = {
 			Element.removeClassName(body, 'hideSearchTimelineThumbs');
 		}
 	},
+	setHaptics: function(body,haptics,hapticsRefresh,hapticsAccount,hapticsBookmark,hapticsScroll){
+		global.haptics = haptics;
+		global.hapticsRefresh = hapticsRefresh;
+		global.hapticsAccount = hapticsAccount;
+		global.hapticsBookmark = hapticsBookmark;
+		global.hapticsScroll = hapticsScroll;
+	},
 	setShowThumbs: function(body, showThumbsStatus) {
 		Element.removeClassName(body, 'showThumbs');
 		Element.removeClassName(body, 'detailsThumbs');
@@ -358,6 +366,13 @@ var toasterIndex = 0;
 
 /* This is an option for twitter encoded videos: 0: min, 1: med: 3: max bitrate */
 var bitrate = 0;
+
+/* These are values for haptic options */
+var haptics = false;
+var hapticsRefresh = false;
+var hapticsAccount = false;
+var hapticsBookmark = false;
+var hapticsScroll = false;
 
 /* Show a banner message */
 function banner(message){

@@ -97,7 +97,7 @@ DashboardAssistant.prototype = {
 					        method: 'open',
 					        parameters: {
 					            id: "de.metaviewsoft.mwatch",
-					            params: {command: "SMS", info: bannerMessage, wordwrap: true}
+					            params: {command: "SMS", info: bannerMessage, wordwrap: true, appid: "net.minego.phnx"}
 				   	    	 },
 				     	   	onSuccess: function() {},
 				       	  	onFailure: function() {}

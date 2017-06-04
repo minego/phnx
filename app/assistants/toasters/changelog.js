@@ -1,7 +1,9 @@
 var ChangelogToaster = Class.create(Toaster, {
 	items: [
 		{ version: '1.6.8' },
-		{ item: 'Included a new patch in the "misc" folder at the install location to allow patching of Jason Robitaille\'s systoolsmgr service from 1.0.6 to 1.0.7.  This allows for haptic feedback on tap and hold functionality (header bar account select, bookmarking, scroll to New break and model refresh of timeline). This is NOT a requirement to run ProjectMacaw'},
+		{ item: 'Notifications sent to Pebble are now flagged as Twitter messages'},
+		{ item: 'Saving and Deleting Searches work again caused by 53bit javascript limitation'},
+		{ item: 'Included a new patch in the "misc" folder at the install location to allow patching of Jason Robitaille\'s systoolsmgr service from 1.0.6 to 1.0.7.  This allows for haptic feedback on tap and hold functionality (header bar account select, bookmarking, scroll to New break and model refresh of timeline). This is NOT a requirement to run ProjectMacaw. If installed, new options appear under Advanced Settings (only on webOS < 3)'},
 		{ item: 'Added some extra images for the compose toaster to display correctly on Pre3 in various themes'},
 		{ item: 'Default user\'s following list is loaded on cross-app launch to allow for autocompletion on compose'},
 		{ item: 'If multiple photos exist in tweet extended-entities payload, side swiping can be used to view other images'},

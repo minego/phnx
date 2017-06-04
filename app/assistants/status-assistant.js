@@ -88,7 +88,7 @@ StatusAssistant.prototype = {
 				for (var i=0; i<this.opts.savedSearchesModel.items.length; i++) {			
 					if(this.opts.savedSearchesModel.items[i].name == this.opts.query) {
 						this.matchFound = 1;
-						this.query_id = this.opts.savedSearchesModel.items[i].id;
+						this.query_id = this.opts.savedSearchesModel.items[i].id_str;
 					} 
 				}
 			}
@@ -394,7 +394,7 @@ StatusAssistant.prototype = {
 			this.opts.savedSearchesModel.items = response.responseJSON;
 			for (var i=0; i<this.opts.savedSearchesModel.items.length; i++) {
 				if(this.opts.savedSearchesModel.items[i].name == this.opts.query) {
-					this.query_id = this.opts.savedSearchesModel.items[i].id;
+					this.query_id = this.opts.savedSearchesModel.items[i].id_str;
 				} 
 			}
 			this.searchListModified = 2;
