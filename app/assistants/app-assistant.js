@@ -186,6 +186,57 @@ AppAssistant.prototype = {
 					}.bind(this));
 				}
 			}.bind(this));
+    } else if (params.action === 'userlaunch') {
+			// code for x-launch-params still work-in-progress
+			// Launch with specifed user
+			//"launchParam":	{ "action": "userLaunch", "userid":"#{searchTerms}" }
+
+			Mojo.Log.info("Called Launch Param user correctly: " + params.userid);
+			var prefs = new LocalStorage();	
+			var defaultUser = prefs.read('defaultAccount');
+			var am = new Account();
+			var accounts;
+			var user = {};
+
+			am.all(function(r){
+				accounts = r;
+				if (accounts.length > 0) {
+					//Mojo.Log.info('Starting app, accounts exist');
+					// Push the main scene with the first account set as default.
+					if (params.userid.length > 0) {
+						user = accounts[0]; // Set a default in case supplied userid not found
+						for (var i=0; i < accounts.length; i++) {
+							if (accounts[i].id === params.userid) {
+								user = accounts[i];
+								break;
+							}
+						}
+					}
+					else {
+						// Use the first user if an explicit default has not been chosen
+						user = accounts[0];
+					}
+				}
+				
+				// Check if the user's stage is active & has scenes
+				var appController = Mojo.Controller.getAppController();
+				var userStage = appController.getStageProxy(global.mainStage + user.key);
+				var userStageController = appController.getStageController(global.mainStage + user.key);
+				if (userStage) {
+					if(userStageController) {
+						userStageController.window.focus();
+					}
+				} else {
+					var launchArgs = {
+						user: user,
+						users: accounts
+					};
+					var stageName = global.mainStage + user.key;
+
+					this.pushStage(stageName, launchArgs);					
+					//this.launchMain();
+				}				
+			}.bind(this));
     } else {
 			Mojo.Log.info('params: ' + params);
 			// Launch the app normally, load the default user if it exists.

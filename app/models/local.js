@@ -45,6 +45,7 @@ function LocalStorage() {
 		mobilizeWebLinks: false,
 		forwardSwipe: 'current',
 		ptrCount: 10,
+		refreshDelay: 2000,
 		bitrate: 0,
 		showVine: false,
 		useFoursquareApp: false,

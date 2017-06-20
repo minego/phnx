@@ -1,0 +1,1044 @@
+Name: Sharing Super Mix
+Version: 2.2.4-87b
+Author: rwatkins, malpha, mgmft, gizmo21, Baldric
+Description: This patch is a combined version of various patches which allow you to share webpages through apps. It is base on work by Thomas Coe, fritos1406, @benyfish, and @semicolonapps. Supports: Neato, Spare Time, Relego, ReadOn Touch PRO/Phone, ReKindleIt!, Facebook (Catalog/Beta), Bad Kitty, Spaz SpEd/Beta/Free, Twee, Tweed, Carbon (offical), Quick Post, Tachyon, DataJog (Full/Beta/Trial), MeOrg!, TapNote. Adds gesture commands and separates Share Page and Share Via Email/SMS (SMS share auto-shortens URL). Additionally adds shorten URL, View as Source and Mobilize page. Options shown are configured via the Tweaks application. For more info on the various options, see the corresponding help in the Tweaks app.  Update: Added ProjectMacaw support and changed Mobilize call to use Google.
+License: MIT License Open Source
+
+diff --git a/usr/palm/applications/com.palm.app.browser/app/controllers/page-applicationmenu.js b/usr/palm/applications/com.palm.app.browser/app/controllers/page-applicationmenu.js
+index 6bf5870..6dcc949 100644
+--- a/usr/palm/applications/com.palm.app.browser/app/controllers/page-applicationmenu.js
++++ b/usr/palm/applications/com.palm.app.browser/app/controllers/page-applicationmenu.js
+@@ -19,6 +19,147 @@ MenuData.ApplicationMenu = {
+ 		checkEnabled: true
+ 	},
+ 	
++	
++	ShareViaFacebook: {
++		label: $L('Facebook'),
++		command: 'share-fb-cmd',
++		checkEnabled: true
++	},
++	
++	TweetViaBadKitty: {
++		label: $L('Bad Kitty'),
++		command: 'share-bk-cmd',
++		checkEnabled: true
++	},
++	
++	TweetViaSpaz: {
++		label: $L('Spaz'),
++		command: 'share-spaz-cmd',
++		checkEnabled: true
++	},
++	
++	TweetViaTwee: {
++		label: $L('Twee'),
++		command: 'share-twee-cmd',
++		checkEnabled: true
++	},
++	
++	TweetViaTweed: {
++		label: $L('Tweed'),
++		command: 'share-tweed-cmd',
++		checkEnabled: true
++	},
++	
++	TweetViaCarbon: {
++		label: $L('Carbon'),
++		command: 'share-carbon-cmd',
++		checkEnabled: true
++	},
++	
++	TweetViaTachyon: {
++		label: $L('Tachyon'),
++		command: 'share-tachyon-cmd',
++		checkEnabled: true
++	},
++
++	TweetViaProjectMacaw: {
++		label: $L('Project Macaw'),
++		command: 'share-projectmacaw-cmd',
++		checkEnabled: true
++	},
++		
++	SendViaQuickPost: {
++		label: $L('Quick Post'),
++		command: 'share-quickpost-cmd',
++		checkEnabled: true
++	},
++
++	AddToRelego: {
++		label: $L('Add To Relego'),
++		command: 'add-relego-cmd',
++		checkEnabled: true
++	},
++
++	AddToReadontouch: {
++		label: $L('Add To ReadOnTouch'),
++		command: 'add-readontouch-cmd',
++		checkEnabled: true
++	},
++
++	AddToSpareTime: {
++		label: $L('Add To Spare Time'),
++		command: 'add-sparetime-cmd',
++		checkEnabled: true
++	},
++	
++	SendToInstapaper: {
++		label: $L('Send To Instapaper'),
++		command: 'add-instapaper-cmd',
++		checkEnabled: true
++	},
++	
++	NeatoThatUrl: {
++		label: $L('Send via Neato!'),
++		command: 'add-neato-cmd',
++		checkEnabled: true
++	},
++	DataJogThatUrl: {
++		label: $L('Send via DataJog'),
++		command: 'add-datajog-cmd',
++		checkEnabled: true
++	},
++	AddToMeorg: {
++		label: $L('Add To MeOrg!'),
++		command: 'add-meorg-cmd',
++		checkEnabled: true
++	},
++	AddToTapnote: {
++		label: $L('Add To TapNote'),
++		command: 'add-tapnote-cmd',
++		checkEnabled: true
++	},
++	ShortenURL: {
++		label: $L('Shorten URL'),
++		command: 'shorten-url-cmd',
++		checkEnabled: true
++	},
++	
++	CopyToClipboard: {
++		label: $L('Copy to Clipboard'),
++		command: 'copy-clipboard-cmd',
++		checkEnabled: true
++	},
++	
++	Mobilize: {
++		label: $L('Mobilize'),
++		command: 'mobilize-page-cmd',
++		checkEnabled: true
++	},
++	
++	ViewSource: {
++		label: $L('View Source'),
++		command: 'view-source-cmd',
++		checkEnabled: true
++	},
++	
++	ReKindleIt: {
++		label: $L('ReKindleIt!'),
++		command: 'add-rekindleit-cmd',
++		checkEnabled: true
++	},
++		
++	ShareViaSMS: {
++		label: $L('SMS'),
++		command: 'share-sms-cmd',
++		checkEnabled: true
++	},
++	
++	ShareViaEmail: {
++		label: $L('Email'),
++		command: 'share-email-cmd',
++		checkEnabled: true
++	},
++	
+ 	AddToLauncher: {
+ 		label: $L('Add to Launcher'),
+ 		command: 'add-launch-icon-cmd',
+diff --git a/usr/palm/applications/com.palm.app.browser/app/controllers/page-assistant.js b/usr/palm/applications/com.palm.app.browser/app/controllers/page-assistant.js
+index 6e8efd0..56c94ed 100644
+--- a/usr/palm/applications/com.palm.app.browser/app/controllers/page-assistant.js
++++ b/usr/palm/applications/com.palm.app.browser/app/controllers/page-assistant.js
+@@ -136,6 +136,10 @@ PageAssistant.prototype.setup = function() {
+ 		// Spotlight mode
+ 		this._webView.addEventListener(Mojo.Event.webViewPluginSpotlightStart, this._onSpotlightStartHandler, false);
+ 		this._webView.addEventListener(Mojo.Event.webViewPluginSpotlightEnd, this._onSpotlightEndHandler, false);
++
++                //Instapaper
++                this.insta_username = "";
++                this.insta_password = "";
+ 		
+ 		//observe seamless transition changes
+ 		
+@@ -796,20 +800,90 @@ PageAssistant.prototype._setupMenus = function() {
+ 		this._pageControls.setup(true);
+ 
+ 		// Create the application menus and shortcuts (once the modifier keys work).
++		
+ 		this.appMenuModel = {
+ 			visible: true,
+ 			items: [
+-				MenuData.ApplicationMenu.NewCard,
+-				MenuData.ApplicationMenu.AddBookmark,
+ 				{
+ 					label: $L("Page"),
+ 					items: [
+-						MenuData.ApplicationMenu.AddToLauncher,
+-						MenuData.ApplicationMenu.SharePage]
++						{label:$L('Add Bookmark'), shortcut:'m', command:'add-bookmark-cmd'},
++						{label:$L('Add To Launcher'),     shortcut:'l', command:'add-launch-icon-cmd'},
++						]
++				},
++				{		
++					label: $L("Share via..."),
++					items: [
++						{label:$L('SMS'), shortcut:'s', command:'share-sms-cmd'},
++						{label:$L('Email'), shortcut:'e', command:'share-email-cmd'},
++						]
+ 				},
+-				MenuData.ApplicationMenu.ShowBookmarks,
+-				MenuData.ApplicationMenu.ShowHistory]
++				{label:$L('New Card'), shortcut:'n', command:'new-page-cmd'},
++				{label:$L('Refresh Page'), shortcut:'r', command:'refresh'},
++				{label:$L('Bookmarks'), shortcut:'b', command:'show-bookmarks-cmd'},
++				{label:$L('History'), shortcut:'h', command:'show-history-cmd'},
++				
++				]
++				
++				
+ 		};
++		
++		this.getTweaksPrefs = new Mojo.Service.Request("palm://org.webosinternals.tweaks.prefs/", {
++			method: 'get', parameters: {'owner': "browser-sharing-super-mix", 
++			keys: ["showViewsource", "showNeato", "showDataJog", "showSpareTime", "showInstapaper", "ipUsername", "ipPassword", "showRelego", "showReadontouch", "showMeOrg", "showTapNote", "showClipboard", "showMobilize", "shortenURL", "reKindleIt", 
++					"showFacebook", "showBadKitty", "showSpaz", "showTwee", "showTweed", "showCarbon", "showTachyon", "showProjectMacaw", "showQuickPost"]},
++			onSuccess: function(response) {
++				if(response) {
++					if(response.showViewsource == true)
++						this.appMenuModel.items[0].items.push(MenuData.ApplicationMenu.ViewSource);
++					if(response.showNeato == true)
++						this.appMenuModel.items[0].items.push(MenuData.ApplicationMenu.NeatoThatUrl);
++					if(response.showDataJog == true)
++						this.appMenuModel.items[0].items.push(MenuData.ApplicationMenu.DataJogThatUrl);
++					if(response.showSpareTime == true) 
++						this.appMenuModel.items[0].items.push(MenuData.ApplicationMenu.AddToSpareTime);
++					if(response.showInstapaper == true) {
++						this.appMenuModel.items[0].items.push(MenuData.ApplicationMenu.SendToInstapaper);
++						this.insta_username = response.ipUsername;
++						this.insta_password = response.ipPassword;
++					}
++					if(response.showRelego == true) 
++						this.appMenuModel.items[0].items.push(MenuData.ApplicationMenu.AddToRelego);
++					if(response.showReadontouch == true) 
++						this.appMenuModel.items[0].items.push(MenuData.ApplicationMenu.AddToReadontouch);
++					if(response.showMeOrg == true) 
++						this.appMenuModel.items[0].items.push(MenuData.ApplicationMenu.AddToMeorg);
++						if(response.showTapNote == true) 
++						this.appMenuModel.items[0].items.push(MenuData.ApplicationMenu.AddToTapnote);
++					if(response.showClipboard == true) 
++						this.appMenuModel.items[0].items.push(MenuData.ApplicationMenu.CopyToClipboard);
++					if(response.showMobilize == true)
++						this.appMenuModel.items[0].items.push(MenuData.ApplicationMenu.Mobilize);
++					if(response.shortenURL == true) 
++						this.appMenuModel.items[0].items.push(MenuData.ApplicationMenu.ShortenURL);
++					if(response.reKindleIt == true) 
++						this.appMenuModel.items[0].items.push(MenuData.ApplicationMenu.ReKindleIt);
++					if(response.showFacebook == true) 
++						this.appMenuModel.items[1].items.push(MenuData.ApplicationMenu.ShareViaFacebook);
++					if(response.showBadKitty == true) 
++						this.appMenuModel.items[1].items.push(MenuData.ApplicationMenu.TweetViaBadKitty);
++					if(response.showSpaz == true) 
++						this.appMenuModel.items[1].items.push(MenuData.ApplicationMenu.TweetViaSpaz);
++					if(response.showTwee == true) 
++						this.appMenuModel.items[1].items.push(MenuData.ApplicationMenu.TweetViaTwee);			
++					if(response.showTweed == true) 
++						this.appMenuModel.items[1].items.push(MenuData.ApplicationMenu.TweetViaTweed);
++					if(response.showCarbon == true) 
++						this.appMenuModel.items[1].items.push(MenuData.ApplicationMenu.TweetViaCarbon);
++					if(response.showTachyon == true)
++						this.appMenuModel.items[1].items.push(MenuData.ApplicationMenu.TweetViaTachyon);
++					if(response.showProjectMacaw == true)
++						this.appMenuModel.items[1].items.push(MenuData.ApplicationMenu.TweetViaProjectMacaw);
++					if(response.showQuickPost == true)
++						this.appMenuModel.items[1].items.push(MenuData.ApplicationMenu.SendViaQuickPost);
++				}
++			}.bind(this)});
++					
+ 
+ 		this.controller.setupWidget(Mojo.Menu.appMenu, undefined, this.appMenuModel);
+ 
+@@ -2180,8 +2252,771 @@ PageAssistant.prototype.handleCommand = function(event) {
+ 					this._createDefaultBookmarkImages(urlReference);
+ 					this.showBookmarkDialog(BookmarkDialogAssistant.createLaunchpointTask, urlReference);
+ 					break;
+-
+-				case MenuData.ApplicationMenu.SharePage.command:
++				
++				//NEATO	
++				case MenuData.ApplicationMenu.NeatoThatUrl.command:
++					try{
++						this.neatoappid = "com.zhephree.neato";
++						this.controller.serviceRequest("palm://com.palm.applicationManager", {
++							method: 'open',
++							parameters: {
++								id: this.neatoappid,
++								params: {send: '{"a":"url","c":"'+this.currentUrl+'"}'}
++							},
++							onFailure:function(){
++								this.controller.showAlertDialog({
++									onChoose: function(value){
++										if (value=="yes"){
++											this.controller.serviceRequest('palm://com.palm.applicationManager', {
++												method:'open',
++												parameters:{
++													target: "http://developer.palm.com/appredirect/?packageid=" + this.neatoappid
++												}
++											});
++										}
++									},
++									preventCancel: false,
++									title: $L("Neato! Not Installed"),
++									message: $L("Neato! is not installed. Would you like to download it?"),
++									choices:[
++										{label:$L('Yes'), value:"yes", type:'affirmative'},
++										{label:$L('No'), value:"no", type:'dismissal'}
++									]
++								});
++							}.bind(this)
++						})
++					}catch(e){
++						Mojo.Log.error("Neato Patch Error: " + e);
++					}
++					break;
++					
++			//DATAJOG
++			case MenuData.ApplicationMenu.DataJogThatUrl.command:
++			var datajogappids = ['com.datajog.webos', 'com.datajog.webos.beta', 'com.datajog.webos.trial'], datajogindex = 0;
++			var target = this;
++		function makeCallDJ() {
++		if (datajogindex < datajogappids.length) {
++			Mojo.Log.info('Trying to Sendvia appid %s', datajogappids[datajogindex]);
++			var request = new Mojo.Service.Request("palm://com.palm.applicationManager", {
++				method: 'open',
++					parameters: {
++						id: datajogappids[datajogindex],
++							params: {action: 'send', data: target.currentUrl}
++							},
++								onFailure: function() {
++									Mojo.Log.info('DataJog failed to launch with appid %s', datajogappids[datajogindex]);
++									datajogindex++; // go to next appid
++									makeCallDJ(); // retry
++									}.bind(this)
++									});
++									} else {
++										Mojo.Log.error('DataJog failed to launch');
++										target.controller.showAlertDialog({
++											onChoose: function(value){
++												if (value=="yes"){
++												target.controller.serviceRequest('palm://com.palm.applicationManager', {
++												method:'open',
++												parameters:{
++												target: "http://developer.palm.com/appredirect/?packageid=" + datajogappids[0]
++												}
++											});
++										}
++									},
++										preventCancel: false,
++										title: $L("DataJog Not Installed"),
++										message: $L("DataJog is not installed. Would you like to download it?"),
++										choices:[
++										{label:$L('Yes'), value:"yes", type:'affirmative'},
++										{label:$L('No'), value:"no", type:'dismissal'}
++										]
++										});
++									}
++								}
++						makeCallDJ();
++						break;
++			
++				//SPARE TIME
++				case MenuData.ApplicationMenu.AddToSpareTime.command:
++					// Send the URL to Spare Time
++					try{
++						this.sparetimeappid = "com.semicolonapps.sparetime";
++						this.controller.serviceRequest("palm://com.palm.applicationManager", {
++							method: 'open',
++							parameters: {
++								id: this.sparetimeappid,
++								params: {action: "add_url", url: this.currentUrl, title: this.currentTitle}
++							},
++							onFailure:function(){
++								this.controller.showAlertDialog({
++									onChoose: function(value){
++										if (value=="yes"){
++											this.controller.serviceRequest('palm://com.palm.applicationManager', {
++												method:'open',
++												parameters:{
++													target: "http://developer.palm.com/appredirect/?packageid=" + this.sparetimeappid
++												}
++											});
++										}
++									},
++									preventCancel: false,
++									title: $L("Spare Time Not Installed"),
++									message: $L("Spare Time is not installed. Would you like to download it?"),
++									choices:[
++										{label:$L('Yes'), value:"yes", type:'affirmative'},
++										{label:$L('No'), value:"no", type:'dismissal'}
++									]
++								});
++							}.bind(this)
++						})
++					}catch(e){
++						Mojo.Log.error("Spare Time Patch Error: " + e);
++					}
++					break;
++					
++				//INSTAPAPER
++				case MenuData.ApplicationMenu.SendToInstapaper.command:
++					// Set up the url
++					var insta_url = "https://www.instapaper.com/api/add";
++					var username = this.insta_username;
++					var password = this.insta_password;
++					var url = this.currentUrl
++					var title = this.currentTitle
++					var target = this;
++	
++					// Attempt to connect to api
++						var request = new Ajax.Request(insta_url, {
++							method: 'get',
++							parameters: {username: username, password: password, url: url, title: title},
++							onSuccess: function() {
++								// Set up and show the banner message for success
++								var message = "Page sent to Instapaper!";
++								var appController = Mojo.Controller.getAppController();
++								var bannerParams = {soundClass: '', soundFile: '', icon: '', messageText: message};
++								appController.showBanner(bannerParams, {banner: message});
++							},
++							on403: function() {
++								// Set up and show the banner message for auth failure
++								var message = "Error: Check username/password!";
++								var appController = Mojo.Controller.getAppController();
++								var bannerParams = {soundClass: '', soundFile: '', icon: '', messageText: message};
++								appController.showBanner(bannerParams, {banner: message});
++							},
++							onFailure: function() {
++								// Set up and show the banner message for failure
++								var message = "Failed to send page to Instapaper.";
++								var appController = Mojo.Controller.getAppController();
++								var bannerParams = {soundClass: '', soundFile: '', icon: '', messageText: message};
++								appController.showBanner(bannerParams, {banner: message});
++							}
++						});
++				break;				
++				
++				//RELEGO
++				case MenuData.ApplicationMenu.AddToRelego.command:
++					// Send the URL to Relego
++					try{
++						this.relegoappid = "com.webosroundup.relego";
++						this.controller.serviceRequest("palm://com.palm.applicationManager", {
++							method: 'open',
++							parameters: {
++								id: this.relegoappid,
++								params: {action: 'addtorelego', url: this.currentUrl, title: this.currentTitle}
++							},
++							onFailure:function(){
++								this.controller.showAlertDialog({
++									onChoose: function(value){
++										if (value=="yes"){
++											this.controller.serviceRequest('palm://com.palm.applicationManager', {
++												method:'open',
++												parameters:{
++													target: "http://developer.palm.com/appredirect/?packageid=" + this.relegoappid
++												}
++											});
++										}
++									},
++									preventCancel: false,
++									title: $L("Relego Not Installed"),
++									message: $L("Relego is not installed. Would you like to download it? It's Free!"),
++									choices:[
++										{label:$L('Yes'), value:"yes", type:'affirmative'},
++										{label:$L('No'), value:"no", type:'dismissal'}
++									]
++								});
++							}.bind(this)
++						})
++					}catch(e){
++						Mojo.Log.error("Relego Patch Error: " + e);
++					}
++					break;
++					
++			//READONTOUCH
++			case MenuData.ApplicationMenu.AddToReadontouch.command:
++	
++			//Add to
++			var readontouchappids = ['com.sven-ziegler.readontouch', 'com.sven-ziegler.readontouch-phone'], readontouchindex = 0;
++			var target = this;
++		function makeCallRoT() {
++		if (readontouchindex < readontouchappids.length) {
++			Mojo.Log.info('Trying to Addto appid %s', readontouchappids[readontouchindex]);
++			var request = new Mojo.Service.Request("palm://com.palm.applicationManager", {
++				method: 'open',
++					parameters: {
++						id: readontouchappids[readontouchindex],
++							params: {action: 'addLink', title: target.currentTitle, url: target.currentUrl}
++							},
++								onFailure: function() {
++									Mojo.Log.info('ReadOnTouch failed to launch with appid %s', readontouchappids[readontouchindex]);
++									readontouchindex++; // go to next appid
++									makeCallRoT(); // retry
++									}.bind(this)
++									});
++									} else {
++										Mojo.Log.error('ReadOnTouch failed to launch');
++										target.controller.showAlertDialog({
++											onChoose: function(value){
++												if (value=="yes"){
++												target.controller.serviceRequest('palm://com.palm.applicationManager', {
++												method:'open',
++												parameters:{
++												target: "http://developer.palm.com/appredirect/?packageid=" + readontouchappids[0]
++												}
++											});
++										}
++									},
++										preventCancel: false,
++										title: $L("ReadonTouch Not Installed"),
++										message: $L("ReadOnTouch is not installed. Would you like to download it?"),
++										choices:[
++										{label:$L('Yes'), value:"yes", type:'affirmative'},
++										{label:$L('No'), value:"no", type:'dismissal'}
++										]
++										});
++									}
++								}
++						makeCallRoT();
++						break;
++				//MeOrg
++				case MenuData.ApplicationMenu.AddToMeorg.command:
++					try{
++						this.meorgappid = "com.sven-ziegler.meorg";
++						this.controller.serviceRequest("palm://com.palm.applicationManager", {
++							method: 'open',
++							parameters: {
++								id: this.meorgappid,
++								params: {action: 'addLink', title: this.currentTitle, url: this.currentUrl}
++							},
++							onFailure:function(){
++								this.controller.showAlertDialog({
++									onChoose: function(value){
++										if (value=="yes"){
++											this.controller.serviceRequest('palm://com.palm.applicationManager', {
++												method:'open',
++												parameters:{
++													target: "http://developer.palm.com/appredirect/?packageid=" + this.meorgappid
++												}
++											});
++										}
++									},
++									preventCancel: false,
++									title: $L("MeOrg! Not Installed"),
++									message: $L("MeOrg! is not installed. Would you like to download it?"),
++									choices:[
++										{label:$L('Yes'), value:"yes", type:'affirmative'},
++										{label:$L('No'), value:"no", type:'dismissal'}
++									]
++								});
++							}.bind(this)
++						})
++					}catch(e){
++						Mojo.Log.error("MeOrg Patch Error: " + e);
++					}
++					break;
++					
++			//TapNote
++				case MenuData.ApplicationMenu.AddToTapnote.command:
++					try{
++						this.tapnoteappid = "com.onecrayon.tapnote";
++						this.controller.serviceRequest("palm://com.palm.applicationManager", {
++							method: 'open',
++							parameters: {
++								id: this.tapnoteappid,
++								params: {action: 'append', text: this.currentTitle+" (added @dt)\n"+this.currentUrl}
++							},
++							onFailure:function(){
++								this.controller.showAlertDialog({
++									onChoose: function(value){
++										if (value=="yes"){
++											this.controller.serviceRequest('palm://com.palm.applicationManager', {
++												method:'open',
++												parameters:{
++													target: "http://developer.palm.com/appredirect/?packageid=" + this.tapnoteappid
++												}
++											});
++										}
++									},
++									preventCancel: false,
++									title: $L("TapNote Not Installed"),
++									message: $L("TapNote Full Version is not installed. Would you like to download it?"),
++									choices:[
++										{label:$L('Yes'), value:"yes", type:'affirmative'},
++										{label:$L('No'), value:"no", type:'dismissal'}
++									]
++								});
++							}.bind(this)
++						})
++					}catch(e){
++						Mojo.Log.error("TapNote Patch Error: " + e);
++					}
++					break;
++					
++			//CLIPBOARD
++				case MenuData.ApplicationMenu.CopyToClipboard.command:
++					this.controller.stageController.setClipboard(this.currentTitle + ' - ' + this.currentUrl);
++					Mojo.Controller.getAppController().showBanner("Copied to Clipboard!",  {source: 'notification'});
++					break;
++					
++			//MOBILIZE
++			    case MenuData.ApplicationMenu.Mobilize.command:
++					this.openUrl("http://google.com/gwt/x?u=" + this.currentUrl);
++				break;
++			
++			// VIEWSOURCE
++			
++				case MenuData.ApplicationMenu.ViewSource.command:
++					this.controller.serviceRequest("palm://com.palm.applicationManager", {
++						method: "open",
++						parameters: {
++							id: "ca.canucksoftware.internalz",
++							params: {
++								target: "view-source://" + this.currentUrl
++							}
++						}
++					});
++				break;
++						
++				//SHORTEN URL
++				case MenuData.ApplicationMenu.ShortenURL.command:
++					// Set up the url
++						var url = "http://is.gd/api.php?longurl=" + this.currentUrl;
++					var target = this;
++	
++					// Attempt to connect to api
++						var request = new Ajax.Request(url, {
++							method: 'get',
++							evalJSON: 'false',
++							onSuccess: function(response) {
++								// Retrieve the short url and copy it
++  								var short_url = response.responseText;
++								target.controller.stageController.setClipboard(short_url, false);
++		
++								// Set up and show the banner message for success
++								var message = "Short URL copied to clipboard.";
++								var appController = Mojo.Controller.getAppController();
++								var bannerParams = {soundClass: '', soundFile: '', icon: '', messageText: message};
++								appController.showBanner(bannerParams, {banner: message});
++							},
++							onFailure: function(response) {
++							// What happens when the api call fails
++							}
++						});
++				break;
++				
++				//REKINDLEIT
++				case MenuData.ApplicationMenu.ReKindleIt.command:
++						this._newBrowserPage("http://www.rekindle.it/queue?r=" + this.currentUrl);
++						break;
++				
++				//FACEBOOK
++				case MenuData.ApplicationMenu.ShareViaFacebook.command:
++					var facebookappids = ['com.palm.app.facebook.beta', 'com.palm.app.facebook'], facebookindex = 0;
++					var target = this;
++					function makeCallFB() {
++						if (facebookindex < facebookappids.length) {
++				 
++							Mojo.Log.info('Trying to launch with appid %s', facebookappids[facebookindex]);
++				 
++							var request = new Mojo.Service.Request("palm://com.palm.applicationManager", {
++								method: 'launch',
++								parameters: {
++									id: facebookappids[facebookindex],
++									params: {status: target.currentTitle + ' - ' + target.currentUrl}
++								},
++								onFailure: function() {
++									Mojo.Log.info('Facebook failed to launch with appid %s', facebookappids[facebookindex]);
++									facebookindex++; // go to next appid
++									makeCallFB(); // retry
++								}.bind(this)
++							});
++				 
++						} else {
++							Mojo.Log.error('Facebook failed to launch');
++							target.controller.showAlertDialog({
++									onChoose: function(value){
++										if (value=="yes"){
++											target.controller.serviceRequest('palm://com.palm.applicationManager', { 
++												method:'open',
++												parameters:{
++													target: "http://developer.palm.com/appredirect/?packageid=" + facebookappids[1]
++												}
++											});
++										}
++									},
++									preventCancel: false,
++									title: $L("Facebook Not Installed"),
++									message: $L("Facebook is not installed. Would you like to download it? It's free!"),
++									choices:[
++										{label:$L('Yes'), value:"yes", type:'affirmative'},
++										{label:$L('No'), value:"no", type:'dismissal'}
++									]
++								});
++						}
++				 
++					}
++					makeCallFB();
++					break;
++				
++				//BAD KITTY
++				case MenuData.ApplicationMenu.TweetViaBadKitty.command:
++					// Send the URL to Bad Kitty
++					try{
++						this.badkittyappid = "com.superinhuman.badkitty";
++						this.controller.serviceRequest("palm://com.palm.applicationManager", {
++							method: 'open',
++							parameters: {
++								id: this.badkittyappid,
++								params: {action: 'tweet', tweet: this.currentTitle + ' - ' + this.currentUrl}
++							},
++							onFailure:function(){
++								this.controller.showAlertDialog({
++									onChoose: function(value){
++										if (value=="yes"){
++											this.controller.serviceRequest('palm://com.palm.applicationManager', { 
++												method:'open',
++												parameters:{
++													target: "http://developer.palm.com/appredirect/?packageid=" + this.badkittyappid
++												}
++											});
++										}
++									},
++									preventCancel: false,
++									title: $L("Bad Kitty Not Installed"),
++									message: $L("Bad Kitty is not installed. Would you like to download it?"),
++									choices:[
++										{label:$L('Yes'), value:"yes", type:'affirmative'},
++										{label:$L('No'), value:"no", type:'dismissal'}
++									]
++								});
++							}.bind(this)
++						})
++					}catch(e){
++						Mojo.Log.error("Bad Kitty Patch Error: " + e);
++					}
++					break;
++				
++				//SPAZ
++				case MenuData.ApplicationMenu.TweetViaSpaz.command:
++					var spazappids = ['com.funkatron.app.spaz-beta', 'com.funkatron.app.spaz-sped', 'com.funkatron.app.spaz'], spazindex = 0;
++					var target = this;
++					function makeCallSpaz() {
++						if (spazindex < spazappids.length) {
++				 
++							Mojo.Log.info('Trying to launch with appid %s', spazappids[spazindex]);
++				 
++							var request = new Mojo.Service.Request("palm://com.palm.applicationManager", {
++								method: 'launch',
++								parameters: {
++									id: spazappids[spazindex],
++									params: {tweet: target.currentTitle + ' - ' + target.currentUrl}
++								},
++								onFailure: function() {
++									Mojo.Log.info('Spaz failed to launch with appid %s', spazappids[spazindex]);
++									spazindex++; // go to next appid
++									makeCallSpaz(); // retry
++								}.bind(this)
++							});
++				 
++						} else {
++							Mojo.Log.error('Spaz failed to launch');
++							target.controller.showAlertDialog({
++									onChoose: function(value){
++										if (value=="yes"){
++											target.controller.serviceRequest('palm://com.palm.applicationManager', { 
++												method:'open',
++												parameters:{
++													target: "http://developer.palm.com/appredirect/?packageid=" + spazappids[2]
++												}
++											});
++										}
++									},
++									preventCancel: false,
++									title: $L("Spaz Not Installed"),
++									message: $L("Spaz is not installed. Would you like to download it? It's free!"),
++									choices:[
++										{label:$L('Yes'), value:"yes", type:'affirmative'},
++										{label:$L('No'), value:"no", type:'dismissal'}
++									]
++								});
++						}
++				 
++					}
++					makeCallSpaz();
++					break;
++					
++				//TWEE
++				case MenuData.ApplicationMenu.TweetViaTwee.command:
++					// Send the URL to Twee
++					try{
++						this.tweeappid = "com.deliciousmorsel.twee";
++						this.controller.serviceRequest("palm://com.palm.applicationManager", {
++							method: 'open',
++							parameters: {
++								id: this.tweeappid,
++								params: {tweet: this.currentTitle + ' - ' + this.currentUrl}
++							},
++							onFailure:function(){
++								this.controller.showAlertDialog({
++									onChoose: function(value){
++										if (value=="yes"){
++											this.controller.serviceRequest('palm://com.palm.applicationManager', { 
++												method:'open',
++												parameters:{
++													target: "http://developer.palm.com/appredirect/?packageid=" + this.tweeappid
++												}
++											});
++										}
++									},
++									preventCancel: false,
++									title: $L("Twee Not Installed"),
++									message: $L("Twee is not installed. Would you like to download it?"),
++									choices:[
++										{label:$L('Yes'), value:"yes", type:'affirmative'},
++										{label:$L('No'), value:"no", type:'dismissal'}
++									]
++								});
++							}.bind(this)
++						})
++					}catch(e){
++						Mojo.Log.error("Twee Patch Error: " + e);
++					}
++					break;
++				
++				//TWEED				
++				case MenuData.ApplicationMenu.TweetViaTweed.command:
++					// Send the URL to Tweed
++					try{
++						this.tweedappid = "com.pivotallabs.webos.tweed";
++						this.controller.serviceRequest("palm://com.palm.applicationManager", {
++							method: 'open',
++							parameters: {
++								id: this.tweedappid,
++								params: {newTweet: this.currentTitle + ' - ' + this.currentUrl}
++							},
++							onFailure:function(){
++								this.controller.showAlertDialog({
++									onChoose: function(value){
++										if (value=="yes"){
++											this.controller.serviceRequest('palm://com.palm.applicationManager', { 
++												method:'open',
++												parameters:{
++													target: "http://developer.palm.com/appredirect/?packageid=" + this.tweedappid
++												}
++											});
++										}
++									},
++									preventCancel: false,
++									title: $L("Tweed Not Installed"),
++									message: $L("Tweed is not installed. Would you like to download it?"),
++									choices:[
++										{label:$L('Yes'), value:"yes", type:'affirmative'},
++										{label:$L('No'), value:"no", type:'dismissal'}
++									]
++								});
++							}.bind(this)
++						})
++					}catch(e){
++						Mojo.Log.error("Tweed Patch Error: " + e);
++					}
++					break;
++				
++				//CARBON				
++				case MenuData.ApplicationMenu.TweetViaCarbon.command:
++					// Send the URL to Carbon
++					try{
++						this.carbonappid = "com.dotsandlines.carbon";
++						this.controller.serviceRequest("palm://com.palm.applicationManager", {
++							method: 'open',
++							parameters: {
++								id: this.carbonappid,
++								params: {action: "compose", body: this.currentTitle + ' - ' + this.currentUrl}
++							},
++							onFailure:function(){
++								this.controller.showAlertDialog({
++									onChoose: function(value){
++										if (value=="yes"){
++											this.controller.serviceRequest('palm://com.palm.applicationManager', { 
++												method:'open',
++												parameters:{
++													target: "http://developer.palm.com/appredirect/?packageid=" + this.carbonappid
++												}
++											});
++										}
++									},
++									preventCancel: false,
++									title: $L("Carbon Not Installed"),
++									message: $L("Carbon is not installed. Would you like to download it?"),
++									choices:[
++										{label:$L('Yes'), value:"yes", type:'affirmative'},
++										{label:$L('No'), value:"no", type:'dismissal'}
++									]
++								});
++							}.bind(this)
++						})
++					}catch(e){
++						Mojo.Log.error("Carbon Patch Error: " + e);
++					}
++					break;
++				
++				//QUICKPOST
++				case MenuData.ApplicationMenu.SendViaQuickPost.command:
++					try{
++						this.quickpostappid = "com.hedami.quickpost";
++						this.controller.serviceRequest("palm://com.palm.applicationManager", {
++							method: 'open',
++							parameters: {
++								id: this.quickpostappid,
++								params: {quickPost: this.currentTitle + ' - ' + this.currentUrl}
++							},
++							onFailure:function(){
++								this.controller.showAlertDialog({
++									onChoose: function(value){
++										if (value=="yes"){
++											this.controller.serviceRequest('palm://com.palm.applicationManager', { 
++												method:'open',
++												parameters:{
++													target: "http://developer.palm.com/appredirect/?packageid=" + this.quickpostappid
++												}
++											});
++										}
++									},
++									preventCancel: false,
++									title: $L("Quick Post Not Installed"),
++									message: $L("Quick Post is not installed. Would you like to download it?"),
++									choices:[
++										{label:$L('Yes'), value:"yes", type:'affirmative'},
++										{label:$L('No'), value:"no", type:'dismissal'}
++									]
++								});
++							}.bind(this)
++						})
++					}catch(e){
++						Mojo.Log.error("Quick Post Patch Error: " + e);
++					}
++					break;
++					
++				//TACHYON
++				case MenuData.ApplicationMenu.TweetViaTachyon.command:
++					try{
++						this.tachyonappid = "com.pocketimagination.tachyon";
++						this.controller.serviceRequest("palm://com.palm.applicationManager", {
++							method: 'open',
++							parameters: {
++								id: this.tachyonappid,
++								params: {action: 'tweet', text: this.currentTitle + ' - ' + this.currentUrl}
++							},
++							onFailure:function(){
++								this.controller.showAlertDialog({
++									onChoose: function(value){
++										if (value=="yes"){
++											this.controller.serviceRequest('palm://com.palm.applicationManager', { 
++												method:'open',
++												parameters:{
++													target: "http://developer.palm.com/appredirect/?packageid=" + this.tachyonappid
++												}
++											});
++										}
++									},
++									preventCancel: false,
++									title: $L("Tachyon Not Installed"),
++									message: $L("Tachyon is not installed. Would you like to download it?"),
++									choices:[
++										{label:$L('Yes'), value:"yes", type:'affirmative'},
++										{label:$L('No'), value:"no", type:'dismissal'}
++									]
++								});
++							}.bind(this)
++						})
++					}catch(e){
++						Mojo.Log.error("Tachyon Patch Error: " + e);
++					}
++					break;
++
++				//PROJECT MACAW
++				case MenuData.ApplicationMenu.TweetViaProjectMacaw.command:
++					try{
++						this.projectmacawappid = "net.minego.phnx";
++						this.controller.serviceRequest("palm://com.palm.applicationManager", {
++							method: 'open',
++							parameters: {
++								id: this.projectmacawappid,
++								params: {action: 'tweet', msg: this.currentTitle + ' - ' + this.currentUrl}
++							},
++							onFailure:function(){
++								this.controller.showAlertDialog({
++									onChoose: function(value){
++										if (value=="yes"){
++											this.controller.serviceRequest('palm://com.palm.applicationManager', { 
++												method:'open',
++												parameters:{
++													target: "http://developer.palm.com/appredirect/?packageid=" + this.projectmacawappid
++												}
++											});
++										}
++									},
++									preventCancel: false,
++									title: $L("Project Macaw Not Installed"),
++									message: $L("Project Macaw is not installed. Would you like to download it?"),
++									choices:[
++										{label:$L('Yes'), value:"yes", type:'affirmative'},
++										{label:$L('No'), value:"no", type:'dismissal'}
++									]
++								});
++							}.bind(this)
++						})
++					}catch(e){
++						Mojo.Log.error("Project Macaw Patch Error: " + e);
++					}
++					break;
++				
++				//SMS
++				case MenuData.ApplicationMenu.ShareViaSMS.command:
++					// Set up the url
++						var url = "http://is.gd/api.php?longurl=" + this.currentUrl;
++						var target = this;
++	
++					// Attempt to connect to api
++						var request = new Ajax.Request(url, {
++							method: 'get',
++							evalJSON: 'false',
++							onSuccess: function(response) {
++								// Retrieve the short url and copy it
++  								var short_url = response.responseText;
++  								var request = new Mojo.Service.Request("palm://com.palm.applicationManager", {
++									method: 'open',
++									parameters: {
++										id: "com.palm.app.messaging",
++										params: {messageText: target.currentTitle + ' - ' + short_url}
++									}
++								});
++							},
++							onFailure: function(response) {
++							// What happens when the api call fails
++							Mojo.Controller.getAppController().showBanner("Share Via SMS Failed",  {source: 'notification'});
++							}
++						});
++						break;
++				
++				//EMAIL
++				case MenuData.ApplicationMenu.ShareViaEmail.command:
+ 					this._shareUrl(this.currentUrl, this._getDisplayTitle(), true /*capture*/);
+ 					break;
+ 

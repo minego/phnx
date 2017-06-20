@@ -1,5 +1,11 @@
 var ChangelogToaster = Class.create(Toaster, {
 	items: [
+		{ version: '1.6.9'},
+		{ item: 'Added new option in Advanced Prefs to allow for a delay between panel loads when refreshing all, such as launching the app'},
+		{ item: 'Bug fixed non-Twitter hosted image display'},
+		{ item: 'Menu item under Accounts now allows the creation of a launch point for the current account or all accounts'},
+		{ item: 'Pebble3 notifications can have their colour set in Tweaks now.  New json file needs to be installed for tweaks prefs and patch MWatch.'},
+		{ item: 'Updated app icon reference so that special tapping in launcher shows icon nicely on Veer etc'},
 		{ version: '1.6.8' },
 		{ item: 'Notifications sent to Pebble are now flagged as Twitter messages'},
 		{ item: 'Saving and Deleting Searches work again caused by 53bit javascript limitation'},

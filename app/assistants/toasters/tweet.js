@@ -110,8 +110,9 @@ var TweetToaster = Class.create(Toaster, {
 		if (!this.tweet.dm) {
 			Twitter.getStatus(this.tweet.id_str, function(response, meta) {
 				var tweet = response.responseJSON;
+				// Overkill to call process just to grab retweet and fav count
 				//var th = new TweetHelper();
-				tweet = th.process(tweet);
+				//tweet = th.process(tweet);
 				this.tweet.retweet_count = tweet.retweet_count;
 				//Mojo.Log.error('1) this.tweet.retweet_count:tweet.retweet_count: ' + this.tweet.retweet_count + ' : ' + tweet.retweet_count);
 				this.tweet.favorite_count = tweet.favorite_count;
@@ -150,7 +151,7 @@ var TweetToaster = Class.create(Toaster, {
 				if ((links[i].expanded_url.indexOf('://boo.fm/') > -1) || (links[i].expanded_url.indexOf('://audioboo.fm/') > -1)){
 					this.getAudioBooHTML(links[i].expanded_url,this.tweet);
 				}
-				if ((links[i].expanded_url.indexOf('://instagram.com/p/') > -1) || (links[i].expanded_url.indexOf('://instagr.am/p/') > -1) || (links[i].expanded_url.indexOf('://www.instagram/p/') > -1)){
+				if ((links[i].expanded_url.indexOf('://instagram.com/p/') > -1) || (links[i].expanded_url.indexOf('://instagr.am/p/') > -1) || (links[i].expanded_url.indexOf('://www.instagram/p/') > -1) || (links[i].expanded_url.indexOf('://www.instagram.com/p/') > -1)){
 					this.getInstagramVideoHTML(links[i].expanded_url,this.tweet);
 				}
 				if(processVine === false){
@@ -701,6 +702,7 @@ var TweetToaster = Class.create(Toaster, {
 				doc.close();
 				var metaValues = doc.getElementsByTagName("meta");
 				var myVideo;
+				var myImage;
 				for(var i=0; i<metaValues.length; i++){
 					if(metaValues[i].content.indexOf('.mp4') > -1){
 						myVideo = metaValues[i].content;
@@ -713,7 +715,6 @@ var TweetToaster = Class.create(Toaster, {
 						tweet.mediaUrl = tweet.myVideoLink;
 						//Mojo.Log.error('instagram mp4: ' + tweet.myVideoLink);
 					}
-
 				//} else {
 				//	tweet.myAudioLink2 = String((myAudio[0].getAttribute("poster")).match(/.*.mp3/));
 				//	tweet.mediaUrl2 = tweet.myAudioLink2;
@@ -1411,7 +1412,11 @@ transport.responseText);
 
 		//img_uid = this.tweet.id + '_' + matchId;
 		//this.controller.stageController.pushScene('pictureView', src, this.tweet.user.screen_name,img_uid,matchId,this.tweet.extended_entities.media);
-		this.controller.stageController.pushScene('pictureView', src, this.tweet.user.screen_name,this.tweet.id,matchId,this.tweet.extended_entities.media);
+		if(this.tweet.extended_entities){
+			this.controller.stageController.pushScene('pictureView', src, this.tweet.user.screen_name,this.tweet.id,matchId,this.tweet.extended_entities.media);
+		} else {
+			this.controller.stageController.pushScene('pictureView', src, this.tweet.user.screen_name,this.tweet.id,matchId,this.tweet.entities.urls);
+		}
 	},
 	showImage: function(src, url) {
 		this.controller.get('preview').src = src;

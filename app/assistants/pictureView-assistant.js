@@ -26,26 +26,29 @@ PictureViewAssistant.prototype = {
 	},
 	wentLeft: function(event){
 		if (this.current > 0) {
-			this.current--;
-		
-			if(this.current > 0 && this.linkUrl[this.current - 1]){
-				this.imageViewer.mojo.leftUrlProvided(this.linkUrl[this.current-1].media_url);
-			}
-			//this.imageViewer.mojo.centerUrlProvided(this.linkUrl[this.current].media_url);
-			if (this.linkUrl[this.current + 1]){
-				this.imageViewer.mojo.rightUrlProvided(this.linkUrl[this.current+1].media_url);
+			if(this.linkUrl[0].media_url){		
+				this.current--;
+				if(this.current > 0 && this.linkUrl[this.current - 1]){
+					this.imageViewer.mojo.leftUrlProvided(this.linkUrl[this.current-1].media_url);
+				}
+				//this.imageViewer.mojo.centerUrlProvided(this.linkUrl[this.current].media_url);
+				if (this.linkUrl[this.current + 1]){
+					this.imageViewer.mojo.rightUrlProvided(this.linkUrl[this.current+1].media_url);
+				}
 			}
 		}
 	},
 	wentRight: function(event){
 		if (this.current < (this.linkUrl.length - 1)) {
-			this.current++;
-			if(this.current > 0 && this.linkUrl[this.current - 1]){
-				this.imageViewer.mojo.leftUrlProvided(this.linkUrl[this.current-1].media_url);
-			}
-			//this.imageViewer.mojo.centerUrlProvided(this.linkUrl[this.current].media_url);
-			if (this.linkUrl[this.current + 1]){
-				this.imageViewer.mojo.rightUrlProvided(this.linkUrl[this.current+1].media_url);
+			if(this.linkUrl[0].media_url){
+				this.current++;
+				if(this.current > 0 && this.linkUrl[this.current - 1]){
+					this.imageViewer.mojo.leftUrlProvided(this.linkUrl[this.current-1].media_url);
+				}
+				//this.imageViewer.mojo.centerUrlProvided(this.linkUrl[this.current].media_url);
+				if (this.linkUrl[this.current + 1]){
+					this.imageViewer.mojo.rightUrlProvided(this.linkUrl[this.current+1].media_url);
+				}
 			}
 		}
 	},
@@ -67,7 +70,11 @@ PictureViewAssistant.prototype = {
 		var imgUrl;
 		
 		if(this.linkUrl){
-			imgUrl = this.linkUrl[this.current].media_url;
+			if(this.linkUrl[this.current].media_url){
+				imgUrl = this.linkUrl[this.current].media_url;
+			} else {
+				imgUrl = this.url;
+			}
 			imgFilename = this.username + '_' + this.tweetId + '_' + this.current;
 		} else {
 			imgUrl = this.url;
@@ -139,6 +146,7 @@ PictureViewAssistant.prototype = {
 		banner('Saving photo...');
 	},
 	handleWindowResize: function(event) {
+		//Mojo.Log.error('resize, src:' + this.url);
 		if (this.imageViewer && this.imageViewer.mojo) {
 			this.imageViewer.mojo.manualSize(this.controller.window.innerWidth, this.controller.window.innerHeight);
 		}
@@ -148,13 +156,25 @@ PictureViewAssistant.prototype = {
 		this.controller.stageController.setWindowOrientation('free');
 		
 		if(this.linkUrl){
-			if(this.current > 0 && this.linkUrl[this.current - 1]){
-				this.imageViewer.mojo.leftUrlProvided(this.linkUrl[this.current-1].media_url);
-			}
-			//this.imageViewer.mojo.centerUrlProvided(this.url);
-			this.imageViewer.mojo.centerUrlProvided(this.linkUrl[this.current].media_url);
-			if (this.linkUrl[this.current + 1]){
-				this.imageViewer.mojo.rightUrlProvided(this.linkUrl[this.current+1].media_url);
+			if(this.linkUrl[0]){
+				if(this.current > 0 && this.linkUrl[this.current - 1]){
+					if(this.linkUrl[this.current-1].media_url){
+						this.imageViewer.mojo.leftUrlProvided(this.linkUrl[this.current-1].media_url);
+					}
+				}
+				//this.imageViewer.mojo.centerUrlProvided(this.url);
+				if(this.linkUrl[this.current].media_url){
+					this.imageViewer.mojo.centerUrlProvided(this.linkUrl[this.current].media_url);
+				} else {
+					this.imageViewer.mojo.centerUrlProvided(this.url);
+				}
+				if (this.linkUrl[this.current + 1]){
+					if(this.linkUrl[this.current + 1].media_url){
+						this.imageViewer.mojo.rightUrlProvided(this.linkUrl[this.current+1].media_url);
+					}
+				}
+			} else {
+				this.imageViewer.mojo.centerUrlProvided(this.url);
 			}
 		} else {
 			//Profile picture

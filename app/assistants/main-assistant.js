@@ -378,6 +378,14 @@ MainAssistant.prototype = {
 			command: 'cmdRemoveAccount'
 		});
 		accountMenuItems.push({
+			label: 'Make shortcut - current account',
+			command: 'cmdCreateShortcut'
+		});
+		accountMenuItems.push({
+			label: 'Make shortcut - all accounts',
+			command: 'cmdCreateAllShortcuts'
+		});
+		accountMenuItems.push({
 			label: 'Login ReadItLater and Instapaper',
 			command: 'cmdLoginRil'
 		});
@@ -443,7 +451,7 @@ MainAssistant.prototype = {
 					{
 						label: 'Manage Muted Users',
 						command: 'cmdManageMutedUsers'
-					}					
+					}
 				]
 			},
 			{
@@ -642,6 +650,10 @@ MainAssistant.prototype = {
 		this.moveIndicator(0);
 
 		this.addListeners();
+
+		var prefs = new LocalStorage();
+		var refreshDelay = prefs.read('refreshDelay');
+
 		setTimeout(function() {
 			var prefs = new LocalStorage();
 
@@ -650,7 +662,8 @@ MainAssistant.prototype = {
 			} else {
 				for (var j = 0, panel; panel = this.panels[j]; j++) {
 					if (panel.type === "timeline" || panel.type === "search") {
-						this.refreshPanelFlush(panel);
+						//this.refreshPanelFlush(panel);
+						this.refreshPanelFlushTimeout(j,refreshDelay,panel);
 					}
 				}
 				// Load the list of people being followed for auto complete
@@ -684,6 +697,7 @@ MainAssistant.prototype = {
 			}
 		}.bind(this),10);
 	},
+
 	/* Command to garbage collect the heap - gc is unknown so commenting out*/
 	garbageCollect: function() {
 		/*Mojo.Log.error("GC'ing javascript heap");
@@ -793,6 +807,10 @@ MainAssistant.prototype = {
 						banner('Muted User list is empty');
 					}
 				}
+			} else if (event.command === 'cmdCreateShortcut') {
+				this.createShortcut(this.user);
+			} else if (event.command === 'cmdCreateAllShortcuts'){
+				this.createAllShortcuts(this.users);
 			} else if (event.command === 'cmdChangelog') {
 				this.toasters.add(new ChangelogToaster(this));
 			} else if (event.command === 'cmdRemoveAccount') {
@@ -1037,10 +1055,72 @@ MainAssistant.prototype = {
 			}
 		}.bind(this));
 	},
+	createShortcut: function(user) {
+		var callParams = {
+			id: Mojo.Controller.appInfo.id,
+			'icon': Mojo.Controller.appInfo.icon,
+			'title': "Project Macaw " + user.username,
+			'params': {"action": "userlaunch","userid": user.id}
+		};
+		this.controller.serviceRequest('palm://com.palm.applicationManager/addLaunchPoint', {
+			parameters: callParams,
+			onSuccess: function() {
+				this.shortcutAddLaunchIconSuccess(user);
+			}.bind(this),
+			onFailure: function() {
+				setTimeout( function() {
+					this.shortcutAddLaunchIconFailure(user);
+				}.bind(this),2000);
+			}.bind(this)
+		});
+	},
+	
+	createAllShortcutsTimeout: function(i,users){
+		setTimeout(function () {
+			this.createShortcut(users[i]);
+		}.bind(this),i*5000);
+	},
+	createAllShortcuts: function(users) {
+		var i;
+		for (i=0; i < users.length; i++) {
+			// Call via a separate timeout function so that there is a pause between each creation to allow the notifications their time in the spotlight
+			this.createAllShortcutsTimeout(i,users);
+		}
+	},
+
+	shortcutAddLaunchIconSuccess: function(user) {
+		Mojo.Controller.getAppController().showBanner("Shortcut created for " + user.username, {}, 'shortcutBanner');
+		//setTimeout(this.shortcutBannerTimeout.bind(this), 2000);
+	},
+	
+	shortcutBannerTimeout: function() {
+		//Mojo.Controller.getAppController().removeBanner('shortcutBanner');
+	},
+	
+	shortcutAddLaunchIconFailure: function(user) {
+		Mojo.Log.error('unable to create shortcut for ' + user.username);
+		Mojo.Controller.getAppController().showBanner("Unable to create Shortcut for " + user.username, {}, 'shortcutBanner');
+		//setTimeout(this.shortcutBannerTimeout.bind(this), 2000);	      
+	},
+	refreshPanelFlushTimeout: function(delay,refreshDelay,panel){
+		setTimeout(function () {
+			//this.createShortcut(users[i]);
+			this.refreshPanelFlush(panel);
+		}.bind(this),delay*refreshDelay);
+	},
+	refreshAllTimeout: function(delay, refreshDelay, panel){
+		setTimeout(function () {
+			this.refreshPanel(panel);
+		}.bind(this),delay*refreshDelay);
+
+	},
 	refreshAll: function() {
+		var prefs = new LocalStorage();
+		var refreshDelay = prefs.read('refreshDelay');
 		for (var j=0; j < this.panels.length; j++) {
 			if (this.panels[j].type === "timeline" || this.panels[j].type === "search") {
-				this.refreshPanel(this.panels[j]);
+				//this.refreshPanel(this.panels[j]);
+				this.refreshAllTimeout(j,refreshDelay,this.panels[j]);
 			}
 		}
 
@@ -1083,6 +1163,7 @@ MainAssistant.prototype = {
 		this.refreshPanel(this.getPanel(id));
 	},
 	refreshPanel: function(panel) {
+		//Mojo.Log.error('panel.id: ' + panel.id);
 		if (panel.refresh) {
 			var lastId = undefined;
 
@@ -1117,6 +1198,7 @@ MainAssistant.prototype = {
 		this.loadingGaps = false;
 		var lastId = undefined;
 		//var myLastId = undefined;
+		//Mojo.Log.error('panel.id: ' + panel.id);
 
 		if (panel.model.items.length > 0) {
 			var tweet = panel.model.items[0];
@@ -1378,7 +1460,7 @@ MainAssistant.prototype = {
 		var scrollMoreToBottom = prefs.read('scrollMoreToBottom');
 		//Mojo.Log.error('xCount: ' + xCount); //Twitter doesn't always return the number of tweets you are expecting, which is VERY annoying.
 		for (var i = 0, tweet; tweet = tweets[i]; i++) {
-			/* Store a reference to the account that loaded this tweet */
+			// Store a reference to the account that loaded this tweet //
 			tweet.owner = user.id;
 
 			if (tweet.dm || !th.filter(tweet, filters)) {

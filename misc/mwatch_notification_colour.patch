@@ -1,0 +1,68 @@
+Name: MWatch notification color
+Version: 0.9.22-1
+Author: Baldric
+Category: Notifications
+Description: Patches V0.9.22 of MetaViewSoft's MWatch to add user specified colour to MWatch notifications
+
+--- .orig/media/cryptofs/apps/usr/palm/applications/de.metaviewsoft.mwatch/app/assistants/pebble.js
++++ /media/cryptofs/apps/usr/palm/applications/de.metaviewsoft.mwatch/app/assistants/pebble.js
+@@ -415,7 +415,7 @@
+ }
+ 
+ // https://github.com/Freeyourgadget/Gadgetbridge/blob/master/app/src/main/java/nodomain/freeyourgadget/gadgetbridge/service/devices/pebble/PebbleProtocol.java
+-AppAssistant.prototype.CreatePebbleNotification30 = function(from, info, appid) {
++AppAssistant.prototype.CreatePebbleNotification30 = function(from, info, appid, color) {
+ 	// utf16->utf8 and not more than 255 chars
+ 	from = this.TruncateString(unescape(encodeURIComponent(from)), 255);
+ 	info = this.TruncateString(unescape(encodeURIComponent(info)), 255);
+@@ -466,6 +466,9 @@
+ 		attributes_count++;
+ 		attributes_length += (3 + info.length);
+ 	}
++	if(color){
++		color_id = color;
++	}
+ 	if (appid == appidPhone) {
+ 		icon_id = ICON_NOTIFICATION_GENERIC;
+ 	} else if (appid == appidEmail) {
+
+
+--- .orig/media/cryptofs/apps/usr/palm/applications/de.metaviewsoft.mwatch/app/assistants/app-assistant.js
++++ /media/cryptofs/apps/usr/palm/applications/de.metaviewsoft.mwatch/app/assistants/app-assistant.js
+@@ -176,7 +176,7 @@
+ 	}
+ };
+ 
+-AppAssistant.prototype.sendInfo = function(info, wordwrap, icon, reason, appid, ring) {
++AppAssistant.prototype.sendInfo = function(info, wordwrap, icon, reason, appid, ring, color) {
+ 	var value = valueOther;
+ 	var from = "Unknown";
+ 	var music = false;
+@@ -243,7 +243,8 @@
+ 				ring: ring,
+ 				hash: info.hashCode(),
+ 				value: value,
+-				music: music};
++				music: music,
++				color: color};
+ 			this.entries.push(entry);
+ 	
+ 			if (((new Date()).getTime() - this.toSendTime) > (10 * 1000)) {
+@@ -280,7 +281,7 @@
+ 					from = data[1];
+ 					info = data[0];
+ 				}
+-				data = this.CreatePebbleNotification30(from, info, this.toSendEntry.appid);
++				data = this.CreatePebbleNotification30(from, info, this.toSendEntry.appid,this.toSendEntry.color);
+ 			} else if (this.version == 2) {
+ 				data = this.CreatePebbleNotification(this.toSendEntry.from, this.toSendEntry.info);
+ 			} else {
+@@ -1298,7 +1299,7 @@
+ 		if (launchParams && (typeof(launchParams) == 'object')) {
+ 			if (1 || this.openspp) {
+ 				if (launchParams.command == "SMS") {
+-					this.sendInfo(launchParams.info, launchParams.wordwrap, launchParams.icon, launchParams.reason, launchParams.appid, true);
++					this.sendInfo(launchParams.info, launchParams.wordwrap, launchParams.icon, launchParams.reason, launchParams.appid, true, launchParams.color);
+ 				} else if (launchParams.command == "RING") {
+ 					this.sendRing(launchParams.caller, launchParams.number);
+ 				} else if (launchParams.command == "INFO") {

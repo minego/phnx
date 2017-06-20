@@ -34,6 +34,16 @@ function PreferencesAssistant(section) {
 		]}
 	);
 	advanced.push(
+		{key: 'refreshDelay', type: 'select', label: 'Refresh All Delay', items: [
+			{label: 'No delay', value: '0'},
+			{label: '2 secs', value: '2000'},
+			{label: '4 secs', value: '4000'},
+			{label: '6 secs', value: '6000'},
+			{label: '8 secs', value: '8000'},
+			{label: '10 secs', value: '10000'}
+		]}
+	);
+	advanced.push(
 		{key: 'bitrate', type: 'select', label: 'Preferred Bitrate of Videos', items: [
 			{label: 'Minimum', value: '0'},
 			{label: 'Medium', value: '1'},
@@ -335,6 +345,7 @@ PreferencesAssistant.prototype = {
 					this.controller.setupWidget('select-' + widget.key,
 						this.widgets['attr_' + widget.key] = {
 							choices: widget.items,
+							multiline: true,
 							labelPlacement: Mojo.Widget.labelPlacementLeft,
 							label: widget.label
 						},

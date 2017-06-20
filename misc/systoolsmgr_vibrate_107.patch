@@ -1,6 +1,7 @@
 Name: SysToolsMgr Vibrate
 Version: 1.0.7
 Author: Baldric
+Category: Services and Plugins
 Description: Adds a deviceVibrate tool to systoolsmgr V1.0.6
 
 --- .orig/media/cryptofs/apps/usr/palm/applications/ca.canucksoftware.systoolsmgr/appinfo.json

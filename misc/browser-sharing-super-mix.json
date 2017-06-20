@@ -1,0 +1,202 @@
+[
+	{
+		"category": "browser",
+		"owner": "browser-sharing-super-mix",
+		"prefs": [ {
+			"group": "page submenu",
+			"restart": "app",
+			"label": "Send via Neato!",
+			"help": "Determines whether the Send Via Neato! option should be under the Page section. Neato! is a Phone<->PC client for webOS.",
+			"key": "showNeato",
+			"type": "ToggleButton",
+			"value": true
+		},  {
+			"group": "page submenu",
+			"restart": "app",
+			"label": "Send via DataJog",
+			"help": "Determines whether the Send Via DataJog option should be under the Page section. DataJog is a webOSDevice<->PC client for webOS. Supports DataJog, DataJog Beta and Trail. Launch order is DataJog, Beta, Trail.",
+			"key": "showDataJog",
+			"type": "ToggleButton",
+			"value": false
+		},  {
+			"group": "page submenu",
+			"restart": "app",
+			"label": "Add to Spare Time",
+			"help": "Determines whether the Add to Spare Time option should be under the Page section. Spare Time is an Instapaper client for webOS.",
+			"key": "showSpareTime",
+			"type": "ToggleButton",
+			"value": false
+		},  {
+			"group": "page submenu",
+			"restart": "app",
+			"label": "Add to Relego",
+			"help": "Determines whether the Add to Relego option should be under the Page section. Relego is a Read It Later client for webOS.",
+			"key": "showRelego",
+			"type": "ToggleButton",
+			"value": false
+		},  {
+			"group": "page submenu",
+			"restart": "app",
+			"label": "Add to ReadOnTouch",
+			"help": "Determines whether the Add to ReadOnTouch option should be under the Page section. ReadOnTouch is a Read It Later client for webOS. Supports ReadOnTouch Pro and Phone. Launch order is Pro, Phone.",
+			"key": "showReadontouch",
+			"type": "ToggleButton",
+			"value": false
+		},  {
+			"group": "page submenu",
+			"restart": "app",
+			"label": "Copy to Clipboard",
+			"help": "Determines whether the Copy to Clipboard option should be under the Page section.",
+			"key": "showClipboard",
+			"type": "ToggleButton",
+			"value": true
+		}, {
+			"group": "page submenu",
+			"restart": "app",
+			"label": "Mobilize",
+			"help": "Determines whether the Mobilize option should be under the Page section. Mobilize reloads current page with an instapaper web-service that shows it in a reduced mobile-view.",
+			"key": "showMobilize",
+			"type": "ToggleButton",
+			"value": false
+		},  {
+			"group": "page submenu",
+			"restart": "app",
+			"label": "View Source",
+			"help": "Determines whether the View Source option should be under the Page section. Requires Internalz 1.3 or greater)",
+			"key": "showViewsource",
+			"type": "ToggleButton",
+			"value": false
+		}, {
+			"group": "page submenu",
+			"restart": "app",
+			"label": "Shorten URL",
+			"help": "Determines whether the Shorten URL option should be under the Page section. URLs are shortened with is.gd and copied to clipboard.",
+			"key": "shortenURL",
+			"type": "ToggleButton",
+			"value": false
+		},  {
+			"group": "page submenu",
+			"restart": "app",
+			"label": "Add to MeOrg!",
+			"help": "Determines whether the Add to MeOrg! option should be under the Page section. MeOrg! is a Springpad client for webOS.",
+			"key": "showMeOrg",
+			"type": "ToggleButton",
+			"value": false
+		},  {
+			"group": "page submenu",
+			"restart": "app",
+			"label": "Add to TapNote",
+			"help": "Determines whether the Add to TapNote option should be under the Page section. TapNote is a Dropbox-synchronized note-taking app, and allows you to create new notes or append text to existing note.",
+			"key": "showTapNote",
+			"type": "ToggleButton",
+			"value": false
+		},  {
+			"group": "page submenu",
+			"restart": "app",
+			"label": "ReKindleIt!",
+			"help": "Determines whether the ReKindleIt! option should be under the Page section. ReKindleIt! is a web service that sends articles to your Kindle. Opens in New Card.",
+			"key": "reKindleIt",
+			"type": "ToggleButton",
+			"value": false
+		}, {
+			"group": "page submenu",
+			"restart": "app",
+			"label": "Send to Instapaper",
+			"help": "Determines whether the Send to Instapaper option should be under the Page section. Instapaper is service designed to store articles to be read offline later. Does not require an app.",
+			"key": "showInstapaper",
+			"type":"ToggleButton",
+			"value": false
+		}, {
+			"group": "page submenu",
+			"restart": "app",
+			"label": "Instapaper Username or Email",
+			"help": "Username for native Instapaper function. Required for the Send to Instapaper option.",
+			"key": "ipUsername",
+			"type": "TextField",
+			"value": "",
+			"input": "text",
+		}, {
+			"group": "page submenu",
+			"restart": "app",
+			"label": "Instapaper Password, if you have one",
+			"help": "Username for native Instapaper function. IF YOU HAVE A PASSWORD, this is required for the Send to Instapaper option.",
+			"key": "ipPassword",
+			"type": "TextField",
+			"value": "",
+			"input": "text",
+		}, {
+			"group": "share via... submenu",
+			"restart": "app",
+			"label": "Facebook",
+			"help": "Determines whether the Facebook option should be under the Share section. Opens the Facebook app and posts as a status update. Supports both app catalog and beta versions.",
+			"key": "showFacebook",
+			"type": "ToggleButton",
+			"value": true
+		},	{
+			"group": "share via... submenu",
+			"restart": "app",
+			"label": "Bad Kitty",
+			"help": "Determines whether the Bad Kitty option should be under the Share section. Bad Kitty is a Twitter client for webOS.",
+			"key": "showBadKitty",
+			"type": "ToggleButton",
+			"value": true			
+		},	{
+			"group": "share via... submenu",
+			"restart": "app",
+			"label": "Spaz",
+			"help": "Determines whether the Spaz option should be under the Share section. Spaz is a microblogging client for webOS. Supports Spaz Special Edition, Spaz Beta, and Spaz Free. Launch order is Beta, SpEd, Free.",
+			"key": "showSpaz",
+			"type": "ToggleButton",
+			"value": true
+		}, {
+			"group": "share via... submenu",
+			"restart": "app",
+			"label": "Twee",
+			"help": "Determines whether the Twee option should be under the Share section. Twee is a Twitter client for webOS.",
+			"key": "showTwee",
+			"type": "ToggleButton",
+			"value": false	
+		},	{
+			"group": "share via... submenu",
+			"restart": "app",
+			"label": "Tweed",
+			"help": "Determines whether the Tweed option should be under the Share section. Tweed is a Twitter client for webOS.",
+			"key": "showTweed",
+			"type": "ToggleButton",
+			"value": false
+		},	{
+			"group": "share via... submenu",
+			"restart": "app",
+			"label": "Carbon",
+			"help": "Determines whether the Carbon option should be under the Share section. Carbon is a Twitter client for webOS. Does not work with Carbon beta.",
+			"key": "showCarbon",
+			"type": "ToggleButton",
+			"value": false
+		},	{
+			"group": "share via... submenu",
+			"restart": "app",
+			"label": "Quick Post",
+			"help": "Determines whether the Quick Post option should be under the Share section. Quick Post is an app that allows fast posting to multiple Twitter and Facebook accounts. Message is posted to default accounts only.",
+			"key": "showQuickPost",
+			"type": "ToggleButton",
+			"value": "true"
+		}, {
+			"group": "share via... submenu",
+			"restart": "app",
+			"label": "Project Macaw",
+			"help": "Determines whether the Project Macaw option should be under the Share section. Project Macaw is a Twitter client for webOS.",
+			"key": "showProjectMacaw",
+			"type": "ToggleButton",
+			"value": true			
+		},	{
+			"group": "share via... submenu",
+			"restart": "app",
+			"label": "Tachyon",
+			"help": "Determines whether the Tachyon option should be under the Share section. Tachyon is a Twitter client for webOS.",
+			"key": "showTachyon",
+			"type": "ToggleButton",
+			"value": "true"
+			}		
+		]
+	}
+]

@@ -1,0 +1,17 @@
+Name: Ubercal MWatch AppID patch
+Version: 1
+Author: Baldric
+Category: Calendar
+Description: Updates an Ubercal (v2.2.4-92) patched Calendar's reminder-assistant of the calendar to specify that the calendar is sending the notification to the watch (so that the proper icon is display on the Pebble3)
+
+--- .orig/usr/palm/applications/com.palm.app.calendar/app/controllers/reminder-assistant.js
++++ /usr/palm/applications/com.palm.app.calendar/app/controllers/reminder-assistant.js
+@@ -314,7 +314,7 @@
+ 					method: 'open',
+ 					parameters: {
+ 						id: "de.metaviewsoft.mwatch",
+-						params: {command: "SMS", icon: "CAL", info: data.subject + "\n" + data.time +" / " + data.location}
++						params: {command: "SMS", icon: "CAL", info: data.subject + "\n" + data.time +" / " + data.location, appid: "com.palm.app.calendar"}
+ 					 },
+ 					onSuccess: function() {},
+ 					onFailure: function() {}		

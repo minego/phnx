@@ -88,16 +88,20 @@ DashboardAssistant.prototype = {
 		//Send notification message to BT watch SE MBW-150 via metaviews MW150
 		this.getTweaksPrefs = new Mojo.Service.Request("palm://org.webosinternals.tweaks.prefs/", {
 			method: 'get', parameters: {'owner': "bluetooth-mbw150",
-			keys: ["mbwMacaw"]},
+			keys: ["mbwMacaw","mbwMacawColour"]},
 			onSuccess: function(response) {
 				if(response) {
 					if(response.mbwMacaw == true) {
+						var notificationColour = 0xCA;
+						if(response.mbwMacawColour){
+							notificationColour = parseInt(response.mbwMacawColour,16);
+						}
 						//If true - Report BannerMessage to SE-Watch MBW150
 						var request = new Mojo.Service.Request('palm://com.palm.applicationManager', {
 					        method: 'open',
 					        parameters: {
 					            id: "de.metaviewsoft.mwatch",
-					            params: {command: "SMS", info: bannerMessage, wordwrap: true, appid: "net.minego.phnx"}
+					            params: {command: "SMS", info: bannerMessage, wordwrap: true, appid: "net.minego.phnx", color: notificationColour}
 				   	    	 },
 				     	   	onSuccess: function() {},
 				       	  	onFailure: function() {}
