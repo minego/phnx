@@ -1,6 +1,7 @@
 var ChangelogToaster = Class.create(Toaster, {
 	items: [
 		{ version: '1.6.9'},
+		{ item: 'Labels of List Selectors are no longer truncated in Preferences'},
 		{ item: 'Added new option in Advanced Prefs to allow for a delay between panel loads when refreshing all, such as launching the app'},
 		{ item: 'Bug fixed non-Twitter hosted image display'},
 		{ item: 'Menu item under Accounts now allows the creation of a launch point for the current account or all accounts'},
