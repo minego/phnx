@@ -1,5 +1,5 @@
 Name: MWatch bluetooth watch notifications
-Version: 1.1
+Version: 1.2
 Author: MetaView, Baldric
 Category: Notifications
 Description: Same as MetaView's patch to add MWatch compatibility for notifications, but removes the email portion (so it can be applied with Ubercycling email timestamp patch). Adds colour and app icon for Pebble3. Needs new Tweaks json preference file with those options.
@@ -18,16 +18,16 @@ index 5a5aec0..7e9d6f3 100644
 +		//Patch to report new SMS to BT-watch SE MBW-150
 +		this.getTweaksPrefs = new Mojo.Service.Request("palm://org.webosinternals.tweaks.prefs/", {
 +			method: 'get', parameters: {'owner': "bluetooth-mbw150", 
-+			keys: ["mbwSMS","mbwSMSColour"]},
++			keys: ["mbwSMS","mbwSMSColour","mbwAll"]},
 +			onSuccess: function(response) {
 +				if(response) {
-+					if(response.mbwSMS== true) {
++					if(response.mbwSMS == true && response.mbwAll == true) {
 +						//Report Mail to ST-Watch MBW150
 +						var notificationColour = 0xCC;
 +						if(response.mbwSMSColour){
 +							notificationColour = parseInt(response.mbwSMSColour,16);
 +						}
-+						var request = new Mojo.Service.Request('palm://com.palm.applicationManager', {
++							var request = new Mojo.Service.Request('palm://com.palm.applicationManager', {
 +					        method: 'open',
 +					        parameters: {
 +					            id: "de.metaviewsoft.mwatch",
@@ -56,10 +56,10 @@ index 6eb982a..1e238cd 100644
 +			if (message === this.MESSAGE_SONG_CHANGED){
 +				this.getTweaksPrefs = new Mojo.Service.Request("palm://org.webosinternals.tweaks.prefs/", {
 +				method: 'get', parameters: {'owner': "bluetooth-mbw150", 
-+				keys: ["mbwSong"]},
++				keys: ["mbwSong","mbwAll"]},
 +					onSuccess: function(response) {
 +						if(response) {
-+							if(response.mbwSong == true) {
++							if(response.mbwSong == true && response.mbwAll == true) {
 +								Mojo.Log.error('ABOUT TO Report Title to ST-Watch MBW150');
 +								var currentSong = this.getCurrentSong();
 +								var request = new Mojo.Service.Request('palm://com.palm.applicationManager', {

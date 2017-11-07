@@ -253,3 +253,4 @@ Modified app-assistant.js, main-assistant.js and dashboard-assistant.js to add L
 Modified pictureView-assistant.js and tweet.js to fix problem with non-twitter hosted images and fixed bug with instagram hosted pics. Note, instagram needs to re-direct so images in PictureView need refreshing to be seen (ie, rotate a couple of times or exit and go back in to PictureViewer)
 Modified preferences-assistant.js, local.js and main-assistant.js to allow for user defined delay between loads of all panels on launch
 Modified preferences-assistant.js so that listSelector items are multiline instead of being truncated with ...
+Modified dashboard-assistant.js to check for mbwAll tweak pref

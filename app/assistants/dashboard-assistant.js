@@ -88,10 +88,10 @@ DashboardAssistant.prototype = {
 		//Send notification message to BT watch SE MBW-150 via metaviews MW150
 		this.getTweaksPrefs = new Mojo.Service.Request("palm://org.webosinternals.tweaks.prefs/", {
 			method: 'get', parameters: {'owner': "bluetooth-mbw150",
-			keys: ["mbwMacaw","mbwMacawColour"]},
+			keys: ["mbwMacaw","mbwMacawColour","mbwAll"]},
 			onSuccess: function(response) {
 				if(response) {
-					if(response.mbwMacaw == true) {
+					if(response.mbwMacaw == true && response.mbwAll == true) {
 						var notificationColour = 0xCA;
 						if(response.mbwMacawColour){
 							notificationColour = parseInt(response.mbwMacawColour,16);

@@ -3,6 +3,14 @@
 		"category": "Bluetooth",
 		"owner": "bluetooth-mbw150",
 		"prefs": [ {
+			"group": "BT watch - All",
+			"restart": "app",
+			"label": "MBW-150 Notifications",
+			"help": "Toggle ALL compatible notifications to MBW-150. Overrides individual settings",
+			"key": "mbwAll",
+			"type": "ToggleButton",
+			"value": false 
+		},	{
 			"group": "BT watch - System",
 			"restart": "app",
 			"label": "Messaging -> MBW-150",
