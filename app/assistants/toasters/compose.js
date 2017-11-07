@@ -83,9 +83,10 @@ var ComposeToaster = Class.create(Toaster, {
 		this.to				= {};
 		this.from			= {};
 		this.rt				= false;
-		this.availableChars	= 140;
+		this.availableChars	= 280;
 		this.availableDMChars = 10000;
-		this.count			= 140;
+		//this.count			= 140;
+		this.count		= this.availableChars;
 		this.images			= []; //any images to be uploaded
 		this.uploading		= false;
 		this.sending		= false;
@@ -567,7 +568,8 @@ var ComposeToaster = Class.create(Toaster, {
 				// Ya gotta give me a little bit of room to work with. How am I
 				// supposed to split that? Jerk!
 
-				ex('Keep it under 140, please!');
+				//ex('Keep it under 140, please!');
+				ex('Keep it under ' + this.availableChars +  ', please!');
 				return;
 			}
 
