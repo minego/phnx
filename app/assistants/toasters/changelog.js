@@ -1,5 +1,7 @@
 var ChangelogToaster = Class.create(Toaster, {
 	items: [
+		{ version: '1.7.1'},
+		{ item: 'Added option to Open Tweet Link in Browser'},
 		{ version: '1.7.0'},
 		{ item: 'Prepped for composing greater than 140 character tweets'},
 		{ item: 'New MWatch setting in Tweaks - mbwAll - respected/required. Please update json preference file for Tweaks (included in app \"misc\" folder)'},

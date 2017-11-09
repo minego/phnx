@@ -519,6 +519,10 @@ var TweetToaster = Class.create(Toaster, {
 			case 'cmdCopyUrl':
 				this.copyUrl();
 				break;
+			case 'cmdOpenTweetUrl':
+				//this.showWebview(this.twitterLink);
+				global.openBrowser(this.twitterLink,'stockBrowser');
+				break;
 			case 'cmdDataJog':
 				this.dataJog();
 				break;
@@ -1553,6 +1557,10 @@ transport.responseText);
 			{
 				label:				$L('Send Direct Message'),
 				command:			'cmdMessage'
+			},
+			{
+				label:		$L('Open Tweet in System Browser'),
+				command:	'cmdOpenTweetUrl'
 			},
 			{
 				label:				$L('Share'),

@@ -254,3 +254,4 @@ Modified pictureView-assistant.js and tweet.js to fix problem with non-twitter h
 Modified preferences-assistant.js, local.js and main-assistant.js to allow for user defined delay between loads of all panels on launch
 Modified preferences-assistant.js so that listSelector items are multiline instead of being truncated with ...
 Modified dashboard-assistant.js to check for mbwAll tweak pref
+Modified tweet.js to allow Tweet to be opened in Browser
