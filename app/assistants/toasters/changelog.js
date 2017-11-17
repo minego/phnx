@@ -1,5 +1,8 @@
 var ChangelogToaster = Class.create(Toaster, {
 	items: [
+		{ version: '1.7.2'},	
+		{ item: 'Increased length of ChangeLog scroller as it was maxing out'},
+		{ item: 'Improved launch speed (slightly)'},
 		{ version: '1.7.1'},
 		{ item: 'Added option to Open Tweet Link in Browser'},
 		{ version: '1.7.0'},
@@ -344,7 +347,7 @@ var ChangelogToaster = Class.create(Toaster, {
 			itemTemplate:		"templates/changelog-item",
 			listTemplate:		"templates/list",
 			// Below added by DC as changeLog display was maxing out
-			renderLimit: 275
+			renderLimit: 325
 		}, this);
 	},
 	backTapped: function(event) {

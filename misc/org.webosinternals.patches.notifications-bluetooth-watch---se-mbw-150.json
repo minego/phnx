@@ -5,16 +5,16 @@
 		"prefs": [ {
 			"group": "BT watch - All",
 			"restart": "app",
-			"label": "MBW-150 Notifications",
-			"help": "Toggle ALL compatible notifications to MBW-150. Overrides individual settings",
+			"label": "Pebble Notifications",
+			"help": "Toggle ALL compatible notifications to Pebble. Overrides individual settings",
 			"key": "mbwAll",
 			"type": "ToggleButton",
 			"value": false 
 		},	{
 			"group": "BT watch - System",
 			"restart": "app",
-			"label": "Messaging -> MBW-150",
-			"help": "Report messaging notifications to BT-watch SE MBW-150",
+			"label": "Messaging -> Pebble",
+			"help": "Report messaging notifications to Pebble",
 			"key": "mbwSMS",
 			"type": "ToggleButton",
 			"value": true
@@ -225,8 +225,8 @@
 		},  {
 			"group": "BT watch - System",
 			"restart": "app",
-			"label": "Mails -> MBW-150",
-			"help": "Report new email to BT-watch SE MBW-150",
+			"label": "Mails -> Pebble",
+			"help": "Report new email to Pebble",
 			"key": "mbwEmail",
 			"type": "ToggleButton",
 			"value": false
@@ -437,16 +437,16 @@
 		}, {
 			"group": "BT watch - System",
 			"restart": "app",
-			"label": "Songs -> MBW-150",
-			"help": "Report MP3 tag of new song to BT-watch SE MBW-150 (build in music player)",
+			"label": "Songs -> Pebble",
+			"help": "Report MP3 tag of new song to Pebble (built in music player)",
 			"key": "mbwSong",
 			"type": "ToggleButton",
 			"value": false
 		},  {
 			"group": "BT watch - Apps",
 			"restart": "app",
-			"label": "Project Macaw -> MBW-150",
-			"help": "Report Project Macaws notifications to BT-watch SE MBW-150",
+			"label": "Project Macaw -> Pebble",
+			"help": "Report Project Macaws notifications to Pebble",
 			"key": "mbwMacaw",
 			"type": "ToggleButton",
 			"value": false
@@ -657,11 +657,215 @@
 		},  {
 			"group": "BT watch - Apps",
 			"restart": "app",
-			"label": "Foursquare -> MBW-150",
-			"help": "Report Foursquare checkin notifications to BT-watch SE MBW-150",
-			"key": "mbw4square",
+			"label": "Phnx -> Pebble",
+			"help": "Report Phnx notifications to Pebble",
+			"key": "mbwPhnx",
 			"type": "ToggleButton",
 			"value": false
-		}		]
+		},  {
+			"group": "BT watch - Apps",
+			"restart": "app",
+			"label": "Phnx Colour",
+			"help": "Set the colour of the notification on a Pebble3 device",
+			"key": "mbwPhnxColour",
+			"type": "ListSelector",
+      "value": "0xCA",
+      "choices": [ {
+        "label": "Black",
+        "value": "0xC0"
+      }, {
+        "label": "Oxford Blue",
+        "value": "0xC1"
+      }, {
+        "label": "Duke Blue",
+        "value": "0xC2"
+      }, {
+        "label": "Blue",
+        "value": "0xC3"
+      }, {
+        "label": "Dark Green",
+        "value": "0xC4"
+      }, {
+        "label": "Midnight Green",
+        "value": "0xC5"
+      }, {
+        "label": "Cobalt Blue",
+        "value": "0xC6"
+      }, {
+        "label": "Blue Moon",
+        "value": "0xC7"
+      }, {
+        "label": "Islamic Green",
+        "value": "0xC8"
+      }, {
+        "label": "Jaeger Green",
+        "value": "0xC9"
+      }, {
+        "label": "Tiffany Blue",
+        "value": "0xCA"
+      }, {
+        "label": "Vivid Cerulean",
+        "value": "0xCB"
+      }, {
+        "label": "Green",
+        "value": "0xCC"
+      }, {
+        "label": "Malachite",
+        "value": "0xCD"
+      }, {
+        "label": "Medium Spring Green",
+        "value": "0xCE"
+      }, {
+        "label": "Cyan",
+        "value": "0xCF"
+      }, {
+        "label": "Bulgarian Rose",
+        "value": "0xD0"
+      }, {
+        "label": "ImperialPurple",
+        "value": "0xD1"
+      }, {
+        "label": "Indigo",
+        "value": "0xD2"
+      }, {
+        "label": "Electric Ultramarine",
+        "value": "0xD3"
+      }, {
+        "label": "Army Green",
+        "value": "0xD4"
+      }, {
+        "label": "Dark Grey",
+        "value": "0xD5"
+      }, {
+        "label": "Liberty",
+        "value": "0xD6"
+      }, {
+        "label": "Very Light Blue",
+        "value": "0xD7"
+      }, {
+        "label": "Kelly Green",
+        "value": "0xD8"
+      }, {      	
+        "label": "May Green",
+        "value": "0xD9"
+      }, {
+        "label": "Cadet Blue",
+        "value": "0xDA"
+      }, {
+        "label": "Picton Blue",
+        "value": "0xDB"
+      }, {
+        "label": "Bright Green",
+        "value": "0xDC"
+      }, {
+        "label": "Screamin Green",
+        "value": "0xDD"
+      }, {
+        "label": "Medium Aquamarine",
+        "value": "0xDE"
+      }, {
+        "label": "Electric Blue",
+        "value": "0xDF"
+      }, {
+        "label": "Dark Candy Apple Red",
+        "value": "0xE0"
+      }, {
+        "label": "Jazzberry Jam",
+        "value": "0xE1"
+      }, {
+        "label": "Purple",
+        "value": "0xE2"
+      }, {
+        "label": "Vivid Violet",
+        "value": "0xE3"
+      }, {
+        "label": "Windsor Tan",
+        "value": "0xE4"
+      }, {
+        "label": "Rose Vale",
+        "value": "0xE5"
+      }, {
+        "label": "Purpureus",
+        "value": "0xE6"
+      }, {
+        "label": "Lavender Indigo",
+        "value": "0xE7"
+      }, {
+        "label": "Limerick",
+        "value": "0xE8"
+      }, {
+        "label": "Brass",
+        "value": "0xE9"
+      }, {
+      	"label": "Light Grey",
+        "value": "0xEA"
+      }, {
+      	"label": "Baby Blue Eyes",
+        "value": "0xEB"
+      }, {
+      	"label": "Spring Bud",
+        "value": "0xEC"
+      }, {
+      	"label": "Inchworm",
+        "value": "0xED"
+      }, {
+        "label": "Mint Green",
+        "value": "0xEE"
+      }, {
+        "label": "Celeste",
+        "value": "0xEF"
+      }, {
+        "label": "Red",
+        "value": "0xF0"
+      }, {
+        "label": "Folly",
+        "value": "0xF1"
+      }, {
+        "label": "Fashion Magenta",
+        "value": "0xF2"
+      }, {
+        "label": "Magenta",
+        "value": "0xF3"
+      }, {
+        "label": "Orange",
+        "value": "0xF4"
+      }, {
+        "label": "Sunset Orange",
+        "value": "0xF5"
+      }, {
+        "label": "Brilliant Rose",
+        "value": "0xF6"
+      }, {
+        "label": "Shocking Pink",
+        "value": "0xF7"
+      }, {
+        "label": "Chrome Yellow",
+        "value": "0xF8"
+      }, {
+        "label": "Rajah",
+        "value": "0xF9"
+      }, {
+        "label": "Melon",
+        "value": "0xFA"
+      }, {
+        "label": "Rich Brilliant Lavender",
+        "value": "0xFB"
+      }, {
+        "label": "Yellow",
+        "value": "0xFC"
+      }, {
+        "label": "Icterine",
+        "value": "0xFD"
+      }, {
+        "label": "Pastel Yellow",
+        "value": "0xFE"
+      }, {
+        "label": "White",
+        "value": "0xFF"
+      }, {
+        "label": "Clear",
+        "value": "0x00"
+      } ]
+		}	]			
 	}
 ]

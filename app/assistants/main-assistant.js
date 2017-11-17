@@ -275,14 +275,11 @@ MainAssistant.prototype = {
 					items: user[panel.id] || []
 				};
 
-				/* Update the timestamps */
+				/* Update mutedUser status and timestamps */
 				for (var x = 0, tweet; tweet = panel.model.items[x]; x++) {
 					var d = new Date(tweet.created_at);
 					tweet.time_str = d.toRelativeTime(1500);
-				}
 
-				/* Update mutedUser status */
-				for (var x = 0, tweet; tweet = panel.model.items[x]; x++) {
 					if(mutedUsers && mutedUsers.length > 0){
 						for (var m = 0, mutedUser; mutedUser = mutedUsers[m]; m++) {
 							//if (tweet.user.screen_name.indexOf(mutedUser.user) > -1) {

@@ -190,7 +190,7 @@ StatusAssistant.prototype = {
 
 		var args = {
 			"q": this.opts.query,
-			"count": searchMaxResults,
+			"count": searchMaxResults
 		};
 
 		if (this.itemsModel.items && this.itemsModel.items[0]) {
@@ -350,6 +350,7 @@ StatusAssistant.prototype = {
 	updateCount: function() {
 		var count = this.itemsModel.items.length;
 		this.controller.get('footer').update(count + ' tweets');
+
 	},
 	handleCommand: function(event) {
 		if (event.type === Mojo.Event.back) {

@@ -255,3 +255,5 @@ Modified preferences-assistant.js, local.js and main-assistant.js to allow for u
 Modified preferences-assistant.js so that listSelector items are multiline instead of being truncated with ...
 Modified dashboard-assistant.js to check for mbwAll tweak pref
 Modified tweet.js to allow Tweet to be opened in Browser
+Modified changelog.js to add lines to the scroller (it was maxing out and white)
+Modified main-assistant.js to somewhat optimize startup time 
