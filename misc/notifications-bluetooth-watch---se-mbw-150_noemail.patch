@@ -1,0 +1,184 @@
+Name: MWatch bluetooth watch notifications
+Version: 1.2
+Author: MetaView, Baldric
+Category: Notifications
+Description: Same as MetaView's patch to add MWatch compatibility for notifications, but removes the email portion (so it can be applied with Ubercycling email timestamp patch). Adds colour and app icon for Pebble3. Needs new Tweaks json preference file with those options.
+
+
+diff --git a/usr/palm/applications/com.palm.app.messaging/app/controllers/notification-assistant.js b/usr/palm/applications/com.palm.app.messaging/app/controllers/notification-assistant.js
+index 5a5aec0..7e9d6f3 100644
+--- a/usr/palm/applications/com.palm.app.messaging/app/controllers/notification-assistant.js
++++ b/usr/palm/applications/com.palm.app.messaging/app/controllers/notification-assistant.js
+@@ -407,6 +407,32 @@ NotificationAssistant.prototype.sendNewMessageNotificationAndUpdateDashboard = f
+ 			message: message
+ 		});
+ 	}
++
++
++		//Patch to report new SMS to BT-watch SE MBW-150
++		this.getTweaksPrefs = new Mojo.Service.Request("palm://org.webosinternals.tweaks.prefs/", {
++			method: 'get', parameters: {'owner': "bluetooth-mbw150", 
++			keys: ["mbwSMS","mbwSMSColour","mbwAll"]},
++			onSuccess: function(response) {
++				if(response) {
++					if(response.mbwSMS == true && response.mbwAll == true) {
++						//Report Mail to ST-Watch MBW150
++						var notificationColour = 0xCC;
++						if(response.mbwSMSColour){
++							notificationColour = parseInt(response.mbwSMSColour,16);
++						}
++							var request = new Mojo.Service.Request('palm://com.palm.applicationManager', {
++					        method: 'open',
++					        parameters: {
++					            id: "de.metaviewsoft.mwatch",
++					            params: {command: "SMS", info: notificationText, wordwrap: true, appid: Mojo.Controller.appInfo.id, color: notificationColour}
++				   	    	 },
++				     	   	onSuccess: function() {},
++				       	  	onFailure: function() {}
++				          	});
++					}
++				}
++			}.bind(this)});
+ 	
+ 	var bannerParams = {
+ 		messageText: notificationText
+diff --git a/usr/palm/applications/com.palm.app.musicplayer/scripts/MusicPlayer.js b/usr/palm/applications/com.palm.app.musicplayer/scripts/MusicPlayer.js
+index 6eb982a..1e238cd 100644
+--- a/usr/palm/applications/com.palm.app.musicplayer/scripts/MusicPlayer.js
++++ b/usr/palm/applications/com.palm.app.musicplayer/scripts/MusicPlayer.js
+@@ -229,6 +229,32 @@ var musicPlayerSingleton = (function(){
+ 		},
+ 		
+ 		sendMessageToListeners: function(message){
++
++
++			//Patch report Title to BT-Watch SE MBW-150	to report new Mail to BT-watch SE MBW-150
++			if (message === this.MESSAGE_SONG_CHANGED){
++				this.getTweaksPrefs = new Mojo.Service.Request("palm://org.webosinternals.tweaks.prefs/", {
++				method: 'get', parameters: {'owner': "bluetooth-mbw150", 
++				keys: ["mbwSong","mbwAll"]},
++					onSuccess: function(response) {
++						if(response) {
++							if(response.mbwSong == true && response.mbwAll == true) {
++								Mojo.Log.error('ABOUT TO Report Title to ST-Watch MBW150');
++								var currentSong = this.getCurrentSong();
++								var request = new Mojo.Service.Request('palm://com.palm.applicationManager', {
++						      		  method: 'open',
++						     		   parameters: {
++								            id: "de.metaviewsoft.mwatch",
++								            params: {command: "INFO", info: currentSong.title + "\n " + currentSong.artist, appid: Mojo.Controller.appInfo.id}
++							   	    	 },
++							     	   	onSuccess: function() {},
++			       					  	onFailure: function() {}
++				        		  	});	
++							}
++						}
++				}.bind(this)});			
++			}
++
+ 			if (!this.listeners){	return; }
+ 			
+ 			this.listeners.each(function(listener){
+--- .orig/usr/palm/applications/com.palm.app.phone/phonePopups/sources/IncomingCallImpl.js
++++ /usr/palm/applications/com.palm.app.phone/phonePopups/sources/IncomingCallImpl.js
+@@ -28,6 +28,7 @@
+ 		{name: "dnastSub", kind:"PalmService", service:"palm://com.palm.display/control/", subscribe: true, },
+ 		{name: "displayOn", kind:"PalmService", service:"palm://com.palm.display/control/"},
+ 
++		{name: "launchMW150", kind: "PalmService", service: "palm://com.palm.applicationManager/", method: "launch", onSuccess: "", onFailure: "", subscribe: true},
+ 		{name: "muteRingtone", kind:"PalmService", service:"palm://com.palm.audio/ringtone/", method: "setMuted"}
+ 	],
+ 	resizeHandler: function() {
+@@ -87,6 +88,9 @@
+ 	        this.picLoc = "url(" + call.contact.picture.src + ")";
+ 	        this.contactImgSrcChanged();
+ 	    }
++		//Patch MBW150 report Call to BT watch
++		params = {command: "RING", number: this.$.displayNumber.getContent(), caller: this.$.displayName.getContent(), appid: "com.palm.app.phone"};
++		this.$.launchMW150.call({"id" : "de.metaviewsoft.mwatch", "params" : params});
+ 
+ 	    this.exposed = true;
+ 	    this.blockIgnore = true;
+@@ -175,7 +179,11 @@
+ 		// just in case we never opened, turn off power and display blocks
+ 		enyo.job.stop("powerButtonListen");
+ 		enyo.job.stop("displayLock");
+-		           		
++
++		//Patch MBW150 report Call to BT watch
++		params = {command: "HANGUP", appid: "com.palm.app.phone"};
++		this.$.launchMW150.call({"id" : "de.metaviewsoft.mwatch", "params" : params});
++		
+ 		this.inherited(arguments);
+ 	},
+ 	
+@@ -225,6 +233,10 @@
+ 	},
+ 
+ 	answerCall: function() {
++		//Patch MBW150 report Call to BT watch
++		params = {command: "HANGUP", appid: "com.palm.app.phone"};
++		this.$.launchMW150.call({"id" : "de.metaviewsoft.mwatch", "params" : params});
++
+ 		var call = this.incomingLine.calls[0];
+ 	    var id = (this.incomingLine.conferenceId !== undefined ? this.incomingLine.conferenceId : call.id);
+ 	    this.exitStatus = "answer";
+@@ -229,7 +241,6 @@
+ 	    var id = (this.incomingLine.conferenceId !== undefined ? this.incomingLine.conferenceId : call.id);
+ 	    this.exitStatus = "answer";
+ 	    this.mute();
+-
+ 		enyo.application.CallSynergizer.callAnswered(this.incomingLine, id, call.transport);
+ 	
+ 		close();
+@@ -231,7 +242,6 @@
+ 	    this.mute();
+ 
+ 		enyo.application.CallSynergizer.callAnswered(this.incomingLine, id, call.transport);
+-	
+ 		close();
+ 	},
+ 
+@@ -237,6 +247,10 @@
+ 
+ 	//Ignore call
+ 	cancelCall: function() {
++		//Patch MBW150 report Call to BT watch
++		params = {command: "HANGUP", appid: "com.palm.app.phone"};
++		this.$.launchMW150.call({"id" : "de.metaviewsoft.mwatch", "params" : params});
++
+ 	    enyo.application.CallSynergizer.callIgnore(this.incomingLine.calls[0]);
+ 	    this.exitStatus = "ignore";
+ 	    this.announceIgnored();
+@@ -251,6 +265,10 @@
+ 				return;	
+ 			}*/
+ 
++		//Patch MBW150 report Call to BT watch
++		params = {command: "HANGUP", appid: "com.palm.app.phone"};
++		this.$.launchMW150.call({"id" : "de.metaviewsoft.mwatch", "params" : params});
++
+ 	    this.mute();
+ 	    enyo.application.CallSynergizer.callIgnore(this.incomingLine.calls[0]);
+ 	    this.exitStatus = "rejected";
+--- .orig/usr/palm/applications/com.palm.app.musicplayer/app/controllers/app-assistant.js
++++ /usr/palm/applications/com.palm.app.musicplayer/app/controllers/app-assistant.js
+@@ -231,6 +231,18 @@
+ 	} else if (params && (params.playlist || params.album || params.artist || params.genre || params.filter)) {
+ 		//passed in specific song filters
+ 		StageAssistant.launchNowPlaying(params); 
++	} else if (params && params.command) {
++		if (params.command == "next") {
++			this.musicPlayer.nextSong();
++		} else if (params.command == "previous") {
++			this.musicPlayer.prevSong();
++		} else if (params.command == "playpause") {
++			if (this.musicPlayer.isPlaying){
++				this.musicPlayer.pause();
++			} else {
++				this.musicPlayer.play();
++			}
++		}
+ 	} else {
+ 		//normal launch
+ 		if(stageController && stageController.getScenes().length > 0){

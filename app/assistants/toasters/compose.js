@@ -110,6 +110,10 @@ var ComposeToaster = Class.create(Toaster, {
 						args.long = this.lng;
 					}
 
+					if (this.photo) {
+						args.photo = this.photo;
+					}
+					
 					Twitter.postTweet(args, function(response, meta) {
 						var prefs = new LocalStorage();
 						var refresh = prefs.read('refreshOnSubmit');
@@ -197,12 +201,45 @@ var ComposeToaster = Class.create(Toaster, {
 		banner('Found you!');
 	},
 	photoTapped: function(event) {
+		if (this.photo) {
+			var opts = {
+				title: 'You already have a photo attached. Would you like to remove it?',
+				callback: function() {
+					this.assistant.toasters.back();
+
+					/* Clear the photo */
+					delete this.photo;
+
+					get('photo-' + this.id).addClassName('photo');
+					get('photo-' + this.id).removeClassName('photo-checked');
+
+					this.photoTapped();
+				}.bind(this),
+
+				cancel: function() {
+					this.assistant.toasters.back();
+				}.bind(this)
+			};
+
+			this.assistant.toasters.add(new ConfirmToaster(opts, this.assistant));
+
+			return;
+		}
 		var params = {
 			defaultKind: 'image',
 			kinds: ['image'],
 			onSelect: function(file){
-				var path = file.fullPath;
-				this.upload(path);
+				//var path = file.fullPath;
+				//this.upload(path);
+				/*
+					Save the path to the photo, and change the icon to show that
+					a photo has been selected.
+				*/				
+				this.photo = file.fullPath;
+
+				get('photo-' + this.id).removeClassName('photo');
+				get('photo-' + this.id).addClassName('photo-checked');
+
 			}.bind(this)
 		};
 
@@ -213,35 +250,35 @@ var ComposeToaster = Class.create(Toaster, {
 		this.availableChars -= 25; // the twitpic url is 25 characters long
 		this.updateCounter();
 	},
-	upload: function(path) {
-		this.uploading = true;
-		get('submit-' + this.id).setStyle({'opacity': '.4'});
-		get('loading').addClassName('show');
-		var currentUser = getUser();
-		var args = [
-			{"key":"consumerKey","data": Config.key},
-			{"key":"consumerSecret","data": Config.secret},
-			{"key":"token","data": currentUser.token},
-			{"key":"secret","data": currentUser.secret}
-		];
-		this.controller.serviceRequest('palm://com.palm.downloadmanager/', {
-			method: 'upload', 
-			parameters: {
-				'url': 'http://photos.phnxapp.com/upload',
-				'fileLabel': 'photo',
-				'fileName': path,
-				'postParameters': args,
-				'subscribe': true
-			},
-			onSuccess: this.uploadSuccess.bind(this),
-			onFailure: function() {
-				this.uploading = false;
-				get('submit-' + this.id).setStyle({'opacity': '1'});
-				get('loading').removeClassName('loading');
-				ex('Error uploading image.');
-			}
-		});
-	},
+	//upload: function(path) {
+	//	this.uploading = true;
+	//	get('submit-' + this.id).setStyle({'opacity': '.4'});
+	//	get('loading').addClassName('show');
+	//	var currentUser = getUser();
+	//	var args = [
+	//		{"key":"consumerKey","data": Config.key},
+	//		{"key":"consumerSecret","data": Config.secret},
+	//		{"key":"token","data": currentUser.token},
+	//		{"key":"secret","data": currentUser.secret}
+	//	];
+	//	this.controller.serviceRequest('palm://com.palm.downloadmanager/', {
+	//		method: 'upload', 
+	//		parameters: {
+	//			'url': 'http://photos.phnxapp.com/upload',
+	//			'fileLabel': 'photo',
+	//			'fileName': path,
+	//			'postParameters': args,
+	//			'subscribe': true
+	//		},
+	//		onSuccess: this.uploadSuccess.bind(this),
+	//		onFailure: function() {
+	//			this.uploading = false;
+	//			get('submit-' + this.id).setStyle({'opacity': '1'});
+	//			get('loading').removeClassName('loading');
+	//			ex('Error uploading image.');
+	//		}
+	//	});
+	//},
 	uploadPhotos: function() {
 		for (var i=0; i < this.images.length; i++) {
 			var img = this.images[i];

@@ -1,0 +1,487 @@
+Name: Uber Cycling Email Dashboard with MWatch
+Version: 1.3d
+Author: 60RH, Baldric
+Category: Notifications
+Description: 60RH's Uber Cycling Email Dashboard with added MWatch notifications. Adding timestamp to the dashboard for cycling emails from GMMan. Time stamp is system dependent so if you use 12hr format it'll use the correct local but it'll be wider. I find using military or 24hr much more aesthetic and economic screen wise. Tapping on the email icon pauses/plays the cycling. Also screen off/on does that.
+
+--- .orig/usr/palm/applications/com.palm.app.email/app/controllers/notification-assistant.js
++++ /usr/palm/applications/com.palm.app.email/app/controllers/notification-assistant.js
+@@ -40,6 +40,8 @@
+ 	this.dashboards = {};
+ 	this.errorDashboards = {};
+ 	
++	this.curmessageId = "";
++	
+ 	this.windowActivate = this.windowActivate.bind(this);
+ 	this._handleNewEmails = this._handleNewEmails.bind(this);
+ 	
+@@ -62,7 +64,6 @@
+ 				// Update our watch to the new rev, or use 0 if there are no emails yet.
+ 				that._updateWatch((latestEmail && latestEmail.initialRev) || 0);
+ 			});
+-			
+ 	
+ 	this.subscribeToServices();// do this last
+ };
+@@ -152,7 +153,7 @@
+ 
+ // Adds a new email to the pending list for its account:
+ NotificationAssistant.prototype._addNewEmail = function(email) {
+-	var accountId, array, sortIdx;
++	var accountId, array, sortIdx, emailId;
+ 	
+ 	// If showing all inboxes, then all new emails go into the "unified" bin.
+ 	if(this.showAllInboxes) {
+@@ -160,7 +161,6 @@
+ 	} else {
+ 		accountId = email.accountId;
+ 	}
+-	
+ 	// Decorate the email object with properties needed by the dashboard.
+ 	email = this._decorateEmail(email);
+ 	
+@@ -172,7 +172,11 @@
+ 	}
+ 	
+ 	// Add new email to the pending list, maintaining proper sort order.
+-	sortIdx = _.sortedIndex(array, email, this._getTimestamp);
++	//sortIdx = _.sortedIndex(array, email, this._getTimestamp);
++	//taken from the 3.0.5 email client
++	for (sortIdx = 0; sortIdx < array.length && email.timestamp > array[sortIdx].timestamp; sortIdx++) {
++			//this space intentionally left blank
++		}
+ 	array.splice(sortIdx, 0, email);
+ 	array._needsUpdate = true;
+ 	
+@@ -184,6 +188,12 @@
+ NotificationAssistant.prototype._getTimestamp = function(o) {
+ 	return o.timestamp;
+ };
++//Returns Date formated according to the options param.
++NotificationAssistant.prototype._getDatefromTimestamp = function(o,options) {
++	var d = new Date();
++	d.setTime(o.timestamp);
++	return Mojo.Format.formatDate(d,options);
++};
+ 
+ // Returns a decorated email object with added properties needed for displaying dashboards.
+ NotificationAssistant.prototype._decorateEmail = function(email) {
+@@ -197,6 +207,34 @@
+ 		Mojo.Log.error("Email %s is missing Sender information, subject len= %s", email._id, email.subject && email.subject.length);
+ 	}
+ 	newMail.text = Foundations.StringUtils.escapeHTML(email.subject);
++	newMail.time = this._getDatefromTimestamp(email,{time: 'short'});
++
++	//Patch to report new Mail to BT-watch SE MBW-150
++	this.getTweaksPrefs = new Mojo.Service.Request("palm://org.webosinternals.tweaks.prefs/", {
++		method: 'get', parameters: {'owner': "bluetooth-mbw150", 
++		keys: ["mbwEmail","mbwEmailColour","mbwAll"]},
++		onSuccess: function(response) {
++			if(response) {
++				if(response.mbwEmail == true) {
++					//Report Mail to ST-Watch MBW150
++					var notificationColour = 0xF4;
++					if(response.mbwEmailColour){
++						notificationColour = parseInt(response.mbwEmailColour,16);
++					}
++					if(response.mbwAll){
++						var request = new Mojo.Service.Request('palm://com.palm.applicationManager', {
++							method: 'open',
++							parameters: {
++								id: "de.metaviewsoft.mwatch",
++								params: {command: "SMS", info: email.subject + "\n" + email.from.addr, appid: "com.palm.app.email", color: notificationColour}
++							},
++							onSuccess: function() {},
++							onFailure: function() {}
++						});
++			    }
++				}
++			}
++		}.bind(this)});	
+ 	
+ 	return newMail;
+ };
+@@ -333,7 +371,8 @@
+ // creating it if necessary.
+ NotificationAssistant.prototype._updateDashboard = function(accountId, messages) {
+ 	var db = this.dashboards[accountId];
+-	
++	var autoCycleActive = true;
++	var controller = this.controller;
+ 	if(messages.length > 0) {
+ 		
+ 		// Make sure icon paths are correct.
+@@ -355,9 +394,11 @@
+ 			Mojo.Log.info("Creating dashboard for account %s, %d messages.", accountId, messages.length);
+ 			db = this.appController.createDashboard(NotificationAssistant.kNewEmailDashboardStageName+accountId, messages, {
+ 				mainTapHandler: this._dashboardMainTap.bind(this, accountId),
+-				iconTapHandler: this._dashboardIconTap.bind(this, accountId),
+-				cleanup: this._dashboardClosed.bind(this, accountId)
+-			});
++				iconTapHandler: this._dashboardIconTap.bind(this, autoCycleActive),
++				actionTapHandler: this._dashboardActionTap.bind(this, accountId),
++				cleanup: this._dashboardClosed.bind(this, accountId),
++				handlePlayPause: this._handlePlayPause.bind(this, controller)
++			}, "notification/dashboard-single-scene", "notification/dashboard-double-scene");
+ 				/* 
+ 				{
+ 					onSuccess: updateDb,
+@@ -365,8 +406,7 @@
+ 					mainTapHandler: this.mainTapHandler,
+ 					iconTapHandler: this.iconTapHandler,
+ 					cleanup: this.onCloseHandler
+-				});*/
+-				
++				});*/	
+ 			this.dashboards[accountId] = db;
+ 		}
+ 	}
+@@ -368,6 +408,13 @@
+ 				});*/
+ 				
+ 			this.dashboards[accountId] = db;
++			
++			if (!this.autoCycleActive)
++			{
++				//TODO: tweaks to specify the cycle length
++				this.autoCycleIntervalId = window.setInterval(this._autoCycleDashes.bind(this), 5000);
++				this.autoCycleActive = true;
++			}
+ 		}
+ 	}
+ };
+@@ -372,6 +419,34 @@
+ 	}
+ };
+ 
++NotificationAssistant.prototype._autoCycleDashes = function()
++{
++
++	//Mojo.Log.error("Dashboard name : %s", NotificationAssistant.get);
++	//var dashstage = this.appController.getStageController(NotificationAssistant.kNewEmailDashboardStageName+"-unified");
++	//Mojo.Log.error("Dashstage keys: %s ; values: %s", _.keys(dashstage), _.values(dashstage));
++	//var dashnoactive = !dashstage.isActiveAndHasScenes();
++	//Mojo.Log.error("dashnotactive = %s", dashnotactive);
++	if (!Object.keys(this.dashboards).length || this.displayOff === true)
++	{
++		window.clearInterval(this.autoCycleIntervalId);
++		this.autoCycleActive = false;
++		return;
++	}
++	
++	for (var key in this.dashboards) {
++		var db = this.dashboards[key];
++		var contents = db.contents;
++		Mojo.Log.error("contents[0] _.keys = %s; _.values = %s",_.keys(contents[0]), _.values(contents[0]));
++		if (contents.length > 1) {
++			contents.unshift(contents.pop());
++			db.updateDashboard(false);
++		//	this.curmessageId = contents[contents.length - 1].id;
++		}
++		this.curmessageId = contents[contents.length - 1].id;
++	}
++}
++
+ // Run through the given array of dashboard layer objects, and set the icon properties properly for each layer in the dashboard.
+ NotificationAssistant.prototype._updateIcons = function(messages) {
+ 	var i;
+@@ -377,6 +452,7 @@
+ 	var i;
+ 	var accountId;
+ 	var iconPath;
++	var timeStamp;
+ 	
+ 	if(messages.length <= 0){
+ 		return;
+@@ -393,11 +469,17 @@
+ 	for (i = 0; i < messages.length; i++) {
+ 		if (accountId !== messages[i].accountId) {
+ 			accountId = this.kUnifiedAccountId;
+-			messages[i].icon = 'images/notification-large-generic.png';
+-		} else {
+-			messages[i].icon = iconPath;
+-		}
+-		//Mojo.Log.info("Message %s is using icon %s", messages[i]._id, messages[i].icon);
++		//	Mojo.Log.info("Message is to address %s", messages[i].to.addr);
++			}
++		/*	messages[i].icon = 'images/notification-large-generic.png';
++		} else { */
++		//for cycling notifications we rather have the actual icon
++		//TODO: if using tweaks have a service call to tweaks to check that
++		//	messages[i].icon = iconPath;
++		messages[i].icon = EmailApp.accounts.getIconById(messages[i].accountId, true);
++	//	}
++	//	messages[i].timestamp = messages[i].time;
++		messages[i].id = messages[i]._id;
+ 	}
+ 	
+ };
+@@ -402,7 +484,6 @@
+ 	
+ };
+ 
+-
+ NotificationAssistant.prototype._dashboardMainTap = function(accountId) {
+ 	//window.logger.log("_dashboardMainTap");
+ 	var message = _.last(this.pending[accountId]);
+@@ -404,8 +485,23 @@
+ 
+ 
+ NotificationAssistant.prototype._dashboardMainTap = function(accountId) {
+-	//window.logger.log("_dashboardMainTap");
+-	var message = _.last(this.pending[accountId]);
++
++	var message = "";
++	var messages = this.pending[accountId];
++
++	Mojo.Log.error("After if this.curmessageId = %s", this.curmessageId);
++	
++	for (i = 0; i <= messages.length; i++) {
++		if (this.curmessageId === messages[i]._id)
++			{
++				message = messages[i];
++				Mojo.Log.error("message._id = %s", message._id);
++				break;
++			}
++	}
++	
++	Mojo.Log.error(" After for this.curmessageId = %s", this.curmessageId);
++	
+ 	var folder = this._getFolderForMessage(message);
+ 	this._clearDashboard(accountId);
+ 	Mojo.Log.info("NotificationAssistant._dashboardMainTap for account %s, displaying message %s", accountId, message && message._id);
+@@ -413,8 +509,10 @@
+ 	//window.logger.log("_dashboardMainTap done");
+ };
+ 
+-NotificationAssistant.prototype._dashboardIconTap = function(accountId) {
+-	var message = _.last(this.pending[accountId]);
++
++
++NotificationAssistant.prototype._dashboardIconTap = function(autoCycleActive) {
++	/*var message = _.last(this.pending[accountId]);
+ 	var folder = this._getFolderForMessage(message);
+ 	this._clearDashboard(accountId);
+ 	Mojo.Log.info("NotificationAssistant._dashboardIconTap for account %s, displaying folder %s", accountId, folder);
+@@ -419,6 +517,39 @@
+ 	this._clearDashboard(accountId);
+ 	Mojo.Log.info("NotificationAssistant._dashboardIconTap for account %s, displaying folder %s", accountId, folder);
+ 	AppAssistant.showEmailStage({folder:folder});	
++	*/
++	//someting I wasn't aware of. Let's reuse this and make it play/pause button for the cycle dash
++	Mojo.Log.info("NotificationAssistant._dashboardIconTap autoCycleActive : %s", this.autoCycleActive);
++	if(this.autoCycleActive)
++	{
++		if(this.autoCycleIntervalId != "undefined")
++			window.clearInterval(this.autoCycleIntervalId);
++		this.autoCycleActive = false;
++		this._showPauseIndicator();
++	}
++	else
++	{
++		this.autoCycleIntervalId = window.setInterval(this._autoCycleDashes.bind(this), 5000);
++		this.autoCycleActive = true;
++		this._showPlayIndicator();
++	}
++	Mojo.Log.info("NotificationAssistant._dashboardIconTap autoCycleActive : %s", this.autoCycleActive);		
++};
++
++ 
++NotificationAssistant.prototype._dashboardActionTap = function(accountId) {
++	var messages = this.pending[accountId];
++	var message = "";
++	
++	for (i = 0; i < messages.length; i++) {
++		if (this.curmessageId === messages[i]._id)
++			{
++				message = messages[i];
++				break;
++			}
++	}
++	this.clear(undefined, undefined, message._id);
++	Message.deleteMessage(message._id);
+ };
+ 
+ NotificationAssistant.prototype._dashboardErrorTap = function(accountId, destBox) {
+@@ -421,6 +552,7 @@
+ 	AppAssistant.showEmailStage({folder:folder});	
+ };
+ 
++
+ NotificationAssistant.prototype._dashboardErrorTap = function(accountId, destBox) {
+     var account = EmailApp.accounts.mailAccounts[accountId];
+ 	var folder = account && account[destBox + "FolderId"];
+@@ -563,6 +695,13 @@
+ 		} else if (data.event == 'displayOn') {
+ 			this.displayOff = false;
+ 			this.newMailDeferralTimeout = 7;
++			//Turn autoCylce to on	
++			if (!this.autoCycleActive)
++			{
++				//TODO: tweaks to specify the cycle length
++				this.autoCycleIntervalId = window.setInterval(this._autoCycleDashes.bind(this), 5000);
++				this.autoCycleActive = true;
++			}
+ 		}
+ 
+ 		Mojo.Log.info("displayUpdate displayOff", this.displayOff, "event", data.event);
+@@ -768,6 +907,94 @@
+ 	}
+ };
+ 
++//Animations for play/pause
++NotificationAssistant.prototype._handlePlayPause = function(controller)
++                                    {
++		                            if (this.autoCycleActive)
++		                                NotificationAssistant.prototype._showPlayIndicator();
++		                            else 
++			                            NotificationAssistant.prototype._showPauseIndicator();
++	                                 }
++NotificationAssistant.prototype._animatedShowingPlayIndicator = function() {
++			this.currentOpacity = this.controller.get('play-indicator-container').style.opacity;	
++
++			if (this.currentOpacity < 1.0) {
++				this.currentOpacity = this.currentOpacity * 1 + 0.1;
++				this.controller.get('play-indicator-container').style.opacity = String(this.currentOpacity);
++				setTimeout(this._animatedShowingPlayIndicator.bind(this), 4);
++			}
++			else {
++				this.currentOpacity = 1.0;
++				this._animatedHidingPlayIndicator();
++			}
++		}
++		
++NotificationAssistant.prototype._animatedHidingPlayIndicator = function(initialOpacity) {
++		
++			this.currentOpacity = this.controller.get('play-indicator-container').style.opacity;	
++			
++			if (this.currentOpacity > 0.0) {
++				this.currentOpacity = this.currentOpacity * 1 - 0.1;
++				this.controller.get('play-indicator-container').style.opacity = String(this.currentOpacity);
++				setTimeout(this._animatedHidingPlayIndicator.bind(this), 4);
++			}
++			else {
++				this.controller.get('play-indicator-container').style.display = 'none';
++			}
++		}
++
++NotificationAssistant.prototype._animatedShowingPauseIndicator = function() {
++			
++			this.currentOpacity = this.controller.get('pause-indicator-container').style.opacity;	
++	
++			if (this.currentOpacity < 1.0) {
++				this.currentOpacity = this.currentOpacity * 1 + 0.1;
++				this.controller.get('pause-indicator-container').style.opacity = String(this.currentOpacity);
++				setTimeout(this._animatedShowingPauseIndicator.bind(this), 4);
++			}
++			else {
++				this.currentOpacity = 1.0;
++				this._animatedHidingPauseIndicator();
++			}
++		}
++		
++NotificationAssistant.prototype._animatedHidingPauseIndicator = function(initialOpacity) {
++		
++			this.currentOpacity = this.controller.get('pause-indicator-container').style.opacity;	
++			
++			//DEBUG //DEBUG 
++			Mojo.Log.error('animatedHidingPauseIndicator, this.currentOpacity = ' + this.currentOpacity);
++			
++			if (this.currentOpacity > 0.0) {
++				this.currentOpacity = this.currentOpacity * 1 - 0.1;
++				//DEBUG //DEBUG Mojo.Log.error('animatedHidingPauseIndicator, NEW this.currentOpacity = ' + this.currentOpacity);
++				this.controller.get('pause-indicator-container').style.opacity = String(this.currentOpacity);
++				setTimeout(this._animatedHidingPauseIndicator.bind(this), 4);
++			}
++			else {
++				this.controller.get('pause-indicator-container').style.display = 'none';
++			}
++		}
++
++NotificationAssistant.prototype._showPlayIndicator = function() {
++//			this.controller.get('play-indicator-container').style.display = 'block';
++        //    Mojo.Log.error('get = ' + controller.get('play-indicator-container').style.display);
++			this.controller.get('play-indicator-container').style.display = 'block';
++			this.currentOpacity = 0.0;
++			this._animatedShowingPlayIndicator();
++		}
++		
++NotificationAssistant.prototype._showPauseIndicator = function() {
++			Mojo.Log.error('IMAGES_HOME = %s', Mojo.Config.IMAGES_HOME);
++			var dashboardcontroler = NotificationAssistant.controller;//this.controller.getAppController().getStageController(kNewEmailDashboardStageName+kUnifiedAccountId);
++			Mojo.Log.error('get = %s',dashboardcontroler.get('pause-indicator-container').style.display);
++		//	this.appController.getStageController(NotificationAssistant.kNewEmailDashboardStageName).get('pause-indicator-container').style.display = 'block';
++//			this.controller.get('pause-indicator-container').style.display = 'block';
++//			this.currentOpacity = 0.0;
++            this.controller.get('pause-indicator-container').style.display = 'block';
++			this.currentOpacity = 0.0;
++			this._animatedShowingPauseIndicator();	
++		}
+ 
+ 
+ 
+@@ -820,6 +1047,7 @@
+ 				}
+ 			}
+ 			if (checkIndex === this.notificationInfo.length) {
++			if (checkIndex === this.notificationInfo.length) {
+ 				clearDashboardList.push(notifications[listIndex]);
+ 			}
+ 		}
+--- /dev/null
++++ b/usr/palm/applications/com.palm.app.email/app/views/notification/dashboard-double-scene.html
+@@ -0,0 +1,31 @@
++<div class="palm-scene dashboard-notification-module">
++    <div id="icon-target" class="palm-dashboard-icon-container" x-mojo-dashboard-target="icon">
++        <div class="dashboard-newitem">
++            <span id="_dashboardCount">#{_dashboardCount}</span>
++        </div>
++        <div class="palm-dashboard-icon" style="background-image: url(#{icon});" id="icon"></div>
++    </div>
++    <div id="main-target" class="palm-dashboard-text-container" x-mojo-dashboard-target="main">
++        <div style="float:right;margin-right:-13px;margin-top:2px;width:48px;height:48px;" id="action" x-mojo-dashboard-target="action">
++            <div style="margin-right:-10px;height:100%;width:100%;background:url(images/icon_trash.png) no-repeat center center;-webkit-background-size:70% 70%;"></div>
++        </div>
++        <span id="rightHTML">
++            #{-rightHTML}
++        </span>
++        <div id="title" class="dashboard-title">
++            #{-title}
++        </div>
++        <div id="text" class="palm-dashboard-text">
++            #{text}
++        </div>
++    </div>
++	<div class="dashboard-newitem" style="display:block;font-weight: normal;height: 20px;  min-width: 25px;margin-top: -55px;margin-right: 0px;">
++   	<span style="  top:-5px;margin: 0 -9px;font-size: 14px;">#{time}</span>
++   </div>
++	<div id="pause-indicator-container" class="pause-indicator-container" style="height: 32px;max-height: 32px;width: 32px;max-width: 32px;margin-top: -40px;margin-left: 10px;z-index: 2000;opacity: 0.0;display: none;float: left;">
++	  <img id="pause-indicator" class="pause-indicator" src="images/list-priority-flagged.png" />	
++	</div>	
++	<div id="play-indicator-container" class="play-indicator-container" style="height: 32px;max-height: 32px;width: 32px;max-width: 32px;margin-top: -40px;margin-left: 10px;z-index: 2000;opacity: 0.0;display: none;float: left;">
++	  <img id="play-indicator" class="play-indicator" src="images/list-flagged.png" />	
++	</div>
++</div>
+--- /dev/null
++++ b/usr/palm/applications/com.palm.app.email/app/views/notification/dashboard-single-scene.html
+@@ -0,0 +1,20 @@
++<div id="main-target" class="palm-scene dashboard-notification-module single" x-mojo-dashboard-target="main">
++    <div class="palm-dashboard-icon-container">
++        <div class="palm-dashboard-icon" style="background-image: url(#{icon});" id="icon"></div>
++    </div>  
++    <div id="rightHTML" class="palm-dashboard-text-container">
++        <div style="float:right;margin-right:-13px;margin-top:2px;width:48px;height:48px;" id="action" x-mojo-dashboard-target="action">
++        <div style="margin-right:-10px;height:100%;width:100%;background:url(images/icon_trash.png) no-repeat center center;-webkit-background-size:70% 70%;"></div>
++        </div>
++        #{-rightHTML}
++        <div id="title" class="dashboard-title">
++            #{-title}
++        </div>
++        <div id="text" class="palm-dashboard-text">
++            #{text}
++        </div>
++    </div>
++	<div class="dashboard-newitem" style="display:block;font-weight: normal;height: 20px;  min-width: 25px;margin-top: -55px;margin-right: 0px;">
++   	<span style="top:-5px;margin: 0 -9px;font-size: 14px;">#{time}</span>
++   </div>
++</div>
