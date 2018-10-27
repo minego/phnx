@@ -73,15 +73,33 @@ TweetHelper.prototype = {
 					//tweet.cssClass = 'new-tweet';
 					if (links[i].expanded_url.indexOf('://instagr.am/p/') > -1 || links[i].expanded_url.indexOf('://instagram.com/p/') > -1 || links[i].expanded_url.indexOf('://www.instagram.com/p/') > -1){
 						tweet.mediaUrl = links[i].expanded_url;
+						Mojo.Log.info("Instagram expanded url: ", links[i].expanded_url);
+						var IGBaseUrlEnd1 = links[i].expanded_url.indexOf('/p/') + 3;
+						var IGBaseUrlEnd2 = links[i].expanded_url.indexOf('?', IGBaseUrlEnd1);
+						var IGBaseUrl = links[i].expanded_url.slice(0, IGBaseUrlEnd2);
+						tweet.mediaUrl = links[i].expanded_url.slice(0, IGBaseUrlEnd2)+"media/?size=l";
+						// Instagram posts don't seem to populate Twitter extended entities.
+						// But our pictureView assistant is expecting media_url be populated in extended entities...
+						links[i].media_url = tweet.mediaUrl;
+						//tweet.mediaUrl = IGBaseUrl+"media/?size=l";
+						//Mojo.Log.info("IG base url end: ", IGBaseUrlEnd2, "IG base url: ", IGBaseUrl);
+						Mojo.Log.info("IG mediaUrl: ", tweet.mediaUrl);
 						if(i === 0){
-							tweet.thumbnail = links[i].expanded_url+"media/?size=m"; //Changed from ?size=t so Touchpad details looks better
+							//tweet.thumbnail = links[i].expanded_url+"media/?size=m"; //Changed from ?size=t so Touchpad details looks better
+							tweet.thumbnail = links[i].expanded_url.slice(0, IGBaseUrlEnd2)+"media/?size=m"; //Changed from ?size=t so Touchpad details looks better
 						} else {
-							tweet.thumbnail2 = links[i].expanded_url+"media/?size=m"; //Changed from ?size=t so Touchpad details looks better
+							//tweet.thumbnail2 = links[i].expanded_url+"media/?size=m"; //Changed from ?size=t so Touchpad details looks better
+							tweet.thumbnail2 = links[i].expanded_url.slice(0, IGBaseUrlEnd2)+"media/?size=m"; //Changed from ?size=t so Touchpad details looks better
 							tweet.thumb2_class = 'show';
 							tweet.thumb2_class_timeline = 'show';
-							tweet.mediaUrl2 = links[i].expanded_url;
+							//tweet.mediaUrl2 = links[i].expanded_url;
+							tweet.mediaUrl2 = links[i].expanded_url.slice(0, IGBaseUrlEnd2)+"media/?size=l";
+							// Instagram posts don't seem to populate Twitter extended entities.
+							// But our pictureView assistant is expecting media_url be populated in extended entities...
+							links[i].media_url = tweet.mediaUrl2;
 							//tweet.thumb_type = 'small';
 						}
+						Mojo.Log.info("Instagram thumbnail url: ", tweet.thumbnail, " : ", tweet.thumbnail2);
 						//tweet.dividerMessage = tweet.mediaUrl;
 						//tweet.cssClass = 'new-tweet';
 						tweet.thumb_class = 'show';
@@ -628,15 +646,32 @@ TweetHelper.prototype = {
 					//tweet.dividerMessage = links[i].expanded_url;
 					//tweet.cssClass = 'new-tweet';
 					if (links[i].expanded_url.indexOf('://instagr.am/p/') > -1 || links[i].expanded_url.indexOf('://instagram.com/p/') > -1 || links[i].expanded_url.indexOf('://www.instagram.com/p/') > -1){
-						tweet.mediaUrl = links[i].expanded_url;
+						//tweet.mediaUrl = links[i].expanded_url;
+						Mojo.Log.info("Instagram expanded url: ", links[i].expanded_url);
+						var IGBaseUrlEnd1 = links[i].expanded_url.indexOf('/p/') + 3;
+						var IGBaseUrlEnd2 = links[i].expanded_url.indexOf('?', IGBaseUrlEnd1);
+						var IGBaseUrl = links[i].expanded_url.slice(0, IGBaseUrlEnd2);
+						tweet.mediaUrl = links[i].expanded_url.slice(0, IGBaseUrlEnd2)+"media/?size=l";
+						// Instagram posts don't seem to populate Twitter extended entities.
+						// But our pictureView assistant is expecting media_url be populated in extended entities...
+						links[i].media_url = tweet.mediaUrl;
+						//tweet.mediaUrl = IGBaseUrl+"media/?size=l";
+						//Mojo.Log.info("IG base url end: ", IGBaseUrlEnd2, "IG base url: ", IGBaseUrl);
 						if(i === 0){
-							tweet.thumbnail = links[i].expanded_url+"media/?size=m"; //Changed from ?size=t so Touchpad details looks better
+							//tweet.thumbnail = links[i].expanded_url+"media/?size=m"; //Changed from ?size=t so Touchpad details looks better
+							tweet.thumbnail = links[i].expanded_url.slice(0, IGBaseUrlEnd2)+"media/?size=m"; //Changed from ?size=t so Touchpad details looks better
 						} else {
-							tweet.thumbnail2 = links[i].expanded_url+"media/?size=m"; //Changed from ?size=t so Touchpad details looks better
+							//tweet.thumbnail2 = links[i].expanded_url+"media/?size=m"; //Changed from ?size=t so Touchpad details looks better
+							tweet.thumbnail2 = links[i].expanded_url.slice(0, IGBaseUrlEnd2)+"media/?size=m"; //Changed from ?size=t so Touchpad details looks better
 							tweet.thumb2_class = 'show';
-							tweet.mediaUrl2 = links[i].expanded_url;
+							//tweet.mediaUrl2 = links[i].expanded_url;
+							tweet.mediaUrl2 = links[i].expanded_url.slice(0, IGBaseUrlEnd2)+"media/?size=l";
+							// Instagram posts don't seem to populate Twitter extended entities.
+							// But our pictureView assistant is expecting media_url be populated in extended entities...
+							links[i].media_url = tweet.mediaUrl2;
 							//tweet.thumb_type = 'small';
 						}
+						Mojo.Log.info("Instagram thumbnail url: ", tweet.thumbnail, " : ", tweet.thumbnail2);
 						//tweet.dividerMessage = tweet.mediaUrl;
 						//tweet.cssClass = 'new-tweet';
 						tweet.thumb_class = 'show';

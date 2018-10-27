@@ -455,7 +455,7 @@ MainAssistant.prototype = {
 				label: 'About',
 				items: [
 					{
-						label: 'About Project Macaw',
+						label: 'About Macaw 2018',
 						command: 'cmdAbout'
 					},
 					{

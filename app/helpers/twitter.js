@@ -21,12 +21,12 @@ var TwitterAPI = function(user, stageController) {
 		home:				'statuses/home_timeline',
 		mentions:			'statuses/mentions_timeline',
 		messages:			'direct_messages',
-		sentMessages:		'direct_messages/sent',
+		sentMessages:		'direct_messages/events/list',
 		favorite:			'favorites/create',
 		unfavorite:			'favorites/destroy',
 		retweet:			'statuses/retweet',
 		destroy:			'statuses/destroy',
-		destroyDM:			'direct_messages/destroy',
+		destroyDM:			'direct_messages/events/destroy',
 		statusShow:			'statuses/show',
 		statusUpdate:		'statuses/update',
 		statusesLookup:		'statuses/lookup',
@@ -45,7 +45,7 @@ var TwitterAPI = function(user, stageController) {
 		saveSearch:			'saved_searches/create',
 		deleteSearch:		'saved_searches/destroy',
 		searchTweets:		'search/tweets',
-		newDM:				'direct_messages/new',
+		newDM:				'direct_messages/events/new',
 		lists:				'lists/list',
 		listSubscriptions:	'lists/subscriptions',
 		listStatuses:		'lists/statuses',
@@ -391,7 +391,7 @@ TwitterAPI.prototype = {
 				}
 
 				if (opts.silent !== true) {
-					Mojo.Log.info('HTTP Failure ' + transport.status);
+					Mojo.Log.info('HTTP Failure ' + transport.status + ' on ' + url);
 
 					if (transport.status >= 500 && transport.status <= 599) {
 						/* 5xx is a server failure */

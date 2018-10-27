@@ -143,6 +143,8 @@ FinishAuthAssistant.prototype = {
 	listen: function(event) {
 		this.controller.listen('next-button', Mojo.Event.tap, this.nextTapped.bind(this));
 		this.controller.listen('rmxdave', Mojo.Event.tap, this.followTapped.bind(this));
+		this.controller.listen('georgemari', Mojo.Event.tap, this.followTapped.bind(this));
+		this.controller.listen('Macaw2018', Mojo.Event.tap, this.followTapped.bind(this));
 		this.controller.listen('ProjectMacaw', Mojo.Event.tap, this.followTapped.bind(this));
 		this.controller.listen('_minego', Mojo.Event.tap, this.followTapped.bind(this));
 		this.controller.listen('baldric555', Mojo.Event.tap, this.followTapped.bind(this));
@@ -152,6 +154,8 @@ FinishAuthAssistant.prototype = {
 	cleanup: function(event) {
 		this.controller.stopListening('next-button', Mojo.Event.tap, this.nextTapped);
 		this.controller.stopListening('rmxdave', Mojo.Event.tap, this.followTapped);
+		this.controller.stopListening('georgemari', Mojo.Event.tap, this.followTapped);
+		this.controller.stopListening('Macaw2018', Mojo.Event.tap, this.followTapped);
 		this.controller.stopListening('ProjectMacaw', Mojo.Event.tap, this.followTapped);
 		this.controller.stopListening('_minego', Mojo.Event.tap, this.followTapped);
 		this.controller.stopListening('baldric555', Mojo.Event.tap, this.followTapped);

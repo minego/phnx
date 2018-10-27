@@ -1,8 +1,8 @@
 {
-	"title":				"Project Macaw",
-	"vendor":				"Project Macaw",
-	"id":					"net.minego.phnx",
-	"version":				"1.7.2",
+	"title":				"Macaw 2018",
+	"vendor":				"Macaw 2018",
+	"id":					"com.georgemari.macaw2018",
+	"version":				"1.8.0",
 	"type":					"web",
 	"main":					"index.html",
 	"icon":					"icon64.png",
@@ -16,13 +16,13 @@
 	"noWindow":				true,
 	"universalSearch": {
 		"action":  {
-			"displayName":	"Tweet with Project Macaw",
-			"url":			"net.minego.phnx",
+			"displayName":	"Tweet with Macaw 2018",
+			"url":			"com.georgemari.macaw2018",
 			"launchParam":	{ "action": "tweet", "msg":"#{searchTerms}" }
 		},
 		"search": {
-			"displayName":	"Search User Project Macaw",
-			"url":			"net.minego.phnx",
+			"displayName":	"Search User Macaw 2018",
+			"url":			"com.georgemari.macaw2018",
 			"launchParam":	{ "action": "user", "userid":"#{searchTerms}" }
 		}
   },
