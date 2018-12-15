@@ -91,8 +91,7 @@ MainAssistant.prototype = {
 		var mutedUsers = prefs.read('mutedUsers');
 		var tmp;
 		
-		
-		if(mutedUsers && mutedUsers.length > 0){
+		if(mutedUsers && mutedUsers.length > 0) {
 			var flagWriteMutedUsers = 0;
 			for (var m = 0, mutedUser; mutedUser = mutedUsers[m]; m++) {
 				if(!mutedUser.id_str){
@@ -100,13 +99,13 @@ MainAssistant.prototype = {
 					mutedUsers[m].id_str = mutedUser.id.toString();
 				}
 			}
-			if(flagWriteMutedUsers === 1){
+			if(flagWriteMutedUsers === 1) {
 				var items	= [];
 		
-				if(mutedUsers){
+				if(mutedUsers) {
 					//Mojo.Log.error('writing pref for mutedUsers');
 					for (var i = 0, m; m = mutedUsers[i]; i++) {
-						//if(m.id && m.user) {
+						//if(m.id && m.user) 
 						if(m.id_str) {
 							items.push({id_str: m.id_str});
 							//Mojo.Log.error('id_str: ' + m.id_str);
@@ -287,7 +286,7 @@ MainAssistant.prototype = {
 								tweet.hideTweet_class = 'hide';
 								break;
 							} else if (tweet.retweeter && (tweet.retweeter.id_str === mutedUser.id_str)) {
-								//(tweet.retweeter.screen_name.indexOf(mutedUser.user) > -1)) {
+								//(tweet.retweeter.screen_name.indexOf(mutedUser.user) > -1)) 
 								tweet.hideTweet_class = 'hide';
 								break;								
 							} else {
@@ -402,10 +401,10 @@ MainAssistant.prototype = {
 				label: 'Refresh & Flush',
 				command: 'cmdRefreshFlush'
 			},
-//			{
+//			
 //				label: 'Check Rate Limit',
 //				command: 'cmdRateLimit'
-//			},
+//			,
 			{
 				label: 'Lookup User',
 				command: 'cmdFindUser'
@@ -455,7 +454,7 @@ MainAssistant.prototype = {
 				label: 'About',
 				items: [
 					{
-						label: 'About Project Macaw',
+						label: 'About Macaw 2018',
 						command: 'cmdAbout'
 					},
 					{
@@ -466,10 +465,6 @@ MainAssistant.prototype = {
 						label: 'View Changelog',
 						command: 'cmdChangelog'
 					}
-					/*,{
-						label: 'Contact Support',
-						command: 'cmdSupport'
-					}*/
 				]
 			}
 		];
@@ -497,98 +492,10 @@ MainAssistant.prototype = {
 					listTemplate:	"templates/list",
 					renderLimit:	this.renderLimit
 				}, panel.model);
-
-				//ask tweetmarker where we left off
-/*
-				var req = {
-					"method": "POST",
-					"uri": [
-						"https://api.tweetmarker.net/v1/lastread?collection=",
-						(panel.id === "home") ? "timeline" : panel.id,
-						"&username=", this.user.userName,
-						"&api_key=WL-33C6DF48244C"
-					].join("")
-				};
-
-				var currentUser = getUser();
-				var args = [
-					{"key":"token","data": currentUser.token},
-					{"key":"secret","data": currentUser.secret}
-				];
-
-				OAuth.completeRequest({
-					"method": req.method,
-					"action": req.uri,
-					"parameters": []
-				}, {
-					"consumerKey": Twitter.key,
-					"consumerSecret": Twitter.secret,
-					"token": currentUser.token,
-					"tokenSecret": currentUser.secret
-				});
-
-				var authHeader = OAuth.getAuthorizationHeader(Twitter.apibase,
-															  []);
-//				this.controller.get('response').update('creating request');
-				var req = new Ajax.Request(url, {
-					"method": req.method,
-					"requestHeaders": {
-						"X-Auth-Service-Provider": [
-							"https://api.twitter.com/1/account",
-							"/verify_credentials.json"
-						].join(""),
-						"X-Verify-Credentials-Authorization": authHeader
-					},
-					"onSuccess": function(response) {
-						Mojo.Controller.errorDialog("yayy " + response);
-					},
-					"onFailure": function(transport) {
-						Mojo.Controller.errorDialog("boo " + transport.responseText);
-					}
-				});
-
-				new Ajax.Request(req.uri, {
-					"method": req.method,
-					"encoding": "UTF-8",
-					"requestHeaders": {
-						"X-Auth-Service-Provider": [
-							"https://api.twitter.com/1/account",
-							"/verify_credentials.json"
-						].join(""),
-						"X-Verify-Credentials-Authorization": [
-							"OAuth realm=\"http://api.twitter.com\"",
-							", oauth_consumer_key=", "WL-33C6DF48244C",
-							", oauth_token=", currentUser.token,
-							", oauth_signature_method=", "HMAC-SHA1",
-							", oauth_signature=", "???",
-							", oauth_timestamp=", "???",
-							", oauth_nonce=", "???",
-							", oauth_version=", "1.0"
-						].join("")
-					},
-					onComplete:function(response){
-						//ex(response.responseText);
-						var response_text=response.responseText;
-						var responseVars=response_text.split("&");
-						var auth_url=this.authorizeUrl+"?"+responseVars[0]+"&oauth_consumer="+this.consumer_key;
-						var oauth_token=responseVars[0].replace("oauth_token=","");
-						var oauth_token_secret=responseVars[1].replace("oauth_token_secret=","");
-						this.requested_token=oauth_token;
-						this.token=this.requested_token;
-						this.tokenSecret=oauth_token_secret;
-						var oauthBrowserParams={
-							authUrl:auth_url,
-							callbackUrl:this.callback
-						};
-						this.instanceBrowser(oauthBrowserParams);
-					}.bind(this)
-				});
-				*/
 			}
 		}
 
 		// Set up Lists and Search widgets
-		//this.savedSearchesModel = {items: []};
 		this.trendingTopicsModel = {items: []};
 
 		this.controller.setupWidget('trending-topics-list',{itemTemplate: "templates/search-list-item",listTemplate: "templates/list-noptr", renderLimit: 50}, this.trendingTopicsModel);
@@ -953,7 +860,14 @@ MainAssistant.prototype = {
 				var ptrCount = prefs.read('ptrCount');
 
 				panel.count++;
-				if((panel.count >= ptrCount) && ptrCount !== 0){
+				// 17-NOV-2018 - George Mari
+				// Our direct messages panel will always be a refresh & flush operation.
+				// Why?  Because when the Twitter API changed for direct messages, we could no longer
+				// retrieve only direct messages since a certain message id, like we still can for 
+				// regular tweets.  So no need to manage gaps, load more at the end, etc.  Just always get 
+				// the last 50 messages, which is the max the API allows us, currently.  This means we won't 
+				// keep around old messages older than the last 50.
+				if(((panel.count >= ptrCount) && ptrCount !== 0) || panel.id == 'messages') {
 					panel.assistant.refreshPanelFlush(panel);
 					panel.assistant.controller.get("ptr-text-" + panel.index).update('Release to refresh ');
 					panel.count = 0;
@@ -1138,9 +1052,7 @@ MainAssistant.prototype = {
 				while ((f = r.shift())) {
 					for (var u, i = 0; (u = global.following[i]); i++) {
 						//Mojo.Log.error('following: ' + global.following[i].screen_name);
-						if (u.screen_name.toLowerCase() ===
-							f.screen_name.toLowerCase()
-						) {
+						if (u.screen_name.toLowerCase() === f.screen_name.toLowerCase()) {
 							f = null;
 							break;
 						}
@@ -1177,6 +1089,9 @@ MainAssistant.prototype = {
 					var tweet = panel.model.items[1];
 
 					if (tweet) {
+						if (tweet.dm) {
+							lastId = tweet.id;
+						}
 						if (tweet.is_rt) {
 								lastId = tweet.original_id;
 						} else {
@@ -1210,6 +1125,9 @@ MainAssistant.prototype = {
 				} else {
 					panel.model.myLastId = tweet.id_str;
 				}
+				if (tweet.dm) {
+					panel.model.myLastId = tweet.id;
+				}
 			}
 		}
 
@@ -1229,6 +1147,9 @@ MainAssistant.prototype = {
 							}
 						} else {
 							lastId = tweet.id_str;
+						}
+						if (tweet.dm) {
+							lastId = tweet.id;
 						}
 					}
 				}
@@ -1280,6 +1201,15 @@ MainAssistant.prototype = {
 		var model = this.panels[this.timeline].model;
 		var maxId;
 
+		// 20-NOV-2018 - George Mari
+		// Don't Load More if we are on the messages panel,
+		// because since the new API for messages was implemented, we get all messages (max of 50 allowed by API)
+		// each time we refresh the panel.
+		if (this.panels[this.timeline].id == 'messages') {
+			Mojo.Log.info('loadMore: skipping load for messages panel...');
+			return;
+
+		}
 		if (model && model.items && model.items.length > 0) {
 			this.loadingMore = true;
 			if (model.items[model.items.length-1].is_rt) {
@@ -1298,46 +1228,105 @@ MainAssistant.prototype = {
 		var dmTo = "←"; //"◄←"; //"☞"; //"To:";
 		var dmFrom = "→"; //"►→"; //"☜"; "From:";
 
-		Twitter.timeline(panel, function(r1, m1) {
+		//Mojo.Log.error('getDMs: entered...');
+		//Mojo.Log.error('getDMs: args: ', Object.toJSON(args));
+		
+		//Mojo.Log.info('getDMs: point 1...');
 			Twitter.timeline(panel, function(r2, m2) {
-				for (var i = 0, tweet; tweet = r1.responseJSON[i]; i++) {
-					tweet.user = tweet.sender;
+
+				var dm_sender = '';
+				var dm_sender_list = '';
+				this.dm_info = [];
+				//Mojo.Log.info('getDMs r2 length: ' + r2.responseJSON.events.length);
+
+				//Mojo.Log.info('getDMs - typeof this.user: ' + typeof this.user);
+				//Mojo.Log.info('getDMs - this.user: ' + JSON.stringify(this.user));
+
+				for (var i = 0, tweet; tweet = r2.responseJSON.events[i]; i++) {
+					tweet.user = tweet.message_create.sender_id;
 					tweet.dm						= true;
 					//tweet.user.name = tweet.user.name + dmFrom;// added by DC
-					tweet.dir = dmFrom;
+					if (tweet.user == this.user.id) {
+						tweet.dir = dmFrom;
+						}
+					else {
+						tweet.dir = dmTo;
+						}
 					// Use unicode above instead of bitmap below.  This way it scales with the font selection
 					//tweet.direction_arrow_img = "images/low/arrow_left.png";
-				}
+					//Mojo.Log.info('getDMs dm text: ' + tweet.message_create.message_data.text);
 
-				for (var i = 0, tweet; tweet = r2.responseJSON[i]; i++) {
-					var id	= tweet.sender.id_str;
+					// this.dm_info will hold things we will need later to display the direct message,
+					// such as the message sender's screen_name, and profile_image_url
+					this.dm_info[tweet.message_create.sender_id] = new Object();
+				}
+				// dm_sender_list will be a comma-separated list of the unique sender_ids 
+				// from our retrieved list of direct messages.
+				for (dm_sender in this.dm_info) {
+					//Mojo.Log.info('getDMs - dm_sender: ' + dm_sender + ' /type: ' + typeof this.dm_info[dm_sender]);
+					if (typeof this.dm_info[dm_sender] != 'function') {
+						dm_sender_list = dm_sender_list + dm_sender + ',';
+					}
+				}
+				// Trim the last comma character from the string
+				if (dm_sender_list.lastIndexOf(',') == dm_sender_list.length - 1) {
+					dm_sender_list = dm_sender_list.slice(0, -1);
+				}	
+				// Mojo.Log.info('getDMs - dm_sender_list: ' + dm_sender_list);
+
+				for (var i = 0, tweet; tweet = r2.responseJSON.events[i]; i++) {
+					//Mojo.Log.info('getDMs in 2nd loop, i = ' + i);
+					var id	= tweet.message_create.sender_id;
+					/*
 					var img = tweet.sender.profile_image_url;
 					if (Mojo.Environment.DeviceInfo.modelNameAscii == "Pre3"){ 
 						img	= img.replace('_normal', '_bigger'); // Use higher res avatar for Pre3
 					}
-
-					tweet.user = tweet.recipient;
+					*/
+					//Mojo.Log.info('getDMs: point 2.1...');
+					tweet.user = tweet.message_create.target.recipient_id;
 
 					//tweet.user.name = tweet.user.name + dmTo;  // added by DC
-					tweet.dir = dmTo;
+					//tweet.dir = dmTo;
 					// Use unicode above instead of bitmap below.  This way it
 					// scales with the font selection
 
 					//tweet.direction_arrow_img = "images/low/arrow_right.png";
-					tweet.user.profile_image_url	= img;
+					//tweet.user.profile_image_url	= img;
 					tweet.user.id_str				= id;
 					tweet.dm						= true;
 				}
 
-				var joined	= r1.responseJSON.concat(r2.responseJSON);
+				//	var joined	= r1.responseJSON.concat(r2.responseJSON);
+				var joined	= r2.responseJSON.events;
 
+				// Mojo.Log.info('getDMs: point 3...');
 				joined.sort(function(a, b) {
-					return((new Date(b.created_at)) - (new Date(a.created_at)));
+					return b.created_timestamp - a.created_timestamp;
 				});
+				// Mojo.Log.info('getDMs: point 4...');
+				Twitter.getUsersById(dm_sender_list, function(r3){
+					var i;
+					//Mojo.Log.info('getDMs - getUsersById responseJSON array length: ' + r3.responseJSON.length);
+					//Mojo.Log.info('process dm getUsersById responseJSON: ' + JSON.stringify(r3.responseJSON));
+					for (i = 0; i < r3.responseJSON.length; i = i + 1) {
+						//Mojo.Log.info('getDMs index for this.dm_info: ' + r3.responseJSON[i].id_str);
+						this.dm_info[r3.responseJSON[i].id_str].screen_name = r3.responseJSON[i].screen_name;
+						//Mojo.Log.info('getDMs screen name: ' + r3.responseJSON[i].screen_name);
+						//Mojo.Log.info('getDMs this.dm_info screen name: ' + this.dm_info[r3.responseJSON[i].id_str].screen_name);
+						this.dm_info[r3.responseJSON[i].id_str].profile_image_url = r3.responseJSON[i].profile_image_url;
+						//Mojo.Log.info('getDMs profile image url: ' + r3.responseJSON[i].profile_image_url);
+						//Mojo.Log.info('getDMs this.dm_info profile image url: ' + this.dm_info[r3.responseJSON[i].id_str].profile_image_url);
+						//Mojo.Log.info('getDms - this.dm_info is: ' + Object.toJSON(this.dm_info));
+					}
+					//Mojo.Log.info('getDMs - about to call gotItems.  this.dm_info length is: ' + this.dm_info.length);
+					this.gotItems({ responseJSON: joined }, panel, 0, this.dm_info);
 
-				this.gotItems({ responseJSON: joined }, panel);
-			}.bind(this), args, this, 'sentMessages');
-		}.bind(this), args, this);
+					}.bind(this));	
+
+				// Mojo.Log.info('getDMs: point 5...');
+			}.bind(this), args, this, 'directmessages');
+	
 	},
 
 	getAccount: function(id) {
@@ -1370,6 +1359,9 @@ MainAssistant.prototype = {
 			'include_entities':	'true',
 			'full_text': 'true'
 		};
+		var dm_args = {
+			count: 50
+			};
 
 		switch(panel.resource){
 			case 'home':
@@ -1410,8 +1402,10 @@ MainAssistant.prototype = {
 			/*
 				Loading DMs requires 2 requests in order to get both sent and
 				received messages.
+				16-NOV-2018 - George Mari
+				Loading DMs no longer requires 2 requests.  Twitter changed their API.
 			*/
-			this.getDMs(Twitter, args, panel);
+			this.getDMs(Twitter, dm_args, panel);
 			return;
 		}
 
@@ -1434,10 +1428,9 @@ MainAssistant.prototype = {
 		}
 	},
 
-	gotItems: function(response, panel, tappedId) {
+	gotItems: function(response, panel, tappedId, msg_info) {
 		// one-size-fits-all function to handle timeline updates
 		// Does lots of looping to update relative times. Needs optimization
-
 		var model		= panel.model;
 		var scroller	= "scroller-" + panel.index;
 		var more		= "more-" + panel.index;
@@ -1455,13 +1448,21 @@ MainAssistant.prototype = {
 		var hideNewMutedTweets = prefs.read('hideNewMutedTweets');
 		var showThumbs = prefs.read('showThumbs');
 		var scrollMoreToBottom = prefs.read('scrollMoreToBottom');
-		//Mojo.Log.error('xCount: ' + xCount); //Twitter doesn't always return the number of tweets you are expecting, which is VERY annoying.
+		//Mojo.Log.info('xCount: ' + xCount); //Twitter doesn't always return the number of tweets you are expecting, which is VERY annoying.
+		//Mojo.Log.info('gotItems - response is: ' + Object.toJSON(tweets));
 		for (var i = 0, tweet; tweet = tweets[i]; i++) {
+			//Mojo.Log.info('gotItems: point 1...');
 			// Store a reference to the account that loaded this tweet //
 			tweet.owner = user.id;
 
 			if (tweet.dm || !th.filter(tweet, filters)) {
-				tweets[i] = th.process(tweet,panel.model,this.controller,processVine,mutedUsers,hideGifs);
+				//Mojo.Log.info('gotItems: tweet.dm is true...');
+				//Mojo.Log.info('gotItems - response:' + typeof response);
+				//Mojo.Log.info('gotItems - panel:' + typeof panel);
+				//Mojo.Log.info('gotItems - tappedId:' + typeof tappedId);
+				//Mojo.Log.info('gotItems - msg_info:' + typeof msg_info);
+
+				tweets[i] = th.process(tweet,panel.model,this.controller,processVine,mutedUsers,hideGifs, msg_info);
 				if(tweets[i].is_quote_status && typeof(tweets[i].quoted_status_id_str) != "undefined" && typeof(tweets[i].quoted_status) != "undefined"){
 					tweets[i].quoted_status = th.process(tweets[i].quoted_status,panel.model,this.controller,false);
 					tweets[i].quote_class = 'show';
@@ -1496,9 +1497,9 @@ MainAssistant.prototype = {
 			for (var i = 1, tweet; tweet = tweets[i]; i++) {
 				model.items.splice((model.items.length - 1) + i, 0, tweet);
 			}
-			//if(!panel.scrollId){
+			//if(!panel.scrollId)
 			//	panel.scrollId = 0;
-			//} else {
+			// else 
 			if(scrollMoreToBottom){
 				panel.scrollId += xCount-1;
 				scrollId = panel.scrollId;
@@ -1605,7 +1606,7 @@ MainAssistant.prototype = {
 			} else {
 				panel.scrollId = 0;
 			}
-		} else if (model.items.length > 0 && !this.loadingMore) {
+		} else if (model.items.length > 0 && !this.loadingMore && panel.id !== 'messages') {
 			// a typical refresh is being performed here (append to top)
 			var k;
 
@@ -1729,7 +1730,7 @@ MainAssistant.prototype = {
 		};
 
 		//Block added by DC - allows new tweet marker to work after refresh and flush
-		//if (panel.update) {
+		//if (panel.update) 
 		if (panel.refresh) {
 			if(model.myLastId) {
 				for(k=0; k < model.items.length; k++){
@@ -1769,7 +1770,7 @@ MainAssistant.prototype = {
 			}
 		}
 
-		if (fullLoad === 1) {
+		if (fullLoad === 1 && panel.id !== 'messages') {
 			if (scrollId < 10) {
 				model.items = tweets.slice(0,10);
 			} else {
@@ -1777,7 +1778,7 @@ MainAssistant.prototype = {
 			}
 		}	//end block
 
-		if((dividerTweet.mutedCount > 0) && muteSelectedUsers === true) {
+		if((dividerTweet.mutedCount > 0) && muteSelectedUsers === true && panel.id !== 'messages') {
 			var msg = "";
 			var unMutedTweetCount = dividerTweet.tweetCount-dividerTweet.mutedCount;
 			if(hideNewMutedTweets){
@@ -1811,12 +1812,12 @@ MainAssistant.prototype = {
 				tweet.time_str = this.timeSince(tweet.created_at);
 				if(mutedUsers && mutedUsers.length > 0){
 					for (var m = 0, mutedUser; mutedUser = mutedUsers[m]; m++) {
-						//if (tweet.user.screen_name.indexOf(mutedUser.user) > -1) {
+						//if (tweet.user.screen_name.indexOf(mutedUser.user) > -1) 
 						if (tweet.user.id_str === mutedUser.id_str) {
 							tweet.hideTweet_class = 'hide';
 							break;
 						} else if (tweet.retweeter && (tweet.retweeter.id_str === mutedUser.id_str)) {
-							//(tweet.retweeter.screen_name.indexOf(mutedUser.user) > -1)) {	
+							//(tweet.retweeter.screen_name.indexOf(mutedUser.user) > -1)) 
 							tweet.hideTweet_class = 'hide';
 							break;
 						}	else {
@@ -1838,12 +1839,12 @@ MainAssistant.prototype = {
 					}
 					tweet.fav_class = 'show';
 				} else {
-					//if(tweet.favSet){
+					//if(tweet.favSet)
 						//tweet.user.name = tweet.user.name.replace(favSym,"");
 						tweet.favSet = false;
 						tweet.fav_class = 'hide';
 						//tweet.favstar = "";
-					//}
+					//
 				}//end block
 			}
 		}
@@ -2113,7 +2114,7 @@ MainAssistant.prototype = {
 
 		var currTarget=event.target;		
 		var currItem = this.controller.get('list-' + panel.index).mojo.getItemByNode(currTarget);
-		var tweetIndex = panel.model.items.map(function (tweet) { return tweet.id_str; }).indexOf(currItem.id_str)
+		var tweetIndex = panel.model.items.map(function (tweet) { return tweet.id_str; }).indexOf(currItem.id_str);
 
 		//Mojo.Log.error('tweets.length: ' + this.tweets.length);
 		this.user[panel.id] = panel.model.items.slice(tweetIndex, tweetIndex+10);
@@ -2263,7 +2264,7 @@ MainAssistant.prototype = {
 		//	}
 		//);
 
-		if(global.sysToolsMgrVer == '1.0.7' && global.haptics == true && global.hapticsScroll == true){
+		if(global.sysToolsMgrVer == '1.0.7' && global.haptics == true && global.hapticsScroll == true) {
 			this.controller.serviceRequest('palm://ca.canucksoftware.systoolsmgr/', {
 				method: 'deviceVibrate',
 				parameters: { 'period': 0, 'duration': 40},
@@ -2274,7 +2275,7 @@ MainAssistant.prototype = {
 					//Sorry, didn't work;
 				}.bind(this)
 			});
-		} else{
+		} else {
 			// Older version of systoolsmgr
 		}
 

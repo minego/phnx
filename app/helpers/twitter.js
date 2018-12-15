@@ -20,13 +20,12 @@ var TwitterAPI = function(user, stageController) {
 	this.endpoints = {
 		home:				'statuses/home_timeline',
 		mentions:			'statuses/mentions_timeline',
-		messages:			'direct_messages',
-		sentMessages:		'direct_messages/sent',
+		directmessages:	'direct_messages/events/list',
 		favorite:			'favorites/create',
 		unfavorite:			'favorites/destroy',
 		retweet:			'statuses/retweet',
 		destroy:			'statuses/destroy',
-		destroyDM:			'direct_messages/destroy',
+		destroyDM:			'direct_messages/events/destroy',
 		statusShow:			'statuses/show',
 		statusUpdate:		'statuses/update',
 		statusesLookup:		'statuses/lookup',
@@ -45,7 +44,7 @@ var TwitterAPI = function(user, stageController) {
 		saveSearch:			'saved_searches/create',
 		deleteSearch:		'saved_searches/destroy',
 		searchTweets:		'search/tweets',
-		newDM:				'direct_messages/new',
+		newDM:				'direct_messages/events/new',
 		lists:				'lists/list',
 		listSubscriptions:	'lists/subscriptions',
 		listStatuses:		'lists/statuses',
@@ -94,6 +93,7 @@ TwitterAPI.prototype = {
 		this.sign('GET', this.url(this.endpoints.showUser), callback, {'screen_name': screen_name, include_entities: true}, {});
 	},
 	getUsersById: function(userIds, callback) {
+		//Mojo.Log.info('getUsersById userIds: ' + userIds);
 		this.sign('GET', this.url(this.endpoints.lookupUsers), callback, {'user_id': userIds}, {});
 	},
 	getUserTweets: function(args, callback) {
@@ -149,7 +149,8 @@ TwitterAPI.prototype = {
 		this.sign('POST', this.url(this.endpoints.deleteSearch + '/' + id), callback, {'id':id}, {});
 	},
 	newDM: function(args, callback) {
-		this.sign('POST', this.url(this.endpoints.newDM), callback, args, {});
+		console.log('newDM - args: ' + Object.toJSON(args));
+		this.signDM('POST', this.url(this.endpoints.newDM), callback, args, {});
 	},
 	destroyDM: function(args, callback) {
 		this.sign('POST', this.url(this.endpoints.destroyDM), callback, args, {}); 
@@ -255,6 +256,93 @@ TwitterAPI.prototype = {
 			this.gotIds(response, meta);
 		}.bind(this));
 	},
+	signDM: function(httpMethod, url, callback, args, meta) {
+		console.log('signDM - point 1 args: ' + Object.toJSON(args));
+		var silent	= false; // if true, errors are not reported on the screen.
+		//var original_args = {"event": {"type": "message_create", "message_create": {"target": {"recipient_id": "38175496"}, "message_data": {"text": args.event.message_create.message_data.text}}}};
+		var original_args = args;
+
+		if (meta.user) {
+			silent = true;
+		}
+
+		if (meta.silent === true) {
+			silent = true;
+		}
+
+		// args is an object literal of URL parameters to be included
+		// meta is an object literal with data that needs to be passed through to the callback
+
+		/*
+			If a photo is being posted then do NOT include the args in the oauth
+			signature. It should only include the query strings.
+		*/
+		var message = {
+			method:		httpMethod,
+			action:		url,
+			parameters:	{}
+		};
+
+		//console.log('sign: ' + httpMethod + ' ' + url + '?' + Object.toJSON(args));
+
+		OAuth.completeRequest(message, {
+			consumerKey:		this.key,
+			consumerSecret:		this.secret,
+			token:				this.token,
+			tokenSecret:		this.tokenSecret
+		});
+		// console.log('signDM - point 2 args: ' + Object.toJSON(args));
+
+		var opts = {
+			contentType:	'application/json',
+			method:			httpMethod,
+			success:			callback,
+			silent:			silent,
+
+			requestHeaders: {
+				Accept:					'*/*',
+				"Accept-Encoding":	'gzip, deflate',
+				Authorization:			OAuth.getAuthorizationHeader(this.apibase, message.parameters),
+				"Content-Type":		'application/json',
+				"User-Agent":			'macaw2018'
+			}
+		};
+
+		if (meta) {
+			opts.meta = meta;
+		}
+
+		if (args.photo) {
+			opts.photo = args.photo;
+			delete args.photo;
+
+			/* The args get sent as part of the post body */
+			opts.postParameters = args;
+
+			this.request(url, opts);
+		} else {
+			switch (httpMethod.toUpperCase()) {
+				default:
+				case 'GET':
+					this.request(OAuth.addToURL(url, args), opts);
+					//Mojo.Log.error('sign GET: ', OAuth.addToURL(url, args), Object.toJSON(opts));
+					break;
+
+				case 'POST':
+					// 20-NOV-2018 - George Mari
+					// For the direct message API, a non-encoded JSON object
+					// is expected in the post body, so calling formEncode 
+					// messes up what is expected.
+					//console.log('signDM -  point 2 args: ' + Object.toJSON(args));
+					//console.log('signDM -  point 3 original_args: ' + Object.toJSON(original_args));
+					opts.postBody = original_args;
+					//console.log('signDM - opts.postBody: ' + Object.toJSON(opts.postBody));
+					this.request(url, opts);
+					//Mojo.Log.info(url, Object.toJSON(opts));
+					break;
+			}
+		}
+	},
 	sign: function(httpMethod, url, callback, args, meta) {
 		var silent	= false; // if true, errors are not reported on the screen.
 
@@ -279,7 +367,7 @@ TwitterAPI.prototype = {
 			parameters:	args.photo ? {} : args
 		};
 
-		console.log(httpMethod + ' ' + url + '?' + Object.toJSON(args));
+		// console.log('sign: ' + httpMethod + ' ' + url + '?' + Object.toJSON(args));
 
 		OAuth.completeRequest(message, {
 			consumerKey:		this.key,
@@ -317,13 +405,17 @@ TwitterAPI.prototype = {
 				default:
 				case 'GET':
 					this.request(OAuth.addToURL(url, args), opts);
-					//Mojo.Log.error(OAuth.addToURL(url, args), opts);
+					//Mojo.Log.error('sign GET: ', OAuth.addToURL(url, args), Object.toJSON(opts));
 					break;
 
 				case 'POST':
+					// 20-NOV-2018 - George Mari
+					// For the new direct message API, a non-encoded JSON object
+					// is expected in the post body, so calling formEncode 
+					// seems to mess up what is expected.
 					opts.postBody = OAuth.formEncode(args);
 					this.request(url, opts);
-					//Mojo.Log.error(url, opts);
+					Mojo.Log.info(url, Object.toJSON(opts));
 					break;
 			}
 		}
@@ -360,6 +452,10 @@ TwitterAPI.prototype = {
 			A wrapper for the PrototypeJS request object, which allows for
 			connection checking and timeouts.
 		*/
+		if (opts.postBody) {
+			console.log('request - opts: ' + Object.toJSON(opts));
+			console.log('request - opts.postBody: ' + Object.toJSON(opts.postBody));
+		}
 		var user		= this.user;
 		var stage		= this.stage;
 
@@ -374,6 +470,17 @@ TwitterAPI.prototype = {
 			}
 
 			opts.onSuccess = function(response) {
+				//Mojo.Log.info('=================================================================');
+				//Mojo.Log.info('Twitter request - success ' + response.status + ' on url: ' + url);
+				//Mojo.Log.info('Twitter request - responseText is: ' + response.responseText);
+				//Mojo.Log.info('Twitter request - responseJSON is: ' + JSON.stringify(response.responseJSON));
+				//Mojo.Log.info('Twitter request - responseXML is: ' + response.responseXML);
+				//Mojo.Log.info('Twitter request - responseJSON 1st array element: ' + JSON.stringify(response.responseJSON[0]));
+				/*
+				for(responsePropertyName in response) {
+					Mojo.Log.info('Twitter request - property name: ' + responsePropertyName)
+					}
+				*/
 				if (Ajax.activeRequestCount <= 1) {
 					this.toggleLoading(false);
 				}
@@ -390,13 +497,17 @@ TwitterAPI.prototype = {
 					this.toggleLoading(false);
 				}
 
+				Mojo.Log.info('Twitter request - HTTP Failure ' + transport.status + ' on ' + url);
 				if (opts.silent !== true) {
-					Mojo.Log.info('HTTP Failure ' + transport.status);
+					Mojo.Log.info('HTTP Failure ' + transport.status + ' on ' + url);
 
 					if (transport.status >= 500 && transport.status <= 599) {
 						/* 5xx is a server failure */
 						global.fail();
 					} else {
+						Mojo.Log.info('request - transport object: ' + Object.toJSON(transport));
+						Mojo.Log.info('request - transport object: ' + Object.toJSON(transport).slice(900));
+						Mojo.Log.info('request - transport object: ' + Object.toJSON(transport).slice(1800));
 						for (var i = 0, err; err = transport.responseJSON.errors[i]; i++) {
 							global.ex(transport.status + ': ' + err.message);
 						}

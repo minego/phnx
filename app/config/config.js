@@ -4,8 +4,11 @@ var Config = {
 		secret:		'ulz0dpskxcddc1wlraDEwPCoJYMHaNhfXJO8sMjIA0'
 	},
 
-	key:			'OFqvS0cNc7oRdPGqz3GTw',
-	secret:			'JqGFNJAAQgXg8TPtJOVFXpbzZS8gNPAHjb2exvOgdQ',
+	//key:			'OFqvS0cNc7oRdPGqz3GTw',
+	//secret:			'JqGFNJAAQgXg8TPtJOVFXpbzZS8gNPAHjb2exvOgdQ',
+	key:				'SNcFn8uetVjDEaEvJ0PZPQBTJ',
+	secret:			'ykISwldFjjXpt3pDlBxTFyJZx3z6bNfg8VwOzsyZs9mPruAtxe',
+
 	//bitlyUser:		'multiipass',
 	//bitlyKey:		'R_28a87f31120f81a28437fb11dcf808fd',
 	bitlyUser:	'baldric555',

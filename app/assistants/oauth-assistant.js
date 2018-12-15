@@ -12,6 +12,7 @@ function OauthAssistant() {
 		callback: 'http://www.google.com' // Optional - 'oob' by default if not specified
 	};
 
+	Mojo.Log.info("Entered OauthAssistant...");
 	this.message = null;
 	this.accessor = null;
 	this.authHeader = null;
@@ -41,6 +42,7 @@ function OauthAssistant() {
 }
 OauthAssistant.prototype.setup = function() {
 
+	Mojo.Log.info("Entered OauthAssistant setup...");
 	this.controller.setupWidget('browser',{},this.storyViewModel = {});
 	this.reloadModel = {
 		icon: 'refresh',
@@ -64,6 +66,7 @@ OauthAssistant.prototype.setup = function() {
 	this.requestToken();
 };
 OauthAssistant.prototype.titleChanged = function(event) {
+	Mojo.Log.info("Entered OauthAssistant titleChanged..." + JSON.stringify(event.url), JSON.stringify(event.title));
 	var callbackUrl=event.url;
 	var responseVars=callbackUrl.split("?");
 	if(!this.exchangingToken && (responseVars[0]==this.callbackURL+'/' || responseVars[0]==this.callbackURL)){
@@ -79,6 +82,7 @@ OauthAssistant.prototype.titleChanged = function(event) {
 	}
 };
 OauthAssistant.prototype.signHeader = function (params){
+	Mojo.Log.info("Entered OauthAssistant signHeader..." + JSON.stringify(params));
 	if(params==undefined)
 		params='';
 	if(this.method==undefined)
@@ -100,6 +104,7 @@ OauthAssistant.prototype.signHeader = function (params){
 	return true;
 };
 OauthAssistant.prototype.requestToken = function (){
+	Mojo.Log.info("Entered OauthAssistant requestToken...");
 	this.url=this.requestTokenUrl;
 	this.method=this.requestTokenMethod;
 	this.signHeader("oauth_callback="+this.callback);
@@ -121,11 +126,22 @@ OauthAssistant.prototype.requestToken = function (){
 			authUrl:auth_url,
 			callbackUrl:this.callback
 		};
+		Mojo.Log.info("oauth browser params: " + JSON.stringify(oauthBrowserParams));
 		this.instanceBrowser(oauthBrowserParams);
-	}.bind(this)
+	}.bind(this),
+	onSuccess: this.requestTokenSuccess,
+	onFailure: this.requestTokenFailure
 	});
+	Mojo.Log.info("Exiting OauthAssistant requestToken...");
+};
+OauthAssistant.prototype.requestTokenSuccess = function(response) {
+	Mojo.Log.info("Entering requestTokenSuccess: ", JSON.stringify(response.responseText));
+};
+OauthAssistant.prototype.requestTokenFailure = function(error) {
+	Mojo.Log.info("Entering requestTokenFailure: ", JSON.stringify(error.responseText));
 };
 OauthAssistant.prototype.exchangeToken = function (token){
+	Mojo.Log.info("Entered OauthAssistant exchangeToken..." + JSON.stringify(token));
 	this.exchangingToken=true;
 	this.url=this.accessTokenUrl;
 	this.token=token;
@@ -142,6 +158,7 @@ OauthAssistant.prototype.exchangeToken = function (token){
 	});
 };
 OauthAssistant.prototype.instanceBrowser = function(oauthBrowserParams) {
+	Mojo.Log.info("instanceBrowser params: " + JSON.stringify(oauthBrowserParams));
 	this.storyURL = oauthBrowserParams.authUrl;
 	this.callbackURL=oauthBrowserParams.callbackUrl;
 	this.controller.get('browser').mojo.openURL(oauthBrowserParams.authUrl);
@@ -150,6 +167,7 @@ OauthAssistant.prototype.handleCommand = function(event) {
 	if (event.type == Mojo.Event.command) {
 		switch (event.command) {
 			case 'refresh':
+				Mojo.Log.info("reloading page...");
 				this.controller.get('browser').mojo.reloadPage();
 				break;
 			case 'stop':
@@ -161,6 +179,7 @@ OauthAssistant.prototype.handleCommand = function(event) {
   //  loadStarted - switch command button to stop icon & command
  //
  OauthAssistant.prototype.loadStarted = function(event) {
+	Mojo.Log.info("Entered OauthAssistant loadStarted...");
 	this.cmdMenuModel.items.pop(this.reloadModel);
 	this.cmdMenuModel.items.push(this.stopModel);
 	this.controller.modelChanged(this.cmdMenuModel);
@@ -168,6 +187,7 @@ OauthAssistant.prototype.handleCommand = function(event) {
  };
   //  loadStopped - switch command button to reload icon & command
  OauthAssistant.prototype.loadStopped = function(event) {
+	Mojo.Log.info("Entered OauthAssistant loadStopped...");
 	this.cmdMenuModel.items.pop(this.stopModel);
 	this.cmdMenuModel.items.push(this.reloadModel);
 	this.controller.modelChanged(this.cmdMenuModel);
@@ -182,6 +202,7 @@ OauthAssistant.prototype.handleCommand = function(event) {
  };
   //  loadProgress - check for completion, then update progress
  OauthAssistant.prototype.loadProgress = function(event) {
+	Mojo.Log.info("Entered OauthAssistant loadProgress...");
 	var percent = event.progress;
 	try {
 		if (percent > 100) {
@@ -226,7 +247,8 @@ OauthAssistant.prototype.handleCommand = function(event) {
 	}
  };
   OauthAssistant.prototype._updateLoadProgress = function(image) {
-  // Find the progress image
+  	Mojo.Log.info("Entered OauthAssistant updateLoadProgress...");
+// Find the progress image
 	image = Math.round(image);
 	// Don't do anything if the progress is already displayed
 	if (this.currLoadProgressImage == image) {
@@ -239,15 +261,18 @@ OauthAssistant.prototype.handleCommand = function(event) {
 	this.currLoadProgressImage = image;
  };
 OauthAssistant.prototype.activate = function(event) {
+	Mojo.Log.info("Entered OauthAssistant activate...");
 	var prefs = new LocalStorage();
 	var theme = prefs.read('theme');
 	this.controller.stageController.loadStylesheet('stylesheets/' + theme +'.css');
 };
 
 OauthAssistant.prototype.deactivate = function(event) {
+	Mojo.Log.info("Entered OauthAssistant deactivate...");
 
 };
 OauthAssistant.prototype.cleanup = function(event) {
+	Mojo.Log.info("Entered OauthAssistant cleanup...");
 	Mojo.Event.stopListening(this.controller.get('browser'),Mojo.Event.webViewLoadProgress, this.loadProgress);
 	Mojo.Event.stopListening(this.controller.get('browser'),Mojo.Event.webViewLoadStarted, this.loadStarted);
 	Mojo.Event.stopListening(this.controller.get('browser'),Mojo.Event.webViewLoadStopped, this.loadStopped);

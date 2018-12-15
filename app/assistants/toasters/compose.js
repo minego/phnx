@@ -530,14 +530,28 @@ var ComposeToaster = Class.create(Toaster, {
 				Twitter.postTweet(args, cb);
 			}.bind(this);
 		} else {
+			var this_name;
+			for (this_name in this) {
+				if (typeof this[this_name] !== 'function') {
+					Mojo.Log.info('submitTweet - this: ' + this_name + ': ' + this[this_name]);
+				}
+				if (this_name == 'opts') {
+					Mojo.Log.info(this_name + ': ' + JSON.stringify(this[this_name])); 
+					Mojo.Log.info(this_name + ': ' + JSON.stringify(this[this_name]).slice(100)); 
+					//Mojo.Log.info('opts.user: ' + Object.toJSON(opts.user)); 
+				}
+				if (this_name == 'to') {Mojo.Log.info(this_name + ': ' + Object.toJSON(this[this_name])); }
+				if (this_name == 'from') {Mojo.Log.info(this_name + ': ' + Object.toJSON(this[this_name])); }
+			}
 			maxChars = this.availableDMChars;
 			sendfunc = function sendDM(txt, cb) {
-				//Mojo.Log.error('sendingDM to screen_name: ' + this.to.screen_name);
-				//Mojo.Log.error('sendingDM to id: ' + this.to.id_str);
+				Mojo.Log.error('sendingDM to screen_name: ' + this.to.screen_name);
+				Mojo.Log.error('sendingDM to id: ' + this.to.id_str);
 				//args = {'text': txt, 'user_id': this.to.id_str};
 				//Line above gives 'from' id_str (instead of 'to' id_str) if you DM from a DM you previously tweeted (ie, you replied to your own DM). Screen_name holds the proper 'to' name
-				args = {'text': txt, 'screen_name': this.to.screen_name};
-
+				//args = {'text': txt, 'screen_name': this.to.screen_name};
+				args = '{"event": {"type": "message_create", "message_create": {"target": {"recipient_id": "' + this.to.id_str + '"}, "message_data": {"text": "' + txt + '"}}}}';
+				//Mojo.Log.info('submitTweet - args: ' + Object.toJSON(args));
 				Twitter.newDM(args, cb);
 			}.bind(this);
 		}
@@ -701,6 +715,10 @@ var ComposeToaster = Class.create(Toaster, {
 		banner('Found you!');
 	},
 	photoTapped: function(event) {
+		if (this.dm) {
+			banner('Photos not yet supported for DMs.');
+			return;
+		}
 		if (this.photo) {
 			var opts = {
 				title: 'You already have a photo attached. Would you like to remove it?',

@@ -152,24 +152,32 @@ PictureViewAssistant.prototype = {
 		}
 	},
 	activate: function(event) {
+		Mojo.Log.info("pictureView linkUrl: ", JSON.stringify(this.linkUrl));
 		this.controller.enableFullScreenMode(true);
 		this.controller.stageController.setWindowOrientation('free');
 		
 		if(this.linkUrl){
 			if(this.linkUrl[0]){
 				if(this.current > 0 && this.linkUrl[this.current - 1]){
+					Mojo.Log.info("pictureView line 163...");
 					if(this.linkUrl[this.current-1].media_url){
-						this.imageViewer.mojo.leftUrlProvided(this.linkUrl[this.current-1].media_url);
+
 					}
 				}
 				//this.imageViewer.mojo.centerUrlProvided(this.url);
+				Mojo.Log.info("pictureView line 169...");
+				Mojo.Log.info("this.linkUrl: ", JSON.stringify(this.linkUrl));
+				Mojo.Log.info("this.current: ", JSON.stringify(this.current));
 				if(this.linkUrl[this.current].media_url){
+					Mojo.Log.info("pictureView line 171...");
 					this.imageViewer.mojo.centerUrlProvided(this.linkUrl[this.current].media_url);
 				} else {
 					this.imageViewer.mojo.centerUrlProvided(this.url);
 				}
 				if (this.linkUrl[this.current + 1]){
+					Mojo.Log.info("pictureView line 177...");
 					if(this.linkUrl[this.current + 1].media_url){
+						Mojo.Log.info("pictureView line 179...");
 						this.imageViewer.mojo.rightUrlProvided(this.linkUrl[this.current+1].media_url);
 					}
 				}

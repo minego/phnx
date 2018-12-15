@@ -1,5 +1,4 @@
 function StageAssistant() {}
 
 StageAssistant.prototype = {
-
 };

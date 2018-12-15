@@ -401,14 +401,96 @@ AppAssistant.prototype = {
 	},
 	checkNotifications: function() {
 		// Check for notifications
-		Mojo.Log.info('Checking notifications');
+		// Mojo.Log.info('Checking notifications');
 		var prefs = new LocalStorage();
 
 		am = new Account();
 		am.all(function(r){
 
 			var callback = function(response, meta) {
-				if (response.responseJSON.length > 0) {
+				// 05-DEC-2018 - George Mari
+				// This same callback is used when checking notifications for the home timeline,
+				// mentions, and direct messages.  For the first 2, our response will ONLY contain 
+				// new tweets that we should show a notification for.
+				// But for direct messages, Twitter always sends us a list of our 50 most 
+				// recent messages - retrieving only the new ones is not possible.
+				// So for direct messages, we need to somehow manually compare our JSON response 
+				// to what we already have stored, to see if anything is new.
+				// Mojo.Log.info('checkNotifications callback: ' + meta.resource.name);
+				// Mojo.Log.info(response.responseJSON ? Object.toJSON(response.responseJSON) : response.responseJSON);
+				if (meta.resource.name == 'directmessages' && response.responseJSON) {
+					// The first thing we need to do with direct messages is figure out whether we have any new ones.
+					// Twitter doesn't do that for us any more - we have to do it manually.
+					// Our response will have attribures "id" and "created_timestamp" that we should be able to use.
+					// Our meta.resource.lastId (?) holds the "id" of the most recent direct message for this account.
+					var allMessages = [];
+					var newMessages = [];
+
+					// Make a copy of the array of returned events/messages
+					allMessages = response.responseJSON.events.slice();
+					var i;
+					var dm_sender_list = '';
+					var unique_dm_senders = [];
+
+					for (i = 0; i < allMessages.length; i=i+1) {
+						// Our response all recent direct messages - ones we have received, and also ones we have sent.
+						// We don't want a notification for a message we sent, so exclude those.
+						if (allMessages[i].id > meta.resource.lastId && allMessages[i].message_create.sender_id != meta.user.id) {
+							var newMessage = {};
+							newMessage.id = allMessages[i].id;
+							newMessage.created_timestamp = allMessages[i].created_timestamp;
+							newMessage.sender = {};
+							newMessage.sender.id = allMessages[i].message_create.sender_id;
+							unique_dm_senders[newMessage.sender.id] = {};
+							// dm_sender_list = dm_sender_list + newMessage.sender.id + ',';
+							// screen name doesn't come as part of the response - we'll have to get it later...
+							newMessage.sender.screen_name = '';
+							newMessage.text = allMessages[i].message_create.message_data.text;
+							newMessages.push(newMessage);
+						}
+					}
+
+					if (newMessages.length > 0) {
+						// dm_sender_list will be a comma-separated list of the unique sender_ids 
+						// from our retrieved list of direct messages.
+						for (dm_sender in unique_dm_senders) {
+							if (typeof unique_dm_senders[dm_sender] != 'function') {
+								dm_sender_list = dm_sender_list + dm_sender + ',';
+							}
+						}
+
+						// Trim the last comma character from the string
+						if (dm_sender_list.lastIndexOf(',') == dm_sender_list.length - 1) {
+							dm_sender_list = dm_sender_list.slice(0, -1);
+						}	
+						// Mojo.Log.info('checkNotifications callback - dm_sender_list: ' + dm_sender_list);
+
+						// After we create our array of new messages, we should sort it by the created_timestamp attribute
+						if (newMessages.length > 0) {
+							newMessages.sort(function(a, b) {
+								return b.created_timestamp - a.created_timestamp;
+							});
+						}
+						// Get the screen names for the senders of our direct messages
+						Twitter.getUsersById(dm_sender_list, function(user_response) {
+							var i;
+							for (i = 0; i < user_response.responseJSON.length; i = i + 1) {
+								var j;
+								for (j = 0; j < newMessages.length; j = j + 1) {
+									if (newMessages[j].sender.id == user_response.responseJSON[i].id_str) {
+										newMessages[j].sender.screen_name = user_response.responseJSON[i].screen_name;
+									}
+								}
+							}
+						// We now have all of our needed information to display the dashboard for our notifications.
+						// But first, save the id of the most recent direct message, so we can use it for comparison in the future.
+						prefs.write(meta.user.id + '_' + meta.resource.name, newMessages[0].id);
+						this.createDashboard(meta.resource, newMessages, meta.user, r);
+						}.bind(this));
+					}
+				}
+				// Not processing direct messages...
+				else if (response.responseJSON.length > 0) {
 					prefs.write(meta.user.id + '_' + meta.resource.name, response.responseJSON[0].id_str);
 					this.createDashboard(meta.resource, response.responseJSON, meta.user, r);
 				}
@@ -420,18 +502,26 @@ AppAssistant.prototype = {
 
 				// Name matches panel IDs in main-assistant
 				// Noun is used in dashboard title
+				// 05-DEC-2018 - George Mari
+				// lastId/since_id is no longer an option when retrieving direct messages, so we shouldn't append this anymore
+				// to the URL when checking direct messages for notification purposes.
 				var resources = [
 					{name: 'home', noun: 'Tweet', lastId: prefs.read(user.id + '_home'), enabled: prefs.read('notificationHome')},
 					{name: 'mentions', noun: 'Mention', lastId: prefs.read(user.id + '_mentions'), enabled: prefs.read('notificationMentions')},
-					{name: 'messages', noun: 'Direct Message', lastId: prefs.read(user.id + '_messages'), enabled: prefs.read('notificationMessages')}
+					{name: 'directmessages', noun: 'Direct Message', lastId: prefs.read(user.id + '_directmessages'), enabled: prefs.read('notificationMessages')}
 				];
 
 				for (var j=0; j < resources.length; j++) {
 					var resource = resources[j];
 					if (resource.enabled && resource.lastId !== null) {
-						Mojo.Log.info('Checking ' + resource.name + ' last ID:' + resource.lastId);
+						// Mojo.Log.info('Checking ' + resource.name + ' last ID:' + resource.lastId);
 						var Twitter = new TwitterAPI(user);
-						Twitter.notificationCheck(resource, callback.bind(this), {"since_id": resource.lastId}, user);
+						if (resource.name == 'directmessages') {
+							Twitter.notificationCheck(resource, callback.bind(this), {"count": '50'}, user);
+						} 
+						else {
+							Twitter.notificationCheck(resource, callback.bind(this), {"since_id": resource.lastId}, user);
+						}
 					}
 				}
 			}

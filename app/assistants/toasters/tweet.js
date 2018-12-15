@@ -1417,8 +1417,14 @@ transport.responseText);
 		//img_uid = this.tweet.id + '_' + matchId;
 		//this.controller.stageController.pushScene('pictureView', src, this.tweet.user.screen_name,img_uid,matchId,this.tweet.extended_entities.media);
 		if(this.tweet.extended_entities){
+			Mojo.Log.info("Entering pictureView with extended_entities...");
 			this.controller.stageController.pushScene('pictureView', src, this.tweet.user.screen_name,this.tweet.id,matchId,this.tweet.extended_entities.media);
 		} else {
+			// Trying for fix bug for Instagram posts.  matchId ends up being -1 in this case, and pictureView doesn't like that.
+			if(matchId < 0) {
+				matchId = 0;
+			}
+			Mojo.Log.info("Entering pictureView with entities...");
 			this.controller.stageController.pushScene('pictureView', src, this.tweet.user.screen_name,this.tweet.id,matchId,this.tweet.entities.urls);
 		}
 	},
