@@ -1,5 +1,7 @@
 var ChangelogToaster = Class.create(Toaster, {
 	items: [
+		{ version: '1.8.1'},
+		{ item: 'Direct message functionality restored (except posting photos)'},
 		{ version: '1.8.0'},
 		{ item: 'Twitter account login working again'},
 		{ item: 'Updated app name to Macaw2018'},

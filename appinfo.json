@@ -2,7 +2,7 @@
 	"title":				"Macaw 2018",
 	"vendor":				"Macaw 2018",
 	"id":					"com.georgemari.macaw2018",
-	"version":				"1.8.0",
+	"version":				"1.8.1",
 	"type":					"web",
 	"main":					"index.html",
 	"icon":					"icon64.png",
@@ -11,7 +11,7 @@
 	"splashicon":			"icon256.png",
 	"splashBackground":		"splash-bg.png",
 	"keywords":				[ "twitter", "tweet" ],
-	"copyright":			"Copyright 2011 David Strack",
+	"copyright":			"",
 	"dockMode":				true,
 	"noWindow":				true,
 	"universalSearch": {

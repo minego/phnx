@@ -1,12 +1,91 @@
 var TweetHelper = function() {};
 
 TweetHelper.prototype = {
-	process: function(tweet,model,controller,processVine,mutedUsers,hideGifs) {
+	process: function(tweet,model,controller,processVine,mutedUsers,hideGifs, dm_info) {
 		// takes a tweet and does all sorts of stuff to it
 		// Save the created_at property for all tweets
+		if (tweet.dm) {
+			tweet.id_str = tweet.id;
+			//Mojo.Log.info('process: tweet.dm is true; dm_info type is: ' + typeof dm_info);
+			//Mojo.Log.info('process - dm tweet is: ' + JSON.stringify(tweet));
+			// DMs now have a very different format/structure than 'normal' tweets.
+			tweet.entities = tweet.message_create.message_data.entities;
+
+			var ts_integer = parseInt(tweet.created_timestamp, 10);
+			//Mojo.Log.info('process - DM created_timestamp: ' + tweet.created_timestamp);
+			//Mojo.Log.info('process - DM ts_integer: ' + ts_integer);
+			tweet.created_at = (new Date(ts_integer)).toUTCString();
+			//Mojo.Log.info('process: DM tweet.created_at: ' + tweet.created_at);
+			tweet.text = tweet.message_create.message_data.text;
+			// We still need the profile_image_url and screen_name
+			// tweet.user.screen_name = ?tweet.message_create.sender_id?;
+			// tweet.user.profile_image_url = ?
+			//Mojo.Log.info('process - sender_id: ' + tweet.message_create.sender_id);
+			var user_id = tweet.message_create.sender_id;
+			var dm_info_property_name;
+			var dm_info_sub_property_name;
+
+			//Mojo.Log.info('process - user_id: ' + user_id);
+			//Mojo.Log.info('process - dm_info: ' + typeof dm_info);
+			/*
+			if (typeof dm_info == 'object') {
+				for (dm_info_property_name in dm_info) {
+					if (typeof dm_info[dm_info_property_name] !== 'function') {
+						Mojo.Log.info('dm_info[' + dm_info_property_name + ']: ' + typeof dm_info[dm_info_property_name]);	
+						for (dm_info_sub_property_name in dm_info[dm_info_property_name]) {
+							if (typeof dm_info_sub_property_name !== 'function') {
+								Mojo.Log.info('dm_info_sub_property_name: ' + dm_info_sub_property_name);	
+								}	
+							}
+						}
+					}
+				//Mojo.Log.info('process - dm_info: ' + JSON.stringify(dm_info));
+				}
+			*/
+			// screen_name and profile_image_url go in the tweet.user for regular tweet, 
+			// but for a dm the tweet.user object doesn't yet exist, so we have to create it.
+			tweet.user = {};
+			tweet.user.id_str = user_id;
+			tweet.user.screen_name = dm_info[user_id].screen_name;
+			//Mojo.Log.info('process - typeof dm_info.screen_name: ' + typeof dm_info[user_id].screen_name);
+			//Mojo.Log.info('process - dm_info.screen_name: ' + dm_info[user_id].screen_name);
+			//Mojo.Log.info('process - tweet screen_name: ' + tweet.user.screen_name);
+			tweet.user.profile_image_url = dm_info[user_id].profile_image_url;
+			//Mojo.Log.info('process - typeof dm_info.profile_image_url: ' + typeof dm_info[user_id].profile_image_url);
+			//Mojo.Log.info('process - dm_info.profile_image_url: ' + dm_info[user_id].profile_image_url);
+			//Mojo.Log.info('process - tweet profile_image_url: ' + tweet.user.profile_image_url);
+			/*
+			Mojo.Log.info('process - calling Twitter.getUsersById with user_id: ' + user_id);
+
+			var tempTwitter = new TwitterAPI(controller.stageController.user.id);
+			Mojo.Log.info('process - tempTwitter type is: ' + typeof(tempTwitter));
+			Mojo.Log.info('process - tempTwitter instance: ' + tempTwitter instanceof TwitterAPI);
+			tempTwitter.getUsersById(user_id, function(r){
+						Mojo.Log.info('process dm getUsersById responseText: ' + r.responseText);
+						Mojo.Log.info('process dm getUsersById responseJSON: ' + JSON.stringify(r.responseJSON));
+						tweet.user.screen_name = r.responseJSON.screen_name;
+						Mojo.Log.info('process DM screen name: ' + r.responseJSON[0].screen_name);
+						tweet.user.profile_image_url = r.responseJSON.profile_image_url;
+						Mojo.Log.info('process DM profile image url: ' + r.responseJSON[0].profile_image_url);
+				}.bind(this));	
+			*/
+			if (tweet.message_create.message_data.entities) {
+				tweet.entities = tweet.message_create.message_data.entities;
+			}
+
+			if (tweet.message_create.message_data.attachment) {
+				if (tweet.message_create.message_data.attachment.type == "media") {
+					tweet.extended_entities = {};
+					tweet.extended_entities.media = tweet.message_create.message_data.attachment.media;
+				}
+			}
+			//Mojo.Log.info('process: end of tweet.dm = true block');
+		}
+
 		tweet.timestamp = tweet.created_at;
 
 		if (!tweet.dm) {
+			//Mojo.Log.info('process: not tweet.dm...');
 			if (typeof(tweet.retweeted_status) !== "undefined") {
 				var orig = tweet;
 				var retweeter = tweet.user;
@@ -18,7 +97,7 @@ TweetHelper.prototype = {
 				tweet.footer = "<br />Retweeted by " + retweeter.screen_name;
 				if(mutedUsers){
 					for (var m = 0, mutedUser; mutedUser = mutedUsers[m]; m++) {
-						//if (retweeter.screen_name.indexOf(mutedUser.user) > -1) {
+						//if (retweeter.screen_name.indexOf(mutedUser.user) > -1) 
 						if (retweeter.id_str === mutedUser.id_str) {
 							tweet.hideTweet_class = 'hide';
 							break;
@@ -32,7 +111,7 @@ TweetHelper.prototype = {
 				tweet.is_rt = false;
 				if(mutedUsers){
 					for (var m = 0, mutedUser; mutedUser = mutedUsers[m]; m++) {
-						//if (tweet.user.screen_name.indexOf(mutedUser.user) > -1) {
+						//if (tweet.user.screen_name.indexOf(mutedUser.user) > -1) 
 						if (tweet.user.id_str === mutedUser.id_str) {
 							tweet.hideTweet_class = 'hide';
 							break;
@@ -55,8 +134,6 @@ TweetHelper.prototype = {
 				tweet.user.profile_image_url	= tweet.user.profile_image_url.replace('_normal', '_bigger'); // Use higher res avatar for Pre3
 			}
 		}
-
-
 
 		// Expand some shortened links automatically via the entities payload
 		// thumbnail passing added by DC
@@ -310,7 +387,7 @@ TweetHelper.prototype = {
 			//var bitrateFlag = 1; //0: min, 1: med, 2: max
 			
 			for (var i = media_links.length - 1; i >= 0; i--){
-				if (media_links[i].video_info){ // && tweet.entities.media[i].media_url !== null) {
+				if (media_links[i].video_info){ // && tweet.entities.media[i].media_url !== null) 
 					if(media_links[i].video_info.variants){
 						for(var j = 0; j < media_links[i].video_info.variants.length; j++)
 						{
@@ -322,14 +399,14 @@ TweetHelper.prototype = {
 						}
 						if(mp4Array.length > 1){
 							mp4Array.sort(dynamicSort("bitrate"));
-							//for(var k = 0; k < mp4Array.length; k++){
+							//for(var k = 0; k < mp4Array.length; k++)
 								//Mojo.Log.error('id: ' + tweet.id_str);
 								//Mojo.Log.error('index: ' + mp4Array[k].index);
 								//Mojo.Log.error('bitrate: ' + mp4Array[k].bitrate);
 							//}
 							//Mojo.Log.error('bitrateFlag: ' + bitrateFlag);
 							//Mojo.Log.error('bitrate(flag):_' + bitrate + "_");
-							//switch(bitrateFlag){
+							//switch(bitrateFlag)
 							switch(bitrate){
 								case "0":
 									//min
@@ -358,7 +435,7 @@ TweetHelper.prototype = {
 						//Mojo.Log.error('final mp4Index: ' + mp4Index);
 						//Mojo.Log.error('final bitrate: ' + media_links[i].video_info.variants[mp4Index].bitrate);
 						//Mojo.Log.error('------');
-						if(i === 0){ // && (tweet.entities.media[i].media_url == tweet.extended_entities.media[i].media_url)){
+						if(i === 0){ // && (tweet.entities.media[i].media_url == tweet.extended_entities.media[i].media_url))
 							tweet.mediaVidUrl = media_links[i].video_info.variants[mp4Index].url; 
 							//Mojo.Log.error('vid link: ' + tweet.mediaVidUrl);
 						} else {
@@ -407,6 +484,7 @@ TweetHelper.prototype = {
 			tweet.convo_class = 'show';
 		}
 
+		//Mojo.Log.info('process: here we are...');
 		tweet.displayed_time_str = (d.toTimeString(d)).slice(0,8) + ' ' + d.toDateString(d);
 
 		//keep the plaintext version for quote-style RTs (so HTML doesn't get tossed in there)
@@ -429,10 +507,7 @@ TweetHelper.prototype = {
 					//Mojo.Log.error('emoji: ' + tweet.full_text);
 			}
 		}
-
-
 		//Mojo.Log.info(tweet.emojify);
-
 		return tweet;
 	},
 
@@ -523,7 +598,7 @@ TweetHelper.prototype = {
 				var myStillLink;
 				var metaValues = doc.getElementsByTagName("meta");
 				for(var i=0; i<metaValues.length; i++){
-					//if(metaValues[i].property.indexOf('twitter:player:stream') > -1){
+					//if(metaValues[i].property.indexOf('twitter:player:stream') > -1)
 					if((metaValues[i].content.indexOf('/videos/') > -1) || (metaValues[i].content.indexOf('/videos_h264high/') > -1)){
 						if(metaValues[i].content.indexOf('.mp4') > -1){
 							myVideoLink = metaValues[i].content.slice(0,metaValues[i].content.indexOf('.mp4')+4);
@@ -536,7 +611,7 @@ TweetHelper.prototype = {
 						}
 					}
 					//Mojo.Log.error('property' + metaValues[i].property);
-					//if(metaValues[i].property.indexOf('twitter:image') > -1){
+					//if(metaValues[i].property.indexOf('twitter:image') > -1)
 					//Old style vines
 					if(metaValues[i].content.indexOf('/thumbs/') > -1){
 						if(metaValues[i].content.indexOf('.jpg') > -1){
@@ -622,7 +697,7 @@ TweetHelper.prototype = {
 
 		if(mutedUsers){
 			for (var m = 0, mutedUser; mutedUser = mutedUsers[m]; m++) {
-				//if (tweet.user.screen_name.indexOf(mutedUser.user) > -1) {
+				//if (tweet.user.screen_name.indexOf(mutedUser.user) > -1) 
 				if (tweet.user.id_str === mutedUser.id_str) {
 					tweet.hideTweet_class = 'hide';
 					break;
