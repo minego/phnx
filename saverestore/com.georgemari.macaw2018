@@ -1,0 +1,13 @@
+#!/bin/sh
+
+APPID=`basename $0`
+APPNAME="Macaw 2018"
+APPNOTE="Luna Restart required after restore."
+
+source `dirname $0`/srf.app.info 
+
+source `dirname $0`/srf.app.databases
+
+source `dirname $0`/srf.app.cookies
+
+exit 0

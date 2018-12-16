@@ -29,7 +29,7 @@ var global = {
 			command: 'cmdPreferences'
 		},
 		{
-			label: 'About Macaw 2018',
+			label: 'About Project Macaw',
 			command: 'cmdAbout'
 		},
 		{
@@ -40,7 +40,7 @@ var global = {
 	prefsMenu: [
 		Mojo.Menu.editItem,
 		{
-			label: 'About Macaw 2018',
+			label: 'About Project Macaw',
 			command: 'cmdAbout'
 		},
 		{

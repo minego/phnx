@@ -1,2 +1,2 @@
-To allow Save/Restore to backup Project Macaw, copy the file in this folder to /var/svc/org.webosinternals.saverestore and make sure it has 755 permissions (ie, rwxr-xr-x).
+To allow Save/Restore to backup Project Macaw/Macaw2018, copy the files in this folder to /var/svc/org.webosinternals.saverestore and make sure it has 755 permissions (ie, rwxr-xr-x).
 After restoring within Save/Restore, IMMEDIATELY do a luna restart and the settings should be restored on app start.
